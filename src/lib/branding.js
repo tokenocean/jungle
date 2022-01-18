@@ -1,43 +1,44 @@
 const BRANDING = {
-  projectName: "Raretoshi",
+  projectName: "JungleLab",
 
-  superUserName: "raretoshi",
+  superUserName: "junglelab",
 
   urls: {
-    base: "raretoshi.com",
-    www: "www.raretoshi.com",
-    protocol: "https://raretoshi.com",
+    base: "junglelab",
+    www: "www.junglelab.io",
+    protocol: "https://junglelab.io",
     external: {
-      twitter: "https://twitter.com/raretoshi",
+      twitter: "https://twitter.com/junglelab_io",
       telegram: "https://t.me/raretoshi",
-      blog: "https://blog.raretoshi.com/",
+      blog: "https://junglelab.net/",
       facebook: "https://facebook.com/raretoshi",
+      instagram: "https://instagram.com/junglelab.io"
     },
   },
 
   meta: {
-    title: "Raretoshi",
-    keywords: "Bitcoin Liquid NFT Art",
+    title: "JungleLab",
+    keywords: "Bitcoin Liquid LNFT Video,Music,Art",
     description:
-      "Upload, collect, and transact rare digital art on the Liquid Network",
-    image: "https://raretoshi.com/splash.png",
-    url: "https://raretoshi.com/",
+      "Upload, collect, and transact rare digital assets on the Liquid Network",
+    image: "https://junglelab.io/splash.png",
+    url: "https://junglelab.io/",
 
     twitter: {
       card: "summary_large_image",
-      creator: "@raretoshi",
-      site: "@raretoshi",
+      creator: "@junglelab",
+      site: "@junglelab.io",
     },
 
     artwork: (art) => ({
-      title: `Raretoshi - ${art.title}`,
+      title: `JungleLab - ${art.title}`,
       image: `/api/ipfs/${art.filename}`,
-      url: `https://raretoshi.com/a/${art.slug}`,
+      url: `https://junglelab.io/a/${art.slug}`,
     }),
   },
 
   emails: {
-    support: "support@raretoshi.com",
+    support: "support@junglelab.io",
   },
 };
 
