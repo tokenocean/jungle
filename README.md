@@ -1,6 +1,6 @@
 # LNFT
 
-JungleLab LNFT Digital Assets is a web-based platform for issuing and transacting with non-fungible tokens on the [Bitcoin Liquid Network](https://blockstream.com/liquid/). Blockstream is sponsoring its development and hosting an exemplary curated instance of it for use by Bitcoin artists at [JungleLab](https://rjunglelab.io). 
+JungleLab LNFT Digital Assets is a web-based platform for issuing and transacting with non-fungible tokens on the [Bitcoin Liquid Network](https://blockstream.com/liquid/). Blockstream is sponsoring its development and hosting an exemplary curated instance of it for use by Bitcoin artists at [JungleLab](https://junglelab.io). 
 
 The plan is to separate out any JungleLab-specific features from the core platform functionality so that anyone can adapt the platform to host their own Liquid-based NFT site but that's currently a work in progress
 
