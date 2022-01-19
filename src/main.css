@@ -222,7 +222,7 @@ select:focus {
 }
 
 button:hover {
-  color: rgb(84, 110, 157);
+  color: #CEDC21;
 }
 
 :global(input),
