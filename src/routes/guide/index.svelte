@@ -1,10 +1,12 @@
 <script context="module">
+	import { asset } from '$lib/store';
+	import { asset } from './../../lib/store.js';
   export const prerender = true;
 </script>
 
 <div class="container mx-auto sm:justify-between mt-10 md:mt-20">
   <div class="mx-auto">
-    <h2 class="mb-10">Raretoshi User Guide</h2>
+    <h2 class="mb-10">JungleLab User Guide</h2>
     <div class="guide-content">
       <div class="toc boxShadow">
         <h3>Table of contents</h3>
@@ -50,8 +52,8 @@
           <ol style="list-style: decimal; padding-left: 30px">
             <li>
               <p>
-                Go to <a href="https://raretoshi.com/" target="_blank"
-                  >https://raretoshi.com</a
+                Go to <a href="https://junglela.io/" target="_blank"
+                  >https://junglelab.io.com</a
                 > and navigate to “Sign in” at the top right corner.
               </p>
               <img
@@ -97,11 +99,11 @@
             </li>
             <li>
               <p>
-                Select “Continue to Raretoshi” or go back to
-                <a href="https://raretoshi.com/login" target="_blank"
-                  >https://raretoshi.com/login</a
+                Select “Continue to JungleLab” or go back to
+                <a href="https://junglelab.io/login" target="_blank"
+                  >https://junglelab.io/login</a
                 > and log in with your username and password. The first time you
-                log into your Raretoshi account you will be prompted to create a
+                log into your JungleLab account you will be prompted to create a
                 new wallet.
               </p>
             </li>
@@ -166,15 +168,15 @@
           <p>
             Artists will need a bit of Liquid Bitcoin (L-BTC) in their wallet to
             mint an NFT (~0.000013 L-BTC or ~0.5 USD at the time of writing).
-            Raretoshi users will also need L-BTC or other Liquid assets (e.g.
+            JungleLab users will also need L-BTC or other Liquid assets (e.g.
             USDt Liquid) in their wallets to bid on artwork. Your wallet can be
             funded through a Liquid, Bitcoin on-chain or Lightning transaction.
           </p>
           <p class="font-bold">
             If you choose to fund your account through a Bitcoin on-chain
             address or Lightning invoice, your BTC will automatically convert to
-            L-BTC within Raretoshi. This is probably the most straightforward
-            and easiest way to get L-BTC in your Raretoshi wallet.
+            L-BTC within JungleLab. This is probably the most straightforward
+            and easiest way to get L-BTC in your JungleLab wallet.
           </p>
           <p>
             Confidential Liquid and bitcoin deposits require one on-chain
@@ -201,7 +203,7 @@
             >.
           </p>
           <p>
-            When selecting “Fund” in your Raretoshi wallet, you will be shown a
+            When selecting “Fund” in your JungleLab wallet, you will be shown a
             Liquid non-confidential address in text format and in QR code. You
             can use this non-confidential address to send any Liquid asset
             including L-BTC, USDt (Liquid), or L-CAD directly to your Raretoshi
@@ -217,7 +219,7 @@
               target="_blank">Blockstream AQUA</a
             >
             or <a href="https://coinos.io/" target="_blank">Coinos</a> to send Liquid
-            assets to your Raretoshi wallet. If you get an error in your Green or
+            assets to your JungleLab wallet. If you get an error in your Green or
             AQUA wallet saying “Non-Confidential addresses not supported” simply
             click on “Confidential” under the Liquid address and you will be shown
             a confidential address and corresponding QR code.
@@ -228,8 +230,8 @@
             don’t see the amount updated in your wallet try refreshing the page.
           </p>
           <p>
-            To speed up your Raretoshi wallet funding process, avoid funding
-            delays and be able to bid on artwork with agility, we recommend
+            To speed up your JungleLab wallet funding process, avoid funding
+            delays and be able to bid on assets with agility, we recommend
             obtaining L-BTC ahead of time. If you want to learn about different
             ways to get L-BTC please take a look at <a
               href="https://help.blockstream.com/hc/en-us/articles/900000630846-How-do-I-get-Liquid-Bitcoin-L-BTC-"
@@ -258,12 +260,12 @@
         <div class="item" id="btc-lightning">
           <h4>3.3 BTC (Lightning)</h4>
           <p>
-            You can also fund your Raretoshi Liquid wallet using Lightning. By
+            You can also fund your JungleLab Liquid wallet using Lightning. By
             selecting “Lightning” you will be presented with a Lightning invoice
             with no predefined amount. You can scan this QR code and input the
             amount you want to send. Similar to on-chain funding, your BTC will
             be sent to Coinos and automatically exchanged to L-BTC that will
-            then be deposited in your Raretoshi Liquid wallet. Keep in mind that
+            then be deposited in your JungleLab Liquid wallet. Keep in mind that
             there is currently a minimum of 0.00001 btc (~1,000 sats) and a
             maximum of 0.01 BTC with this funding option.
           </p>
@@ -272,7 +274,7 @@
         <div class="item" id="upload-artwork-and-mint-nft">
           <h3>4. UPLOAD ARTWORK & MINT NFT</h3>
           <p>
-            All new accounts in Raretoshi are “Fan” accounts. With this type of
+            All new accounts in JungleLab are “Fan” accounts. With this type of
             account you can bid on artwork and trade NTFs in the secondary
             market, but you can’t upload or mint NFTs. These options are
             reserved for users with an artist account. Artists will get their
@@ -281,20 +283,20 @@
           <p>
             To upload their artwork, artists can go to their profile page and
             select “Submit a new artwork.” This option is also available in the
-            “Market” page (https://raretoshi.com/market). Current supported file
+            “Market” page (https://junglela.io/market). Current supported file
             formats are jpg, png, gif and mp4 up to a size limit of 400MB.
           </p>
           <img class="guide-image" src="/guide/image11.png" alt="Screenshot" />
           <img class="guide-image" src="/guide/image4.png" alt="Screenshot" />
           <p>
-            You will be presented with a “Submit artwork” form. You can either
-            drag and drop your file or click on “Upload your artwork” to select
+            You will be presented with a “Submit digital asset” form. You can either
+            drag and drop your file or click on “Upload your asset” to select
             a file from your device. You will see a “Upload complete!” message
-            once your artwork is ready
+            once your asset is ready
           </p>
           <img class="guide-image" src="/guide/image3.png" alt="Screenshot" />
           <img class="guide-image" src="/guide/image1.png" alt="Screenshot" />
-          <p>You can now fill out details of your artwork including:</p>
+          <p>You can now fill out details of your asset including:</p>
           <ul style="list-style: disc; padding-left: 30px">
             <li>Title</li>
             <li>
@@ -316,29 +318,29 @@
               artwork, but it can also be customized)
             </li>
             <li>
-              Tags (you can use this field to add search words for your artwork
+              Tags (you can use this field to add search words for your asset
               so other users can find it easily. This section will also be used
-              to include your artwork in a specific gallery (e.g., #Bitcoin2021;
+              to include your asset in a specific gallery (e.g., #Bitcoin2021;
               #Cypherpunks, etc.) Please only add the tag to a specific gallery
-              if you are authorized to do so. We will remove any artwork that is
+              if you are authorized to do so. We will remove any asset that is
               not supposed to be displayed in the gallery. Consult with your
               gallery organizer to make sure you include the appropriate tag
             </li>
           </ul>
           <img class="guide-image" src="/guide/image21.png" alt="Screenshot" />
           <p>
-            After clicking “Submit” your artwork will be uploaded into our IPFS
+            After clicking “Submit” your asset will be uploaded into our IPFS
             node and a Liquid issuance transaction will be generated to mint the
-            NFT. You will be redirected to the newly uploaded artwork page and
+            NFT. You will be redirected to the newly uploaded asset page and
             you will be able to see different details such as the username of
-            the artist that created the artwork, the current owner (in this case
+            the artist that created the asset, the current owner (in this case
             the same artist), and under asset details you’ll be able to see the
             IPFS hash and the Liquid transaction ID.
           </p>
           <p>
             You will have to wait 1-2 min for the NFT minting transaction to be
             confirmed in the Liquid blockchain (indicated as “pending'' by the
-            history of the artwork on the bottom left corner).
+            history of the asset on the bottom left corner).
           </p>
           <img class="guide-image" src="/guide/image37.png" alt="Screenshot" />
           <p>
@@ -365,7 +367,7 @@
             list your piece for sale.
           </p>
           <p>
-            1. Go to your Raretoshi profile page. There, you will find all your
+            1. Go to your JungleLab profile page. There, you will find all your
             uploaded artwork under the “Creations” tab.
           </p>
           <img class="guide-image" src="/guide/image8.png" alt="Screenshot" />
@@ -442,7 +444,7 @@
             and the money to the artist.
           </p>
           <p>
-            After listing your artwork using the auction option, other users
+            After listing your asset using the auction option, other users
             will bid on it and see information such as reserve price, if any,
             and how much time is left until the auction ends.
           </p>
@@ -451,13 +453,13 @@
         <div class="item" id="what-to-expect-after-listing">
           <h3>6. WHAT TO EXPECT AFTER LISTING</h3>
           <p>
-            After listing your artwork, Raretoshi users will be able to bid in
+            After listing your asset, JungleLab users will be able to bid in
             different ways depending on your listing conditions. If you set a
-            price, users will be able to buy out your artwork immediately for
+            price, users will be able to buy out your asset immediately for
             that price. Users can also make an offer and you’ll see these offers
-            in the artwork page and in your profile page under “Offers.” If you
+            in the asset page and in your profile page under “Offers.” If you
             did a simple listing (i.e., not auction) after someone places a bid
-            on your artwork, you can accept that offer, wait for further offers
+            on your asset, you can accept that offer, wait for further offers
             or wait until someone pays the buyout price for your piece.
           </p>
           <p>
@@ -466,18 +468,18 @@
             deposit the bid money into your Raretoshi wallet. Your artwork will
             still be visible to you in your profile page under “Creations” but
             since you no longer are the owner, it won’t show up under the
-            “Collection” tab. The artwork page will also show the history of the
+            “Collection” tab. The asset page will also show the history of the
             NFT and it will reflect the new owner.
           </p>
           <img class="guide-image" src="/guide/image31.png" alt="Screenshot" />
           <img class="guide-image" src="/guide/image20.png" alt="Screenshot" />
           <img class="guide-image" src="/guide/image32.png" alt="Screenshot" />
           <p>
-            If you decide to list your artwork as an auction, Raretoshi users
+            If you decide to list your asset as an auction, JungleLab users
             will see the time left until the auction goes live, and they will be
             able to bid for your piece until the end of the auction. If you set
             a reserve price (i.e., minimum amount that you will accept for your
-            piece), users will also be able to see this information. Raretoshi
+            piece), users will also be able to see this information. JungleLab
             users will also see a countdown timer indicating when the auction
             ends. If someone bids in the last 15 min, this will automatically
             push the auction end time 15 min. Once an auction is finished, the
@@ -489,7 +491,7 @@
           <h3>7. OTHER</h3>
         </div>
         <div class="item" id="edit-profile">
-          <h4>7.1 Edit your Raretoshi profile</h4>
+          <h4>7.1 Edit your JungleLab profile</h4>
           <p>1. Go to your profile page</p>
           <img class="guide-image" src="/guide/image11.png" alt="Screenshot" />
 
@@ -536,7 +538,7 @@
 
   .toc a,
   .guide a {
-    color: #3ba5ac;
+    color: #CEDC21;
   }
   .guide-image {
     max-width: 800px;
