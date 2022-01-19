@@ -9,9 +9,9 @@
 }
 
 @font-face {
-  font-family: Montserrat;
+  font-family: PermanentMarker-Regular;
   font-weight: bold;
-  src: url("/font/Montserrat-Bold.ttf") format("opentype");
+  src: url("/font/PermanentMarker-Regular.ttf") format("opentype");
 }
 
 @font-face {
@@ -45,7 +45,7 @@ body {
 h1,
 h2,
 h3 {
-  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  font-family: "PermanentMarker-Regular", Helvetica, Arial, sans-serif;
   color: #2d2e32;
   font-weight: bold;
 }
@@ -102,7 +102,7 @@ Brand Colors
 }
 
 .border-lightblue {
-  border-bottom: 1px solid #6ed8e0;
+  border-bottom: 1px solid #CEDC21;
 }
 
 .text-midblue {
@@ -150,9 +150,9 @@ button {
   background: rgb(143, 238, 245);
   background: linear-gradient(
     90deg,
-    rgba(143, 238, 245, 1) 0%,
-    rgba(127, 228, 235, 1) 50%,
-    rgba(110, 216, 224, 1) 100%
+    rgba(206, 220, 33) 0%,
+    rgba(206, 220, 33) 50%,
+    rgba(206, 220, 33) 100%
   );
 }
 

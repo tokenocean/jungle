@@ -305,7 +305,7 @@
 <style>
   .hover {
     @apply border-b-2;
-    border-bottom: 3px solid #6ed8e0;
+    border-bottom: 3px solid #CEDC21;
   }
 
   .closeBtn {
@@ -316,7 +316,7 @@
     @apply mb-auto h-8 mx-2 md:mx-4 mt-6;
     &:hover {
       @apply border-b-2;
-      border-bottom: 3px solid #6ed8e0;
+      border-bottom: 3px solid #43470B;
     }
   }
 </style>
