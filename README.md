@@ -8,11 +8,11 @@ The plan is to separate out any JungleLab-specific features from the core platfo
 
  - User accounts and profiles for artists and collectors include custom avatars, contact info and biography
  - Users can follow other artists and collectors and like/favorite individual artworks
- - Artists can upload digital media files (jpg, png, gif, mp4) representing an artwork and add metadata like a title, description, and tags
+ - Artists can upload digital media files (jpg, png, gif, mp4) representing an asset and add metadata like a title, description, and tags
  - Selected metadata is published in the [liquid asset registry](https://docs.blockstream.com/liquid/developer-guide/proof-of-issuance.html) so that tokens can be recognized by external wallets
  - Media files are added to the IPFS network upon being uploaded and are given a unique content identifier (CID) derived from the SHA256 hash of the file
  - The CID is embedded in the Liquid token issuance transaction contract, permanently and provably linking the file to the token
- - Artworks are listed in a searchable/sortable/filterable marketplace gallery
+ - Assets are listed in a searchable/sortable/filterable marketplace gallery
  - Artists can list an artwork for sale by setting an optional listing price, royalty rate, and/or auction period
  - Bids and sales are conducted peer-to-peer using atomic swaps so the platform host does not need to escrow funds
  - Listings, bids, transfers and new artwork activity are logged and presented in a site-wide feed
