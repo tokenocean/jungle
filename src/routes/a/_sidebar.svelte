@@ -12,7 +12,7 @@
 
 <style>
   :global(.description a) {
-    color: #3ba5ac;
+    color: #CEDC21;
   }
 
   .art-likes-container {

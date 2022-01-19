@@ -415,7 +415,7 @@
       </div>
     </a>
 
-    <h2>List artwork</h2>
+    <h2>List asset</h2>
 
     {#if loading}
       <ProgressLinear />
@@ -674,15 +674,15 @@
   input[type="checkbox"]:checked {
     appearance: none;
     border: 5px solid #fff;
-    outline: 2px solid #6ed8e0;
-    background-color: #6ed8e0;
+    outline: 2px solid #CEDC21;
+    background-color: #CEDC21;
     padding: 2px;
     border-radius: 0;
   }
 
   input[type="radio"]:checked {
     appearance: none;
-    border: 7px solid #6ed8e0;
+    border: 7px solid #CEDC21;
     background-color: #fff;
     padding: 2px;
     border-radius: 100%;
