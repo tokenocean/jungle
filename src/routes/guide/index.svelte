@@ -39,7 +39,7 @@
           <li>
             <p><a href="#other">OTHER</a></p>
             <ol style="list-style: decimal; padding-left: 30px">
-              <li><a href="#edit-profile">Edit your Raretoshi profile</a></li>
+              <li><a href="#edit-profile">Edit your JungleLab profile</a></li>
             </ol>
           </li>
         </ol>
@@ -50,7 +50,7 @@
           <ol style="list-style: decimal; padding-left: 30px">
             <li>
               <p>
-                Go to <a href="https://junglela.io/" target="_blank"
+                Go to <a href="https://junglelab.io/" target="_blank"
                   >https://junglelab.io.com</a
                 > and navigate to “Sign in” at the top right corner.
               </p>
@@ -399,14 +399,14 @@
             3. Royalty Rate: setting a royalty rate (in percentage) is optional.
             This is the percentage that will be paid to the original artist in
             subsequent sales of the NFT. Setting a royalty involves transferring
-            the artwork to a 2-of-2 multisig address with Raretoshi. Our servers
+            the artwork to a 2-of-2 multisig address with JungleLab. Our servers
             will only co-sign a transfer if they pay the specified royalty to
             the original artist. This percentage can not be modified afterwards
             by any NFT owner. Once an NFT has a royalty associated it gets
-            locked in Raretoshi to ensure that the original artists receive
+            locked in JungleLab to ensure that the original artists receive
             their royalties, which means the NFT cannot be transferred outside
             of the platform. If you want your NFT to be transferable outside of
-            Raretoshi wallets, do not add a royalty.
+            JungleLab wallets, do not add a royalty.
           </p>
           <p>
             Once you are happy with your listing conditions you can hit “Submit”
@@ -437,7 +437,7 @@
           <p>
             To ensure auction start and end dates and time, once an artwork is
             listed using this option it is transferred to a 2-of-2 multisig
-            address. The Raretoshi server will co-sign this transaction once the
+            address. The JungleLab server will co-sign this transaction once the
             auction is finished and the NFT will be sent to the highest bidder
             and the money to the artist.
           </p>
@@ -463,7 +463,7 @@
           <p>
             If you decide to accept an offer, your wallet will sign the atomic
             swap transaction that will transfer the NFT to the bidder and will
-            deposit the bid money into your Raretoshi wallet. Your artwork will
+            deposit the bid money into your JungleLab wallet. Your artwork will
             still be visible to you in your profile page under “Creations” but
             since you no longer are the owner, it won’t show up under the
             “Collection” tab. The asset page will also show the history of the
@@ -511,7 +511,6 @@
   .guide-content .item {
     margin-bottom: 80px;
   }
-
   .guide-content .item h4 {
     font-size: 26px;
     line-height: 32px;
@@ -521,7 +520,6 @@
     padding: 20px 30px;
     margin-bottom: 30px;
   }
-
   .toc h3 {
     margin-bottom: 20px;
   }
@@ -529,14 +527,12 @@
     margin: 5px 0;
     font-size: 22px;
   }
-
   .guide p {
     margin: 5px 0;
   }
-
   .toc a,
   .guide a {
-    color: #CEDC21;
+    color: #4d4d4e;
   }
   .guide-image {
     max-width: 800px;
