@@ -1,6 +1,4 @@
 <script context="module">
-	import { asset } from '$lib/store';
-	import { asset } from './../../lib/store.js';
   export const prerender = true;
 </script>
 
