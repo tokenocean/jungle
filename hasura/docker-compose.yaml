@@ -33,6 +33,14 @@ services:
       - ${STORAGE_DIR}:/export
     ports:
       - '8091:8091'
+  ui:
+    image: junglelab/jungle
+    depends_on:
+      - lapp
+    container_name: ui
+    restart: on-failure
+    ports:
+      - '3000:3000'
   postgres:
     container_name: postgres
     image: postgres:12
@@ -67,6 +75,7 @@ services:
       - hasura
     ports:
       - '3400:3000'
+    restart: unless-stopped
     environment:
       SERVER_URL: '${SERVER_URL}'
       HASURA_ENDPOINT: '${HASURA_URL}/v1/graphql'
@@ -93,6 +102,7 @@ services:
       - 8081:8080
       - 4001:4001
       - 5001:5001
+    restart: unless-stopped
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
