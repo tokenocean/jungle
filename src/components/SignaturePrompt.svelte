@@ -87,7 +87,7 @@
 <style>
   input[type="checkbox"] {
     appearance: none;
-    border: 3px solid #6ed8e0;
+    border: 3px solid #CEDC21;
     background-color: #fff;
     padding: 0;
     margin-right: 3px;
@@ -98,7 +98,7 @@
 
   input[type="checkbox"]:checked {
     border: none;
-    background-color: #6ed8e0;
+    background-color: #CEDC21;
   }
   label {
     line-height: 22px;

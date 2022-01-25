@@ -218,7 +218,7 @@
     right: 15px;
     top: 15px;
     font-size: 20px;
-    color: #6ed8e0;
+    color: #CEDC21;
   }
 
   input[type="checkbox"] {
