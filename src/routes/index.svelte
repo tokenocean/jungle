@@ -195,6 +195,10 @@
       </p>
       <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
         The Revolutionary urban lifestyle LNFT platform for artists, creatives and collectors.
+        <p>
+        <a
+        href="https://jungle.coinos.io/guide"
+        target="_blank">JungleLab User & Artist Guide Tutorial</a>
       </p>
     </div>
 
