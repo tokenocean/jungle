@@ -94,6 +94,7 @@
           <a href="/terms-and-conditions">Terms of Service</a>
         </li>
         <li class="mb-2"><a href="/faq">FAQs</a></li>
+        <li class="mb-2"><a href="/guide">User Guide</a></li>
       </ul>
     </div>
   </div>
