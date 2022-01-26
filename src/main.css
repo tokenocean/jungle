@@ -95,14 +95,14 @@ Brand Colors
 
 /* Light blue — Primary accent color */
 .text-lightblue {
-  color: #43470b;
+  color: #2d2e32;
 }
 .bg-lightblue {
-  background: #43470b;
+  background: #CCFF00;
 }
 
 .border-lightblue {
-  border-bottom: 1px solid #CEDC21;
+  border-bottom: 1px solid #CCFF00;
 }
 
 .text-midblue {
@@ -111,22 +111,22 @@ Brand Colors
 
 /*Light blue gradient — Gradient accent color */
 .lightblue-grad {
-  background: rgb(143, 238, 245);
+  background: #CCFF00;
   background: linear-gradient(
     90deg,
-    rgba(143, 238, 245, 1) 0%,
-    rgba(127, 228, 235, 1) 50%,
-    rgba(110, 216, 224, 1) 100%
+    #CCFF00 0%,
+    #CCFF00 50%,
+    #CCFF00 100%
   );
 }
 
 /*Logo gradient — Gradient for logo or other small applications */
 .logo-grad {
-  background: rgb(143, 238, 245);
+  background: #CCFF00;
   background: linear-gradient(
     90deg,
-    rgba(143, 238, 245, 1) 0%,
-    rgba(80, 190, 198, 1) 50%
+    #CCFF00 0%,
+    #CCFF00 50%
   );
 }
 
@@ -150,8 +150,8 @@ button {
   background: rgba(255,152,0);
   background: linear-gradient(
     90deg,
-    rgba(206, 220, 33) 0%,
-    rgba(81, 177, 62) 50%,
+    rgba(255,152,0) 0%,
+    rgba(255,157,0) 50%,
     rgba(255,152,0) 100%
   );
 }
@@ -160,7 +160,7 @@ button {
 .button-transparent {
   border-radius: 30px;
   border: 1px solid rgba(255,152,0);
-  color: #f8f8fa;
+  color: #43470b;
   height: 48px;
   padding: 0 30px;
   font-weight: 700;
@@ -203,11 +203,11 @@ button {
 }
 
 .secondary-color {
-  color: #43470b;
+  color: #FF9900;
 }
 
 .brand-color {
-  background: #51B13E;
+  background: #CCFF00;
 }
 
 .button-trans-gray {
@@ -236,7 +236,7 @@ select {
 
 .title {
   @apply font-bold pb-14 text-4xl text-left;
-  color: #43470b;
+  color: rgba(255,152,0);
 }
 
 .sub-title {

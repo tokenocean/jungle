@@ -79,14 +79,14 @@
     background: #31373e;
   }
   .border-blue {
-    border-color: #43470b;
+    border-color: #CCFF00;
   }
 
   .bg-btc {
     background: rgba(52,190,171,.25);
   }
   .border-btc {
-    border-color: #43470b;
+    border-color: #CCFF00;
   }
 
   .light-color {
