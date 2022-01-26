@@ -131,7 +131,7 @@
       width: 90%;
       appearance: none;
       border: 0;
-      border-bottom: 1px solid #43470b;
+      border-bottom: 1px solid #FF9900;
     }
   }
 
