@@ -95,7 +95,7 @@ Brand Colors
 
 /* Light blue — Primary accent color */
 .text-lightblue {
-  color: #CEDC21;
+  color: #43470b;
 }
 .bg-lightblue {
   background: #43470b;
@@ -106,7 +106,7 @@ Brand Colors
 }
 
 .text-midblue {
-  color: #CEDC21;
+  color: #43470b;
 }
 
 /*Light blue gradient — Gradient accent color */
@@ -147,20 +147,20 @@ button {
   align-items: center;
   color: #E4E4E4;
   font-weight: bold;
-  background: rgb(143, 238, 245);
+  background: rgba(255,152,0);
   background: linear-gradient(
     90deg,
     rgba(206, 220, 33) 0%,
     rgba(81, 177, 62) 50%,
-    rgba(255,153,0) 100%
+    rgba(255,152,0) 100%
   );
 }
 
 .secondary-btn,
 .button-transparent {
   border-radius: 30px;
-  border: 1px solid #2d2e32;
-  color: #2d2e32;
+  border: 1px solid rgba(255,152,0);
+  color: #f8f8fa;
   height: 48px;
   padding: 0 30px;
   font-weight: 700;
@@ -222,7 +222,7 @@ select:focus {
 }
 
 button:hover {
-  color: #FF9900;
+  color: rgba(255,152,0);
 }
 
 :global(input),
@@ -236,13 +236,13 @@ select {
 
 .title {
   @apply font-bold pb-14 text-4xl text-left;
-  color: #133e7c;
+  color: #43470b;
 }
 
 .sub-title {
   font-weight: bold;
   font-size: 20px;
-  color: #05b298;
+  color: rgba(255,152,0);
 }
 
 .box-shadow {
