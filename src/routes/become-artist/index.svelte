@@ -139,7 +139,7 @@
     right: 15px;
     top: 15px;
     font-size: 20px;
-    color: #CEDC21;
+    color: #43470b;
   }
 
   @media only screen and (max-width: 1024px) {

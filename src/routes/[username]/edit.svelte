@@ -218,12 +218,12 @@
     right: 15px;
     top: 15px;
     font-size: 20px;
-    color: #CEDC21;
+    color: #43470b;
   }
 
   input[type="checkbox"] {
     appearance: none;
-    border: 5px solid #CEDC21;
+    border: 5px solid #43470b;
     outline: 1px solid #fff;
     background-color: #fff;
     padding: 2px;
@@ -234,8 +234,8 @@
 
   input[type="checkbox"]:checked {
     border: 5px solid #fff;
-    outline: 2px solid #CEDC21;
-    background-color: #CEDC21;
+    outline: 2px solid #43470b;
+    background-color: #43470b;
   }
 
   @media only screen and (max-width: 1024px) {

@@ -1,7 +1,6 @@
 <script context="module">
   export async function load({ fetch }) {
     const props = await fetch(`/artworks/recent.json`).then((r) => r.json());
-
     return {
       props,
     };
@@ -19,22 +18,17 @@
   import branding from "$lib/branding";
   import { prefetch } from "$app/navigation";
   import { browser } from "$app/env";
-
   onMount(() => browser && prefetch("/market"));
-
   export let featured;
   export let recent;
   export let latest;
-
   let current = 0;
   $: artwork = featured && featured[current] && featured[current].artwork;
-
   let interval = setInterval(() => {
     if (!featured) return;
     current++;
     if (current >= featured.length) current = 0;
   }, 6000);
-
   onDestroy(() => clearInterval(interval));
 </script>
 
@@ -273,12 +267,10 @@
     width: 90%;
     margin-top: 128px;
   }
-
   .header .primary-btn {
     width: 240px;
     margin: 0 auto;
   }
-
   .header h5 {
     font-size: 22px;
     line-height: 36px;
@@ -286,13 +278,11 @@
     margin-top: 24px;
     margin-bottom: 34px;
   }
-
   .secondary-header {
     height: 600px !important;
     width: 100%;
     object-fit: cover;
   }
-
   .blur-bg {
     display: flex;
     padding: 60px;
@@ -305,76 +295,60 @@
     width: 50%;
     width: fit-content;
   }
-
   .blur-bg h2 {
     color: white !important;
   }
-
   .blur-bg p {
     color: white !important;
     margin-top: 20px;
   }
-
   .container.more {
     display: flex;
     justify-content: center;
     margin: 0 auto;
     margin-top: 36px;
   }
-
   .more .secondary-btn {
     width: 180px;
   }
-
   .header-button {
     width: 200px;
     border: 1px solid;
     border-radius: 30px;
     padding: 0.7rem 1.5rem !important;
   }
-
   h3 {
     margin-bottom: 36px;
   }
-
   .marg-bottom {
     margin-bottom: 128px !important;
   }
-
   @media only screen and (max-width: 768px) {
     .header-container.marg-bottom {
       margin-bottom: 96px !important;
     }
-
     .header {
       margin-top: 64px;
     }
-
     h3 {
       margin-bottom: 32px;
     }
-
     .header h5 {
       margin-top: 24px;
       margin-bottom: 24px;
     }
-
     .header .primary-btn {
       width: 100%;
     }
-
     .secondary-header {
       height: 400px !important;
     }
-
     .container.more {
       margin-top: 48px;
     }
-
     .marg-bottom {
       margin-bottom: 96px !important;
     }
-
     .blur-bg {
       padding: 24px;
       width: 75%;
