@@ -70,8 +70,8 @@
   input[type="checkbox"]:checked {
     appearance: none;
     border: 5px solid #fff;
-    outline: 2px solid #CEDC21;
-    background-color: #CEDC21;
+    outline: 2px solid #43470b;
+    background-color: #43470b;
     padding: 2px;
     border-radius: 0;
   }

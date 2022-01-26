@@ -47,7 +47,7 @@
     background: #31373e;
   }
   .border-blue {
-    border-color: #CEDC21;
+    border-color: #43470b;
   }
 
   .active {

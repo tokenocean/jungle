@@ -46,7 +46,7 @@
   }
 
   .menu :global(.search):focus-within {
-    border: 1px solid #CEDC21;
+    border: 1px solid #43470b;
     border-radius: 30px;
   }
 

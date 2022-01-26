@@ -98,7 +98,7 @@ Brand Colors
   color: #CEDC21;
 }
 .bg-lightblue {
-  background: #CEDC21;
+  background: #43470b;
 }
 
 .border-lightblue {
@@ -150,9 +150,9 @@ button {
   background: rgb(143, 238, 245);
   background: linear-gradient(
     90deg,
-    rgba(206, 220, 33) 0%,
-    rgba(206, 220, 33) 50%,
-    rgba(206, 220, 33) 100%
+    rgb(206, 220, 33) 0%,
+    rgba(81, 177, 62) 50%,
+    rgba(81, 177, 62) 100%
   );
 }
 
@@ -173,7 +173,7 @@ button {
 
 .secondary-btn:hover {
   border: 1px solid #6b6b6b;
-  color: #CEDC21;
+  color: #43470b;
 }
 
 .button-trans-gray {
@@ -203,11 +203,11 @@ button {
 }
 
 .secondary-color {
-  color: #CEDC21;
+  color: #43470b;
 }
 
 .brand-color {
-  background: #CEDC21;
+  background: #51B13E;
 }
 
 .button-trans-gray {
@@ -222,7 +222,7 @@ select:focus {
 }
 
 button:hover {
-  color: #CEDC21;
+  color: #43470b;
 }
 
 :global(input),

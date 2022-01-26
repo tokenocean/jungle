@@ -228,7 +228,7 @@
 
   .hover {
     @apply border-b-2;
-    border-bottom: 3px solid #CEDC21;
+    border-bottom: 3px solid #43470b;
   }
 
   .tabs div {
@@ -255,6 +255,6 @@
 
   .social-details span {
     margin-left: 8px;
-    color: #CEDC21;
+    color: #43470b;
   }
 </style>

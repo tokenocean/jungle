@@ -529,7 +529,7 @@
 
 <style>
   :global(.description a) {
-    color: #CEDC21;
+    color: #43470b;
   }
 
   .disabled {
@@ -638,7 +638,7 @@
     }
 
     .show-more {
-      color: #CEDC21;
+      color: #43470b;
       font-weight: bold;
       text-align: right;
       margin-top: 10px;
