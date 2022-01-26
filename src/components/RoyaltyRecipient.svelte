@@ -12,7 +12,7 @@
 <div class="flex mb-2">
   <div
     class="py-2 {recipient.type === royaltyRecipientIndividualType
-      ? 'bg-primary'
+      ? '#CCFF00'
       : 'bg-gray-500'} w-3 rounded-l-lg"
   />
   <div
