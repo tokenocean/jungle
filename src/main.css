@@ -106,7 +106,7 @@ Brand Colors
 }
 
 .text-midblue {
-  color: #43470B;
+  color: #CEDC21;
 }
 
 /*Light blue gradient — Gradient accent color */
@@ -152,7 +152,7 @@ button {
     90deg,
     rgba(206, 220, 33) 0%,
     rgba(81, 177, 62) 50%,
-    rgba(206, 220, 33) 100%
+    rgba(255,153,0) 100%
   );
 }
 
