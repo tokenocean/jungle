@@ -145,7 +145,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #444444;
+  color: #E4E4E4;
   font-weight: bold;
   background: rgb(143, 238, 245);
   background: linear-gradient(
@@ -203,7 +203,7 @@ button {
 }
 
 .secondary-color {
-  color: #FF9900;
+  color: #43470b;
 }
 
 .brand-color {
