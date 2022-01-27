@@ -98,7 +98,7 @@ Brand Colors
   color: #2d2e32;
 }
 .bg-lightblue {
-  background: #CCFF00;
+  background: #43470b;
 }
 
 .border-lightblue {
@@ -145,7 +145,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #E4E4E4;
+  color: white;
   font-weight: bold;
   background: rgba(255,152,0);
   background: linear-gradient(
@@ -159,7 +159,7 @@ button {
 .secondary-btn,
 .button-transparent {
   border-radius: 30px;
-  border: 1px solid rgba(255,152,0);
+  border: 1px solid #CCFF00;
   color: #43470b;
   height: 48px;
   padding: 0 30px;
@@ -172,7 +172,7 @@ button {
 }
 
 .secondary-btn:hover {
-  border: 1px solid #FF9900;
+  border: 1px solid #43470b;
   color: #43470b;
 }
 
