@@ -102,7 +102,7 @@ Brand Colors
 }
 
 .border-lightblue {
-  border-bottom: 1px solid #CCFF00;
+  border-bottom: 1px solid #FF9800;
 }
 
 .text-midblue {
@@ -111,12 +111,12 @@ Brand Colors
 
 /*Light blue gradient — Gradient accent color */
 .lightblue-grad {
-  background: #CCFF00;
+  background: #FF9800;
   background: linear-gradient(
     90deg,
     #CCFF00 0%,
-    #CCFF00 50%,
-    #CCFF00 100%
+    #FF9800 50%,
+    #FF9800 100%
   );
 }
 
@@ -145,7 +145,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: #43470b;
   font-weight: bold;
   background: rgba(255,152,0);
   background: linear-gradient(
@@ -222,7 +222,7 @@ select:focus {
 }
 
 button:hover {
-  color: rgba(255,152,0);
+  color: #43470bd2;
 }
 
 :global(input),
