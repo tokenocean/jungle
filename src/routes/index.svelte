@@ -230,7 +230,7 @@
             <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Liquid Network</p>
           </dt>
           <dd class="mt-2 ml-16 text-base text-gray-500">
-            We exist to support millions of artists and creatives with an eco-system that provides rights, ownership, and the opportunity to create multiple independent revenue streams.
+            We exist to support millions of users & artists + creatives with an eco-system that provides rights, ownership, and the opportunity to create multiple independent revenue streams, Supported by Blockstream & Raretoshi. 
           </dd>
         </div>
 
