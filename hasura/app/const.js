@@ -1,9 +1,9 @@
 module.exports = {
-  projectName: "Raretoshi",
+  projectName: "JungleLab",
   urls: {
-    protocol: "https://raretoshi.com",
+    protocol: "https://jungle.coinos.io",
   },
   emails: {
-    support: "support@raretoshi.com",
+    support: "support@jungle.coinos.io",
   },
 };
