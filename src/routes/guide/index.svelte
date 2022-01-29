@@ -50,8 +50,8 @@
           <ol style="list-style: decimal; padding-left: 30px">
             <li>
               <p>
-                Go to <a href="https://junglelab.io/" target="_blank"
-                  >https://junglelab.io.com</a
+                Go to <a href="https://jungle.coinos.io/" target="_blank"
+                  >https://jungle.coinos.io</a
                 > and navigate to “Sign in” at the top right corner.
               </p>
               <img
@@ -98,8 +98,8 @@
             <li>
               <p>
                 Select “Continue to JungleLab” or go back to
-                <a href="https://junglelab.io/login" target="_blank"
-                  >https://junglelab.io/login</a
+                <a href="https://jungle.coinos.io/login" target="_blank"
+                  >https://jungle.coinos.io/login</a
                 > and log in with your username and password. The first time you
                 log into your JungleLab account you will be prompted to create a
                 new wallet.
@@ -281,7 +281,7 @@
           <p>
             To upload their artwork, artists can go to their profile page and
             select “Submit a new artwork.” This option is also available in the
-            “Market” page (https://junglela.io/market). Current supported file
+            “Market” page (https://jungle.coinos.io/market). Current supported file
             formats are jpg, png, gif and mp4 up to a size limit of 400MB.
           </p>
           <img class="guide-image" src="/guide/image11.png" alt="Screenshot" />
