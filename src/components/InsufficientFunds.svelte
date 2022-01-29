@@ -305,7 +305,7 @@
 <style>
   .hover {
     @apply border-b-2;
-    border-bottom: 3px solid #43470b;
+    border-bottom: 3px solid #f2a900;
   }
 
   .closeBtn {

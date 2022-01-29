@@ -235,7 +235,7 @@
   input[type="checkbox"]:checked {
     border: 5px solid #fff;
     outline: 2px solid #43470b;
-    background-color: #43470b;
+    background-color: #f2a900;
   }
 
   @media only screen and (max-width: 1024px) {

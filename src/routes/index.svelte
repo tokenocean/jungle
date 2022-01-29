@@ -184,7 +184,7 @@
     <div class="lg:text-center">
       <h2 class="text-base text-black font-semibold tracking-wide uppercase">Liquid Digital Assets</h2>
       <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-        JungleLab.io
+        changing the way you interact with digital assets.
     </div>
     <div class="mt-10">
       <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
