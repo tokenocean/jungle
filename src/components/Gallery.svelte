@@ -94,7 +94,7 @@
   };
 </script>
 
-<svelte:window bind:scrollY={y}/>
+<svelte:window bind:scrollY={y} />
 
 {#if debug}
   <div class="fixed bg-white z-50 left-2 w-48 top-24">
