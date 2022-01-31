@@ -9,7 +9,7 @@
 
   :global(.dark input, .dark select) {
     @apply bg-black text-white border;
-    border-color: #43470b;
+    border-color: #FF9800;
   }
 
   .wallet-container{
