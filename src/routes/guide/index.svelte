@@ -204,7 +204,7 @@
             When selecting “Fund” in your JungleLab wallet, you will be shown a
             Liquid non-confidential address in text format and in QR code. You
             can use this non-confidential address to send any Liquid asset
-            including L-BTC, USDt (Liquid), or L-CAD directly to your Raretoshi
+            including L-BTC, USDt (Liquid), or L-CAD directly to your Junglelab
             wallet without limit in amount.
           </p>
           <p>
@@ -344,7 +344,7 @@
           <p>
             Once the minting transaction is confirmed, your artwork/NFT will be
             ready to be listed. At this point your artwork is labelled as
-            “Unlisted” so no other Raretoshi user can see it in the platform.
+            “Unlisted” so no other Junglelab user can see it in the platform.
             You can see it in your profile page but it won’t be publicly visible
             until listed.
           </p>
