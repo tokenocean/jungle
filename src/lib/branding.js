@@ -13,7 +13,7 @@ const BRANDING = {
       blog: "https://junglelab.net/",
       facebook: "https://facebook.com/escabaeskyee",
       instagram: "https://instagram.com/junglelabrare",
-      discord: "https://discord.gg/R3JeugAt",
+      discord: "https://discord.gg/eqWEC5rq8A",
     },
   },
 
