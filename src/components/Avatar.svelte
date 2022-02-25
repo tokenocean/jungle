@@ -39,7 +39,7 @@
 
   .xs {
     @apply w-10 h-10;
-  } 
+  }
 
   .large {
     @apply w-16 h-16;

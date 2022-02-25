@@ -12,8 +12,8 @@ const BRANDING = {
       telegram: "https://t.me/eskyjunglelab",
       blog: "https://junglelab.net/",
       facebook: "https://facebook.com/escabaeskyee",
-			instagram: "https://instagram.com/junglelabrare",
-			discord: "https://discord.gg/R3JeugAt",
+      instagram: "https://instagram.com/junglelabrare",
+      discord: "https://discord.gg/R3JeugAt",
     },
   },
 

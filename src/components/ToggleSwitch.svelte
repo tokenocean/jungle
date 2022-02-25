@@ -23,10 +23,10 @@
 <style>
   .toggle-checkbox:checked {
     @apply right-0;
-    border: 1px solid #FF9900;
+    border: 1px solid #ff9900;
     right: 0;
   }
   .toggle-checkbox:checked + .toggle-label {
-    background: #FF9900;
+    background: #ff9900;
   }
 </style>

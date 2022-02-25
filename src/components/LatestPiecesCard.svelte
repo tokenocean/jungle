@@ -29,8 +29,7 @@
         <div class="flex">
           <div
             class="my-auto cursor-pointer"
-            on:click|stopPropagation={() =>
-              goto(`/${artwork.artist.username}`)}
+            on:click|stopPropagation={() => goto(`/${artwork.artist.username}`)}
           >
             <Avatar user={transaction.artwork.artist} size="large" />
           </div>
