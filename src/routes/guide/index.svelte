@@ -295,10 +295,10 @@
           <img class="guide-image" src="/guide/image11.png" alt="guide-image" />
           <img class="guide-image" src="/guide/image4.png" alt="guide-image" />
           <p>
-            You will be presented with a “Submit digital asset” form. You can either
-            drag and drop your file or click on “Upload your asset” to select
-            a file from your device. You will see a “Upload complete!” message
-            once your asset is ready
+            You will be presented with a “Submit digital asset” form. You can
+            either drag and drop your file or click on “Upload your asset” to
+            select a file from your device. You will see a “Upload complete!”
+            message once your asset is ready
           </p>
           <img class="guide-image" src="/guide/image3.png" alt="Screenshot" />
           <img class="guide-image" src="/guide/image1.png" alt="Screenshot" />
@@ -324,9 +324,9 @@
               artwork, but it can also be customized)
             </li>
             <li>
-              Tags (you can use this field to add search words for your asset
-              so other users can find it easily. This section will also be used
-              to include your asset in a specific gallery (e.g., #Bitcoin2021;
+              Tags (you can use this field to add search words for your asset so
+              other users can find it easily. This section will also be used to
+              include your asset in a specific gallery (e.g., #Bitcoin2021;
               #Cypherpunks, etc.) Please only add the tag to a specific gallery
               if you are authorized to do so. We will remove any asset that is
               not supposed to be displayed in the gallery. Consult with your
@@ -337,11 +337,11 @@
           <p>
             After clicking “Submit” your asset will be uploaded into our IPFS
             node and a Liquid issuance transaction will be generated to mint the
-            NFT. You will be redirected to the newly uploaded asset page and
-            you will be able to see different details such as the username of
-            the artist that created the asset, the current owner (in this case
-            the same artist), and under asset details you’ll be able to see the
-            IPFS hash and the Liquid transaction ID.
+            NFT. You will be redirected to the newly uploaded asset page and you
+            will be able to see different details such as the username of the
+            artist that created the asset, the current owner (in this case the
+            same artist), and under asset details you’ll be able to see the IPFS
+            hash and the Liquid transaction ID.
           </p>
           <p>
             You will have to wait 1-2 min for the NFT minting transaction to be
@@ -450,9 +450,9 @@
             and the money to the artist.
           </p>
           <p>
-            After listing your asset using the auction option, other users
-            will bid on it and see information such as reserve price, if any,
-            and how much time is left until the auction ends.
+            After listing your asset using the auction option, other users will
+            bid on it and see information such as reserve price, if any, and how
+            much time is left until the auction ends.
           </p>
           <img class="guide-image" src="/guide/image36.png" alt="guide-image" />
         </div>
@@ -461,12 +461,12 @@
           <p>
             After listing your asset, JungleLab users will be able to bid in
             different ways depending on your listing conditions. If you set a
-            price, users will be able to buy out your asset immediately for
-            that price. Users can also make an offer and you’ll see these offers
-            in the asset page and in your profile page under “Offers.” If you
-            did a simple listing (i.e., not auction) after someone places a bid
-            on your asset, you can accept that offer, wait for further offers
-            or wait until someone pays the buyout price for your piece.
+            price, users will be able to buy out your asset immediately for that
+            price. Users can also make an offer and you’ll see these offers in
+            the asset page and in your profile page under “Offers.” If you did a
+            simple listing (i.e., not auction) after someone places a bid on
+            your asset, you can accept that offer, wait for further offers or
+            wait until someone pays the buyout price for your piece.
           </p>
           <p>
             If you decide to accept an offer, your wallet will sign the atomic
@@ -481,10 +481,10 @@
           <img class="guide-image" src="/guide/image20.png" alt="guide-image" />
           <img class="guide-image" src="/guide/image32.png" alt="guide-image" />
           <p>
-            If you decide to list your asset as an auction, JungleLab users
-            will see the time left until the auction goes live, and they will be
-            able to bid for your piece until the end of the auction. If you set
-            a reserve price (i.e., minimum amount that you will accept for your
+            If you decide to list your asset as an auction, JungleLab users will
+            see the time left until the auction goes live, and they will be able
+            to bid for your piece until the end of the auction. If you set a
+            reserve price (i.e., minimum amount that you will accept for your
             piece), users will also be able to see this information. JungleLab
             users will also see a countdown timer indicating when the auction
             ends. If someone bids in the last 15 min, this will automatically
@@ -512,23 +512,25 @@
         </div>
       </div>
     </div>
-<div class="contact boxShadow">
-	<p>Need more help?</p>
-	<ul>
-          <li><a href="/help">Read FAQs</a></li>
-          <li>
-            <a href={branding.urls.external.discord} target="_blank" rel='noreferrer'
-              >Chat with support</a
-            >
-          </li>
-          <li>
-            <a href="mailto:{branding.emails.support}" target="_blank" rel='noreferrer'
-              >Email support</a
-            >
-          </li>
-	</ul>
+  </div>
 </div>
-  </div></div>
+<div class="contact boxShadow">
+  <p>Need more help?</p>
+  <ul>
+    <li><a href="/help">Read FAQs</a></li>
+    <li>
+      <a href={branding.urls.external.discord} target="_blank" rel="noreferrer"
+        >Chat with support</a
+      >
+    </li>
+    <li>
+      <a
+        href="mailto:{branding.emails.support}"
+        target="_blank"
+        rel="noreferrer">Email support</a
+      >
+    </li>
+  </ul>
 </div>
 
 <style>
@@ -562,21 +564,21 @@
     max-width: 100%;
     margin: 10px auto;
   }
-.contact {
-	height: 300px;
-	width: 1325px;
-	padding: 30px;
-	margin-left: 50px;
-}
-.contact p {
-	margin-bottom: 30px;
-	font-size: 22px;
-	border-radius: 10px;
-}
+  .contact {
+    height: 300px;
+    width: 1325px;
+    padding: 30px;
+    margin-left: 50px;
+  }
+  .contact p {
+    margin-bottom: 30px;
+    font-size: 22px;
+    border-radius: 10px;
+  }
 
-.contact a {
-	color: #3ba5ac;
-}
+  .contact a {
+    color: #3ba5ac;
+  }
 
   @media only screen and (max-width: 1023px) {
     .layout-container {
