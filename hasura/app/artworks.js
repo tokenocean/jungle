@@ -1,10 +1,12 @@
+const { v4 } = require("uuid");
 const { api, q, lnft } = require("./api");
-const { broadcast } = require("./wallet");
+const { broadcast, btc, parseAsset } = require("./wallet");
 const { Psbt } = require("liquidjs-lib");
 const { compareAsc, parseISO } = require("date-fns");
 const {
   acceptBid,
   cancelBid,
+  createArtwork,
   createTransaction,
   getCurrentUser,
   getTransactionArtwork,
@@ -16,6 +18,7 @@ const {
   updateViews,
 } = require("./queries");
 const { SERVER_URL } = process.env;
+const { kebab, sleep, wait } = require("./utils");
 
 const crypto = require("crypto");
 
@@ -30,7 +33,6 @@ app.post("/cancel", auth, async (req, res) => {
 
     if (errors) throw new Error(errors[0].message);
     let user = data.currentuser[0];
-
 
     if (tx.user_id !== user.id) return res.code(401).send();
 
@@ -232,6 +234,116 @@ app.post("/accept", auth, async (req, res) => {
       .post({ query: acceptBid, variables: req.body })
       .json();
     res.send(data);
+  } catch (e) {
+    console.log(e);
+    res.code(500).send(e.message);
+  }
+});
+
+const issuances = {};
+const issue = async (
+  issuance,
+  ids,
+  { body: { artwork, tickers, transactions }, headers }
+) => {
+  issuances[issuance] = { length: transactions.length, i: 0 };
+  let tries = 0;
+  let i = 0;
+
+  while (transactions.length && tries < 40) {
+    try {
+      artwork.ticker = tickers[0].toUpperCase();
+      artwork.id = ids[i];
+      artwork.edition = i + 1;
+      artwork.slug = kebab(artwork.title || "untitled");
+
+      if (i > 0) artwork.slug += "-" + i + 1;
+
+      artwork.slug += "-" + artwork.id.substr(0, 5);
+      if (i === 0) slug = artwork.slug;
+
+      let { contract, psbt } = transactions[0];
+      let p = Psbt.fromBase64(psbt);
+      await broadcast(p);
+      let tx = p.extractTransaction();
+      let hash = tx.getId();
+      contract = JSON.stringify(contract);
+      artwork.asset = parseAsset(
+        tx.outs.find((o) => parseAsset(o.asset) !== btc).asset
+      );
+
+      let tags = artwork.tags.map(({ tag }) => ({
+        tag,
+        artwork_id: artwork.id,
+      }));
+
+      let artworkSansTags = { ...artwork };
+      delete artworkSansTags.tags;
+
+      let variables = {
+        artwork: artworkSansTags,
+        transaction: {
+          artwork_id: artwork.id,
+          type: "creation",
+          hash,
+          contract,
+          asset: artwork.asset,
+          amount: 1,
+          psbt,
+        },
+        tags,
+      };
+
+      ({ data, errors } = await api(headers)
+        .post({ query: createArtwork, variables })
+        .json());
+
+      if (errors) throw new Error(errors[0].message);
+
+      tries = 0;
+      transactions.shift();
+      tickers.shift();
+      issuances[issuance].i = ++i;
+    } catch (e) {
+      console.log("failed issuance", e);
+      await sleep(5000);
+      tries++;
+    }
+  }
+
+  try {
+    // await api
+    //   .url("/mail-artwork-minted")
+    //   .auth(`Bearer ${$session.jwt}`)
+    //   .post({
+    //     userId: $session.user.id,
+    //     artworkId: artwork.id,
+    //   });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+app.post("/issue", auth, async (req, res) => {
+  try {
+    let issuance = v4();
+    let ids = req.body.transactions.map((t) => v4());
+    issue(issuance, ids, req);
+    let slug =
+      kebab(req.body.artwork.title || "untitled") + "-" + ids[0].substr(0, 5);
+
+    await wait(() => issuances[issuance].i > 0 || console.log(issuances));
+
+    res.send({ issuance, slug });
+  } catch (e) {
+    console.log(e);
+    res.code(500).send(e.message);
+  }
+});
+
+app.get("/issuance", auth, async (req, res) => {
+  try {
+    res.send(issuance[req.body.issuance]);
   } catch (e) {
     console.log(e);
     res.code(500).send(e.message);

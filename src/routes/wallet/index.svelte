@@ -1,15 +1,17 @@
 <script context="module">
   export async function load({ session }) {
-    if (!(session && session.user)) return {
-      status: 302,
-      redirect: '/login'
-    } 
+    if (!(session && session.user))
+      return {
+        status: 302,
+        redirect: "/login",
+      };
 
     return {};
   }
 </script>
 
 <script>
+  import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
   import { border, bg } from "./_colors";
@@ -17,15 +19,7 @@
   import { browser } from "$app/env";
   import { query } from "$lib/api";
   import { onDestroy, onMount, tick } from "svelte";
-  import {
-    asset,
-    assets,
-    balances,
-    pending,
-    password,
-    user,
-    token,
-  } from "$lib/store";
+  import { asset, assets, balances, pending, password } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { getArtworksByOwner } from "$queries/artworks";
   import { assetLabel, btc, err, sats, tickers, val } from "$lib/utils";
@@ -59,49 +53,13 @@
 
   let poll;
   let pollBalances = async () => {
-    await getBalances();
+    await getBalances($session);
     poll = setTimeout(pollBalances, 5000);
-  } 
+  };
 
   onMount(pollBalances);
   onDestroy(() => clearTimeout(poll));
-
 </script>
-
-<style>
-  .dark-red {
-    background: #2b0208;
-  }
-  .dark-green {
-    background: #082527;
-  }
-  .dark-gray {
-    background: #31373e;
-  }
-  .border-blue {
-    border-color: #CCFF00;
-  }
-
-  .bg-btc {
-    background: rgba(52,190,171,.25);
-  }
-  .border-btc {
-    border-color: #CCFF00;
-  }
-
-  .light-color {
-    color: #f4f4f4;
-  }
-
-  .active {
-    @apply border-t-2 border-b-2 border-r-2 text-white;
-  }
-
-  button:disabled {
-    @apply text-gray-400 border-gray-400;
-  }
-
-</style>
 
 {#if $balances && $pending}
   <div class="w-full">
@@ -123,7 +81,10 @@
 
     <div class="dark-bg mb-2 pt-1 sm:rounded-lg">
       <div
-        class={`border-l-8 text-center p-3 text-white text-xl w-1/2 rounded-r-full mt-5 font-bold ${border($asset)} ${bg($asset)}`}>
+        class={`border-l-8 text-center p-3 text-white text-xl w-1/2 rounded-r-full mt-5 font-bold ${border(
+          $asset
+        )} ${bg($asset)}`}
+      >
         {name($asset)}
       </div>
 
@@ -138,20 +99,22 @@
         <div class="m-6">
           <div class="text-sm light-color">Pending</div>
           <div class="flex mt-3">
-            <span
-              class="light-color mr-3">{$pending && val($asset, $pending[$asset] || 0)}</span>
+            <span class="light-color mr-3"
+              >{$pending && val($asset, $pending[$asset] || 0)}</span
+            >
             <span class="text-gray-400">{assetLabel($asset)}</span>
           </div>
         </div>
       {/if}
       <div class="flex justify-between p-6 pt-2">
-        <button
-          on:click={toggleFunding}
-          class="button-trans-gray w-full mr-2">Fund</button>
+        <button on:click={toggleFunding} class="button-trans-gray w-full mr-2"
+          >Fund</button
+        >
         <button
           on:click={toggleWithdrawing}
           class="button-trans-gray w-full ml-2"
-          disabled={!balance}>Withdraw</button>
+          disabled={!balance}>Withdraw</button
+        >
       </div>
     </div>
     <div>
@@ -161,3 +124,37 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .dark-red {
+    background: #2b0208;
+  }
+  .dark-green {
+    background: #082527;
+  }
+  .dark-gray {
+    background: #31373e;
+  }
+  .border-blue {
+    border-color: #ccff00;
+  }
+
+  .bg-btc {
+    background: rgba(52, 190, 171, 0.25);
+  }
+  .border-btc {
+    border-color: #ccff00;
+  }
+
+  .light-color {
+    color: #f4f4f4;
+  }
+
+  .active {
+    @apply border-t-2 border-b-2 border-r-2 text-white;
+  }
+
+  button:disabled {
+    @apply text-gray-400 border-gray-400;
+  }
+</style>

@@ -239,16 +239,20 @@ module.exports = {
       contract
     } 
   }`,
-  getLastTransactionForAddress: `query($address: String!) {
+  getLastTransactionsForAddress: `query($address: String!) {
     transactions(
       where: {
         address: {_eq: $address}, 
         type: {_in: ["deposit", "withdrawal"]}
       },
-      limit: 1,
+      limit: 25,
       order_by: [{ sequence: desc }]
     ) {
       hash
+      type
+      asset
+      address
+      user_id
     }
   }`,
   getTransactions: `query($id: uuid!, $limit: Int) {
@@ -349,5 +353,16 @@ module.exports = {
       asset
       value
     }
+  }`,
+  createArtwork: `mutation ($artwork: artworks_insert_input!, $tags: [tags_insert_input!]!, $transaction: transactions_insert_input!) {
+    insert_artworks_one(object: $artwork) {
+      id
+    }
+    insert_tags(objects: $tags) {
+      affected_rows
+    }
+    insert_transactions_one(object: $transaction) {
+      id
+    } 
   }`,
 };

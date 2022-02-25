@@ -51,7 +51,7 @@
       <div class="p-4">
         <div class="flex flex-row justify-between h-20">
           <a href={`/a/${artwork.slug}`} class="mr-2">
-            <h1 class="text-xl break-words overflow-y-hidden max-h-14">
+            <h1 class="text-xl break-all overflow-y-hidden max-h-14">
               {artwork.title || "Untitled"}
               {#if !(artwork.transferred_at || artwork.asking_asset)}
                 (unlisted)
@@ -83,8 +83,9 @@
               <div class="price">{val(artwork.bid.amount)} {ticker}</div>
               <div class="text-xs font-medium">
                 Current bid by
-                <a href={`/${artwork.bid.user.username}`} class="secondary-color"
-                  >@{artwork.bid.user.username}</a
+                <a
+                  href={`/${artwork.bid.user.username}`}
+                  class="secondary-color">@{artwork.bid.user.username}</a
                 >
               </div>
             </div>
@@ -119,19 +120,19 @@
         </div>
       </div>
     </div>
-      {#if end_counter}
-        <div class="p-3 rounded-b-lg lightblue-grad text-black mt-auto">
-          Time left:
-          {end_counter}
-        </div>
-      {:else if start_counter}
-        <div class="p-3 rounded-b-lg lightblue-grad text-black mt-auto">
-          Auction starts in:
-          {start_counter}
-        </div>
-      {:else}
-        <div class="p-3 rounded-b-lg">&nbsp;</div>
-      {/if}
+    {#if end_counter}
+      <div class="p-3 rounded-b-lg lightblue-grad text-black mt-auto">
+        Time left:
+        {end_counter}
+      </div>
+    {:else if start_counter}
+      <div class="p-3 rounded-b-lg lightblue-grad text-black mt-auto">
+        Auction starts in:
+        {start_counter}
+      </div>
+    {:else}
+      <div class="p-3 rounded-b-lg">&nbsp;</div>
+    {/if}
   {/if}
 </div>
 

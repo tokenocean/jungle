@@ -17,7 +17,9 @@
       class="flex flex-col text-sm w-full lg:w-2/4 mb-10 order-last lg:order-first"
     >
       <a href="/"><img src="/logo-white.svg" alt="logo" class="w-48" /></a>
-      <a href="/"><img src="/bitcoin-logo-dark-768x162.png" alt="logo" class="w-48" /></a>
+      <a href="/"
+        ><img src="/bitcoin-logo-dark-768x162.png" alt="logo" class="w-48" /></a
+      >
       <p class="mt-4">&copy;2021 {branding.projectName}</p>
       <div class="flex items-center mt-12">
         <p class="pr-3">Powered by:</p>
@@ -86,10 +88,11 @@
     <div class="w-full lg:w-1/4 mb-10">
       <h4 class="font-bold mb-4">Help</h4>
       <ul class="list-none">
+        <li class="mb-2"><a href="/help">Help</a></li>
         <li class="mb-2">
           <a href="https://blockstream.com/liquid/">The Liquid Network</a>
         </li>
-        <li class="mb-2"><a href="mailto:support@junglelab">Support</a></li>
+        <li class="mb-2"><a href="mailto:support@junglelab.io">Support</a></li>
         <li class="mb-2"><a href="/privacy-policy">Privacy Policy</a></li>
         <li class="mb-2">
           <a href="/terms-and-conditions">Terms of Service</a>

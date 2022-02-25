@@ -18,12 +18,12 @@
   <a href={branding.urls.external.blog}
     ><button on:click={toggle}>Blog</button></a
   >
-  <a href="/faq"><button on:click={toggle}>FAQ</button></a>
+  <a href="/help"><button on:click={toggle}>Help</button></a>
   {#if $session?.user}
     {#if $session.user.is_admin}
       <a href="/admin"><button on:click={toggle}>Admin</button></a>
     {/if}
-    <a href={`/${$session.user.username}`}>
+    <a href={`/${$session.user?.username}`}>
       <button on:click={toggle} class="flex">
         <Avatar user={$session.user} />
       </button></a

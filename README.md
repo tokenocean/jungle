@@ -65,7 +65,15 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
     cd ..
     pnpm dev   # site is available at http://localhost:3000/
 
-## Setup local development with cloud tools - VS CodeSpaces <https://vscode.dev>
+### Setup pre-commit git hooks
+
+We have a pre-commit git hook for running prettier on all files to keep the formatting consistent.
+
+`git config core.hooksPath "./git_hooks"` - This will set the git config path to use this directory for hooks.
+
+`chmod +x ./git_hooks/pre-commit` - This will give the hook the necessary permissions to run.
+
+## Setup local development with cloud tools - VS CodeSpaces https://vscode.dev
 
      npm i -g pnpm
      pnpm install
@@ -95,4 +103,4 @@ Mine some blocks to get the electrs API server warmed up
 
 Get a deposit address from the wallet page or users table in the db and send an amount with this command
 
-    docker exec -it liquid elements-cli -datadir=/config sendtoaddress <address> <amount>
+    docker exec -it liquid elements-cli -datadir=/home/elements/.elements sendtoaddress <address> <amount>

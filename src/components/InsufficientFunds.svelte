@@ -1,6 +1,7 @@
 <svelte:options accessors={true} />
 
 <script>
+  import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import {
     faUserSecret,
@@ -10,17 +11,9 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { faClone } from "@fortawesome/free-regular-svg-icons";
   import { ProgressLinear } from "$comp";
-  import { onMount, tick } from "svelte";
+  import { onDestroy, onMount, tick } from "svelte";
   import qrcode from "qrcode-generator-es6";
-  import {
-    balances,
-    error,
-    locked,
-    pending,
-    prompt,
-    user,
-    token,
-  } from "$lib/store";
+  import { balances, error, locked, pending, prompt } from "$lib/store";
   import { assetLabel, btc, copy, err, fullscreen, val } from "$lib/utils";
   import { getBalances } from "$lib/wallet";
   import { api } from "$lib/api";
@@ -37,7 +30,7 @@
   $: amountUpdated(amount);
   let amountUpdated = (a) => isNaN(a) && ($prompt = undefined);
 
-  let url = `liquidnetwork:${$user.address}?amount=${amount}`;
+  let url = `liquidnetwork:${$session.user.address}?amount=${amount}`;
 
   let showInvoice = false;
   let toggle = () => {
@@ -57,13 +50,13 @@
   };
 
   onDestroy(() => clearInterval(poll));
-  let poll = setInterval(() => getBalances.catch(err), 5000);
+  let poll = setInterval(() => getBalances($session), 5000);
 
   let confidential = false;
   let toggleConfidential = () => {
     confidential = !confidential;
     if (confidential) liquid();
-    else address = $user.address;
+    else address = $session.user.address;
   };
 
   $: current = ($balances && $balances[$error.asset]) || 0;
@@ -71,7 +64,6 @@
   $: incoming && (confirming = true);
   $: newBalance(current);
   let newBalance = () => {
-    console.log("SKOO");
     if (confirming) {
       confirmed = true;
       confirming = false;
@@ -97,10 +89,10 @@
     try {
       ({ address, fee } = await api
         .url("/bitcoin")
-        .auth(`Bearer ${$token}`)
+        .auth(`Bearer ${$session.jwt}`)
         .post({
           amount: Math.max($error.amount, 1000),
-          liquidAddress: $user.address,
+          liquidAddress: $session.user.address,
         })
         .json());
     } catch (e) {
@@ -115,7 +107,7 @@
 
     if (!confidential) {
       explainer = false;
-      address = $user.address;
+      address = $session.user.address;
       return;
     }
 
@@ -125,10 +117,10 @@
     try {
       ({ address, fee } = await api
         .url("/liquid")
-        .auth(`Bearer ${$token}`)
+        .auth(`Bearer ${$session.jwt}`)
         .post({
           amount: Math.max($error.amount, 1000),
-          liquidAddress: $user.address,
+          liquidAddress: $session.user.address,
         })
         .json());
     } catch (e) {
@@ -145,10 +137,10 @@
     try {
       ({ address, fee } = await api
         .url("/lightning")
-        .auth(`Bearer ${$token}`)
+        .auth(`Bearer ${$session.jwt}`)
         .post({
           amount: Math.max($error.amount, 1000),
-          liquidAddress: $user.address,
+          liquidAddress: $session.user.address,
         })
         .json());
     } catch (e) {
@@ -159,7 +151,7 @@
   };
 
   let address;
-  $: if ($user) address = $user.address;
+  $: if ($session.user) address = $session.user.address;
 </script>
 
 <div class="mb-2 rounded-lg">
@@ -316,7 +308,7 @@
     @apply mb-auto h-8 mx-2 md:mx-4 mt-6;
     &:hover {
       @apply border-b-2;
-      border-bottom: 3px solid #43470B;
+      border-bottom: 3px solid #43470b;
     }
   }
 </style>

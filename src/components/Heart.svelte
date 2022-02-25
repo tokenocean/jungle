@@ -1,5 +1,5 @@
 <script>
-  import { user } from "$lib/store";
+  import { session } from "$app/stores";
   import { createFavorite, deleteFavorite } from "$queries/favorites";
   import { requireLogin } from "$lib/auth";
   import { err } from "$lib/utils";
@@ -15,9 +15,9 @@
 
   let favorite = async () => {
     try {
-      await requireLogin();
+      await requireLogin(null, $session.jwt);
       let { id: artwork_id } = artwork;
-      let { id: user_id } = $user;
+      let { id: user_id } = $session.user;
 
       if (favorited) {
         await query(deleteFavorite, { artwork_id, user_id });

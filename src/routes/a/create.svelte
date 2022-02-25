@@ -11,32 +11,25 @@
 </script>
 
 <script>
+  import { page, session } from "$app/stores";
   import Fa from "svelte-fa";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-  import { page } from "$app/stores";
   import { v4 } from "uuid";
-  import { hasura, api } from "$lib/api";
+  import { query, api } from "$lib/api";
   import { tick, onDestroy } from "svelte";
-  import {
-    edition,
-    fee,
-    psbt,
-    password,
-    prompt,
-    user,
-    token,
-  } from "$lib/store";
+  import { edition, fee, psbt, password, titles, txcache } from "$lib/store";
   import { Dropzone, ProgressLinear } from "$comp";
   import { upload, supportedTypes } from "$lib/upload";
-  import { create } from "$queries/artworks";
+  import { getArtworksByTicker, queryTickers } from "$queries/artworks";
   import { btc, kebab, goto, err } from "$lib/utils";
-  import { requireLogin, requirePassword } from "$lib/auth";
+  import { requirePassword } from "$lib/auth";
   import {
     createIssuance,
     sign,
-    broadcast,
     parseAsset,
+    parseVal,
     keypair,
+    getInputs,
   } from "$lib/wallet";
   import reverse from "buffer-reverse";
   import { ArtworkMedia } from "$comp";
@@ -116,31 +109,29 @@
     tags: [],
   };
 
-  let hash, tx;
+  let hash, tx, inputs, total, transactions;
+  let required = 0;
   const issue = async (ticker) => {
     let contract;
     let domain =
-      $user.username === branding.superUserName
+      $session.user.username === branding.superUserName
         ? branding.urls.base
-        : `${$user.username.toLowerCase()}.${branding.urls.base}`;
+        : `${$session.user.username.toLowerCase()}.${branding.urls.base}`;
 
     let error, success;
 
-    await requirePassword();
+    contract = await createIssuance(artwork, domain, inputs.pop());
 
-    contract = await createIssuance(artwork, domain, tx);
+    $titles = [...$titles, artwork];
 
-    await sign();
-    await broadcast(true);
+    await sign(1, false);
     await tick();
 
     tx = $psbt.extractTransaction();
-    artwork.asset = parseAsset(
-      tx.outs.find((o) => parseAsset(o.asset) !== btc).asset
-    );
-    hash = tx.getId();
-
-    return JSON.stringify(contract);
+    required += parseVal(tx.outs.find((o) => o.script.length === 0).value);
+    $txcache[tx.getId()] = tx;
+    inputs.unshift(tx);
+    transactions.push({ contract, psbt: $psbt.toBase64() });
   };
 
   let tries;
@@ -164,15 +155,13 @@
   };
 
   let checkTicker = async () => {
-    let { data } = await hasura
-      .auth(`Bearer ${$token}`)
-      .post({
-        query: `query { artworks(where: { ticker: { _like: "${artwork.ticker.toUpperCase()}%" }}) { ticker }}`,
-      })
-      .json();
+    let { ticker } = artwork;
+    let { artworks } = await query(getArtworksByTicker, {
+      ticker: ticker + "%",
+    });
 
-    if (!data.errors && data.artworks && data.artworks.length) {
-      let tickers = data.artworks.sort(({ ticker: a }, { ticker: b }) =>
+    if (artworks && artworks.length) {
+      let tickers = artworks.sort(({ ticker: a }, { ticker: b }) =>
         b.length < a.length
           ? 1
           : b.length > a.length
@@ -180,29 +169,18 @@
           : a.charCodeAt(a.length - 1) - b.charCodeAt(b.length - 1)
       );
 
-      if (tickers.map((a) => a.ticker).includes(artwork.ticker)) {
-        let { ticker } = tickers.pop();
-        artwork.ticker =
-          ticker.substr(0, 3) + c[c.indexOf(ticker.substr(3)) + 1];
+      if (tickers.map((a) => a.ticker).includes(ticker)) {
+        let { ticker: t } = tickers.pop();
+        artwork.ticker = t.substr(0, 3) + c[c.indexOf(t.substr(3)) + 1];
       }
     }
   };
 
   let checkTickers = async (tickers) => {
-    let { data } = await hasura
-      .auth(`Bearer ${$token}`)
-      .post({
-        query: `query { artworks(where: { ticker: { _in: ${JSON.stringify(
-          tickers
-        )} }}) { ticker }}`,
-      })
-      .json();
-
-    if (data.artworks && data.artworks.length)
+    let { artworks } = await query(queryTickers, { tickers });
+    if (artworks.length)
       throw new Error(
-        `Ticker(s) not available: ${data.artworks
-          .map((a) => a.ticker)
-          .join(", ")}`
+        `Ticker(s) not available: ${artworks.map((a) => a.ticker).join(", ")}`
       );
   };
 
@@ -217,6 +195,8 @@
 
   let submit = async (e) => {
     e.preventDefault();
+    await requirePassword($session);
+    transactions = [];
     if (!artwork.title) return err("Please enter a title");
     if (!artwork.ticker) return err("Please enter a ticker symbol");
 
@@ -227,8 +207,6 @@
     loading = true;
 
     try {
-      await requireLogin();
-
       let { ticker } = artwork;
       let tickers = [];
 
@@ -241,65 +219,29 @@
 
       await checkTickers(tickers);
 
-      if (artwork.editions > 1) $prompt = Issuing;
+      [inputs, total] = await getInputs();
 
       for ($edition = 1; $edition <= artwork.editions; $edition++) {
-        if ($edition > 1) {
-          artwork.ticker = tickers[$edition - 1];
-          await new Promise((r) => setTimeout(r, 5000));
-        }
-        artwork.ticker = artwork.ticker.toUpperCase();
-
-        let contract = await issue();
+        await issue();
         tries = 0;
-        artwork.id = v4();
-        artwork.edition = $edition;
-        artwork.slug = kebab(artwork.title || "untitled");
-
-        if ($edition > 1) artwork.slug += "-" + $edition;
-        artwork.slug += "-" + artwork.id.substr(0, 5);
-
-        let tags = artwork.tags.map(({ tag }) => ({
-          tag,
-          artwork_id: artwork.id,
-        }));
-
-        let artworkSansTags = { ...artwork };
-        delete artworkSansTags.tags;
-
-        let variables = {
-          artwork: artworkSansTags,
-          transaction: {
-            artwork_id: artwork.id,
-            type: "creation",
-            hash,
-            contract,
-            asset: artwork.asset,
-            amount: 1,
-            psbt: $psbt.toBase64(),
-          },
-          tags,
-        };
-
-        let result = await hasura
-          .auth(`Bearer ${$token}`)
-          .post({
-            query: create,
-            variables,
-          })
-          .json();
-
-        if (result.error) throw new Error(result.error.message);
-
-        await api.url("/mail-artwork-minted").auth(`Bearer ${$token}`).post({
-          userId: $user.id,
-          artworkId: artwork.id,
-        });
       }
 
-      $prompt = undefined;
-      goto(`/a/${artwork.slug}`);
+      if (total < required)
+        throw { message: "Insufficient funds", required, btc, total };
+
+      let { issuance, slug } = await api
+        .url("/issue")
+        .auth(`Bearer ${$session.jwt}`)
+        .post({
+          artwork,
+          tickers,
+          transactions,
+        })
+        .json();
+
+      goto(`/a/${slug}`);
     } catch (e) {
+      console.log(e);
       err(e);
       loading = false;
     }

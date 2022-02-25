@@ -1,9 +1,10 @@
 <script>
+  import { session } from "$app/stores";
   import { onMount, tick, onDestroy } from "svelte";
   import { page } from "$app/stores";
   import { ArtworkMedia } from "$comp";
-  import { getSamples, updateUser } from "$queries/users";
-  import { role, user, token } from "$lib/store";
+  import { getSamples, updateUser, deleteSamples } from "$queries/users";
+  import { role } from "$lib/store";
   import { api, hasura, query } from "$lib/api";
   import { err, goto, info } from "$lib/utils";
   import { requireLogin } from "$lib/auth";
@@ -12,9 +13,9 @@
   let samples;
 
   onMount(async () => {
-    if ($token) {
+    if ($session.jwt) {
       const applicantsRequest = await hasura
-        .auth(`Bearer ${$token}`)
+        .auth(`Bearer ${$session.jwt}`)
         .headers({
           "X-Hasura-Role": "approver",
         })
@@ -28,62 +29,84 @@
     }
   });
 
-  $: pageChange($page, $user);
+  $: pageChange($page, $session.user);
 
   let pageChange = async () => {
     try {
-      if (!$user) return;
-      if (!$user.is_admin) goto("/market");
+      if (!$session.user) return;
+      if (!$session.user.is_admin) goto("/market");
       $role = "approver";
     } catch (error) {
       err(error);
     }
-    await requireLogin();
+    await requireLogin(null, $session.jwt);
   };
 
   onDestroy(() => ($role = "user"));
 
   let makeArtist = async (user) => {
-    user.is_artist = true;
-    query(
-      updateUser,
-      { id: user.id, user: { is_artist: true } },
-      {
-        "X-Hasura-Role": "approver",
-      }
-    ).catch(err);
+    try {
+      user.is_artist = true;
+      await query(
+        updateUser,
+        { id: user.id, user: { is_artist: true, info: null } },
+        {
+          "X-Hasura-Role": "approver",
+        }
+      ).catch(err);
 
-    await api
-      .url("/mail-artist-application-approved")
-      .auth(`Bearer ${$token}`)
-      .post({
-        userId: user.id,
-      });
+      await query(
+        deleteSamples,
+        { user_id: user.id },
+        {
+          "X-Hasura-Role": "approver",
+        }
+      ).catch(err);
 
-    users = users.filter((u) => u.id !== user.id);
-    info(`${user.username} is now an artist!`);
+      await api
+        .url("/mail-artist-application-approved")
+        .auth(`Bearer ${$session.jwt}`)
+        .post({
+          userId: user.id,
+        });
+
+      users = users.filter((u) => u.id !== user.id);
+      info(`${user.username} is now an artist!`);
+    } catch (error) {
+      err(error);
+    }
   };
 
   let denyArtist = async (user) => {
-    user.is_denied = true;
-    query(
-      updateUser,
-      { id: user.id, user: { is_denied: true } },
-      {
-        "X-Hasura-Role": "approver",
-      }
-    ).catch(err);
+    try {
+      await query(
+        updateUser,
+        { id: user.id, user: { info: null } },
+        {
+          "X-Hasura-Role": "approver",
+        }
+      ).catch(err);
 
-    await api
-      .auth(`Bearer ${$token}`)
-      .url("/mail-artist-application-denied")
-      .post({
-        userId: user.id,
-      })
-      .json();
+      await query(
+        deleteSamples,
+        { user_id: user.id },
+        {
+          "X-Hasura-Role": "approver",
+        }
+      ).catch(err);
 
-    users = users.filter((u) => u.id !== user.id);
-    info(`${user.username} has been denied!`);
+      await api
+        .auth(`Bearer ${$session.jwt}`)
+        .url("/mail-artist-application-denied")
+        .post({
+          userId: user.id,
+        });
+
+      users = users.filter((u) => u.id !== user.id);
+      info(`${user.username} has been denied!`);
+    } catch (error) {
+      err(error);
+    }
   };
 </script>
 
@@ -123,6 +146,6 @@
         >
       </div>
     </div>
-    <hr>
+    <hr />
   {/each}
 </div>

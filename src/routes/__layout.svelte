@@ -1,6 +1,7 @@
 <script context="module">
   import { prerendering } from "$app/env";
   import { get } from "$lib/api";
+  import "../main.css";
 
   export async function load({ fetch, url, session }) {
     if (prerendering)
@@ -39,9 +40,10 @@
     addresses as a,
     meta,
     titles as t,
-    user,
     password,
+    prompt,
     poll,
+    user,
     token,
   } from "$lib/store";
   import { onDestroy, onMount } from "svelte";
@@ -53,8 +55,7 @@
   let refresh = async () => {
     try {
       let { jwt_token } = await get("/auth/refresh.json", fetch);
-      $token = jwt_token;
-      if (!$token && $session) delete $session.user;
+      if (browser) $token = jwt_token;
     } catch (e) {
       console.log(e);
     }
@@ -70,11 +71,8 @@
 
     $a = addresses;
     $t = titles;
-
-    if ($session) {
-      $user = $session.user;
-      $token = $session.jwt;
-    }
+    $user = $session.user;
+    $token = $session.jwt;
 
     interval = setInterval(refresh, 60000);
   }
@@ -82,12 +80,16 @@
   let open = false;
   let y;
 
-  let stopPolling = () => $poll.map(clearInterval);
+  let stopPolling = () => {
+    $poll.map(clearInterval);
+    $prompt = false;
+  };
   $: stopPolling($page);
 
   onDestroy(() => clearInterval(interval));
   onMount(() => {
-    if (browser && !$password) $password = window.sessionStorage.getItem("password");
+    if (browser && !$password)
+      $password = window.sessionStorage.getItem("password");
   });
 </script>
 
@@ -113,5 +115,18 @@
 
 <Footer />
 
-<style global src="../main.css">
+<style global>
+  input,
+  textarea,
+  select {
+    @apply border bg-white focus:outline-none;
+    overflow-y: auto;
+    padding: 0;
+    padding: 10px;
+  }
+
+  .title {
+    @apply font-bold pb-14 text-4xl text-left;
+    color: #133e7c;
+  }
 </style>

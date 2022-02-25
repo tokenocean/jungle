@@ -48,6 +48,7 @@
 </script>
 
 <script>
+  import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import {
     faChevronDown,
@@ -68,9 +69,17 @@
   } from "$comp";
   import Sidebar from "./_sidebar.svelte";
   import { tick, onDestroy } from "svelte";
-  import { art, meta, prompt, password, user, token, psbt } from "$lib/store";
+  import { art, meta, prompt, password, psbt } from "$lib/store";
   import countdown from "$lib/countdown";
-  import { goto, err, explorer, info, linkify, units } from "$lib/utils";
+  import {
+    goto,
+    err,
+    explorer,
+    info,
+    linkify,
+    units,
+    underway,
+  } from "$lib/utils";
   import { requirePassword } from "$lib/auth";
   import {
     createOffer,
@@ -86,15 +95,16 @@
   export let artwork, others, metadata, views;
 
   let release = async () => {
-    await requirePassword();
+    await requirePassword($session);
     $psbt = await releaseToSelf(artwork);
     $psbt = await sign();
+    $psbt = await requestSignature($psbt);
     await broadcast($psbt);
   };
 
   $: disabled =
     loading ||
-    !artwork ||
+    (artwork.owner_id === $session.user?.id && underway(artwork)) ||
     artwork.transactions.some(
       (t) => ["purchase", "creation", "cancel"].includes(t.type) && !t.confirmed
     );
@@ -102,12 +112,14 @@
   let start_counter, end_counter, now, timeout;
 
   let fetch = async () => {
-    query(getArtwork, { id: artwork.id }).then((res) => {
-      artwork = res.artworks_by_pk;
+    try {
+      ({ artworks_by_pk: artwork } = await query(getArtwork, {
+        id: artwork.id,
+      }));
       artwork.views = views;
-
-      $art = artwork;
-    });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   let poll = setInterval(fetch, 2500);
@@ -151,7 +163,7 @@
       transaction.asset = artwork.asset;
       transaction.type = "bid";
 
-      await requirePassword();
+      await requirePassword($session);
 
       $psbt = await createOffer(artwork, transaction.amount);
       $psbt = await sign();
@@ -162,10 +174,13 @@
       await save();
       await fetch();
 
-      await api.url("/offer-notifications").auth(`Bearer ${$token}`).post({
-        artworkId: artwork.id,
-        transactionHash: transaction.hash,
-      });
+      await api
+        .url("/offer-notifications")
+        .auth(`Bearer ${$session.jwt}`)
+        .post({
+          artworkId: artwork.id,
+          transactionHash: transaction.hash,
+        });
 
       offering = false;
     } catch (e) {
@@ -180,7 +195,7 @@
     transaction.asset = artwork.asking_asset;
 
     let { data, errors } = await api
-      .auth(`Bearer ${$token}`)
+      .auth(`Bearer ${$session.jwt}`)
       .url("/transaction")
       .post({ transaction })
       .json();
@@ -202,7 +217,7 @@
   let loading;
   let buyNow = async () => {
     try {
-      await requirePassword();
+      await requirePassword($session);
       loading = true;
 
       transaction.amount = -artwork.list_price;
@@ -225,12 +240,15 @@
       await save();
       await fetch();
 
-      await api.url("/mail-purchase-successful").auth(`Bearer ${$token}`).post({
-        userId: $user.id,
-        artworkId: artwork.id,
-      });
+      await api
+        .url("/mail-purchase-successful")
+        .auth(`Bearer ${$session.jwt}`)
+        .post({
+          userId: $session.user.id,
+          artworkId: artwork.id,
+        });
 
-      await api.url("/mail-artwork-sold").auth(`Bearer ${$token}`).post({
+      await api.url("/mail-artwork-sold").auth(`Bearer ${$session.jwt}`).post({
         userId: artwork.owner.id,
         artworkId: artwork.id,
       });
@@ -251,7 +269,7 @@
 <div class="container mx-auto mt-10 md:mt-20">
   <div class="flex flex-wrap">
     <div class="lg:text-left w-full lg:w-1/3 lg:max-w-xs">
-      <h1 class="text-3xl font-black primary-color break-words">
+      <h1 class="text-3xl font-black primary-color break-all">
         {artwork.title || "Untitled"}
       </h1>
       <div class="flex mt-4 mb-6">
@@ -334,7 +352,7 @@
 
       {#if loading}
         <ProgressLinear />
-      {:else if $user && $user.id === artwork.owner_id && artwork.held}
+      {:else if $session.user && $session.user.id === artwork.owner_id && artwork.held}
         <div class="w-full mb-2">
           <a
             sveltekit:prefetch
@@ -361,7 +379,7 @@
           >
         </div>
 
-        {#if $user.id === artwork.artist_id}
+        {#if $session.user.id === artwork.artist_id}
           <div class="w-full mb-2">
             <a
               href={`/a/${artwork.slug}/edit`}
@@ -440,7 +458,7 @@
 
       {#if artwork.description}
         <div
-          class="mob-desc description text-gray-600 whitespace-pre-wrap break-words"
+          class="mob-desc description text-gray-600 whitespace-pre-wrap break-all"
         >
           <h4 class="mt-10 font-bold">About this artwork</h4>
           <div class="desc-text {showMore ? 'openDesc' : ''}">
@@ -482,7 +500,7 @@
       </div>
 
       {#if artwork.description}
-        <div class="desk-desc description text-gray-600 break-words">
+        <div class="desk-desc description text-gray-600 break-all">
           <h4 class="mt-10 mb-5 font-bold">About this artwork</h4>
           <div class="whitespace-pre-wrap">
             {@html linkify(artwork.description)}
@@ -533,6 +551,7 @@
   }
 
   .disabled {
+    pointer-events: none;
     @apply text-gray-400 border-gray-400;
   }
 

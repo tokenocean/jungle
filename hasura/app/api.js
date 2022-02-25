@@ -52,7 +52,6 @@ const q = async (query, variables) => {
     for (let index = 0; index < errors.length; index++) {
       const element = errors[index];
       console.error(`Error ${index + 1}: ${JSON.stringify(element)}`);
-      
     }
     throw new Error(errors[0].message);
   }

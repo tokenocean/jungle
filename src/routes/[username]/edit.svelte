@@ -1,4 +1,13 @@
+<script context="module">
+  export async function load({ session }) {
+    return {
+      props: { form: session.user },
+    };
+  }
+</script>
+
 <script>
+  import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import {
     faImage,
@@ -9,20 +18,14 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
   import { onMount } from "svelte";
-  import { user, token } from "$lib/store";
   import { err, info, goto, validateEmail } from "$lib/utils";
   import { Avatar } from "$comp";
   import { upload } from "$lib/upload";
   import { updateUser } from "$queries/users";
   import { query } from "$lib/api";
 
-  let initialize = (user) => {
-    if (!(form && form.id) && user) form = { ...user };
-  };
+  export let form;
 
-  $: initialize($user);
-
-  let form;
   let fileInput;
   let filename;
   let preview;
@@ -60,31 +63,31 @@
     update(form);
   };
 
-  let update = (form) => {
-    let {
-      is_artist,
-      is_admin,
-      num_followers,
-      num_follows,
-      followed,
-      id,
-      balance,
-      pubkey,
-      wallet_initialized,
-      mnemonic,
-      ...rest
-    } = form;
-    $user = { ...$user, ...rest };
+  let update = async (form) => {
+    try {
+      let {
+        is_artist,
+        is_admin,
+        num_followers,
+        num_follows,
+        followed,
+        id,
+        balance,
+        pubkey,
+        wallet_initialized,
+        mnemonic,
+        has_samples,
+        ...rest
+      } = form;
+      $session.user = { ...$session.user, ...rest };
 
-    query(updateUser, { user: rest, id }).then((r) => {
-      if (r.error) {
-        if (r.error.message.includes("Uniqueness")) err("Username taken");
-        else err(r.error);
-      } else {
-        info("Profile updated");
-        goto(`/${rest.username}`);
-      }
-    });
+      await query(updateUser, { user: rest, id });
+      info("Profile updated");
+      goto(`/${rest.username}`);
+    } catch (e) {
+      if (e.message.includes("Uniqueness")) err("Username taken");
+      else err(e);
+    }
   };
 </script>
 
@@ -93,7 +96,7 @@
     <div
       class="mb-4 w-full sm:max-w-3xl md:shadow rounded-xl md:p-10 m-auto lg:flex-row  bg-white"
     >
-      <a class="block mb-6 text-midblue" href={`/${$user.username}`}>
+      <a class="block mb-6 text-midblue" href={`/${$session.user.username}`}>
         <div class="flex">
           <Fa icon={faChevronLeft} class="my-auto mr-1" />
           <div>Back</div>
@@ -155,7 +158,7 @@
           <div class="flex flex-col mb-4">
             <label for="prompt_sign">Request transactions signing</label>
             <input
-            type="checkbox"
+              type="checkbox"
               id="prompt_sign"
               bind:checked={form.prompt_sign}
             />
@@ -170,7 +173,7 @@
           class="text-center mx-auto lg:ml-10 mb-10"
           on:click={() => fileInput.click()}
         >
-          <Avatar size="xl" src={preview || $user.avatar_url} />
+          <Avatar size="xl" src={preview || $session.user.avatar_url} />
           <button class="text-lightblue mt-5"
             >CHANGE AVATAR
             <Fa icon={faImage} pull="right" class="mt-1 ml-2" /></button
