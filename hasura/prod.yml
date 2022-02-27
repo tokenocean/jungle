@@ -1,12 +1,21 @@
 version: '3.6'
 services:
+  ui:
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
+    depends_on:
+      - lapp
+    container_name: ui
+    restart: on-failure
+    ports:
+      - '3000:3000'
   lapp:
     depends_on:
       - hbp
     container_name: lapp
-    image: asoltys/lnft-server
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: on-failure
     environment:
+      APP_URL: '${APP_URL}'
       SERVER_URL: '${SERVER_URL}'
       HASURA_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
       CLOUDFLARE_TOKEN: '${CLOUDFLARE_TOKEN}'
@@ -32,14 +41,6 @@ services:
       - ${STORAGE_DIR}:/export
     ports:
       - '8091:8091'
-  ui:
-    image: junglelab/jungle
-    depends_on:
-      - lapp
-    container_name: ui
-    restart: on-failure
-    ports:
-      - '3000:3000'
   postgres:
     container_name: postgres
     image: postgres:12
@@ -51,6 +52,10 @@ services:
     ports:
       - '5433:5432'
   hasura:
+    logging:
+      options:
+        max-size: "50k"
+        max-file: "3"
     container_name: hasura
     image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
     ports:
@@ -62,6 +67,7 @@ services:
       - ./migrations:/hasura-migrations
       - ./metadata:/hasura-metadata
     environment:
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: "http-log, query-log, startup"
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       HASURA_GRAPHQL_ADMIN_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
       HASURA_GRAPHQL_JWT_SECRET: '${HASURA_GRAPHQL_JWT_SECRET}'
@@ -74,7 +80,6 @@ services:
       - hasura
     ports:
       - '3400:3000'
-    restart: unless-stopped
     environment:
       SERVER_URL: '${SERVER_URL}'
       HASURA_ENDPOINT: '${HASURA_URL}/v1/graphql'
@@ -101,7 +106,6 @@ services:
       - 8081:8080
       - 4001:4001
       - 5001:5001
-    restart: unless-stopped
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
