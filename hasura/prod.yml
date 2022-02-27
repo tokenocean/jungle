@@ -1,4 +1,4 @@
-version: '3.6'
+version: "3.6"
 services:
   ui:
     image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
@@ -7,7 +7,7 @@ services:
     container_name: ui
     restart: on-failure
     ports:
-      - '3000:3000'
+      - "3000:3000"
   lapp:
     depends_on:
       - hbp
@@ -15,32 +15,31 @@ services:
     image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: on-failure
     environment:
-      APP_URL: '${APP_URL}'
-      SERVER_URL: '${SERVER_URL}'
-      HASURA_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
-      CLOUDFLARE_TOKEN: '${CLOUDFLARE_TOKEN}'
-      CLOUDFLARE_ZONE: '${CLOUDFLARE_ZONE}'
-      DOMAIN: '${DOMAIN}'
-      COINOS_URL: '${COINOS_URL}'
-      COINOS_TOKEN: '${COINOS_TOKEN}'
-      HASURA_URL: '${HASURA_URL}'
-      HASURA_JWT: '${HASURA_GRAPHQL_JWT_SECRET}'
-      LIQUID_ELECTRS_URL: '${LIQUID_ELECTRS_URL}'
-      HBP_URL: '${HBP_URL}'
-      IPFS_URL: '${IPFS_URL}'
-      IPFS_WEB_URL: '${IPFS_WEB_URL}'
-      SIGNING_SERVER_MNEMONIC: '${SIGNING_SERVER_MNEMONIC}'
-      SMTP_HOST: '${SMTP_HOST}'
-      SMTP_PORT: '${SMTP_PORT}'
-      SMTP_USER: '${SMTP_USER}'
-      SMTP_PASS: '${SMTP_PASS}'
-      SMTP_SENDER: '${SMTP_SENDER}'
+      APP_URL: "${APP_URL}"
+      SERVER_URL: "${SERVER_URL}"
+      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      CLOUDFLARE_TOKEN: "${CLOUDFLARE_TOKEN}"
+      CLOUDFLARE_ZONE: "${CLOUDFLARE_ZONE}"
+      DOMAIN: "${DOMAIN}"
+      COINOS_URL: "${COINOS_URL}"
+      COINOS_TOKEN: "${COINOS_TOKEN}"
+      HASURA_URL: "${HASURA_URL}"
+      HASURA_JWT: "${HASURA_GRAPHQL_JWT_SECRET}"
+      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      HBP_URL: "${HBP_URL}"
+      IPFS_URL: "${IPFS_URL}"
+      IPFS_WEB_URL: "${IPFS_WEB_URL}"
+      SIGNING_SERVER_MNEMONIC: "${SIGNING_SERVER_MNEMONIC}"
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_USER: "${SMTP_USER}"
+      SMTP_PASS: "${SMTP_PASS}"
+      SMTP_SENDER: "${SMTP_SENDER}"
     volumes:
-      - ./app:/app
       - ./custom:/opt/src/hasura/app/custom
       - ${STORAGE_DIR}:/export
     ports:
-      - '8091:8091'
+      - "8091:8091"
   postgres:
     container_name: postgres
     image: postgres:12
@@ -50,7 +49,7 @@ services:
     volumes:
       - ${DATA_DIR}:/var/lib/postgresql/data
     ports:
-      - '5433:5432'
+      - "5433:5432"
   hasura:
     logging:
       options:
@@ -59,7 +58,7 @@ services:
     container_name: hasura
     image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
     ports:
-      - '8080:8080'
+      - "8080:8080"
     depends_on:
       - postgres
     restart: always
@@ -69,8 +68,8 @@ services:
     environment:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "http-log, query-log, startup"
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
-      HASURA_GRAPHQL_ADMIN_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
-      HASURA_GRAPHQL_JWT_SECRET: '${HASURA_GRAPHQL_JWT_SECRET}'
+      HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
   hbp:
@@ -79,24 +78,24 @@ services:
     depends_on:
       - hasura
     ports:
-      - '3400:3000'
+      - "3400:3000"
     environment:
-      SERVER_URL: '${SERVER_URL}'
-      HASURA_ENDPOINT: '${HASURA_URL}/v1/graphql'
-      HASURA_GRAPHQL_ADMIN_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
-      JWT_ALGORITHM: '${JWT_ALGORITHM}'
-      JWT_KEY: '${JWT_KEY}'
+      SERVER_URL: "${SERVER_URL}"
+      HASURA_ENDPOINT: "${HASURA_URL}/v1/graphql"
+      HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      JWT_ALGORITHM: "${JWT_ALGORITHM}"
+      JWT_KEY: "${JWT_KEY}"
       AUTO_MIGRATE: "true"
       AUTO_ACTIVATE_NEW_USERS: "true"
       STORAGE_ENABLE: "false"
       MAX_REQUESTS: 10000
       LOST_PASSWORD_ENABLE: "true"
       EMAILS_ENABLE: "true"
-      SMTP_HOST: '${SMTP_HOST}'
-      SMTP_PORT: '${SMTP_PORT}'
-      SMTP_USER: '${SMTP_USER}'
-      SMTP_PASS: '${SMTP_PASS}'
-      SMTP_SENDER: '${SMTP_SENDER}'
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_USER: "${SMTP_USER}"
+      SMTP_PASS: "${SMTP_PASS}"
+      SMTP_SENDER: "${SMTP_SENDER}"
     volumes:
       - ./custom:/app/custom
   ipfs:
