@@ -82,9 +82,9 @@
         <h3>How do I get some L-BTC?</h3>
 
         <p>
-          To bid or list art on Raretoshi, patrons will need to have some L-BTC
-          in their Raretoshi wallets. The easiest way to fund your account is to
-          send onchain BTC or bitcoin on the Lighting Network to your Raretoshi
+          To bid or list art on JungleLab, patrons will need to have some L-BTC
+          in their JungleLab wallets. The easiest way to fund your account is to
+          send onchain BTC or bitcoin on the Lighting Network to your JungleLab
           wallet, and it will auto-convert to L-BTC. You can also watch <a
             href="https://www.youtube.com/watch?v=LxY3oxLQhA8"
             target="_blank">this video tutorial</a
