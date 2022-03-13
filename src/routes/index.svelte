@@ -149,8 +149,8 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fFN0dWRpb3xlbnwwfHx8fDE2MzcxMTAyNDQ&ixlib=rb-1.2.1&q=80&w=2000"
-              alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
+              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDh8fG11c2ljfGVufDB8fHx8MTY0MDAxNTcxMA&ixlib=rb-1.2.1&q=80&w=2000"
+              alt="Collection of music digital assets."
               class="w-full h-full object-center object-cover"
             />
           </div>
@@ -168,8 +168,8 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w960/2021/11/19A8303F-62D7-403E-A846-43894D70EEFD.jpeg"
-              alt="Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant."
+              src="https://images.unsplash.com/photo-1554941829-202a0b2403b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDMzfHx2aWRlb3xlbnwwfHx8fDE2NDAwMjA4ODM&ixlib=rb-1.2.1&q=80&w=2000"
+              alt="Collection of video digital assets."
               class="w-full h-full object-center object-cover"
             />
           </div>
@@ -187,8 +187,8 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w960/2021/11/QmXJhqJX5sGgRwLua4PmUBpTtXnFpRFhTad37iSPrnoCDC-1.png"
-              alt="Collection of four insulated travel bottles on wooden shelf."
+              src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDExfHxhcnR8ZW58MHx8fHwxNjQwMDIwOTM4&ixlib=rb-1.2.1&q=80&w=2000"
+              alt="Collection of digital art assets."
               class="w-full h-full object-center object-cover"
             />
           </div>
@@ -389,7 +389,7 @@
           >
             <img
               src="https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fFN0dWRpb3xlbnwwfHx8fDE2MzcxMTAyNDQ&ixlib=rb-1.2.1&q=80&w=2000"
-              alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug."
+              alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
           </div>
@@ -408,7 +408,7 @@
           >
             <img
               src="https://junglelab.net/content/images/size/w960/2021/11/19A8303F-62D7-403E-A846-43894D70EEFD.jpeg"
-              alt="Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant."
+              alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
           </div>
@@ -427,7 +427,7 @@
           >
             <img
               src="https://junglelab.net/content/images/size/w960/2021/11/QmXJhqJX5sGgRwLua4PmUBpTtXnFpRFhTad37iSPrnoCDC-1.png"
-              alt="Collection of four insulated travel bottles on wooden shelf."
+              alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
           </div>
