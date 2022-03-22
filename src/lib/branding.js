@@ -9,10 +9,10 @@ const BRANDING = {
     protocol: "https://junglelab.io",
     external: {
       twitter: "https://twitter.com/junglelab_io",
-      telegram: "https://t.me/eskyjunglelab",
+      telegram: "https://t.me/+fal5TBUf5AAyOGRk",
       blog: "https://junglelab.net/",
       facebook: "https://facebook.com/escabaeskyee",
-      instagram: "https://instagram.com/junglelabrare",
+      instagram: "https://instagram.com/junglelab.io",
       discord: "https://discord.gg/eqWEC5rq8A",
     },
   },
