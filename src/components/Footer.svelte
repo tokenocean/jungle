@@ -20,7 +20,7 @@
       <a href="/"
         ><img src="/bitcoin-logo-dark-768x162.png" alt="logo" class="w-48" /></a
       >
-      <p class="mt-4">&copy;2021 {branding.projectName}</p>
+      <p class="mt-4">&copy;2022 {branding.projectName}</p>
       <div class="flex items-center mt-12">
         <p class="pr-3">Powered by:</p>
         <img src="/liquid_logo.svg" alt="liquid network logo" />
