@@ -34,7 +34,7 @@
           and whose registered office is Vincenti Buildings 28/19 (Suite 1405),
           Strait Street, VLT1432 Valletta, Malta and a wholly-owned, indirect
           subsidiary of Blockstream Corporation Inc, and operating the {branding.projectName}
-          website (“Website”) located at {branding.projectName}.com (“Site”).
+          website (“Website”) located at {branding.projectName}.io (“Site”).
         </p>
 
         <p>
