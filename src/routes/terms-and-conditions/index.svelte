@@ -430,7 +430,7 @@
         <h3>Fans and Artists</h3>
         <p>
           By registering to use the Website, each Fan and Artist agrees with
-          Blockstream that:
+          JungleLab & Blockstream that:
         </p>
         <ul>
           <li>
