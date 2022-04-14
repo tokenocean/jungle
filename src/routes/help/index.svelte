@@ -44,9 +44,10 @@
         <h3>Who can publish their art here?</h3>
 
         <p>
-          Raretoshi is a curated physical and digital art marketplace focused
-          solely on Bitcoin art. Your application will be reviewed by our team
-          and we'll reach out to let you know if you’ve been accepted.
+          JungleLab is a curated physical and digital assets marketplace focused
+          solely on Bitcoin Liquid Lightning Urban Culture . Your application
+          will be reviewed by our team and we'll reach out to let you know if
+          you’ve been accepted.
         </p>
 
         <h3>
