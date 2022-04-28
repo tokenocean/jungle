@@ -1,8 +1,8 @@
-import {
-  Client as HyperspaceClient,
-  Server as HyperspaceServer,
-} from "hyperspace";
-import Hyperdrive from "hyperdrive";
+const {
+  Client: HyperspaceClient,
+  Server: HyperspaceServer,
+} = require("hyperspace");
+const Hyperdrive = require("hyperdrive");
 
 async function main() {
   // Setup the Hyperspace Daemon connection

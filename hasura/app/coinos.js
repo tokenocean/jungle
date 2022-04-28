@@ -1,7 +1,5 @@
-import { coinos } from "./api.js";
-import { networks } from "liquidjs-lib";
-import { app } from "./app.js";
-import { auth } from "./auth.js";
+const { coinos } = require("./api");
+const { networks } = require("liquidjs-lib");
 
 let network;
 if (process.env.LIQUID_ELECTRS_URL.includes("blockstream")) {

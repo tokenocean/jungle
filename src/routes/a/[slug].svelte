@@ -3,7 +3,6 @@
   import { browser } from "$app/env";
   import branding from "$lib/branding";
   import { host } from "$lib/utils";
-  import Comments from "./_comments.svelte";
 
   export async function load({ fetch, params: { slug } }) {
     const props = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
@@ -56,7 +55,7 @@
     faChevronUp,
     faTimes,
   } from "@fortawesome/free-solid-svg-icons";
-  import { getArtwork, deleteArtwork } from "$queries/artworks";
+  import { getArtwork } from "$queries/artworks";
   import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
   import { page } from "$app/stores";
   import { compareAsc, format, parseISO } from "date-fns";
@@ -73,7 +72,6 @@
   import { art, meta, prompt, password, psbt } from "$lib/store";
   import countdown from "$lib/countdown";
   import {
-    confirm,
     goto,
     err,
     explorer,
@@ -113,7 +111,7 @@
 
   let start_counter, end_counter, now, timeout;
 
-  let refreshArtwork = async () => {
+  let fetch = async () => {
     try {
       ({ artworks_by_pk: artwork } = await query(getArtwork, {
         id: artwork.id,
@@ -124,7 +122,7 @@
     }
   };
 
-  let poll = setInterval(refreshArtwork, 2500);
+  let poll = setInterval(fetch, 2500);
 
   onDestroy(() => {
     $art = undefined;
@@ -174,7 +172,7 @@
       transaction.hash = $psbt.data.globalMap.unsignedTx.tx.getId();
 
       await save();
-      await refreshArtwork();
+      await fetch();
 
       await api
         .url("/offer-notifications")
@@ -240,7 +238,7 @@
       transaction.psbt = $psbt.toBase64();
 
       await save();
-      await refreshArtwork();
+      await fetch();
 
       await api
         .url("/mail-purchase-successful")
@@ -259,17 +257,6 @@
     }
 
     loading = false;
-  };
-
-  let handleDelete = async () => {
-    try {
-      await confirm();
-      await query(deleteArtwork, { id: artwork.id });
-      info("Artwork deleted");
-      goto("/market");
-    } catch (e) {
-      err(e);
-    }
   };
 
   let showPopup = false;
@@ -316,24 +303,15 @@
             </div>
           </div>
         </a>
-        {#if artwork.artist_id !== artwork.owner_id && artwork.held}
+        {#if artwork.artist_id !== artwork.owner_id}
           <a href={`/${artwork.owner.username}`}>
             <div class="flex mb-6 secondary-color">
               <Avatar user={artwork.owner} />
               <div class="ml-2">
                 <div>@{artwork.owner.username}</div>
-                <div class="text-xs text-gray-600">Owner</div>
-              </div>
-            </div>
-          </a>
-        {/if}
-        {#if !artwork.held}
-          <a href="https://bitcoin.org/bitcoin.pdf">
-            <div class="flex mb-6 secondary-color">
-              <Avatar src="/static/satoshi.jpg" />
-              <div class="ml-2">
-                <div>@anon</div>
-                <div class="text-xs text-gray-600">Token Held Externally</div>
+                <div class="text-xs text-gray-600">
+                  {artwork.held ? "" : "Presumed "}Owner
+                </div>
               </div>
             </div>
           </a>
@@ -407,13 +385,6 @@
               href={`/a/${artwork.slug}/edit`}
               class="block text-center text-sm secondary-btn w-full"
               class:disabled>Edit</a
-            >
-          </div>
-          <div class="w-full mb-2">
-            <a
-              on:click={handleDelete}
-              class="block text-center text-sm secondary-btn w-full cursor-pointer"
-              >Delete</a
             >
           </div>
         {/if}
@@ -552,19 +523,14 @@
         />
       </div>
 
-      <!-- Comments -->
-      <div class="mt-64">
-        <Comments bind:artwork bind:refreshArtwork />
-      </div>
-
       {#if others.length}
-        <div class="w-full mb-4">
+        <div class="w-full mt-64 mb-4">
           <h2 class="text-2xl font-bold primary-color py-10 px-0">
             More by this artist
           </h2>
           <div class="w-full grid md:grid-cols-3 gap-4 others">
             {#each others as artwork (artwork.id)}
-              <Card {artwork} showDetails={false} noAudio={true} />
+              <Card {artwork} showDetails={false} />
             {/each}
           </div>
         </div>

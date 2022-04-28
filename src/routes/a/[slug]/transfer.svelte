@@ -23,7 +23,6 @@
   import { updateArtwork } from "$queries/artworks";
   import { createTransaction } from "$queries/transactions";
   import { api, query } from "$lib/api";
-  import { v4 as uuidv4 } from "uuid";
   import { page } from "$app/stores";
   import {
     broadcast,
@@ -36,14 +35,9 @@
 
   export let artwork;
 
-  $: disabled = !recipient && !address;
+  $: disabled = !recipient;
 
   let recipient;
-  $: address = recipient
-    ? artwork.has_royalty
-      ? recipient.multisig
-      : recipient.address
-    : "";
 
   let loading;
 
@@ -51,10 +45,18 @@
     await requirePassword($session);
 
     loading = true;
-
     try {
+      let address = artwork.has_royalty
+        ? recipient.multisig
+        : recipient.address;
       $psbt = await pay(artwork, address, 1);
       await sign();
+
+      if (artwork.has_royalty) {
+        $psbt = await requestSignature($psbt);
+      }
+
+      await broadcast();
 
       let transaction = {
         amount: 1,
@@ -70,19 +72,21 @@
       await api
         .auth(`Bearer ${$token}`)
         .url("/transfer")
-        .post({ address, transaction })
+        .post({ address, id: recipient.id, transaction })
         .json();
 
-      info(
-        `Artwork sent to ${
-          recipient ? recipient.username : `${address.slice(0, 21)}...`
-        }!`
-      );
+      query(updateArtwork, {
+        artwork: {
+          owner_id: recipient.id,
+        },
+        id: artwork.id,
+      }).catch(err);
+
+      info(`Artwork sent to ${recipient.username}!`);
       goto(`/a/${artwork.slug}`);
     } catch (e) {
       err(e);
     }
-
     loading = false;
   };
 </script>
@@ -97,10 +101,10 @@
       <div class="w-full max-w-lg text-center my-8 mx-auto">
         <AutoComplete
           hideArrow={true}
-          placeholder="Username"
+          placeholder="Recipient"
           items={$addresses.filter((a) => a.id !== $session.user.id)}
           className="w-full"
-          inputClassName="huh text-center"
+          inputClassName="huh"
           labelFieldName="username"
           bind:selectedItem={recipient}
         >
@@ -109,18 +113,6 @@
             <div class="ml-1 my-auto">{item.username}</div>
           </div>
         </AutoComplete>
-        <p class="font-bold mt-10 mb-7">OR</p>
-
-        <input
-          type="text"
-          class="w-full rounded-lg p-3 text-center"
-          placeholder="Address"
-          value={recipient ? "" : address}
-          on:keyup={(e) => {
-            recipient = undefined;
-            address = e.target.value;
-          }}
-        />
         <a
           href="/"
           on:click|preventDefault={send}

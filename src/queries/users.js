@@ -52,7 +52,6 @@ export const getUserByUsername = `query($username: String!) {
 
 export const getSamples = `query {
   users(where: { _and: [{ is_artist: { _eq: false }}, { samples: {}}]}) {
-    display_name
     ${fields} 
     info
     samples {
@@ -102,5 +101,15 @@ export const topArtists = (limit) => `query {
     highest_sale
     avg_sale
     sold
+  }
+}`;
+
+export const getUsersAddresses = `query {
+  users(order_by: { username: asc }) {
+    id
+    address
+    multisig
+    username
+    avatar_url
   }
 }`;

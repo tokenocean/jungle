@@ -58,8 +58,6 @@
       if ($fc.openBid) where.bid_id = { _is_null: false };
       if ($fc.ownedByCreator) where.artist_owned = { _eq: true };
       if ($fc.hasSold) where.transferred_at = { _is_null: false };
-      if ($fc.isPhysical) where.is_physical = { _eq: true };
-      if ($fc.hasRoyalties) where.has_royalty = { _eq: true };
 
       let order_by = {
         newest: { created_at: "desc" },
@@ -103,12 +101,14 @@
 </div>
 <div class="container mx-auto">
   <div
-    class="flex flex-wrap justify-between items-center flex-row-reverse controls py-10"
+    class="flex flex-wrap justify-between items-center md:flex-row-reverse controls"
   >
-    <div class="w-full flex filter-container justify-between">
+    <div
+      class="w-full lg:w-auto mb-3 flex filter-container justify-between pt-10 xl:py-10 xl:pb-30 mt-50"
+    >
       <div class="switch">
         <div
-          class="flex cursor-pointer font-bold"
+          class="flex cursor-pointer lg:hidden mb-8 font-bold"
           on:click={() => (showFilters = !showFilters)}
         >
           <div>FILTERS</div>

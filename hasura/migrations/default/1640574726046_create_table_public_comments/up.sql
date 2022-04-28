@@ -1,1 +1,0 @@
-CREATE TABLE "public"."comments" ("comment" text NOT NULL, "date_posted" timestamptz NOT NULL, "liked" boolean NOT NULL, "username" text NOT NULL, PRIMARY KEY ("username") , FOREIGN KEY ("username") REFERENCES "public"."users"("username") ON UPDATE restrict ON DELETE restrict);

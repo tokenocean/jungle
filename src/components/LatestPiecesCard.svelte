@@ -19,7 +19,7 @@
   >
     <div class="h-full box-shadow rounded-lg recentCard">
       <div class="thumb">
-        <ArtworkMedia noAudio={true} {artwork} showDetails={false} />
+        <ArtworkMedia {artwork} showDetails={false} />
       </div>
       <div class="p-4">
         <div class="flex justify-between mb-4">

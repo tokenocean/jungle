@@ -9,7 +9,6 @@
         props: {
           addresses: [],
           titles: [],
-          popup: null,
         },
       };
 
@@ -41,7 +40,6 @@
     addresses as a,
     meta,
     titles as t,
-    popup as p,
     password,
     prompt,
     poll,
@@ -50,27 +48,14 @@
   } from "$lib/store";
   import { onDestroy, onMount } from "svelte";
   import branding from "$lib/branding";
-  import { checkAuthFromLocalStorage } from "$lib/auth";
 
-  export let addresses, titles, popup;
-  let unsubscribeFromSession;
-  let refreshInterval;
-  let authCheckInterval;
+  export let addresses, titles;
 
+  let interval;
   let refresh = async () => {
     try {
       let { jwt_token } = await get("/auth/refresh.json", fetch);
-      $token = jwt_token;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  let authCheck = async () => {
-    try {
-      if ($session.user) {
-        checkAuthFromLocalStorage($session.user);
-      }
+      if (browser) $token = jwt_token;
     } catch (e) {
       console.log(e);
     }
@@ -86,16 +71,10 @@
 
     $a = addresses;
     $t = titles;
-    $p = popup;
     $user = $session.user;
     $token = $session.jwt;
 
-    refreshInterval = setInterval(refresh, 60000);
-    authCheckInterval = setInterval(authCheck, 5000);
-
-    unsubscribeFromSession = session.subscribe((value) => {
-      value.user && checkAuthFromLocalStorage(value.user);
-    });
+    interval = setInterval(refresh, 60000);
   }
 
   let open = false;
@@ -107,11 +86,7 @@
   };
   $: stopPolling($page);
 
-  onDestroy(() => {
-    clearInterval(refreshInterval);
-    clearInterval(authCheckInterval);
-    unsubscribeFromSession && unsubscribeFromSession();
-  });
+  onDestroy(() => clearInterval(interval));
   onMount(() => {
     if (browser && !$password)
       $password = window.sessionStorage.getItem("password");

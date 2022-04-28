@@ -30,8 +30,8 @@ export const marketFields = `
     user {
       id
       username
-    }
-    amount
+    } 
+    amount 
   }
 `;
 
@@ -95,15 +95,15 @@ export const fields = `
     user {
       id
       username
-    }
-    amount
+    } 
+    amount 
   }
 `;
 
 export const txFields = `
   id
   psbt
-  amount
+  amount 
   hash
   type
   created_at
@@ -112,21 +112,21 @@ export const txFields = `
   bid {
     id
     user {
-      id
+      id 
       username
-    }
-  }
+    } 
+  } 
   user {
     id
     username
     avatar_url
     full_name
     email
-  }
+  } 
   artwork_id
   artwork {
     ${fields}
-  }
+  } 
 `;
 
 export const getFeatured = `query {
@@ -134,10 +134,10 @@ export const getFeatured = `query {
     id
     start_date
     end_date
-    white
+    white 
     artwork {
       ${fields}
-    }
+    } 
   }
 }`;
 
@@ -152,7 +152,7 @@ export const getArtworks = `query($where: artworks_bool_exp!, $limit: Int, $offs
     ${fields}
     tags {
       tag
-    }
+    } 
   }
 }`;
 
@@ -161,7 +161,7 @@ export const getUserArtworks = `query($id: uuid!) {
     ${fields}
     tags {
       tag
-    }
+    } 
   }
 }`;
 
@@ -170,7 +170,7 @@ export const getArtworksByOwner = (id) => `query {
     ${fields}
     tags {
       tag
-    }
+    } 
   }
 }`;
 
@@ -183,17 +183,9 @@ export const getArtworkByAsset = (asset) => `query {
 export const getArtworkBySlug = `query($slug: String!) {
   artworks(where: {slug : {_eq: $slug}}, limit: 1) {
     ${fields}
-    comments {
-      created_at
-      comment
-      user {
-        username
-        avatar_url
-      }
-    }
     transactions(where: { type: { _neq: "royalty" }}, order_by: { created_at: desc }) {
       ${txFields}
-    }
+    } 
     tags {
       tag
     },
@@ -214,19 +206,13 @@ export const getArtworksByUsername = (username) => `query {
 }`;
 
 export const getArtworksByTag = (tag) => `query {
-  artworks(where: {tags: {tag: {_ilike: "${tag}"}}}, order_by: { created_at: asc }) {
+  artworks(where: {tags: {tag: {_eq: "${tag}"}}}, order_by: { created_at: asc }) {
     ${fields}
   }
 }`;
 
 export const updateArtwork = `mutation update_artwork($artwork: artworks_set_input!, $id: uuid!) {
   update_artworks_by_pk(pk_columns: { id: $id }, _set: $artwork) {
-    id
-  }
-}`;
-
-export const deleteArtwork = `mutation delete_artwork($id: uuid!) {
-  delete_artworks_by_pk(id: $id) {
     id
   }
 }`;
@@ -246,7 +232,7 @@ export const updateArtworkWithRoyaltyRecipients = `mutation update_artwork_with_
 export const updateTags = `mutation insert_tags($tags: [tags_insert_input!]!, $artwork_id: uuid!) {
   delete_tags(where: {artwork_id: {_eq: $artwork_id}}) {
     affected_rows
-  }
+  } 
   insert_tags(objects: $tags) {
     affected_rows
   }
@@ -255,21 +241,13 @@ export const updateTags = `mutation insert_tags($tags: [tags_insert_input!]!, $a
 export const getArtwork = `query($id: uuid!) {
   artworks_by_pk(id: $id) {
     ${fields}
-    comments {
-      created_at
-      comment
-      user {
-        username
-        avatar_url
-      }
-    }
     tags {
       tag
     },
     num_favorites,
     transactions(where: { type: { _neq: "royalty" }}, order_by: { created_at: desc }) {
       ${txFields}
-    }
+    } 
     favorites_aggregate(where: {artwork_id: {_eq: $id}}) {
       aggregate {
         count
@@ -289,7 +267,7 @@ export const countArtworks = `query($where: artworks_bool_exp!) {
 export const getTags = `query {
   tags {
     tag
-  }
+  } 
 }`;
 
 export const getTagsWithArtwork = `query {
@@ -297,12 +275,20 @@ export const getTagsWithArtwork = `query {
     tag
     artwork {
       ${fields}
-    }
+    } 
+  } 
+}`;
+
+export const getTitles = `query {
+  artworks {
+    id
+    asset
+    edition
+    editions
+    title
+    owner_id
   }
 }`;
 
-export const createComment = `mutation ($comment: comments_insert_input!) {
-  insert_comments_one(object: $comment) {
-    id
-  }
-}`;
+export const getArtworksByTicker = `query($ticker: String!) { artworks(where: { ticker: { _like: $ticker }}) { ticker }}`;
+export const queryTickers = `query($tickers: [String!]) { artworks(where: { ticker: { _in: $tickers }}) { ticker }}`;

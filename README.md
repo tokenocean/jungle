@@ -1,4 +1,4 @@
-# JungleLab
+# LNFT
 
 JungleLab LNFT Digital Assets is a web-based platform for issuing and transacting with non-fungible tokens on the [Bitcoin Liquid Network](https://blockstream.com/liquid/). Blockstream is sponsoring its development and hosting an exemplary curated instance of it for use by Bitcoin artists at [JungleLab](https://junglelab.io).
 
@@ -6,11 +6,11 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
 
 - User accounts and profiles for artists and collectors include custom avatars, contact info and biography
 - Users can follow other artists and collectors and like/favorite individual artworks
-- Artists can upload digital media files (jpg, png, gif, mp4) representing an artwork and add metadata like a title, description, and tags
+- Artists can upload digital media files (jpg, png, gif, mp4) representing an asset and add metadata like a title, description, and tags
 - Selected metadata is published in the [liquid asset registry](https://docs.blockstream.com/liquid/developer-guide/proof-of-issuance.html) so that tokens can be recognized by external wallets
 - Media files are added to the IPFS network upon being uploaded and are given a unique content identifier (CID) derived from the SHA256 hash of the file
 - The CID is embedded in the Liquid token issuance transaction contract, permanently and provably linking the file to the token
-- Artworks are listed in a searchable/sortable/filterable marketplace gallery
+- Assets are listed in a searchable/sortable/filterable marketplace gallery
 - Artists can list an artwork for sale by setting an optional listing price, royalty rate, and/or auction period
 - Bids and sales are conducted peer-to-peer using atomic swaps so the platform host does not need to escrow funds
 - Listings, bids, transfers and new artwork activity are logged and presented in a site-wide feed
@@ -42,12 +42,14 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
 
 ## Installation pre-requisites
 
-- pnpm: https://pnpm.io/
-- Docker: https://docs.docker.com/get-docker/
-- Hasura CLI: https://hasura.io/docs/1.0/graphql/core/hasura-cli/install-hasura-cli.html#install-hasura-cli
+- pnpm: <https://pnpm.io/>
+- Docker: <https://docs.docker.com/get-docker/>
+- Hasura CLI: <https://hasura.io/docs/1.0/graphql/core/hasura-cli/install-hasura-cli.html#install-hasura-cli>
 
 ## Setup local development environment
 
+    git clone https://github.com/liquidnft/lnft
+    cd lnft
     pnpm install
     cd hasura
     cp .env.sample .env
@@ -57,8 +59,8 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
     hasura metadata apply
     hasura seeds apply
     hasura metadata reload
-    sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z
-    docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z
+    sudo cp ../static/user.png storage
+    docker exec -it ipfs ipfs add /export/user.png
     docker restart lapp
     cd ..
     pnpm dev   # site is available at http://localhost:3000/
@@ -84,13 +86,18 @@ We have a pre-commit git hook for running prettier on all files to keep the form
      hasura metadata apply
      hasura seeds apply
      hasura metadata reload
-     sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z
-     docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z
+     sudo cp ../static/user.png storage
+     docker exec -it ipfs ipfs add /export/user.png
      docker restart lapp
      cd ..
      pnpm dev   # site is available at http://localhost:3000/
-     chmod +x mine.sh
-    ./mine.sh   # this script will run continually to mine regtest blocks, you may want to run it in a separate terminal window or tab
+
+## Regtest mining
+
+Mine some blocks to get the electrs API server warmed up
+
+    chmod +x mine.sh
+    ./mine.sh   # run in a separate tab
 
 ## Fund a wallet with regtest coins
 
