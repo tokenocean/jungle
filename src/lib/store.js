@@ -14,6 +14,8 @@ export const filterCriteria = writable({
   openBid: false,
   ownedByCreator: false,
   hasSold: false,
+  isPhysical: false,
+  hasRoyalties: false,
 });
 export const full = writable();
 export const loading = writable();
@@ -28,12 +30,12 @@ export const poll = writable([]);
 export const prompt = writable();
 export const psbt = writable();
 export const results = writable([]);
-export const role = writable("user");
 export const show = writable();
 export const sighash = writable();
 export const snack = writable();
 export const sortCriteria = writable("newest");
 export const titles = writable([]);
+export const popup = writable();
 export const txcache = writable({});
 export const transactions = writable([]);
 export const user = writable();
