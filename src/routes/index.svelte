@@ -214,7 +214,8 @@
       <p
         class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
       >
-        changing the way you interact with digital assets.
+        Changing the way you interact with digital assets. INVEST IN ARTISTS.
+        OWN YOUR FAVORITE MUSIC, BUY EVENT TICKETS
       </p>
     </div>
     <div class="mt-10">
@@ -413,9 +414,9 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/video/">
+            <a href="https://junglelab.net/nft-event-tickets/">
               <span class="absolute inset-0" />
-              Video
+              Festival
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">Exclusive</p>
@@ -426,15 +427,15 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w960/2021/11/QmXJhqJX5sGgRwLua4PmUBpTtXnFpRFhTad37iSPrnoCDC-1.png"
+              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.MxbiqZwrs_YFQAXhSOjzVQHaE8%26pid%3DApi&f=1"
               alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/art/">
+            <a href="https://junglelab.net/merchandise/">
               <span class="absolute inset-0" />
-              Art
+              Merchandise
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">Exclusive</p>
