@@ -1,5 +1,5 @@
-module.exports = {
-  projectName: "JungleLab",
+export default {
+  projectName: "Raretoshi",
   urls: {
     protocol: "https://junglelab.io",
   },

@@ -9,6 +9,9 @@
     faTwitter,
   } from "@fortawesome/free-brands-svg-icons";
   import { faRss } from "@fortawesome/free-solid-svg-icons";
+
+  const date = new Date();
+  const year = date.getFullYear();
 </script>
 
 <div class="bg-black px-2 mt-24">
@@ -34,7 +37,9 @@
             target="_blank"
             href={branding.urls.external.blog}
             class="flex items-center"
-            ><div class="w-6 mr-1"><Fa icon={faRss} /></div>
+            ><div class="w-6 mr-1">
+              <Fa icon={faRss} />
+            </div>
             Blog</a
           >
         </li>
@@ -43,7 +48,9 @@
             target="_blank"
             href={branding.urls.external.twitter}
             class="flex items-center"
-            ><div class="w-6 mr-1"><Fa icon={faTwitter} /></div>
+            ><div class="w-6 mr-1">
+              <Fa icon={faTwitter} />
+            </div>
             Twitter</a
           >
         </li>
@@ -52,7 +59,9 @@
             target="_blank"
             href={branding.urls.external.discord}
             class="flex items-center"
-            ><div class="w-6 mr-1"><Fa icon={faDiscord} size="sm" /></div>
+            ><div class="w-6 mr-1">
+              <Fa icon={faDiscord} size="sm" />
+            </div>
             Discord</a
           >
         </li>
@@ -61,7 +70,9 @@
             target="_blank"
             href={branding.urls.external.telegram}
             class="flex items-center"
-            ><div class="w-6 mr-1"><Fa icon={faTelegramPlane} /></div>
+            ><div class="w-6 mr-1">
+              <Fa icon={faTelegramPlane} />
+            </div>
             Telegram</a
           >
         </li>
@@ -70,7 +81,9 @@
             target="_blank"
             href={branding.urls.external.instagram}
             class="flex items-center"
-            ><div class="w-6 mr-1"><Fa icon={faInstagramSquare} /></div>
+            ><div class="w-6 mr-1">
+              <Fa icon={faInstagramSquare} />
+            </div>
             Instagram</a
           >
         </li>
@@ -79,7 +92,9 @@
             target="_blank"
             href={branding.urls.external.facebook}
             class="flex items-center"
-            ><div class="w-6 mr-1"><Fa icon={faFacebook} /></div>
+            ><div class="w-6 mr-1">
+              <Fa icon={faFacebook} />
+            </div>
             Facebook</a
           >
         </li>

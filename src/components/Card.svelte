@@ -1,8 +1,8 @@
 <script>
   import { Avatar, ArtworkMedia, Heart } from "$comp";
   import countdown from "$lib/countdown";
-  import { fade, goto, units } from "$lib/utils";
-  import { onMount } from "svelte";
+  import { fade, units } from "$lib/utils";
+  import { onDestroy, onMount } from "svelte";
   import { loaded } from "$lib/store";
 
   export let justScrolled = false;
@@ -12,6 +12,7 @@
   export let thumb = true;
   export let popup = false;
   export let height = undefined;
+  export let noAudio = false;
 
   $: style = height ? `height: ${height}px` : undefined;
 
@@ -24,13 +25,16 @@
   }
 
   let start_counter, end_counter;
+  let timeout;
   let count = () => {
     if (!artwork) return;
     start_counter = countdown(new Date(artwork.auction_start));
     end_counter = countdown(new Date(artwork.auction_end));
-    setTimeout(count, 1000);
+    timeout = setTimeout(count, 1000);
   };
-  count();
+
+  onMount(count);
+  onDestroy(() => clearTimeout(timeout));
 </script>
 
 <div
@@ -42,7 +46,7 @@
   <div {style}>
     <a href={`/a/${artwork.slug}`} sveltekit:prefetch>
       {#if $loaded[artwork.id] || !justScrolled}
-        <ArtworkMedia {artwork} {showDetails} {popup} bind:thumb />
+        <ArtworkMedia {noAudio} {artwork} {showDetails} {popup} bind:thumb />
       {/if}
     </a>
   </div>
