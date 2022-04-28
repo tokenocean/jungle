@@ -1,12 +1,14 @@
-import { getAppProps } from "$queries/helpers";
+import { getTitles } from "$queries/artworks";
+import { getUsersAddresses } from "$queries/users";
 export async function get({ request: { headers }, locals: { q } }) {
   try {
-    let { artworks: titles, users: addresses, popups } = await q(getAppProps);
+    let { artworks: titles } = await q(getTitles);
+    let { users: addresses } = await q(getUsersAddresses);
+
     return {
       body: {
         addresses,
         titles,
-        popup: popups.length ? popups[0] : null,
       },
       headers,
     };

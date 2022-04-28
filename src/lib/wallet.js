@@ -1,7 +1,7 @@
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { api, electrs, hasura } from "$lib/api";
-import * as middlewares from "wretch-middlewares";
+// import * as middlewares from "wretch-middlewares";
 import { mnemonicToSeedSync } from "bip39";
 import { fromSeed } from "bip32";
 import { fromBase58 } from "bip32";
@@ -28,6 +28,7 @@ import {
   txcache,
   transactions,
   signStatus,
+  acceptStatus,
   prompt,
   user,
   token,
@@ -38,16 +39,11 @@ import { requirePassword } from "$lib/auth";
 import { getActiveBids } from "$queries/transactions";
 import { compareAsc, parseISO } from "date-fns";
 import { SignaturePrompt, AcceptPrompt } from "$comp";
-import createHash from "create-hash";
-
-function sha256(buffer) {
-  return createHash("sha256").update(buffer).digest();
-}
 
 export const CANCELLED = "cancelled";
 export const ACCEPTED = "accepted";
 
-const { retry } = middlewares.default || middlewares;
+// const { retry } = middlewares.default || middlewares;
 
 const DUST = 800;
 const satsPerByte = 0.15;
@@ -625,7 +621,6 @@ export const pay = async (artwork, to, amount) => {
 
   addFee(p2);
 
-  psbt.set(p2);
   return p2;
 };
 
@@ -663,6 +658,16 @@ export const requireSign = async () => {
   return new Promise((resolve) =>
     signStatus.subscribe((signedSub) => {
       signedSub ? resolve(signedSub) : prompt.set(SignaturePrompt);
+    })
+  );
+};
+
+export const requireAccept = async () => {
+  acceptStatus.set(false);
+
+  return await new Promise((resolve) =>
+    acceptStatus.subscribe((acceptedSub) => {
+      acceptedSub ? resolve(acceptedSub) : prompt.set(AcceptPrompt);
     })
   );
 };
@@ -705,10 +710,10 @@ export const broadcast = async (disableRetries = false) => {
 
   let hex = tx.toHex();
   let middlewares = [
-    retry({
-      delayTimer: 6000,
-      maxAttempts: 5,
-    }),
+    // retry({
+    //   delayTimer: 6000,
+    //   maxAttempts: 3,
+    // }),
   ];
 
   if (disableRetries) middlewares = [];
@@ -786,7 +791,7 @@ export const executeSwap = async (artwork) => {
 };
 
 export const createIssuance = async (
-  { filename: file, title: name },
+  { filename: file, title: name, ticker },
   domain,
   tx
 ) => {
@@ -806,12 +811,9 @@ export const createIssuance = async (
     issuer_pubkey: keypair().pubkey.toString("hex"),
     name,
     precision: 0,
-    ticker: "DANG",
+    ticker,
     version: 0,
   };
-
-  let without = { ...contract };
-  delete without.file;
 
   let construct = async (p) => {
     if (tx) {

@@ -1,10 +1,12 @@
-import { app } from "./app.js";
-import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 const { HASURA_JWT } = process.env;
-import { q, cf, hasura, hbp } from "./api.js";
-import wretch from "wretch";
+const { cf, hasura, hbp } = require("./api");
+const wretch = require("wretch");
+const ipfsClient = require("ipfs-http-client");
+const { globSource } = ipfsClient;
+const faces = require("./faces");
 
-export let auth = {
+auth = {
   preValidation(req, res, done) {
     let fail = () => res.code(401).send("Unauthorized");
     if (!req.headers.authorization) fail();
@@ -31,11 +33,11 @@ app.post("/login", async (req, res) => {
 
   try {
     let user;
-    let { users } = await q(query, { email });
+    let { data } = await hasura.post({ query, variables: { email } }).json();
 
-    if (users.length) {
-      user = users[0];
-      email = user.display_name;
+    if (data && data.users && data.users.length) {
+      user = data.users[0];
+      email = data.users[0].display_name;
     } else {
       throw new Error();
     }

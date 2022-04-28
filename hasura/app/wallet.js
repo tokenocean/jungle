@@ -1,34 +1,31 @@
-import { mnemonicToSeedSync } from "bip39";
-import { fromSeed } from "bip32";
-
-import {
-  address as Address,
+const { mnemonicToSeedSync } = require("bip39");
+const { fromSeed } = require("bip32");
+const {
+  address: Address,
   confidential,
+  ECPair,
   Psbt,
   Transaction,
   payments,
   networks,
-} from "liquidjs-lib";
+} = require("liquidjs-lib");
+const { electrs } = require("./api");
+const reverse = require("buffer-reverse");
 
-import { ECPair } from "./ecc.js";
-
-import { electrs } from "./api.js";
-import reverse from "buffer-reverse";
-
-export const network =
+const network =
   networks[
     process.env.LIQUID_ELECTRS_URL.includes("blockstream")
       ? "liquid"
       : "regtest"
   ];
 
-export const btc = network.assetHash;
+const btc = network.assetHash;
 
 const mnemonic = process.env.SIGNING_SERVER_MNEMONIC;
 
 const path = "m/84'/0'/0'/0/0";
 
-export const keypair = () => {
+const keypair = () => {
   let seed = mnemonicToSeedSync(mnemonic);
   let key = fromSeed(seed, network).derivePath(path);
   let { publicKey: pubkey, privateKey: privkey } = key;
@@ -37,11 +34,11 @@ export const keypair = () => {
   return { pubkey, privkey, seed, base58 };
 };
 
-export const release = (a) => {
+const release = (a) => {
   return Psbt.fromBase64(a);
 };
 
-export const combine = (a, b) => {
+const combine = (a, b) => {
   let c = Psbt.fromBase64(b);
   a = Psbt.fromBase64(a);
   b = Psbt.fromBase64(b);
@@ -51,7 +48,7 @@ export const combine = (a, b) => {
   return d.toBase64();
 };
 
-export const sign = (psbt, sighash = 1, privkey) => {
+const sign = (psbt, sighash = 1, privkey) => {
   if (!privkey) ({ privkey } = keypair());
   psbt = Psbt.fromBase64(psbt);
 
@@ -71,45 +68,57 @@ export const sign = (psbt, sighash = 1, privkey) => {
   return psbt;
 };
 
-export const broadcast = async (psbt) => {
+const broadcast = async (psbt) => {
   let tx = psbt.extractTransaction();
   let hex = tx.toHex();
 
   return electrs.url("/tx").body(hex).post().text();
 };
 
-export const parseVal = (v) => parseInt(v.slice(1).toString("hex"), 16);
-export const parseAsset = (v) => reverse(v.slice(1)).toString("hex");
+let parseVal = (v) => parseInt(v.slice(1).toString("hex"), 16);
+let parseAsset = (v) => reverse(v.slice(1)).toString("hex");
 
-export const parse = async (psbt) => {
-  psbt = Psbt.fromBase64(psbt);
-  let tx = psbt.__CACHE.__TX;
+module.exports = {
+  btc,
+  broadcast,
+  combine,
+  keypair,
+  parseAsset,
 
-  let { ins } = tx;
-  let inputs = [];
+  async parse(psbt) {
+    psbt = Psbt.fromBase64(psbt);
+    let tx = psbt.__CACHE.__TX;
 
-  for (let i = 0; i < ins.length; i++) {
-    let { hash, index } = ins[i];
-    let txid = reverse(hash).toString("hex");
-    let input = (await electrs.url(`/tx/${txid}`).get().json()).vout[index];
-    input.address = input.scriptpubkey_address;
-    inputs.push(input);
-  }
+    let { ins } = tx;
+    let inputs = [];
 
-  let outputs = tx.outs.map((o) => {
-    let address;
+    for (let i = 0; i < ins.length; i++) {
+      let { hash, index } = ins[i];
+      let txid = reverse(hash).toString("hex");
+      let input = (await electrs.url(`/tx/${txid}`).get().json()).vout[index];
+      input.address = input.scriptpubkey_address;
+      inputs.push(input);
+    }
 
-    try {
-      address = Address.fromOutputScript(o.script, network);
-    } catch (e) {}
+    let outputs = tx.outs.map((o) => {
+      let address;
 
-    return {
-      ...o,
-      asset: parseAsset(o.asset),
-      value: parseVal(o.value),
-      address,
-    };
-  });
+      try {
+        address = Address.fromOutputScript(o.script, network);
+      } catch (e) {}
 
-  return [tx.getId(), inputs, outputs];
+      return {
+        ...o,
+        asset: parseAsset(o.asset),
+        value: parseVal(o.value),
+        address,
+      };
+    });
+
+    return [tx.getId(), inputs, outputs];
+  },
+
+  network,
+  release,
+  sign,
 };

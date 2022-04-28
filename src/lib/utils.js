@@ -1,7 +1,6 @@
 import { fade as svelteFade } from "svelte/transition";
 import { get } from "svelte/store";
 import {
-  acceptStatus,
   addresses,
   assets,
   error,
@@ -12,7 +11,7 @@ import {
   user,
 } from "$lib/store";
 import { goto as svelteGoto } from "$app/navigation";
-import { AcceptPrompt, InsufficientFunds } from "$comp";
+import { InsufficientFunds } from "$comp";
 import { isWithinInterval, parseISO, compareAsc } from "date-fns";
 
 const btc = import.meta.env.VITE_BTC;
@@ -32,16 +31,6 @@ const publicPages = [
   "privacy-policy",
   "activate",
 ];
-
-const confirm = async () => {
-  acceptStatus.set(false);
-
-  return await new Promise((resolve) =>
-    acceptStatus.subscribe((acceptedSub) => {
-      acceptedSub ? resolve(acceptedSub) : prompt.set(AcceptPrompt);
-    })
-  );
-};
 
 const royaltyRecipientSystemType = "system";
 const royaltyRecipientIndividualType = "individual";
@@ -326,7 +315,6 @@ export {
   assetLabel,
   btc,
   cad,
-  confirm,
   copy,
   dev,
   etag,
