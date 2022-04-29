@@ -400,26 +400,9 @@
               NFT Event Tickets
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">NFT Event Tickets</p>
-        </div>
-
-        <div class="group relative">
-          <div
-            class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
-          >
-            <img
-              src="https://junglelab.net/content/images/size/w960/2021/11/19A8303F-62D7-403E-A846-43894D70EEFD.jpeg"
-              alt="Collection of digital assets."
-              class="w-full h-full object-center object-cover"
-            />
-          </div>
-          <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/nft-event-tickets/">
-              <span class="absolute inset-0" />
-              Festival
-            </a>
-          </h3>
-          <p class="text-base font-semibold text-gray-900">Exclusive</p>
+          <p class="text-base font-semibold text-gray-900">
+            Exclusive NFT Event Tickets
+          </p>
         </div>
 
         <div class="group relative">
@@ -433,12 +416,35 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
+            <a href="https://junglelab.net/nft-event-tickets/">
+              <span class="absolute inset-0" />
+              Festival
+            </a>
+          </h3>
+          <p class="text-base font-semibold text-gray-900">
+            Exclusive Festivals
+          </p>
+        </div>
+
+        <div class="group relative">
+          <div
+            class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1579664531470-ac357f8f8e2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDIwfHxNZXJjaGFuZGlzZXxlbnwwfHx8fDE2NTExNTgyOTI&ixlib=rb-1.2.1&q=80&w=2000"
+              alt="Collection of digital assets."
+              class="w-full h-full object-center object-cover"
+            />
+          </div>
+          <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://junglelab.net/merchandise/">
               <span class="absolute inset-0" />
               Merchandise
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">Exclusive</p>
+          <p class="text-base font-semibold text-gray-900">
+            Exclusive Merchandise
+          </p>
         </div>
       </div>
     </div>
