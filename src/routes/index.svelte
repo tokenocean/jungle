@@ -209,13 +209,12 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="lg:text-center">
       <h2 class="text-base text-black font-semibold tracking-wide uppercase">
-        Liquid Digital Assets
+        Liquid Bitcoin Digital Assets
       </h2>
       <p
         class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
       >
-        Changing the way you interact with digital assets. INVEST IN ARTISTS.
-        OWN YOUR FAVORITE MUSIC, BUY EVENT TICKETS
+        INVEST IN ARTISTS. INVEST IN MUSIC, INVEST IN NFT EVENT TICKETS.
       </p>
     </div>
     <div class="mt-10">
