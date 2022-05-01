@@ -1,5 +1,5 @@
 export default {
-  projectName: "Raretoshi",
+  projectName: "JungleLab",
   urls: {
     protocol: "https://junglelab.io",
   },
