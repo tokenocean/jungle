@@ -56,6 +56,7 @@
     faChevronDown,
     faChevronUp,
     faTimes,
+    faInfoCircle,
   } from "@fortawesome/free-solid-svg-icons";
   import { getArtworkBySlug, deleteArtwork } from "$queries/artworks";
   import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
@@ -280,6 +281,10 @@
   let showPopup = false;
   let showMore = false;
   let showActivity = false;
+  let redeemInput = false;
+  let redeemCode;
+
+  const redeem = () => {};
 </script>
 
 <Head {metadata} />
@@ -291,12 +296,21 @@
         {artwork.title || "Untitled"}
       </h1>
       <div class="flex mt-4 mb-6">
-        <div class="my-auto">
-          Edition
-          {artwork.edition}
-          of
-          {artwork.editions}
-        </div>
+        {#if !artwork.open_edition}
+          <div class="my-auto">
+            Edition
+            {artwork.edition}
+            of
+            {artwork.editions}
+          </div>
+        {:else}
+          <div class="my-auto flex justify-center items-center">
+            Open Edition | BTC Rewards <Fa
+              class="mx-2 secondary-color"
+              icon={faInfoCircle}
+            />
+          </div>
+        {/if}
         {#if artwork.is_physical}
           <div
             class="flex ml-auto py-1 px-4 bg-gray-100 rounded rounded-full my-auto"
@@ -430,6 +444,32 @@
             {disabled}
             class:disabled>Buy now</button
           >
+        {/if}
+        {#if artwork.redeem_code}
+          {#if !redeemInput}
+            <button
+              on:click={() => (redeemInput = true)}
+              class="secondary-btn"
+              {disabled}
+              class:disabled>Redeem Code</button
+            >
+          {:else}
+            <form on:submit|preventDefault={redeem}>
+              <div class="flex flex-col mb-4">
+                <div>
+                  <div class="mt-1 rounded-md shadow-sm">
+                    <input
+                      id="redeemcode"
+                      class="form-input block w-full pl-7"
+                      placeholder="Enter Code"
+                      bind:value={redeemCode}
+                    />
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="secondary-btn">Submit</button>
+            </form>
+          {/if}
         {/if}
         {#if bidding}
           {#if offering}

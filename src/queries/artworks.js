@@ -71,6 +71,10 @@ export const fields = `
   }
   slug
   is_physical
+  open_edition
+  open_edition_start
+  open_edition_end
+  redeem_code
   instagram
   ticker
   views

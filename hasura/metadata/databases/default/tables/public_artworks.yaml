@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: artworks
+  schema: public
 object_relationships:
   - name: artist
     using:
@@ -17,94 +17,91 @@ array_relationships:
       foreign_key_constraint_on:
         column: artwork_id
         table:
-          schema: public
           name: comments
+          schema: public
   - name: favorites
     using:
       foreign_key_constraint_on:
         column: artwork_id
         table:
-          schema: public
           name: favorites
+          schema: public
   - name: featureds
     using:
       foreign_key_constraint_on:
         column: artwork_id
         table:
-          schema: public
           name: featured
+          schema: public
   - name: offers
     using:
       manual_configuration:
-        remote_table:
-          schema: public
-          name: offers
-        insertion_order: null
         column_mapping:
           id: artwork_id
+        insertion_order: null
+        remote_table:
+          name: offers
+          schema: public
   - name: royalty_recipients
     using:
       foreign_key_constraint_on:
         column: artwork_id
         table:
-          schema: public
           name: royalty_recipients
+          schema: public
   - name: tags
     using:
       foreign_key_constraint_on:
         column: artwork_id
         table:
-          schema: public
           name: tags
+          schema: public
   - name: transactions
     using:
       foreign_key_constraint_on:
         column: artwork_id
         table:
-          schema: public
           name: transactions
+          schema: public
 computed_fields:
-  - name: artist_owned
-    definition:
+  - definition:
       function:
-        schema: public
         name: artwork_artist_owned
-  - name: favorited
-    definition:
-      function:
         schema: public
+    name: artist_owned
+  - definition:
+      function:
         name: artwork_favorited
+        schema: public
       session_argument: hasura_session
       table_argument: artwork_row
-  - name: has_royalty
-    definition:
+    name: favorited
+  - definition:
       function:
-        schema: public
         name: artwork_has_royalty
+        schema: public
       table_argument: artwork_row
-  - name: last_active
+    name: has_royalty
+  - comment: ""
     definition:
       function:
-        schema: public
         name: artwork_last_tx
-    comment: ""
-  - name: num_favorites
+        schema: public
+    name: last_active
+  - comment: ""
     definition:
       function:
-        schema: public
         name: artwork_favorites
+        schema: public
       session_argument: hasura_session
       table_argument: artwork_row
-    comment: ""
+    name: num_favorites
 insert_permissions:
-  - role: user
-    permission:
+  - permission:
+      backend_only: false
       check:
         artist_id:
           _eq: X-Hasura-User-Id
-      set:
-        artist_id: x-hasura-User-Id
-        owner_id: x-hasura-User-Id
       columns:
         - artist_id
         - asking_asset
@@ -124,15 +121,22 @@ insert_permissions:
         - list_price
         - list_price_tx
         - max_extensions
+        - open_edition
+        - open_edition_end
+        - open_edition_start
         - owner_id
+        - redeem_code
         - reserve_price
         - slug
         - ticker
         - title
-      backend_only: false
+      set:
+        artist_id: x-hasura-User-Id
+        owner_id: x-hasura-User-Id
+    role: user
 select_permissions:
-  - role: anonymous
-    permission:
+  - permission:
+      allow_aggregations: true
       columns:
         - artist_id
         - asking_asset
@@ -156,7 +160,11 @@ select_permissions:
         - list_price
         - list_price_tx
         - max_extensions
+        - open_edition
+        - open_edition_end
+        - open_edition_start
         - owner_id
+        - redeem_code
         - reserve_price
         - slug
         - ticker
@@ -175,9 +183,9 @@ select_permissions:
               _is_null: false
           - transferred_at:
               _is_null: false
+    role: anonymous
+  - permission:
       allow_aggregations: true
-  - role: user
-    permission:
       columns:
         - artist_id
         - asking_asset
@@ -201,7 +209,11 @@ select_permissions:
         - list_price
         - list_price_tx
         - max_extensions
+        - open_edition
+        - open_edition_end
+        - open_edition_start
         - owner_id
+        - redeem_code
         - reserve_price
         - slug
         - ticker
@@ -223,19 +235,19 @@ select_permissions:
           - transferred_at:
               _is_null: false
           - _exists:
+              _table:
+                name: users
+                schema: public
               _where:
                 _and:
                   - id:
                       _eq: X-Hasura-User-Id
                   - is_admin:
                       _eq: true
-              _table:
-                schema: public
-                name: users
-      allow_aggregations: true
+    role: user
 update_permissions:
-  - role: user
-    permission:
+  - permission:
+      check: null
       columns:
         - asking_asset
         - auction_end
@@ -254,16 +266,20 @@ update_permissions:
         - list_price
         - list_price_tx
         - max_extensions
+        - open_edition
+        - open_edition_end
+        - open_edition_start
         - owner_id
+        - redeem_code
         - reserve_price
         - title
       filter:
         owner_id:
           _eq: X-Hasura-User-Id
-      check: null
+    role: user
 delete_permissions:
-  - role: user
-    permission:
+  - permission:
       filter:
         owner_id:
           _eq: X-Hasura-User-Id
+    role: user
