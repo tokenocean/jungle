@@ -6,9 +6,6 @@ configuration:
   column_config:
     multisig:
       custom_name: multisig
-  custom_column_names:
-    multisig: multisig
-  custom_root_fields: {}
 object_relationships:
   - name: account
     using:
