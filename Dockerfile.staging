@@ -1,6 +1,7 @@
 FROM gcr.io/coinos-326717/github.com/tokenocean/raretoshi:base
 
-ENV NODE_ENV staging
+ARG NODE_ENV=staging
+ENV NODE_ENV $NODE_ENV
 
 WORKDIR /app
 COPY . .
