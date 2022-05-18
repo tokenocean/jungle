@@ -29,7 +29,7 @@ export const electrs = wretch().url(`${host}/api/el`);
 
 export const hasura = wretch()
   .middlewares([retry({ maxAttempts: 2 })])
-  .url(`${host}/api/v1/graphql`);
+  .url(`${host}/v1/graphql`);
 
 export const query = async (query, variables, headers = {}) => {
   let jwt = getStore(token);
