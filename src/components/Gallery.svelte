@@ -82,12 +82,8 @@
       a = Math.max(0, cr * columns);
       if (a >= 0) inview = filtered.slice(a >= p ? a - columns : 0, a + p);
 
-      // x is a magical smoothing factor derived by guessing and testing
-      x = cr > 1 ? parseInt((13 * rh) / (y + 40 - cr * rh)) : 0;
-      if (columns === 1)
-        x = Math.min(Math.round((5 * rh) / (y + 40 - cr * rh)), 100);
-
-      translate = Math.max(0, cr * rh - rh) + x;
+      // x = (75 * (y-(cr*rh)) / rh);
+      translate = Math.max(0, cr * rh - rh); //+ (75-x);
       justScrolled = true;
       setTimeout(() => (justScrolled = false), 250);
     });
@@ -95,12 +91,6 @@
 </script>
 
 <svelte:window bind:innerWidth={w} bind:scrollY={y} on:resize={resize} />
-
-{#if debug}
-  <div class="fixed bg-white z-50 left-2 w-48 top-24">
-    {Math.round(x)}
-  </div>
-{/if}
 
 <div bind:this={content} id="content">
   <div class="sm:grid sm:grid-cols-2 sm:gap-10 lg:grid-cols-3">
