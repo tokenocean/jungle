@@ -810,8 +810,6 @@ export const createIssuance = async (
     version: 0,
   };
 
-  console.log(tx.getId(), tx.vout);
-
   let construct = async (p) => {
     if (tx) {
       let txid = tx.getId();
