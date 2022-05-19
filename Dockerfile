@@ -5,8 +5,8 @@ ENV NODE_ENV $NODE_ENV
 
 WORKDIR /app
 COPY . .
+RUN mv /deps/node_modules /app
 RUN sed -i '/cypress/d' package.json
-RUN NODE_ENV=development pnpm i
 RUN pnpm build
 
 CMD ["node", "build"]
