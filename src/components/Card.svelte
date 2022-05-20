@@ -26,11 +26,15 @@
 
   let start_counter, end_counter;
   let timeout;
+  let auction_underway;
   let count = () => {
     if (!artwork) return;
     start_counter = countdown(new Date(artwork.auction_start));
     end_counter = countdown(new Date(artwork.auction_end));
     timeout = setTimeout(count, 1000);
+
+    let now = new Date();
+    auction_underway = now > new Date(artwork.auction_start) && now < new Date(artwork.auction_end);
   };
 
   onMount(count);
@@ -124,14 +128,14 @@
         </div>
       </div>
     </div>
-    {#if end_counter}
+    {#if auction_underway}
       <div class="p-3 rounded-b-lg lightblue-grad text-black mt-auto">
         Time left:
         {end_counter}
       </div>
     {:else if start_counter}
       <div class="p-3 rounded-b-lg lightblue-grad text-black mt-auto">
-        Auction starts in:
+        Starts in:
         {start_counter}
       </div>
     {:else}
