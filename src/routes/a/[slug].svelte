@@ -15,7 +15,7 @@
         status: 404,
       };
 
-    await api.url("/held").post({ id: artwork.id }).json();
+    await post("/artworks/held", { id: artwork.id }, fetch).res();
     if (!browser) {
       try {
         await post("/artworks/viewed", { id: artwork.id }, fetch).res();
@@ -292,7 +292,7 @@
 <div class="container mx-auto mt-10 md:mt-20">
   <div class="flex flex-wrap">
     <div class="lg:text-left w-full lg:w-1/3 lg:max-w-xs">
-      <h1 class="text-3xl font-black primary-color break-all">
+      <h1 class="text-3xl font-black primary-color">
         {artwork.title || "Untitled"}
       </h1>
       <div class="flex mt-4 mb-6">
@@ -574,7 +574,7 @@
       </div>
 
       {#if artwork.description}
-        <div class="desk-desc description text-gray-600 break-all">
+        <div class="desk-desc description text-gray-600">
           <h4 class="mt-10 mb-5 font-bold">About this artwork</h4>
           <div class="whitespace-pre-wrap">
             {@html linkify(artwork.description)}
