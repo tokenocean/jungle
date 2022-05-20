@@ -158,6 +158,7 @@ export const keypair = (mnemonic, pass) => {
 
     return { pubkey, privkey, seed, base58 };
   } catch (e) {
+    console.log(e);
     throw new Error("Failed to generated keys with mnemonic");
   }
 };
