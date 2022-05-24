@@ -141,10 +141,9 @@
   <div
     class="p-5 bg-primary/50 flex justify-center items-center h-full w-full mx-auto rounded-lg"
   >
-    <img src class="hidden" bind:this={aud} />
+    <img src class="hidden" bind:this={aud} alt="" />
     <figure>
       <Fa icon={faHeadphones} class="mx-auto" size="3x" />
-      <figcaption class="text-center">NFT audio file</figcaption>
 
       {#if noAudio === false}
         <audio class="mx-auto" controls src={preview || path}>
@@ -152,6 +151,7 @@
           <code>audio</code> element.
         </audio>
       {/if}
+      <figcaption class="text-center">NFT audio file</figcaption>
     </figure>
   </div>
 {:else}

@@ -118,20 +118,6 @@
 </form>
 
 <style>
-  .tooltip {
-    cursor: pointer;
-  }
-  .tooltip .tooltip-text {
-    display: none;
-    padding: 15px;
-    position: absolute;
-    z-index: 100;
-    width: 300px;
-    font-style: normal;
-  }
-  .tooltip:hover .tooltip-text {
-    display: block;
-  }
   input[type="checkbox"]:checked {
     appearance: none;
     border: 5px solid #fff;
