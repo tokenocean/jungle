@@ -430,6 +430,7 @@
           </div>
           <div class="w-full mb-2">
             <a
+              href={'JavaScript:void(0)'}
               on:click={handleDelete}
               class="block text-center text-sm secondary-btn w-full cursor-pointer"
               >Delete</a

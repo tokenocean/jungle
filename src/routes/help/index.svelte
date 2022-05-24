@@ -139,9 +139,6 @@
     font-size: 22px;
     border-radius: 10px;
   }
-  .contact h5 {
-    margin-bottom: 10px;
-  }
 
   .contact a,
   .faq a {
