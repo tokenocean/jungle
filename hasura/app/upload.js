@@ -5,7 +5,7 @@ import ffmpeg from "fluent-ffmpeg";
 import { PassThrough } from "stream";
 import Clone from "readable-stream-clone";
 import { app } from "./app.js";
-import fastifyMultipart from "fastify-multipart";
+import fastifyMultipart from "@fastify/multipart";
 
 app.register(fastifyMultipart);
 

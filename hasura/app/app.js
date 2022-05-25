@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import fastifyStatic from "fastify-static";
+import fastifyStatic from "@fastify/static";
 import path from "path";
 
 export const app = fastify();
