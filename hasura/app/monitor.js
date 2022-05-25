@@ -317,7 +317,7 @@ let updateTransactions = async (address, user_id) => {
         txcache[prev] = tx;
 
         let { asset, value, scriptpubkey_address: a } = tx.vout[vout];
-        if (address === a) total[asset] = (total[asset] || 0) - parseInt(value);
+        if (asset && address === a) total[asset] = (total[asset] || 0) - parseInt(value);
       } catch (e) {
         console.log("problem finding input", prev, e);
       }
@@ -325,7 +325,7 @@ let updateTransactions = async (address, user_id) => {
 
     for (let k = 0; k < vout.length; k++) {
       let { asset, value, scriptpubkey_address: a } = vout[k];
-      if (address === a) total[asset] = (total[asset] || 0) + parseInt(value);
+      if (asset && address === a) total[asset] = (total[asset] || 0) + parseInt(value);
     }
 
     let assets = Object.keys(total);
