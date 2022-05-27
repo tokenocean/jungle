@@ -7,15 +7,12 @@ import { fromSeed } from "bip32";
 import { fromBase58 } from "bip32";
 import {
   address as Address,
+  ECPair,
   Psbt,
   payments,
   networks,
   Transaction,
 } from "liquidjs-lib";
-
-
-import { ECPairFactory } from "ecpair";
-import * as ecclib from "tiny-secp256k1";
 
 import reverse from "buffer-reverse";
 import {
@@ -47,10 +44,6 @@ import createHash from "create-hash";
 function sha256(buffer) {
   return createHash("sha256").update(buffer).digest();
 }
-
-export const ECPair = ECPairFactory(ecclib);
-export const ecc = ecclib;
-
 
 export const CANCELLED = "cancelled";
 export const ACCEPTED = "accepted";
