@@ -71,8 +71,8 @@
     units,
     sats,
     val,
+    ticker,
     tickers,
-    assetLabel,
     royaltyRecipientSystemType,
   } from "$lib/utils";
   import { ProgressLinear, RoyaltyRecipientList } from "$comp";
@@ -430,20 +430,20 @@
         <div class="flex flex-col mt-4">
           <p>Listing currency</p>
           <div class="flex flex-wrap">
-            {#each listingCurrencies as asset}
-              <label for={asset} class="ml-2 mr-6 flex items-center">
+            {#each listingCurrencies as c}
+              <label for={c} class="ml-2 mr-6 flex items-center">
                 <input
-                  id={asset}
+                  id={c}
                   class="form-radio h-6 w-6 mt-4 mr-2"
                   type="radio"
-                  name={asset}
-                  value={asset}
+                  name={c}
+                  value={c}
                   bind:group={artwork.asking_asset}
                   on:change={clearPrice}
                   disabled={auction_underway}
                 />
                 <p class="mb-2 whitespace-nowrap">
-                  {asset ? assetLabel(asset) : "Unlisted"}
+                  {c ? ticker(c) : "Unlisted"}
                 </p>
               </label>
             {/each}
@@ -483,7 +483,7 @@
               <div
                 class="absolute inset-y-0 right-0 flex items-center mr-2 mt-4"
               >
-                {assetLabel(artwork.asking_asset)}
+                {ticker(artwork.asking_asset)}
               </div>
             </div>
           </div>
@@ -623,7 +623,7 @@
                       <div
                         class="absolute inset-y-0 right-0 flex items-center mr-2 mt-8"
                       >
-                        {assetLabel(artwork.asking_asset)}
+                        {ticker(artwork.asking_asset)}
                       </div>
                     </label>
                   </div>

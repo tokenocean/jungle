@@ -7,13 +7,11 @@
     if (prerendering)
       return {
         props: {
-          addresses: [],
-          titles: [],
           popup: null,
         },
       };
 
-    const props = await get(`/addresses.json`, fetch);
+    const props = await get(`/announcements.json`, fetch);
 
     if (
       session &&
@@ -38,9 +36,7 @@
   import decode from "jwt-decode";
   import { Sidebar, Navbar, Dialog, Footer, Snack, Head } from "$comp";
   import {
-    addresses as a,
     meta,
-    titles as t,
     popup as p,
     password,
     prompt,
@@ -52,7 +48,7 @@
   import branding from "$lib/branding";
   import { checkAuthFromLocalStorage } from "$lib/auth";
 
-  export let addresses, titles, popup;
+  export let popup;
   let unsubscribeFromSession;
   let refreshInterval;
   let authCheckInterval;
@@ -84,8 +80,6 @@
       },
     });
 
-    $a = addresses;
-    $t = titles;
     $p = popup;
     $user = $session.user;
     $token = $session.jwt;

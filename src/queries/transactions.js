@@ -40,8 +40,8 @@ export const getArtworkTransactions = (id) => `query {
   }
 }`;
 
-export const getTransaction = (id) => `query {
-  transactions_by_pk(id: "${id}") {
+export const getTransaction = `query($id: uuid!) {
+  transactions_by_pk(id: $id) {
     ${fields}
     artwork {
       ${artworkFields}

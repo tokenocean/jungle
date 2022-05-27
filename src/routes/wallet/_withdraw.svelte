@@ -4,7 +4,7 @@
   import { tick } from "svelte";
   import { asset, assets, balances, psbt } from "$lib/store";
   import { broadcast, pay, keypair, requestSignature } from "$lib/wallet";
-  import { btc, dev, err, info, sats, val, assetLabel } from "$lib/utils";
+  import { btc, dev, err, info, sats, val, ticker } from "$lib/utils";
   import sign from "$lib/sign";
   import { ProgressLinear } from "$comp";
   import { requirePassword } from "$lib/auth";
@@ -21,8 +21,8 @@
   let artwork;
 
   $: updateAsset($asset);
-  let updateAsset = (a) =>
-    query(getArtworkByAsset(a))
+  let updateAsset = ({ asset }) =>
+    asset && query(getArtworkByAsset, { asset })
       .then(({ artworks }) => (artwork = artworks[0]))
       .catch(err);
 
@@ -36,8 +36,9 @@
 
     loading = true;
     try {
-      if ($asset !== btc && !artwork) artwork = { asset: $asset };
-      $psbt = await pay(artwork, to.trim(), sats($asset, amount));
+      let { asset: a } = $asset;
+      if (a !== btc && !artwork) artwork = { asset: a };
+      $psbt = await pay(artwork, to.trim(), sats(a, amount));
       $psbt = await sign();
 
       if (artwork && (artwork.auction_end || artwork.has_royalty)) {
@@ -68,8 +69,10 @@
       <div class="flex flex-col mb-4">
         <label for="asset">Asset</label>
         <select id="asset" class="text-black" bind:value={$asset}>
-          {#each $assets as asset}
-            <option value={asset.asset}>{assetLabel(asset.asset)}</option>
+          {#each $assets as { asset: a }}
+            <option value={a}
+              >{ticker(a) || a }</option
+            >
           {/each}
         </select>
       </div>
@@ -79,7 +82,7 @@
           <input
             id="amount"
             class="w-full"
-            placeholder={val($asset, 0)}
+            placeholder={val($asset.asset, 0)}
             bind:value={amount}
           />
         </div>

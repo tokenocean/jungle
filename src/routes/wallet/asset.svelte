@@ -38,7 +38,7 @@
           <div
             class="flex mb-2 cursor-pointer"
             on:click={() => {
-              $asset = a.asset;
+              $asset = a;
               goto("/wallet");
             }}
           >

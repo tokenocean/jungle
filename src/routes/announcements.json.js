@@ -1,11 +1,9 @@
-import { getAppProps } from "$queries/helpers";
+import { getAnnouncements } from "$queries/helpers";
 export async function get({ request: { headers }, locals: { q } }) {
   try {
-    let { artworks: titles, users: addresses, popups } = await q(getAppProps);
+    let { popups } = await q(getAnnouncements);
     return {
       body: {
-        addresses,
-        titles,
         popup: popups.length ? popups[0] : null,
       },
       headers,

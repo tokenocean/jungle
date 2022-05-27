@@ -1,10 +1,11 @@
 import { writable } from "svelte/store";
 
-export const addresses = writable();
+const btc = import.meta.env.VITE_BTC;
+
 export const art = writable();
 export const artworks = writable([]);
 export const artworksLimit = writable(10);
-export const asset = writable();
+export const asset = writable({ asset: btc });
 export const assets = writable([]);
 export const balances = writable({});
 export const commentsLimit = writable(10);
@@ -36,7 +37,6 @@ export const show = writable();
 export const sighash = writable();
 export const snack = writable();
 export const sortCriteria = writable("newest");
-export const titles = writable([]);
 export const popup = writable();
 export const txcache = writable({});
 export const transactions = writable([]);

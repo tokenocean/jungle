@@ -2,23 +2,30 @@ import { fade as svelteFade } from "svelte/transition";
 import { get } from "svelte/store";
 import {
   acceptStatus,
-  addresses,
   assets,
   error,
   full,
   prompt,
   snack,
-  titles,
   user,
 } from "$lib/store";
 import { goto as svelteGoto } from "$app/navigation";
 import { AcceptPrompt, InsufficientFunds } from "$comp";
 import { isWithinInterval, parseISO, compareAsc } from "date-fns";
+import { query } from "$lib/api";
+import { getArtworkByAsset } from "$queries/artworks.js";
+import { getUserByAddress } from "$queries/users.js";
 
 export const btc = import.meta.env.VITE_BTC;
 export const cad = import.meta.env.VITE_CAD;
 export const usd = import.meta.env.VITE_USD;
 export const host = import.meta.env.VITE_HOST;
+export const label = ({ asset, name }, field = "ticker") =>
+  name || (asset
+    ? tickers[asset]
+      ? tickers[asset][field]
+      : asset.substr(0, 5)
+    : "");
 
 export const sleep = (n) => new Promise((r) => setTimeout(r, n));
 
@@ -53,40 +60,30 @@ export const royaltyRecipientTypes = {
   [royaltyRecipientIndividualType]: "Individual",
 };
 
-export const addressUser = (a) =>
-  get(addresses) &&
-  get(addresses).find((u) => u.address === a || u.multisig === a);
+export const addressUser = async (address) => {
+  const { users } = await query(getUserByAddress, { address });
+  return users.length ? users[0] : undefined;
+};
 
-export const addressLabel = (address) => {
-  let $addresses = get(addresses);
-
-  let r;
-
-  if ($addresses) {
-    r = $addresses.find((u) => u.multisig === address);
-    if (r) return r.username + " 2of2";
-    r = $addresses.find((u) => u.address === address);
-    if (r) return r.username;
+export const addressLabel = async (address) => {
+  const { users } = await query(getUserByAddress, { address });
+  if (users.length) {
+    let user = users[0];
+    return user.address === address ? user.username : user.username + " 2of2";
   }
 
   return address.length > 6 ? address.substr(0, 6) + "..." : address;
 };
 
-export const assetLabel = (asset) => {
-  let $titles = get(titles);
-  let r = $titles && $titles.find((u) => u.asset === asset);
+export const assetLabel = async (asset) => {
+  const { artworks } = await query(getArtworkByAsset, { asset });
 
-  return r
-    ? r.title
+  if (artworks.length) {
+    let r = artworks[0];
+    return r.title
       ? r.title + (r.editions > 1 ? ` ${r.edition}/${r.editions}` : "")
-      : r.name || "Untitled"
-    : ticker(asset);
-};
-
-export const artworkId = (asset) => {
-  let $titles = get(titles);
-  let r = $titles && $titles.find((u) => u.asset === asset);
-  return r && r.id;
+      : "Untitled";
+  }
 };
 
 export const tickers = {

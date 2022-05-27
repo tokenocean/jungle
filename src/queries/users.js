@@ -16,6 +16,24 @@ export const getUser = `query {
   }
 }`;
 
+export const getUsers = `query {
+  users {
+    username
+    address
+    multisig
+  }
+}`;
+
+export const getUserByAddress = `query($address: String!) {
+  users(where: { _or: [{ address: { _eq: $address }}, { multisig: { _eq: $address }}] }, limit: 1) {
+      id
+      address
+      multisig
+      username
+      avatar_url
+  }
+}`
+
 export const getUserByUsername = `query($username: String!, $artworksLimit: Int) {
   users(where: { username: {_eq: $username }}, limit: 1) {
     ${fields}

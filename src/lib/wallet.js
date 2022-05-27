@@ -1,6 +1,6 @@
 import { tick } from "svelte";
 import { get } from "svelte/store";
-import { api, electrs, hasura } from "$lib/api";
+import { api, electrs, hasura, query } from "$lib/api";
 import * as middlewares from "wretch-middlewares";
 import { mnemonicToSeedSync } from "bip39";
 import { fromSeed } from "bip32";
@@ -24,7 +24,6 @@ import {
   poll,
   psbt,
   sighash,
-  titles,
   txcache,
   transactions,
   signStatus,
@@ -35,6 +34,7 @@ import {
 import cryptojs from "crypto-js";
 import { btc, info } from "$lib/utils";
 import { requirePassword } from "$lib/auth";
+import { getArtworkByAsset } from "$queries/artworks";
 import { getActiveBids } from "$queries/transactions";
 import { compareAsc, parseISO } from "date-fns";
 import { SignaturePrompt, AcceptPrompt } from "$comp";
@@ -65,24 +65,6 @@ export const parseAsset = (v) => reverse(v.slice(1)).toString("hex");
 
 const nonce = Buffer.alloc(1);
 
-export const getTransactions = (user) => {
-  let { address } = user;
-  if (!get(poll).find((p) => p.name === "txns"))
-    poll.set([
-      ...get(poll),
-      {
-        name: "txns",
-        interval: setInterval(() => txns(), 10000),
-      },
-    ]);
-
-  let txns = async () => {
-    transactions.set(await electrs.url(`/address/${address}/txs`).get().json());
-  };
-
-  return txns();
-};
-
 export const getBalances = async ({ user, jwt }) => {
   await requirePassword({ jwt });
 
@@ -92,15 +74,14 @@ export const getBalances = async ({ user, jwt }) => {
     .get()
     .json();
 
-  Object.keys(c).map(async (a) => {
-    let artwork = get(titles).find(
-      (t) => t.asset === a && t.owner_id !== user.id
-    );
+  // Object.keys(c).map(async (a) => {
+  //   let { artworks } = await query(getArtworkByAsset, { asset: a });
+  //   let artwork = artworks[0];
 
-    if (artwork) {
-      await api.auth(`Bearer ${jwt}`).url("/claim").post({ artwork }).json();
-    }
-  });
+  //   if (artwork.owner_id !== user.id) {
+  //     await api.auth(`Bearer ${jwt}`).url("/claim").post({ artwork }).json();
+  //   }
+  // });
 
   balances.set(c);
   pending.set(p);

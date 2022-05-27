@@ -62,7 +62,7 @@
     <h1 class="font-black text-4xl primary-color">Sign transaction</h1>
   </div>
 
-  <Transaction summary={true} />
+  <Transaction summary={true} psbt={$psbt} />
   {#if base64}
     <div class="break-all font-mono text-xs mb-2">{p.toBase64()}</div>
   {/if}
