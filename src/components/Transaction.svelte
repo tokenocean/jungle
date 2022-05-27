@@ -160,7 +160,7 @@
     } catch (e) {
       console.log(e);
       err(e);
-    }
+    } 
   };
 
   let toggleDetails = async () => (showDetails = !showDetails);
@@ -424,3 +424,4 @@
     {/if}
   </div>
 {/if}
+
