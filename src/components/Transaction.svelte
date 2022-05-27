@@ -56,115 +56,115 @@
   $: init(psbt);
   let init = async (p, u) => {
     try {
-    if (loading) return setTimeout(() => init(p, u), 50);
-    loading = true;
-    if (!p) return (loading = false);
+      if (loading) return setTimeout(() => init(p, u), 50);
+      loading = true;
+      if (!p) return (loading = false);
 
-    ins = [];
-    outs = [];
+      ins = [];
+      outs = [];
 
-    totals = {};
-    senders = {};
-    recipients = {};
-    users = {};
+      totals = {};
+      senders = {};
+      recipients = {};
+      users = {};
 
-    let address, asset, value;
+      let address, asset, value;
 
-    for (let i = 0; i < tx.ins.length; i++) {
-      let { hash, index } = tx.ins[i];
-      let txid = reverse(hash).toString("hex");
+      for (let i = 0; i < tx.ins.length; i++) {
+        let { hash, index } = tx.ins[i];
+        let txid = reverse(hash).toString("hex");
 
-      let prev = ($txcache[txid] || (await getTx(txid))).outs[index];
+        let prev = ($txcache[txid] || (await getTx(txid))).outs[index];
 
-      asset = parseAsset(prev.asset);
-      address = Address.fromOutputScript(prev.script, network);
-      value = parseVal(prev.value);
+        asset = parseAsset(prev.asset);
+        address = Address.fromOutputScript(prev.script, network);
+        value = parseVal(prev.value);
 
-      let { spent } = await electrs
-        .url(`/tx/${txid}/outspend/${index}`)
-        .get()
-        .json();
+        let { spent } = await electrs
+          .url(`/tx/${txid}/outspend/${index}`)
+          .get()
+          .json();
 
-      let input = {
-        address,
-        asset,
-        signed:
-          p.data.inputs[i] &&
-          (!!p.data.inputs[i].partialSig || !!p.data.inputs[i].finalScriptSig),
-        pSig: p.data.inputs[i] && !!p.data.inputs[i].partialSig,
-        index,
-        spent,
-        txid,
-        value,
-      };
+        let input = {
+          address,
+          asset,
+          signed:
+            p.data.inputs[i] &&
+            (!!p.data.inputs[i].partialSig ||
+              !!p.data.inputs[i].finalScriptSig),
+          pSig: p.data.inputs[i] && !!p.data.inputs[i].partialSig,
+          index,
+          spent,
+          txid,
+          value,
+        };
 
-      ins = [...ins, input];
+        ins = [...ins, input];
 
-      let username = await addressLabel(address);
-      users[username] = await addressUser(address);
+        let username = await addressLabel(address);
+        users[username] = await addressUser(address);
 
-      if (!totals[username]) totals[username] = {};
-      if (!totals[username][asset]) totals[username][asset] = 0;
-      totals[username][asset] += value;
-      senders[username] = true;
-    }
-
-    for (let j = 0; j < tx.outs.length; j++) {
-      let out = tx.outs[j];
-
-      asset = parseAsset(out.asset);
-      value = parseVal(out.value);
-
-      try {
-        address = getAddress(out);
-      } catch (e) {
-        if (!out.script.length) address = "Fee";
-        else {
-          outs = [
-            ...outs,
-            {
-              value,
-              asset,
-              address: "",
-            },
-          ];
-          continue;
-        }
+        if (!totals[username]) totals[username] = {};
+        if (!totals[username][asset]) totals[username][asset] = 0;
+        totals[username][asset] += value;
+        senders[username] = true;
       }
 
-      let username = await addressLabel(address);
-      users[username] = await addressUser(address);
+      for (let j = 0; j < tx.outs.length; j++) {
+        let out = tx.outs[j];
 
-      if (!totals[username]) totals[username] = {};
-      if (!totals[username][asset]) totals[username][asset] = 0;
-      totals[username][asset] -= value;
-      if (totals[username][asset] < 0) recipients[username] = true;
+        asset = parseAsset(out.asset);
+        value = parseVal(out.value);
 
-      outs = [
-        ...outs,
-        {
-          value,
-          asset,
-          address,
-        },
-      ];
-    }
+        try {
+          address = getAddress(out);
+        } catch (e) {
+          if (!out.script.length) address = "Fee";
+          else {
+            outs = [
+              ...outs,
+              {
+                value,
+                asset,
+                address: "",
+              },
+            ];
+            continue;
+          }
+        }
 
-    let assets = [...new Set([...ins, ...outs].map((o) => o.asset))];
-    for (let i = 0; i < assets.length; i++) {
-      let asset = assets[i];
-      labels[asset] = (await assetLabel(asset)) || ticker(asset);
-    }
+        let username = await addressLabel(address);
+        users[username] = await addressUser(address);
 
-    loading = false;
-    } catch(e) {
+        if (!totals[username]) totals[username] = {};
+        if (!totals[username][asset]) totals[username][asset] = 0;
+        totals[username][asset] -= value;
+        if (totals[username][asset] < 0) recipients[username] = true;
+
+        outs = [
+          ...outs,
+          {
+            value,
+            asset,
+            address,
+          },
+        ];
+      }
+
+      let assets = [...new Set([...ins, ...outs].map((o) => o.asset))];
+      for (let i = 0; i < assets.length; i++) {
+        let asset = assets[i];
+        labels[asset] = (await assetLabel(asset)) || ticker(asset);
+      }
+
+      loading = false;
+    } catch (e) {
       console.log(e);
       err(e);
-    } 
+    }
   };
 
   let toggleDetails = async () => (showDetails = !showDetails);
-
 </script>
 
 {#if loading}
@@ -278,11 +278,9 @@
         {#if totals["Fee"]}
           <div class="grid grid-cols-3 mb-4 w-full">
             <div class="flex">
-            <Avatar src="/liquid.jpg" />
-                      <div class="my-auto ml-2 truncate">
-                        liquid fee
-                        </div>
-                        </div>
+              <Avatar src="/liquid.jpg" />
+              <div class="my-auto ml-2 truncate">liquid fee</div>
+            </div>
             <div class="my-auto ml-auto">
               {val(btc, Math.abs(totals["Fee"][btc]))}
             </div>
@@ -429,4 +427,3 @@
     {/if}
   </div>
 {/if}
-
