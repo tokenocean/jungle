@@ -45,6 +45,7 @@ specifiers:
   svelte-preprocess: ^4.10.6
   svelte-select: ^4.4.7
   tailwindcss: ^3.0.24
+  tiny-secp256k1: ^2.2.1
   uuid: ^8.3.2
   wretch: ^1.7.10
   wretch-middlewares: ^0.1.13
@@ -94,6 +95,7 @@ devDependencies:
   svelte-preprocess: 4.10.6_bwfybwdzwmlevsatlte2x4gwcy
   svelte-select: 4.4.7
   tailwindcss: 3.0.24
+  tiny-secp256k1: 2.2.1
   uuid: 8.3.2
   wretch: 1.7.10
   wretch-middlewares: 0.1.13_wretch@1.7.10
@@ -3747,6 +3749,13 @@ packages:
       nan: 2.15.0
     dev: true
 
+  /tiny-secp256k1/2.2.1:
+    resolution: {integrity: sha512-/U4xfVqnVxJXN4YVsru0E6t5wVncu2uunB8+RVR40fYUxkKYUPS10f+ePQZgFBoE/Jbf9H1NBveupF2VmB58Ng==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      uint8array-tools: 0.0.7
+    dev: true
+
   /tmp/0.2.1:
     resolution: {integrity: sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ==}
     engines: {node: '>=8.17.0'}
@@ -3790,6 +3799,11 @@ packages:
 
   /typeforce/1.18.0:
     resolution: {integrity: sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==}
+    dev: true
+
+  /uint8array-tools/0.0.7:
+    resolution: {integrity: sha512-vrrNZJiusLWoFWBqz5Y5KMCgP9W9hnjZHzZiZRT8oNAkq3d5Z5Oe76jAvVVSRh4U8GGR90N2X1dWtrhvx6L8UQ==}
+    engines: {node: '>=14.0.0'}
     dev: true
 
   /unbox-primitive/1.0.2:
