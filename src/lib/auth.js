@@ -1,3 +1,4 @@
+import cookie from "cookie";
 import { session } from "$app/stores";
 import { api } from "$lib/api";
 import decode from "jwt-decode";
@@ -47,3 +48,13 @@ export const checkAuthFromLocalStorage = (user) => {
     goto("/logout");
   }
 };
+
+export const checkToken = (headers) => {
+  const cookies = cookie.parse(headers.get("cookie") || "");
+  if (!cookies.token || expired(cookies.token)) {
+    return {
+      headers: { location: '/login' },
+      status: 302,
+    } 
+  } 
+} 

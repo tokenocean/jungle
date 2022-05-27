@@ -6,10 +6,11 @@
         redirect: "/login",
       };
 
-    const props = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
+    const { artwork } = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
+    const { users } = await fetch(`/users/${slug}.json`).then((r) => r.json());
 
     return {
-      props,
+      props: { artwork, users }
     };
   }
 </script>
@@ -18,7 +19,7 @@
   import { session } from "$app/stores";
   import { Avatar, ProgressLinear } from "$comp";
   import AutoComplete from "simple-svelte-autocomplete";
-  import { addresses, art, psbt, user, token } from "$lib/store";
+  import { art, psbt, user, token } from "$lib/store";
   import { err, goto, info } from "$lib/utils";
   import { updateArtwork } from "$queries/artworks";
   import { createTransaction } from "$queries/transactions";
@@ -34,7 +35,7 @@
   } from "$lib/wallet";
   import { requirePassword } from "$lib/auth";
 
-  export let artwork;
+  export let artwork, users;
 
   $: disabled = !recipient && !address;
 
@@ -78,7 +79,6 @@
   };
 </script>
 
-{#if $addresses}
   <div class="container mx-auto sm:justify-between mt-10 md:mt-20">
     <h2 class="mb-4">Transfer Artwork</h2>
 
@@ -89,7 +89,7 @@
         <AutoComplete
           hideArrow={true}
           placeholder="Username"
-          items={$addresses.filter((a) => a.id !== $session.user.id)}
+          items={users.filter((a) => a.id !== $session.user.id)}
           className="w-full"
           inputClassName="huh text-center"
           labelFieldName="username"
@@ -121,7 +121,6 @@
       </div>
     {/if}
   </div>
-{/if}
 
 <style>
   .disabled {

@@ -17,6 +17,7 @@ import {
   deleteUtxo,
   getActiveBids,
   getActiveListings,
+  getAssetArtworks,
   getAvatars,
   getContract,
   getCurrentUser,
@@ -237,6 +238,7 @@ let getUser = async (headers) => {
   return data.currentuser[0];
 };
 
+let titles = {};
 app.get("/transactions", auth, async (req, res) => {
   try {
     let { id, address, multisig } = await getUser(req.headers);
@@ -244,7 +246,18 @@ app.get("/transactions", auth, async (req, res) => {
     await updateTransactions(address, id);
     await updateTransactions(multisig, id);
 
-    res.send(await q(getTransactions, { id }));
+    let { transactions } = await q(getTransactions, { id });
+    for (let i = 0; i < transactions.length; i++) {
+      let { asset } = transactions[i];
+      if (!titles[asset]) {
+        let { artworks } = await q(getAssetArtworks, { assets: transactions.map(tx => tx.asset) });
+        artworks.map((a) => titles[a.asset] = a.title);
+      } 
+
+      transactions[i].label = titles[asset];
+    } 
+
+    res.send(transactions);
   } catch (e) {
     console.log(e);
     res.code(500).send(e.message);

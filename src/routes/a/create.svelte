@@ -22,7 +22,6 @@
     fee,
     psbt,
     password,
-    titles,
     token,
     txcache,
     user,
@@ -128,8 +127,6 @@
     let error, success;
 
     contract = await createIssuance(artwork, domain, inputs.pop());
-
-    $titles = [...$titles, artwork];
 
     await sign(1, false);
     await tick();
