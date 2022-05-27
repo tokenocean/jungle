@@ -22,11 +22,10 @@ specifiers:
   cypress: ^9.7.0
   cypress-file-upload: ^5.0.8
   date-fns: ^2.28.0
-  ecpair: ^2.0.1
   graphql: ^15.8.0
   hash-base: github:asoltys/hash-base
   jwt-decode: ^3.1.2
-  liquidjs-lib: 6.0.2-liquid.7
+  liquidjs-lib: github:asoltys/liquidjs-lib#v6.0.3
   long: ^4.0.0
   node-fetch: ^3.2.4
   postcss: ^8.4.14
@@ -45,8 +44,8 @@ specifiers:
   svelte-preprocess: ^4.10.6
   svelte-select: ^4.4.7
   tailwindcss: ^3.0.24
-  tiny-secp256k1: ^2.2.1
   uuid: ^8.3.2
+  vite-plugin-wasm-pack: ^0.1.12
   wretch: ^1.7.10
   wretch-middlewares: ^0.1.13
 
@@ -72,11 +71,10 @@ devDependencies:
   cypress: 9.7.0
   cypress-file-upload: 5.0.8_cypress@9.7.0
   date-fns: 2.28.0
-  ecpair: 2.0.1
   graphql: 15.8.0
   hash-base: github.com/asoltys/hash-base/071b7d32fb805b3b9f99898f6f84c16a2ce98894
   jwt-decode: 3.1.2
-  liquidjs-lib: 6.0.2-liquid.7
+  liquidjs-lib: github.com/asoltys/liquidjs-lib/84aa5d1cc0bbb679609c625acb54fe1c99bd330f
   long: 4.0.0
   node-fetch: 3.2.4
   postcss: 8.4.14
@@ -95,8 +93,8 @@ devDependencies:
   svelte-preprocess: 4.10.6_bwfybwdzwmlevsatlte2x4gwcy
   svelte-select: 4.4.7
   tailwindcss: 3.0.24
-  tiny-secp256k1: 2.2.1
   uuid: 8.3.2
+  vite-plugin-wasm-pack: 0.1.12
   wretch: 1.7.10
   wretch-middlewares: 0.1.13_wretch@1.7.10
 
@@ -1673,6 +1671,15 @@ packages:
     resolution: {integrity: sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==}
     dev: true
 
+  /fs-extra/10.1.0:
+    resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      graceful-fs: 4.2.10
+      jsonfile: 6.1.0
+      universalify: 2.0.0
+    dev: true
+
   /fs-extra/9.1.0:
     resolution: {integrity: sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==}
     engines: {node: '>=10'}
@@ -2164,30 +2171,6 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /liquidjs-lib/6.0.2-liquid.7:
-    resolution: {integrity: sha512-SKVVweS4jNwPmA1lBVX5I0Qm6Xkw3LWUbcwE57NgLcv+RwcQcU7IkKd8bMyslSmt00P+oC58lDJoSW5HzeJzaA==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      '@types/randombytes': 2.0.0
-      '@types/wif': 2.0.2
-      '@vulpemventures/secp256k1-zkp': 2.0.0
-      axios: 0.21.4
-      bech32: 2.0.0
-      bip174-liquid: 1.0.3
-      bip32: 2.0.6
-      bip66: 1.1.5
-      bitcoin-ops: 1.4.1
-      blech32: 1.1.2
-      bs58check: 2.1.2
-      create-hash: 1.2.0
-      ecpair: 2.0.1
-      typeforce: 1.18.0
-      varuint-bitcoin: 1.1.2
-      wif: 2.0.6
-    transitivePeerDependencies:
-      - debug
-    dev: true
-
   /listr2/3.14.0_enquirer@2.3.6:
     resolution: {integrity: sha512-TyWI8G99GX9GjE54cJ+RrNMcIFBfwMPxc3XTFiAYGN4s10hWROGtOg7+O6u6LE3mNkyld7RSLE6nrKBvTfcs3g==}
     engines: {node: '>=10.0.0'}
@@ -2363,6 +2346,10 @@ packages:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+    dev: true
+
+  /narrowing/1.4.0:
+    resolution: {integrity: sha512-TYkWGGMWqyiEhTx0KdGtf+dukZAc1fcY0sOpXWOFxvdBXsVpfdtYUnsfZtpPax3REgD7BxcBWkGByWgYrSkC9A==}
     dev: true
 
   /node-domexception/1.0.0:
@@ -3749,13 +3736,6 @@ packages:
       nan: 2.15.0
     dev: true
 
-  /tiny-secp256k1/2.2.1:
-    resolution: {integrity: sha512-/U4xfVqnVxJXN4YVsru0E6t5wVncu2uunB8+RVR40fYUxkKYUPS10f+ePQZgFBoE/Jbf9H1NBveupF2VmB58Ng==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      uint8array-tools: 0.0.7
-    dev: true
-
   /tmp/0.2.1:
     resolution: {integrity: sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ==}
     engines: {node: '>=8.17.0'}
@@ -3799,11 +3779,6 @@ packages:
 
   /typeforce/1.18.0:
     resolution: {integrity: sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==}
-    dev: true
-
-  /uint8array-tools/0.0.7:
-    resolution: {integrity: sha512-vrrNZJiusLWoFWBqz5Y5KMCgP9W9hnjZHzZiZRT8oNAkq3d5Z5Oe76jAvVVSRh4U8GGR90N2X1dWtrhvx6L8UQ==}
-    engines: {node: '>=14.0.0'}
     dev: true
 
   /unbox-primitive/1.0.2:
@@ -3880,6 +3855,14 @@ packages:
       inherits: 2.0.4
       string_decoder: 1.3.0
       util-deprecate: 1.0.2
+    dev: true
+
+  /vite-plugin-wasm-pack/0.1.12:
+    resolution: {integrity: sha512-WliYvQp9HXluir4OKGbngkcKxtYtifU11cqLurRRJGsl770Sjr1iIkp5RuvU3IC1poT4A57Z2/YgAKI2Skm7ZA==}
+    dependencies:
+      chalk: 4.1.2
+      fs-extra: 10.1.0
+      narrowing: 1.4.0
     dev: true
 
   /vite/2.9.9:
@@ -4045,4 +4028,30 @@ packages:
       readable-stream: 3.6.0
       safe-buffer: 5.2.1
       vite-compatible-readable-stream: 3.6.1
+    dev: true
+
+  github.com/asoltys/liquidjs-lib/84aa5d1cc0bbb679609c625acb54fe1c99bd330f:
+    resolution: {tarball: https://codeload.github.com/asoltys/liquidjs-lib/tar.gz/84aa5d1cc0bbb679609c625acb54fe1c99bd330f}
+    name: liquidjs-lib
+    version: 6.0.3
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      '@types/randombytes': 2.0.0
+      '@types/wif': 2.0.2
+      '@vulpemventures/secp256k1-zkp': 2.0.0
+      axios: 0.21.4
+      bech32: 2.0.0
+      bip174-liquid: 1.0.3
+      bip32: 2.0.6
+      bip66: 1.1.5
+      bitcoin-ops: 1.4.1
+      blech32: 1.1.2
+      bs58check: 2.1.2
+      create-hash: 1.2.0
+      ecpair: 2.0.1
+      typeforce: 1.18.0
+      varuint-bitcoin: 1.1.2
+      wif: 2.0.6
+    transitivePeerDependencies:
+      - debug
     dev: true
