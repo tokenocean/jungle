@@ -32,6 +32,7 @@
     "cypress": "^9.7.0",
     "cypress-file-upload": "^5.0.8",
     "date-fns": "^2.28.0",
+    "ecpair": "^2.0.1",
     "graphql": "^15.8.0",
     "hash-base": "github:asoltys/hash-base",
     "jwt-decode": "^3.1.2",
