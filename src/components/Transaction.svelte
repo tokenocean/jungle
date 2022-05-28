@@ -34,9 +34,8 @@
     err,
   } from "$lib/utils";
 
-  export let summary;
+  export let summary = false;
   export let psbt;
-  export let debug = false;
 
   let ins,
     outs,
@@ -51,7 +50,7 @@
 
   let labels = {};
   let retries = 0;
-  let tx = psbt.TX;
+  let { tx } = psbt.data.globalMap.unsignedTx;
 
   $: init(psbt);
   let init = async (p, u) => {
