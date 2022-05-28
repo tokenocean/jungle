@@ -215,6 +215,12 @@ export const getArtworksByUsername = (username) => `query {
   }
 }`;
 
+export const getCollectionByUsername = `query($username: String!) {
+  artworks(where: {owner: { username: {_eq: $username }}}) {
+    ${marketFields}
+  }
+}`;
+
 export const getArtworksByTag = (tag) => `query {
   artworks(where: {tags: {tag: {_ilike: "${tag}"}}}, order_by: { created_at: asc }) {
     ${fields}

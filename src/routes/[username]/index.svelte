@@ -201,10 +201,7 @@
               {#if $artworksLimit !== undefined && subject.creations.length}
                 <button
                   class="primary-btn w-full"
-                  on:click={() => {
-                    $artworksLimit = undefined;
-                    refreshUser();
-                  }}>Show all</button
+                  on:click={() => goto(`/artist/${subject.username}`)}>Show all</button
                 >
               {/if}
             </div>
@@ -222,10 +219,7 @@
               {#if $artworksLimit !== undefined && subject.holdings.length}
                 <button
                   class="primary-btn w-full"
-                  on:click={() => {
-                    $artworksLimit = undefined;
-                    refreshUser();
-                  }}>Show all</button
+                  on:click={() => goto(`/${subject.username}/collection`)}>Show all</button
                 >
               {/if}
             </div>
