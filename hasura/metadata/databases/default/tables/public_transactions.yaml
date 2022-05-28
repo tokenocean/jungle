@@ -60,16 +60,21 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - amount
-        - artwork_id
-        - asset
-        - bid_id
         - confirmed
-        - created_at
+        - amount
+        - sequence
+        - address
+        - asset
+        - contract
         - hash
-        - id
+        - hex
+        - json
         - psbt
         - type
+        - created_at
+        - artwork_id
+        - bid_id
+        - id
         - user_id
       filter:
         _or:
@@ -84,17 +89,21 @@ select_permissions:
   - role: user
     permission:
       columns:
-        - amount
-        - artwork_id
-        - asset
-        - bid_id
         - confirmed
+        - amount
+        - sequence
+        - address
+        - asset
         - contract
-        - created_at
         - hash
-        - id
+        - hex
+        - json
         - psbt
         - type
+        - created_at
+        - artwork_id
+        - bid_id
+        - id
         - user_id
       filter:
         _or:
