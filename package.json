@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "cypress:open": "cypress open",
-    "dev": "TAILWIND_MODE=watch svelte-kit dev",
+    "dev": "TAILWIND_MODE=watch svelte-kit dev --host",
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
