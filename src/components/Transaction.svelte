@@ -185,7 +185,7 @@
               {#each Object.keys(totals[username]) as asset}
                 {#if totals[username][asset] > 0}
                   {#if users[username]}
-                    <div class="my-auto flex">
+                    <div class="my-auto flex mb-1">
                       <div class="flex">
                         {#if users[username]}
                           <Avatar
@@ -215,7 +215,7 @@
                       ).toFixed(8)}
                     </div>
                   </div>
-                  <div class="truncate ml-auto mr-2 my-auto">
+                  <div class="truncate ml-2 my-auto w-full text-right">
                     {labels[asset]}
                   </div>
                 {/if}
@@ -235,7 +235,7 @@
               {#each Object.keys(totals[username]) as asset}
                 {#if totals[username][asset] < 0}
                   {#if users[username]}
-                    <div class="my-auto flex">
+                    <div class="my-auto flex mb-1">
                       <div class="flex">
                         {#if users[username]}
                           <Avatar
@@ -265,27 +265,25 @@
                       ).toFixed(8)}
                     </div>
                   </div>
-                  <div class="truncate ml-auto mr-2 my-auto w-full text-right">
+                  <div class="truncate ml-2 my-auto w-full text-right">
                     {labels[asset]}
                   </div>
                 {/if}
               {/each}
             {/if}
           {/each}
+        {#if totals["Fee"]}
+          <div class="flex">
+            <Avatar src="/liquid.jpg" />
+            <div class="my-auto ml-2 truncate">liquid fee</div>
+          </div>
+          <div class="my-auto ml-auto">
+            {val(btc, Math.abs(totals["Fee"][btc]))}
+          </div>
+          <div class="truncate ml-2 my-auto text-right w-full">L-BTC</div>
+        {/if}
         </div>
 
-        {#if totals["Fee"]}
-          <div class="grid grid-cols-3 mb-4 w-full">
-            <div class="flex">
-              <Avatar src="/liquid.jpg" />
-              <div class="my-auto ml-2 truncate">liquid fee</div>
-            </div>
-            <div class="my-auto ml-auto">
-              {val(btc, Math.abs(totals["Fee"][btc]))}
-            </div>
-            <div class="truncate ml-auto mr-2 my-auto">L-BTC</div>
-          </div>
-        {/if}
       </div>
     </div>
 
