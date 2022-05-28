@@ -25,7 +25,7 @@ export const newapi = (headers) => {
   return wretch().url(url).auth(jwt ? `Bearer ${jwt}` : undefined);
 } 
   
-export const electrs = wretch().url(`${app}/el`);
+export const electrs = wretch().url(`${host}/api/el`);
 
 export const hasura = wretch()
   .middlewares([retry({ maxAttempts: 2 })])
