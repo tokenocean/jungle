@@ -199,7 +199,7 @@
                 <div class="mx-auto">No creations yet</div>
               {/each}
               {#if $artworksLimit !== undefined && subject.creations.length}
-                <a
+                <a sveltekit:prefetch
                   class="primary-btn mx-auto mb-12 w-full"
                   href={`/artist/${subject.username}`}>Show all</a
                 >
@@ -217,7 +217,7 @@
                 <div class="mx-auto">Nothing collected yet</div>
               {/each}
               {#if $artworksLimit !== undefined && subject.holdings.length}
-                <a
+                <a sveltekit:prefetch
                   class="primary-btn mx-auto mb-12 w-full"
                   href={`/${subject.username}/collection`}>Show all</a
                 >
