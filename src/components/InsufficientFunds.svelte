@@ -14,7 +14,7 @@
   import { onDestroy, onMount, tick } from "svelte";
   import qrcode from "qrcode-generator-es6";
   import { balances, error, locked, pending, prompt } from "$lib/store";
-  import { assetLabel, btc, copy, err, fullscreen, val } from "$lib/utils";
+  import { assetLabel, btc, copy, err, fullscreen, ticker, val } from "$lib/utils";
   import { getBalances } from "$lib/wallet";
   import { api } from "$lib/api";
 
@@ -27,6 +27,12 @@
     $error.asset === btc ? Math.max($error.amount, 1000) + fee : $error.amount
   );
 
+  let label;
+  $: getLabel($error);
+  let getLabel = async ({ asset }) => {
+    label = (await assetLabel(asset)) || ticker(asset);
+  } 
+  
   $: amountUpdated(amount);
   let amountUpdated = (a) => isNaN(a) && ($prompt = undefined);
 
@@ -168,7 +174,7 @@
     <div class="text-xs mt-6">Unconfirmed Payment Detected</div>
     <span class="text-yellow-500 text-sm">
       +{val($error.asset, parseInt(incoming))}
-      {assetLabel($error.asset)}
+      {label}
     </span>
   {:else}
     {#if confirmed}
@@ -179,12 +185,12 @@
         <div class="text-xs mt-6">Current Balance</div>
         <div class="text-xl">
           {val($error.asset, parseInt(current))}
-          {assetLabel($error.asset)}
+          {label}
         </div>
       </div>
       <div class="w-1/2">
         <div class="text-xs mt-6">Funds Required</div>
-        <div class="text-xl">{amount} {assetLabel($error.asset)}</div>
+        <div class="text-xl">{amount} {label}</div>
       </div>
     </div>
 
