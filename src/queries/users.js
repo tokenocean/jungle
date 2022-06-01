@@ -21,6 +21,7 @@ export const getUsers = `query {
     username
     address
     multisig
+    avatar_url
   }
 }`;
 
