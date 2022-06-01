@@ -88,7 +88,7 @@
     authCheckInterval = setInterval(authCheck, 5000);
 
     unsubscribeFromSession = session.subscribe((value) => {
-      value.user && checkAuthFromLocalStorage(value.user);
+      value && value.user && checkAuthFromLocalStorage(value.user);
     });
   }
 
