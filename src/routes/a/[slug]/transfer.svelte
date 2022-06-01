@@ -7,7 +7,7 @@
       };
 
     const { artwork } = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
-    const { users } = await fetch(`/users/${slug}.json`).then((r) => r.json());
+    const { users } = await fetch(`/users.json`).then((r) => r.json());
 
     return {
       props: { artwork, users }
