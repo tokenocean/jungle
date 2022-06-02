@@ -56,5 +56,9 @@ export const checkToken = (headers) => {
       headers: { location: '/login' },
       status: 302,
     } 
+  } else {
+    return {
+      authorization: `Bearer ${cookies.token}`
+    }
   } 
 } 
