@@ -249,9 +249,9 @@ app.get("/transactions", auth, async (req, res) => {
     let { transactions } = await q(getTransactions, { id });
     for (let i = 0; i < transactions.length; i++) {
       let { asset } = transactions[i];
-      if (!titles[asset]) {
+      if (asset !== btc && !titles[asset]) {
         let { artworks } = await q(getAssetArtworks, { assets: transactions.map(tx => tx.asset) });
-        artworks.map((a) => titles[a.asset] = a.title);
+        artworks.map((a) => (titles[a.asset] = a.title));
       } 
 
       transactions[i].label = titles[asset];
