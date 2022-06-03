@@ -68,7 +68,7 @@
     {:else}
       <div class="flex flex-col mb-4">
         <label for="asset">Asset</label>
-        <select id="asset" class="text-black" bind:value={$asset}>
+        <select id="asset" class="text-black" bind:value={$asset.asset}>
           {#each $assets as { asset: a }}
             <option value={a}
               >{ticker(a) || a }</option

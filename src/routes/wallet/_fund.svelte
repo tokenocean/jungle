@@ -162,7 +162,7 @@
       </p>
     {/if}
 
-    {#if $asset === btc}
+    {#if $asset.asset === btc}
       <div
         class="flex justify-center text-center cursor-pointer tabs flex-wrap mb-2"
       >

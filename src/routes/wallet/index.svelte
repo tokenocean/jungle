@@ -33,7 +33,9 @@
   export let transactions;
 
   let balance;
-  balances.subscribe((b) => b && (balance = val($asset.asset, b[$asset.asset] || 0)));
+  balances.subscribe((b) => {
+   if (b) balance = val($asset.asset, b[$asset.asset] || 0);
+  });
 
   let funding;
   let withdrawing;
