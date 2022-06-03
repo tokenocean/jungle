@@ -1,0 +1,54 @@
+table:
+  schema: public
+  name: messages
+object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: to
+  - name: userByFrom
+    using:
+      foreign_key_constraint_on: from
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        from:
+          _eq: X-Hasura-User-Id
+      set:
+        from: x-hasura-User-Id
+      columns:
+        - message
+        - to
+      backend_only: false
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - message
+        - created_at
+        - from
+        - to
+        - id
+      filter:
+        _or:
+          - from:
+              _eq: X-Hasura-User-Id
+          - to:
+              _eq: X-Hasura-User-Id
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - message
+      filter:
+        from:
+          _eq: X-Hasura-User-Id
+      check:
+        from:
+          _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        from:
+          _eq: X-Hasura-User-Id

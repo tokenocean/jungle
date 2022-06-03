@@ -124,7 +124,11 @@ insert_permissions:
         - list_price
         - list_price_tx
         - max_extensions
+        - open_edition
+        - open_edition_end
+        - open_edition_start
         - owner_id
+        - redeem_code
         - reserve_price
         - slug
         - ticker
@@ -156,7 +160,11 @@ select_permissions:
         - list_price
         - list_price_tx
         - max_extensions
+        - open_edition
+        - open_edition_end
+        - open_edition_start
         - owner_id
+        - redeem_code
         - reserve_price
         - slug
         - ticker
@@ -201,7 +209,11 @@ select_permissions:
         - list_price
         - list_price_tx
         - max_extensions
+        - open_edition
+        - open_edition_end
+        - open_edition_start
         - owner_id
+        - redeem_code
         - reserve_price
         - slug
         - ticker
@@ -254,7 +266,11 @@ update_permissions:
         - list_price
         - list_price_tx
         - max_extensions
+        - open_edition
+        - open_edition_end
+        - open_edition_start
         - owner_id
+        - redeem_code
         - reserve_price
         - title
       filter:

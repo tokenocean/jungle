@@ -65,6 +65,8 @@
   };
 
   let tab = subject.is_artist ? "creations" : "collection";
+
+  let sendMessage = false;
 </script>
 
 <div class="container mx-auto lg:px-16 mt-5 md:mt-20">
@@ -143,9 +145,17 @@
           {#if $session.user.id === subject.id}
             <Menu />
           {:else}
-            <button class="p-2 primary-btn follow mt-8" on:click={follow}>
-              {subject.followed ? "Unfollow" : "Follow"}</button
-            >
+            <div class="flex space-x-5">
+              <button class="p-2 primary-btn follow mt-8" on:click={follow}>
+                {subject.followed ? "Unfollow" : "Follow"}</button
+              >
+              <button
+                class="p-2 primary-btn mt-8"
+                on:click={() => (sendMessage = !sendMessage)}
+              >
+                Message</button
+              >
+            </div>
           {/if}
         {/if}
       </div>
@@ -199,7 +209,8 @@
                 <div class="mx-auto">No creations yet</div>
               {/each}
               {#if $artworksLimit !== undefined && subject.creations.length}
-                <a sveltekit:prefetch
+                <a
+                  sveltekit:prefetch
                   class="primary-btn mx-auto mb-12 w-full"
                   href={`/artist/${subject.username}`}>Show all</a
                 >
@@ -217,7 +228,8 @@
                 <div class="mx-auto">Nothing collected yet</div>
               {/each}
               {#if $artworksLimit !== undefined && subject.holdings.length}
-                <a sveltekit:prefetch
+                <a
+                  sveltekit:prefetch
                   class="primary-btn mx-auto mb-12 w-full"
                   href={`/${subject.username}/collection`}>Show all</a
                 >
