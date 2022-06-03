@@ -30,6 +30,7 @@
   <textarea
     bind:value={sendMessage}
     required
+    placeholder="Enter message..."
     id="message"
     name="message"
     class="rounded-lg w-full bg-[#31373e]/10 border border-black/10"
