@@ -18,3 +18,9 @@ export const createMessage = `mutation create_message($message: messages_insert_
     id
   }
 }`;
+
+export const updateMessage = `mutation update_message($message: messages_set_input!, $from: uuid!) {
+  update_messages(where: {from: {_eq: $from}}, _set: $message) {
+    affected_rows
+  }
+}`;

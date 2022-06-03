@@ -24,11 +24,12 @@ select_permissions:
   - role: user
     permission:
       columns:
-        - message
         - created_at
         - from
-        - to
         - id
+        - message
+        - to
+        - viewed
       filter:
         _or:
           - from:
@@ -40,6 +41,7 @@ update_permissions:
     permission:
       columns:
         - message
+        - viewed
       filter:
         from:
           _eq: X-Hasura-User-Id

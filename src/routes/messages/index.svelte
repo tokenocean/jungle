@@ -1,9 +1,10 @@
 <script>
   export let messages;
   import Fa from "svelte-fa";
+  import { tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
   import { session } from "$app/stores";
-  import { createMessage } from "$queries/messages";
+  import { createMessage, updateMessage } from "$queries/messages";
   import { query } from "$lib/api";
 
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
@@ -43,13 +44,21 @@
         username: selectedUser.username,
       },
     });
-    sendMessage = "";
+
     messages = [...messages];
+    sendMessage = "";
+    await tick();
+    getFocus();
   }
 
   function timestamp(data) {
     let time = new Date(data);
     return time.toLocaleDateString();
+  }
+
+  let bottom;
+  function getFocus() {
+    bottom.focus({ preventScroll: false });
   }
 </script>
 
@@ -70,12 +79,20 @@
             <div class="bg-[#30bfad] w-3 py-2 rounded-l-lg" />
             <button
               class="bg-[#31373e] flex justify-center items-center space-x-4 w-full p-2 px-10 rounded-r-lg"
-              on:click={() =>
-                (selectedUser = {
+              on:click={async () => {
+                selectedUser = {
                   id: user.id,
                   username: user.username,
                   avatar: user.avatar_url,
-                })}
+                };
+                await tick();
+                getFocus();
+
+                query(updateMessage, {
+                  message: { viewed: true },
+                  from: user.id,
+                });
+              }}
             >
               <img
                 src="/api/public/{user.avatar_url}"
@@ -117,6 +134,7 @@
               </p>
             </div>
           {/each}
+          <a href="" bind:this={bottom} />
         </div>
         <form on:submit|preventDefault={onSubmit}>
           <textarea
