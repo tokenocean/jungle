@@ -132,7 +132,7 @@
           </button>
         </div>
         <div
-          class="bg-[#31373e] border border-white/50 space-y-4 w-full p-2 px-5 md:px-10 rounded-lg max-h-96 overflow-auto"
+          class="bg-[#31373e] border border-white/50 space-y-4 w-full py-4 px-5 md:px-10 rounded-lg max-h-96 overflow-auto"
         >
           {#each messages.filter((message) => message.from === selectedUser.id || message.to === selectedUser.id) as message}
             <div
