@@ -2,7 +2,11 @@
   import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
-  import { faSignOutAlt, faWallet } from "@fortawesome/free-solid-svg-icons";
+  import {
+    faSignOutAlt,
+    faWallet,
+    faEnvelopeOpen,
+  } from "@fortawesome/free-solid-svg-icons";
   import { goto } from "$lib/utils";
 </script>
 
@@ -29,6 +33,14 @@
         <Fa icon={faWallet} />
       </div>
       <div><span>View Wallet</span></div>
+    </div>
+  </a>
+  <a href="/messages">
+    <div class="flex">
+      <div class="my-auto">
+        <Fa icon={faEnvelopeOpen} />
+      </div>
+      <div><span>View Messages</span></div>
     </div>
   </a>
   <a href="/logout" class="cursor-pointer">

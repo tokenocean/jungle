@@ -3,9 +3,6 @@ table:
   schema: public
 configuration:
   custom_root_fields: {}
-  column_config:
-    multisig:
-      custom_name: multisig
   custom_column_names:
     multisig: multisig
   custom_root_fields: {}
