@@ -63,7 +63,7 @@
 </script>
 
 <div class="flex justify-center items-center py-10">
-  <div class="w-full md:w-1/2 lg:w-1/3 px-2">
+  <div class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 px-2">
     <h2 class="text-center mb-10">Messages</h2>
 
     <div class="border p-10 w-full rounded-lg space-y-4 dark-bg">
@@ -110,28 +110,48 @@
           </div>
         {/each}
       {:else}
-        <button
-          class="text-[#30bfad]"
-          on:click={() => (selectedUser = undefined)}
-        >
-          <div class="flex">
-            <Fa icon={faChevronLeft} class="my-auto mr-1" />
-            <div>Back</div>
+        <div>
+          <div class="flex justify-center">
+            <div class="flex items-center">
+              <img
+                src="/api/public/{selectedUser.avatar}"
+                alt="avatar"
+                class="rounded-full w-12 mr-4"
+              />
+              <p>{selectedUser.username}</p>
+            </div>
           </div>
-        </button>
+          <button
+            class="text-[#30bfad]"
+            on:click={() => (selectedUser = undefined)}
+          >
+            <div class="flex">
+              <Fa icon={faChevronLeft} class="my-auto mr-1" />
+              <div>Back</div>
+            </div>
+          </button>
+        </div>
         <div
-          class="bg-[#31373e] space-y-4 w-full p-2 px-10 rounded-lg max-h-96 overflow-auto"
+          class="bg-[#31373e] border border-white/50 space-y-4 w-full p-2 px-5 md:px-10 rounded-lg max-h-96 overflow-auto"
         >
           {#each messages.filter((message) => message.from === selectedUser.id || message.to === selectedUser.id) as message}
-            <div>
-              <p class="break-all max-w-md">
-                {message.from === selectedUser.id
-                  ? selectedUser.username
-                  : $session.user.username}: {message.message}
-              </p>
-              <p class="text-xs text-gray-400">
-                Sent: {timestamp(message.created_at)}
-              </p>
+            <div
+              class="flex {message.from === selectedUser.id
+                ? 'justify-start'
+                : 'justify-end'}"
+            >
+              <div
+                class="w-2/3 rounded-lg p-2 {message.from === selectedUser.id
+                  ? 'dark-bg'
+                  : 'bg-primary text-black'}"
+              >
+                <p class="break-all">
+                  {message.message}
+                </p>
+                <p class="text-xs text-gray-400 text-right">
+                  {timestamp(message.created_at)}
+                </p>
+              </div>
             </div>
           {/each}
           <a href="" bind:this={bottom} />
@@ -140,6 +160,7 @@
           <textarea
             bind:value={sendMessage}
             required
+            placeholder="Enter message..."
             id="message"
             name="message"
             class="rounded-lg w-full bg-[#31373e]/75 border border-white/50"
