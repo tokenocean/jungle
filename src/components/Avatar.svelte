@@ -17,14 +17,10 @@
     placement: "right",
   });
   const extraOpts = {
-    modifiers: [
-      { name: "offset", options: { offset: [0, 8] } },
-      { name: "flip" },
-    ],
+    modifiers: [{ name: "offset", options: { offset: [0, 8] } }],
   };
 
   let showTooltip = false;
-  console.log(user);
 </script>
 
 {#if showTooltip && user.username !== $session.user.username}
