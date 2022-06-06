@@ -60,6 +60,21 @@
   function getFocus() {
     bottom.focus({ preventScroll: false });
   }
+
+  async function handleSelection(user) {
+    selectedUser = {
+      id: user.id,
+      username: user.username,
+      avatar: user.avatar_url,
+    };
+    await tick();
+    getFocus();
+
+    query(updateMessage, {
+      message: { viewed: true },
+      from: user.id,
+    });
+  }
 </script>
 
 <div class="flex justify-center items-center py-10">
@@ -79,20 +94,7 @@
             <div class="bg-[#30bfad] w-3 py-2 rounded-l-lg" />
             <button
               class="bg-[#31373e] flex justify-center items-center space-x-4 w-full p-2 px-10 rounded-r-lg"
-              on:click={async () => {
-                selectedUser = {
-                  id: user.id,
-                  username: user.username,
-                  avatar: user.avatar_url,
-                };
-                await tick();
-                getFocus();
-
-                query(updateMessage, {
-                  message: { viewed: true },
-                  from: user.id,
-                });
-              }}
+              on:click={() => handleSelection(user)}
             >
               <img
                 src="/api/public/{user.avatar_url}"
