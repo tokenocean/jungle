@@ -5,11 +5,16 @@ export const getMessages = `query {
 		from
 		to
 		id
-		user {
-username
-avatar_url
-id
-}
+		toUser {
+      username
+      avatar_url
+      id
+    }
+		fromUser {
+      username
+      avatar_url
+      id
+    }
   }
 }`;
 

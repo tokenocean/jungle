@@ -1,5 +1,4 @@
 <script>
-  export let messages;
   import Fa from "svelte-fa";
   import { tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -7,9 +6,13 @@
   import { createMessage, updateMessage } from "$queries/messages";
   import { query } from "$lib/api";
 
+  export let messages;
+
+  console.log(messages);
+
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
   let users = uniq(
-    messages.map(({ user: { username, avatar_url, id } }) => ({
+    messages.map(({ fromUser: { username, avatar_url, id } }) => ({
       username,
       avatar_url,
       id,
@@ -18,6 +21,8 @@
   );
 
   users = users.filter((user) => user.username !== $session.user.username);
+
+  console.log(users);
 
   let selectedUser;
   let sendMessage;
@@ -70,6 +75,7 @@
     await tick();
     getFocus();
 
+    console.log("UPDATING", user);
     query(updateMessage, {
       message: { viewed: true },
       from: user.id,
