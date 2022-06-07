@@ -7,7 +7,7 @@ const sleep = (n) => new Promise((r) => setTimeout(r, n));
 import { btc, network } from "./wallet.js";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
-import { wait } from "./utils.js";
+import { getUser, wait } from "./utils.js";
 
 import {
   cancelBid,
@@ -229,14 +229,6 @@ app.get("/proof/liquid-asset-proof-:asset", (req, res) => {
     );
   else res.code(500).send("Unrecognized asset");
 });
-
-let getUser = async (headers) => {
-  let { data, errors } = await api(headers)
-    .post({ query: getCurrentUser })
-    .json();
-  if (errors) throw new Error(errors[0].message);
-  return data.currentuser[0];
-};
 
 let titles = {};
 app.get("/transactions", auth, async (req, res) => {

@@ -41,7 +41,6 @@ update_permissions:
     permission:
       columns:
         - message
-        - viewed
       filter:
         from:
           _eq: X-Hasura-User-Id
