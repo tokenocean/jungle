@@ -2,12 +2,12 @@ table:
   schema: public
   name: messages
 object_relationships:
-  - name: user
-    using:
-      foreign_key_constraint_on: to
-  - name: userByFrom
+  - name: fromUser
     using:
       foreign_key_constraint_on: from
+  - name: toUser
+    using:
+      foreign_key_constraint_on: to
 insert_permissions:
   - role: user
     permission:
