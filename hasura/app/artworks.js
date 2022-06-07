@@ -98,7 +98,7 @@ app.post("/transfer", auth, async (req, res) => {
     }
 
     try {
-      await broadcast(Psbt.fromBase64(transaction.psbt));
+      await broadcast(Psbt.fromBase64(psbt));
     } catch (e) {
       if (users.length) {
         await q(deleteTransaction, { id: receipt_id });
