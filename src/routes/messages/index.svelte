@@ -4,11 +4,9 @@
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
   import { session } from "$app/stores";
   import { createMessage, updateMessage } from "$queries/messages";
-  import { query } from "$lib/api";
+  import { api, query } from "$lib/api";
 
   export let messages;
-
-  console.log(messages);
 
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
   let users = uniq(
@@ -21,8 +19,6 @@
   );
 
   users = users.filter((user) => user.username !== $session.user.username);
-
-  console.log(users);
 
   let selectedUser;
   let sendMessage;
@@ -67,19 +63,11 @@
   }
 
   async function handleSelection(user) {
-    selectedUser = {
-      id: user.id,
-      username: user.username,
-      avatar: user.avatar_url,
-    };
+    selectedUser = user;
     await tick();
     getFocus();
 
-    console.log("UPDATING", user);
-    query(updateMessage, {
-      message: { viewed: true },
-      from: user.id,
-    });
+    api.auth(`Bearer ${$session.jwt}`).url("/markRead").post({ from: user.id });
   }
 </script>
 

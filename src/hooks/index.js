@@ -78,4 +78,6 @@ export async function handle({ event, resolve }) {
   return response;
 }
 
-export const getSession = ({ locals: { jwt, user } }) => ({ jwt, user });
+export const getSession = ({ locals: { jwt, user } }) => {
+  return { jwt, user };
+};
