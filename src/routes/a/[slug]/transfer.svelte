@@ -54,7 +54,13 @@
     loading = true;
 
     try {
-      $psbt = await pay(artwork, address, 1);
+      let user = users.find(u => u.address === address || u.multisig === address);
+      let { address: addr } = user;
+      if (artwork.held === "multisig") {
+        addr = user.multisig;
+      } 
+
+      $psbt = await pay(artwork, addr, 1);
       await sign();
 
       if (artwork.held === "multisig") $psbt = await requestSignature($psbt);
