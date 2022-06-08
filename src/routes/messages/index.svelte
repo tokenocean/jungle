@@ -64,11 +64,24 @@
 
   async function handleSelection(user) {
     selectedUser = user;
+
     await tick();
     getFocus();
 
     api.auth(`Bearer ${$session.jwt}`).url("/markRead").post({ from: user.id });
   }
+
+  const messagesSort = (messageA, messageB) => {
+    if (messageA.created_at > messageB.created_at) {
+      return 1;
+    }
+
+    if (messageA.created_at < messageB.created_at) {
+      return -1;
+    }
+
+    return 0;
+  };
 </script>
 
 <div class="flex justify-center items-center py-10">
@@ -105,12 +118,15 @@
             </button>
           </div>
         {/each}
+        {#if messages.length === 0}
+          <p class="text-center">No messages yet.</p>
+        {/if}
       {:else}
         <div>
           <div class="flex justify-center">
             <div class="flex items-center">
               <img
-                src="/api/public/{selectedUser.avatar}"
+                src="/api/public/{selectedUser.avatar_url}"
                 alt="avatar"
                 class="rounded-full w-12 mr-4"
               />
@@ -130,7 +146,9 @@
         <div
           class="bg-[#31373e] border border-white/50 space-y-4 w-full py-4 px-5 md:px-10 rounded-lg max-h-96 overflow-auto"
         >
-          {#each messages.filter((message) => message.from === selectedUser.id || message.to === selectedUser.id) as message}
+          {#each messages
+            .filter((message) => message.from === selectedUser.id || message.to === selectedUser.id)
+            .sort(messagesSort) as message}
             <div
               class="flex {message.from === selectedUser.id
                 ? 'justify-start'
