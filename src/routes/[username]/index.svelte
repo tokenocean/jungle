@@ -13,7 +13,7 @@
 
 <script>
   import { session } from "$app/stores";
-  import { artworksLimit } from "$lib/store";
+  import { artworksLimit, prompt, messageUser } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faEnvelope,
@@ -24,7 +24,7 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import { err, goto } from "$lib/utils";
-  import { Avatar, Card, Offers, ProgressLinear } from "$comp";
+  import { Avatar, Card, Offers, ProgressLinear, SendMessage } from "$comp";
   import { createFollow, deleteFollow } from "$queries/follows";
   import { getUserByUsername } from "$queries/users";
   import Menu from "./_menu.svelte";
@@ -143,9 +143,20 @@
           {#if $session.user.id === subject.id}
             <Menu />
           {:else}
-            <button class="p-2 primary-btn follow mt-8" on:click={follow}>
-              {subject.followed ? "Unfollow" : "Follow"}</button
-            >
+            <div class="flex space-x-5">
+              <button class="p-2 primary-btn follow mt-8" on:click={follow}>
+                {subject.followed ? "Unfollow" : "Follow"}</button
+              >
+              <button
+                class="p-2 primary-btn mt-8"
+                on:click={() => {
+                  $messageUser = { id: subject.id, username: subject.username };
+                  prompt.set(SendMessage);
+                }}
+              >
+                Message</button
+              >
+            </div>
           {/if}
         {/if}
       </div>
@@ -199,7 +210,8 @@
                 <div class="mx-auto">No creations yet</div>
               {/each}
               {#if $artworksLimit !== undefined && subject.creations.length}
-                <a sveltekit:prefetch
+                <a
+                  sveltekit:prefetch
                   class="primary-btn mx-auto mb-12 w-full"
                   href={`/artist/${subject.username}`}>Show all</a
                 >
@@ -217,7 +229,8 @@
                 <div class="mx-auto">Nothing collected yet</div>
               {/each}
               {#if $artworksLimit !== undefined && subject.holdings.length}
-                <a sveltekit:prefetch
+                <a
+                  sveltekit:prefetch
                   class="primary-btn mx-auto mb-12 w-full"
                   href={`/${subject.username}/collection`}>Show all</a
                 >

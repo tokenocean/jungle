@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { api, q, lnft } from "./api.js";
+import { q, lnft } from "./api.js";
 import { broadcast, btc, parseAsset } from "./wallet.js";
 import { Psbt } from "liquidjs-lib";
 import { compareAsc, parseISO } from "date-fns";
@@ -14,7 +14,6 @@ import {
   createTransaction,
   deleteTransaction,
   getArtwork,
-  getCurrentUser,
   getUserByAddress,
   getTransactionArtwork,
   getTransactionUser,
@@ -27,18 +26,9 @@ import {
 } from "./queries.js";
 
 const { SERVER_URL } = process.env;
-import { kebab, sleep, wait } from "./utils.js";
+import { getUser, kebab, sleep, wait } from "./utils.js";
 import crypto from "crypto";
 import { app } from "./app.js";
-
-const getUser = async ({ headers }) => {
-  let { data, errors } = await api(headers)
-    .post({ query: getCurrentUser })
-    .json();
-
-  if (errors) throw new Error(errors[0].message);
-  return data.currentuser[0];
-};
 
 app.post("/cancel", auth, async (req, res) => {
   try {
@@ -70,12 +60,8 @@ app.post("/transfer", auth, async (req, res) => {
       type: "transfer",
     };
 
-    let result = await api(req.headers)
-      .post({ query: createTransaction, variables: { transaction } })
-      .json();
-
-    if (result.errors) throw new Error(result.errors[0].message);
-    transfer_id = result.data.insert_transactions_one.id;
+    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, headers);
+    transfer_id = r.id;
 
     let { users } = await q(getUserByAddress, { address });
 
@@ -224,13 +210,8 @@ app.post("/transaction", auth, async (req, res) => {
       url: `${SERVER_URL}/a/${slug}`,
     };
 
-    let result = await api(req.headers)
-      .post({ query: createTransaction, variables: { transaction } })
-      .json();
-
-    if (result.errors) throw new Error(result.errors[0].message);
-
-    res.send(result.data.insert_transactions_one);
+    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, headers);
+    res.send(r);
   } catch (e) {
     console.log("problem creating transaction", e);
     res.code(500).send(e.message);
@@ -258,10 +239,7 @@ app.post("/tx/update", auth, async (req, res) => {
 app.post("/accept", auth, async (req, res) => {
   try {
     await broadcast(Psbt.fromBase64(req.body.psbt));
-    let { data } = await api(req.headers)
-      .post({ query: acceptBid, variables: req.body })
-      .json();
-    res.send(data);
+    res.send(await q(acceptBid, req.body, req.headers));
   } catch (e) {
     console.log(e);
     res.code(500).send(e.message);

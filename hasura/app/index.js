@@ -9,6 +9,7 @@ import "./artworks.js";
 import "./auctions.js";
 import "./coinos.js";
 import "./proxy.js";
+import "./messages.js";
 import "./monitor.js";
 import "./signing.js";
 import "./upload.js";

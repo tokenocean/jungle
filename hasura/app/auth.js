@@ -1,7 +1,7 @@
 import { app } from "./app.js";
 import jwt from "jsonwebtoken";
 const { HASURA_JWT } = process.env;
-import { q, cf, hasura, hbp } from "./api.js";
+import { q, cf, hbp } from "./api.js";
 import wretch from "wretch";
 import {
   deleteUserByEmail,

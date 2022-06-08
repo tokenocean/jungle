@@ -1,3 +1,6 @@
+import { q } from "./api.js";
+import { getCurrentUser } from "./queries.js";
+
 export const kebab = (str) =>
   str &&
   str
@@ -10,4 +13,9 @@ export const sleep = (n) => new Promise((r) => setTimeout(r, n));
 export const wait = async (f) => {
   while (!(await f())) await sleep(1000);
   return f();
+};
+
+export const getUser = async ({ headers }) => {
+  let { currentuser } = await q(getCurrentUser, null, headers);
+  return currentuser[0];
 };

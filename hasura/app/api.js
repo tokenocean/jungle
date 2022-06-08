@@ -33,19 +33,20 @@ const ddequeue = () => {
   timer = setTimeout(dequeue, DELAY);
 };
 
-export const hasura = wretch().url(`${HASURA_URL}/v1/graphql`);
-export const api = (h) => hasura.headers(h);
-export const adminApi = hasura.headers({
-  "x-hasura-admin-secret": HASURA_SECRET,
-});
-
+export const api = (h) => wretch().url(`${HASURA_URL}/v1/graphql`).headers(h);
 export const electrs = wretch().middlewares([enqueue]).url(LIQUID_ELECTRS_URL);
 export const registry = wretch().url("https://assets.blockstream.info/");
 export const coinos = wretch().url(COINOS_URL).auth(`Bearer ${COINOS_TOKEN}`);
 export const ipfs = wretch().url(IPFS_WEB_URL);
 
-export const q = async (query, variables) => {
-  let { data, errors } = await adminApi.post({ query, variables }).json();
+export const q = async (
+  query,
+  variables,
+  headers = {
+    "x-hasura-admin-secret": HASURA_SECRET,
+  }
+) => {
+  let { data, errors } = await api(headers).post({ query, variables }).json();
   if (errors) {
     for (let index = 0; index < errors.length; index++) {
       const element = errors[index];

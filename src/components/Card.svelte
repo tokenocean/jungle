@@ -34,7 +34,9 @@
     timeout = setTimeout(count, 1000);
 
     let now = new Date();
-    auction_underway = now > new Date(artwork.auction_start) && now < new Date(artwork.auction_end);
+    auction_underway =
+      now > new Date(artwork.auction_start) &&
+      now < new Date(artwork.auction_end);
   };
 
   onMount(count);
@@ -101,28 +103,24 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div class="text-sm">
-            <a href={`/${artwork.artist.username}`}>
-              <div class="flex">
-                <Avatar user={artwork.artist} size="xs" />
-                <div class="mx-1 w-3/4">
-                  <div class="truncate">@{artwork.artist.username}</div>
-                  <div class="text-xs text-gray-600">Artist</div>
-                </div>
+            <div class="flex">
+              <Avatar user={artwork.artist} size="xs" />
+              <div class="mx-1 w-3/4">
+                <div class="truncate">@{artwork.artist.username}</div>
+                <div class="text-xs text-gray-600">Artist</div>
               </div>
-            </a>
+            </div>
           </div>
 
           {#if artwork.owner.id !== artwork.artist.id}
             <div class="text-sm">
-              <a href={`/${artwork.artist.username}`}>
-                <div class="flex">
-                  <Avatar user={artwork.owner} size="xs" />
-                  <div class="ml-2 w-3/4">
-                    <div class="truncate">@{artwork.owner.username}</div>
-                    <div class="text-xs text-gray-600">Owner</div>
-                  </div>
+              <div class="flex">
+                <Avatar user={artwork.owner} size="xs" />
+                <div class="ml-2 w-3/4">
+                  <div class="truncate">@{artwork.owner.username}</div>
+                  <div class="text-xs text-gray-600">Owner</div>
                 </div>
-              </a>
+              </div>
             </div>
           {/if}
         </div>
