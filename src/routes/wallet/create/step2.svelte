@@ -8,14 +8,12 @@
   import { requirePassword } from "$lib/auth";
 
   let mnemonic;
-  let displayMnemonic = async () => {
-    if (!$session.user) return;
-    await requirePassword($session);
+  page.subscribe(async () => {
+    await requirePassword();
     mnemonic = getMnemonic();
-  };
+  });
   let offset = 0;
 
-  $: displayMnemonic($page, $session.user);
 </script>
 
 <div class="container">

@@ -1,4 +1,5 @@
 <script>
+  import { token } from "$lib/store";
   import Fa from "svelte-fa";
   import { tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -68,7 +69,7 @@
     await tick();
     getFocus();
 
-    api.auth(`Bearer ${$session.jwt}`).url("/markRead").post({ from: user.id });
+    api.auth(`Bearer ${$token}`).url("/markRead").post({ from: user.id });
   }
 
   const messagesSort = (messageA, messageB) => {

@@ -1,15 +1,3 @@
-<script context="module">
-  export async function load({ session }) {
-    if (!(session && session.user))
-      return {
-        status: 302,
-        redirect: "/login",
-      };
-
-    return {};
-  }
-</script>
-
 <script>
   import { page, session } from "$app/stores";
   import Fa from "svelte-fa";

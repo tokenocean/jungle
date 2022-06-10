@@ -19,7 +19,7 @@
   import { session } from "$app/stores";
   import { Avatar, ProgressLinear } from "$comp";
   import AutoComplete from "simple-svelte-autocomplete";
-  import { art, psbt, user, token } from "$lib/store";
+  import { art, psbt, token } from "$lib/store";
   import { err, goto, info } from "$lib/utils";
   import { updateArtwork } from "$queries/artworks";
   import { createTransaction } from "$queries/transactions";

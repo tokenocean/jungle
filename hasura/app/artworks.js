@@ -60,7 +60,7 @@ app.post("/transfer", auth, async (req, res) => {
       type: "transfer",
     };
 
-    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, headers);
+    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, req.headers);
     transfer_id = r.id;
 
     let { users } = await q(getUserByAddress, { address });

@@ -9,7 +9,7 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { faClone } from "@fortawesome/free-solid-svg-icons";
   import qrcode from "qrcode-generator-es6";
-  import { asset } from "$lib/store";
+  import { asset, token } from "$lib/store";
   import { btc, copy, err } from "$lib/utils";
   import { api } from "$lib/api";
   import { ProgressLinear } from "$comp";
@@ -52,7 +52,7 @@
     try {
       ({ address, fee } = await api
         .url("/bitcoin")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: 10000,
           liquidAddress: $session.user.address,
@@ -80,7 +80,7 @@
     try {
       ({ address, fee } = await api
         .url("/liquid")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: 10000,
           liquidAddress: $session.user.address,
@@ -100,7 +100,7 @@
     try {
       ({ address, fee } = await api
         .url("/lightning")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: 10000,
           liquidAddress: $session.user.address,

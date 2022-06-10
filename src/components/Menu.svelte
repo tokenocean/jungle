@@ -1,6 +1,6 @@
 <script>
-  import branding from "$lib/branding";
   import { session } from "$app/stores";
+  import branding from "$lib/branding";
   import { Avatar, Search } from "$comp";
 
   export let open = false;
@@ -19,7 +19,7 @@
     ><button on:click={toggle}>Blog</button></a
   >
   <a href="/help"><button on:click={toggle}>Help</button></a>
-  {#if $session?.user}
+  {#if $session.user}
     {#if $session.user.is_admin}
       <a href="/admin"><button on:click={toggle}>Admin</button></a>
     {/if}

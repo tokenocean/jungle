@@ -1,3 +1,15 @@
+<script context="module">
+  export async function load({ session }) {
+    if (!(session?.user?.is_admin))
+      return {
+        status: 302,
+        redirect: "/login",
+      };
+
+    return {};
+  }
+</script>
+
 <script>
   import { session } from "$app/stores";
   import {
@@ -13,9 +25,8 @@
   $: pageChange($page, $session.user);
   let pageChange = async () => {
     try {
-      await requireLogin(null, $session.jwt);
-      if (!$session.user) return;
-      if (!$session.user.is_admin) goto("/");
+      await requireLogin();
+      if (!$session?.user?.is_admin) goto("/");
     } catch (error) {
       err(error);
     }

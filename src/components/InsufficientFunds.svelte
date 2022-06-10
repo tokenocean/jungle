@@ -13,7 +13,7 @@
   import { ProgressLinear } from "$comp";
   import { onDestroy, onMount, tick } from "svelte";
   import qrcode from "qrcode-generator-es6";
-  import { balances, error, locked, pending, prompt } from "$lib/store";
+  import { balances, error, locked, pending, prompt, token } from "$lib/store";
   import { assetLabel, btc, copy, err, fullscreen, ticker, val } from "$lib/utils";
   import { getBalances } from "$lib/wallet";
   import { api } from "$lib/api";
@@ -56,7 +56,7 @@
   };
 
   onDestroy(() => clearInterval(poll));
-  let poll = setInterval(() => getBalances($session), 5000);
+  let poll = setInterval(() => getBalances(), 5000);
 
   let confidential = false;
   let toggleConfidential = () => {
@@ -95,7 +95,7 @@
     try {
       ({ address, fee } = await api
         .url("/bitcoin")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
           liquidAddress: $session.user.address,
@@ -123,7 +123,7 @@
     try {
       ({ address, fee } = await api
         .url("/liquid")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
           liquidAddress: $session.user.address,
@@ -143,7 +143,7 @@
     try {
       ({ address, fee } = await api
         .url("/lightning")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
           liquidAddress: $session.user.address,

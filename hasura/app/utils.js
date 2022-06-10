@@ -16,6 +16,7 @@ export const wait = async (f) => {
 };
 
 export const getUser = async ({ headers }) => {
+  if (!headers.authorization) throw new Error("missing auth token");
   let { currentuser } = await q(getCurrentUser, null, headers);
   return currentuser[0];
 };

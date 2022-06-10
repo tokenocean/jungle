@@ -1,5 +1,4 @@
 import cookie from "cookie";
-import { session } from "$app/stores";
 import { api } from "$lib/api";
 import decode from "jwt-decode";
 import { tick } from "svelte";
@@ -16,7 +15,6 @@ export const requireLogin = async (page) => {
     if (expired(get(token))) throw new Error("Login required");
   } catch (e) {
     console.log(e);
-    session.set({});
     goto("/login");
     throw e;
   }

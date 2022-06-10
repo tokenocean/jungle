@@ -7,7 +7,7 @@
     faChevronRight,
   } from "@fortawesome/free-solid-svg-icons";
   import { requirePassword } from "$lib/auth";
-  import { psbt, user, token, commentsLimit } from "$lib/store";
+  import { psbt, token, commentsLimit } from "$lib/store";
   import { api, query } from "$lib/api";
   import { createComment, deleteComment } from "$queries/artworks";
   import { btc, err, confirm, info } from "$lib/utils";
@@ -27,7 +27,7 @@
     await requirePassword();
     loading = true;
     try {
-      if (artwork.owner.id !== $user.id) {
+      if (artwork.owner.id !== $session.user.id) {
         await pay(undefined, artwork.owner.address, amount);
         await sign();
         await broadcast();

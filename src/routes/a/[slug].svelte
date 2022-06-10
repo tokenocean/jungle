@@ -51,6 +51,7 @@
 
 <script>
   import { session } from "$app/stores";
+  import { token } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faChevronDown,
@@ -59,7 +60,6 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { getArtworkBySlug, deleteArtwork } from "$queries/artworks";
   import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
-  import { page } from "$app/stores";
   import { compareAsc, format, parseISO } from "date-fns";
   import {
     Activity,
@@ -182,7 +182,7 @@
 
       await api
         .url("/offer-notifications")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           artworkId: artwork.id,
           transactionHash: transaction.hash,
@@ -201,7 +201,7 @@
     transaction.asset = artwork.asking_asset;
 
     let { data, errors } = await api
-      .auth(`Bearer ${$session.jwt}`)
+      .auth(`Bearer ${$token}`)
       .url("/transaction")
       .post({ transaction })
       .json();
@@ -223,7 +223,7 @@
   let loading;
   let buyNow = async () => {
     try {
-      await requirePassword($session);
+      await requirePassword();
       loading = true;
 
       transaction.amount = -artwork.list_price;
@@ -248,13 +248,13 @@
 
       await api
         .url("/mail-purchase-successful")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           userId: $session.user.id,
           artworkId: artwork.id,
         });
 
-      await api.url("/mail-artwork-sold").auth(`Bearer ${$session.jwt}`).post({
+      await api.url("/mail-artwork-sold").auth(`Bearer ${$token}`).post({
         userId: artwork.owner.id,
         artworkId: artwork.id,
       });
