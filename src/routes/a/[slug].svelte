@@ -403,7 +403,7 @@
             class:disabled>List</a
           >
         </div>
-        {#if artwork.held === "multisig" && !artwork.has_royalty && !artwork.auction_end}
+        {#if artwork.held === "multisig" && !artwork.has_royalty && !artwork.auction_end && !artwork.open_edition}
           <div class="w-full mb-2">
             <a
               href="/"

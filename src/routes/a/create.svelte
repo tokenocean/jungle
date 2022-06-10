@@ -27,6 +27,7 @@
     keypair,
     getInputs,
     network,
+    signOver,
   } from "$lib/wallet";
   import reverse from "buffer-reverse";
   import { ArtworkMedia } from "$comp";
@@ -119,7 +120,10 @@
     await sign(1, false);
     await tick();
 
+    let base64 = $psbt.toBase64();
+    console.log(base64);
     tx = $psbt.extractTransaction();
+
     required += parseVal(tx.outs.find((o) => o.script.length === 0).value);
 
     $txcache[tx.getId()] = tx;
@@ -135,7 +139,20 @@
     ) {
       inputs.unshift(tx);
     }
-    transactions.push({ contract, psbt: $psbt.toBase64() });
+
+    let openEditionPsbt;
+    if (artwork.open_edition) {
+      let { asset } = tx.outs.find((o) => parseAsset(o.asset) !== btc);
+      await signOver({ asset: parseAsset(asset) }, tx);
+      await tick();
+      openEditionPsbt = $psbt.toBase64();
+    }
+
+    transactions.push({
+      contract,
+      psbt: base64,
+      openEditionPsbt,
+    });
   };
 
   let tries;

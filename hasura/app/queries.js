@@ -557,3 +557,9 @@ export const updateMessages = `mutation($message: messages_set_input!, $from: uu
     affected_rows
   }
 }`;
+
+export const createOpenEdition = `mutation ($o: open_editions_insert_input!) {
+  insert_open_editions_one(object: $o) {
+    id
+  }
+}`;

@@ -19,6 +19,7 @@
 - "!include public_invitees.yaml"
 - "!include public_messages.yaml"
 - "!include public_offers.yaml"
+- "!include public_open_editions.yaml"
 - "!include public_recentactivity.yaml"
 - "!include public_royalty_recipients.yaml"
 - "!include public_samples.yaml"

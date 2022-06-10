@@ -11,6 +11,7 @@ import {
   cancelBid,
   createArtwork,
   createComment,
+  createOpenEdition,
   createTransaction,
   deleteTransaction,
   getArtwork,
@@ -60,7 +61,11 @@ app.post("/transfer", auth, async (req, res) => {
       type: "transfer",
     };
 
-    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, req.headers);
+    let { insert_transactions_one: r } = await q(
+      createTransaction,
+      { transaction },
+      req.headers
+    );
     transfer_id = r.id;
 
     let { users } = await q(getUserByAddress, { address });
@@ -210,7 +215,11 @@ app.post("/transaction", auth, async (req, res) => {
       url: `${SERVER_URL}/a/${slug}`,
     };
 
-    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, headers);
+    let { insert_transactions_one: r } = await q(
+      createTransaction,
+      { transaction },
+      headers
+    );
     res.send(r);
   } catch (e) {
     console.log("problem creating transaction", e);
@@ -251,7 +260,7 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
   issuances[issuance] = { length: transactions.length, i: 0 };
   let tries = 0;
   let i = 0;
-  let contract, psbt;
+  let contract, psbt, openEditionPsbt;
 
   let tags = artwork.tags.map(({ tag }) => ({
     tag,
@@ -274,7 +283,7 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
       if (i > 0) artwork.slug += "-" + i + 1;
       artwork.slug += "-" + artwork.id.substr(0, 5);
 
-      ({ contract, psbt } = transactions[i]);
+      ({ contract, psbt, openEditionPsbt } = transactions[i]);
       let p = Psbt.fromBase64(psbt);
 
       try {
@@ -305,6 +314,16 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
         tags,
       });
 
+      if (artwork.open_edition) {
+        console.log("OEP", openEditionPsbt);
+        await q(createOpenEdition, {
+          o: {
+            artwork_id: artwork.id,
+            psbt: openEditionPsbt,
+          },
+        });
+      }
+
       tries = 0;
       issuances[issuance].i = ++i;
       issuances[issuance].asset = artwork.asset;
@@ -333,7 +352,7 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
 app.post("/issue", auth, async (req, res) => {
   let tries = 0;
   try {
-    let { address, id: user_id } = await getUser(req);
+    let { address, multisig, id: user_id } = await getUser(req);
     let { artwork, transactions } = req.body;
     let issuance = v4();
     let ids = transactions.map((t) => v4());
@@ -347,7 +366,8 @@ app.post("/issue", auth, async (req, res) => {
     await wait(async () => {
       if (++tries > 40) throw new Error("Issuance timed out");
       if (!(issuances[issuance].i > 0)) return false;
-      let utxos = await lnft.url(`/address/${address}/utxo`).get().json();
+      let utxos = [...(await lnft.url(`/address/${address}/utxo`).get().json()),
+      ...(await lnft.url(`/address/${multisig}/utxo`).get().json())];
       return utxos.find((tx) => tx.asset === issuances[issuance].asset);
     });
 

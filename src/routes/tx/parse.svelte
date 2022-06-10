@@ -46,7 +46,7 @@
 <div class="container mx-auto px-10 mt-16 max-w-4xl">
 
   {#if $psbt}
-    <div class="flex">
+    <div class="flex mb-8">
       <button on:click={clear} class="secondary-btn mr-2">Clear</button>
       <button on:click={signTx} class="secondary-btn mr-2">Sign</button>
       <button on:click={broadcastTx} class="secondary-btn">Broadcast</button>

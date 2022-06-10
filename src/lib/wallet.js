@@ -768,9 +768,9 @@ export const executeSwap = async (artwork) => {
 };
 
 export const createIssuance = async (
-  { filename: file, title: name },
+  { filename: file, title: name, open_edition },
   domain,
-  tx
+  tx,
 ) => {
   let out = singlesig();
   fee.set(50);
@@ -830,7 +830,7 @@ export const createIssuance = async (
 
     p.addIssuance({
       assetAmount: 1,
-      assetAddress: out.address,
+      assetAddress: open_edition ? multisig().address : out.address,
       tokenAmount: 0,
       precision: 0,
       net: network,
