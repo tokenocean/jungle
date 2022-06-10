@@ -1,5 +1,6 @@
 <script>
   import { session } from "$app/stores";
+  import { token } from "$lib/store";
   import Fa from "svelte-fa";
   import { ProgressLinear } from "$comp";
   import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
@@ -17,12 +18,7 @@
 
   let cancel = ({ id }) => {
     loading = true;
-    api
-      .auth(`Bearer ${$session.jwt}`)
-      .url("/cancel")
-      .post({ id })
-      .json()
-      .catch(err);
+    api.auth(`Bearer ${$token}`).url("/cancel").post({ id }).json().catch(err);
   };
 </script>
 
@@ -39,7 +35,7 @@
     <a href={`/tx/${transaction.id}`} class="text-sm secondary-color">
       <Fa class="text-xl mx-2" icon={faInfoCircle} />
     </a>
-    {#if canAccept(transaction)}
+    {#if canAccept(transaction, $session.user)}
       <a
         href="/"
         on:click|preventDefault={() => comp.accept(transaction)}
@@ -48,7 +44,7 @@
         [accept]
       </a>
     {/if}
-    {#if canCancel(transaction)}
+    {#if canCancel(transaction, $session.user)}
       <a
         href="/"
         on:click|preventDefault={() => cancel(transaction)}

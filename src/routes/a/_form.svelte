@@ -1,5 +1,5 @@
 <script>
-  import { session } from "$app/stores";
+  import { token } from "$lib/store";
   import { browser } from "$app/env";
   import { err } from "$lib/utils";
   import { query } from "$lib/api";
@@ -31,7 +31,7 @@
 
     try {
       let { tags } = await query(getTags, null, {
-        authorization: `Bearer ${$session.jwt}`,
+        authorization: `Bearer ${$token}`,
       });
       items = [...new Set(tags.map((t) => t.tag))].map((value) => ({
         value,

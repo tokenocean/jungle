@@ -4,8 +4,8 @@
 
   onMount(() => {
     if (browser) {
-      window.sessionStorage.removeItem("password");
-      window.sessionStorage.removeItem("username");
+      window.location.reload();
+      window.location.href = "/login";
     }
   });
 </script>

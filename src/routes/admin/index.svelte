@@ -1,67 +1,31 @@
-<script context="module">
-  export async function load({ session }) {
-    if (!(session && session.user && session.user.is_admin))
-      return {
-        status: 302,
-        redirect: "/",
-      };
-
-    return {};
-  }
-</script>
-
 <script>
-  import { session } from "$app/stores";
+  import { token } from "$lib/store";
   import { onMount, tick, onDestroy } from "svelte";
-  import { page } from "$app/stores";
   import { ArtworkMedia } from "$comp";
-  import { getSamples, updateUser, deleteSamples } from "$queries/users";
+  import { updateUser, deleteSamples } from "$queries/users";
   import { api, hasura, query } from "$lib/api";
   import { err, info } from "$lib/utils";
   import { requireLogin } from "$lib/auth";
 
-  let users = [];
-  let samples;
-
-  onMount(async () => {
-    if ($session.jwt) {
-      const applicantsRequest = await hasura
-        .auth(`Bearer ${$session.jwt}`)
-        .headers({
-          "X-Hasura-Role": "approver",
-        })
-        .post({
-          query: getSamples,
-        })
-        .json();
-      users = applicantsRequest.data.users.sort(
-        (a, b) => a.username && a.username.localeCompare(b.username)
-      );
-    }
-  });
+  export let users;
 
   let makeArtist = async (user) => {
     try {
       user.is_artist = true;
       await query(
         updateUser,
-        { id: user.id, user: { is_artist: true, info: null } },
-        {
-          "X-Hasura-Role": "approver",
-        }
-      ).catch(err);
+        { id: user.id, user: { is_artist: true, info: null } }, headers()
+        );
 
       await query(
         deleteSamples,
         { user_id: user.id },
-        {
-          "X-Hasura-Role": "approver",
-        }
-      ).catch(err);
+        headers()
+        );
 
       await api
         .url("/mail-artist-application-approved")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           userId: user.id,
         });
@@ -69,6 +33,7 @@
       users = users.filter((u) => u.id !== user.id);
       info(`${user.username} is now an artist!`);
     } catch (error) {
+      console.log(error);
       err(error);
     }
   };
@@ -92,7 +57,7 @@
       ).catch(err);
 
       await api
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .url("/mail-artist-application-denied")
         .post({
           userId: user.id,

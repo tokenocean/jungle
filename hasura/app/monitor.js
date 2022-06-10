@@ -233,7 +233,7 @@ app.get("/proof/liquid-asset-proof-:asset", (req, res) => {
 let titles = {};
 app.get("/transactions", auth, async (req, res) => {
   try {
-    let { id, address, multisig } = await getUser(req.headers);
+    let { id, address, multisig } = await getUser(req);
 
     await updateTransactions(address, id);
     await updateTransactions(multisig, id);
@@ -494,7 +494,7 @@ let scanUtxos = async (address) => {
 
 app.get("/balance", auth, async (req, res) => {
   try {
-    let { address, multisig, id, last_seen_tx } = await getUser(req.headers);
+    let { address, multisig, id, last_seen_tx } = await getUser(req);
     let outs = [...(await scanUtxos(address)), ...(await scanUtxos(multisig))];
     let pending = [];
 

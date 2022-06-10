@@ -23,7 +23,7 @@
   let showTooltip = false;
 </script>
 
-{#if showTooltip && user.username !== $session.user.username}
+{#if showTooltip && $session.user && user.username !== $session.user.username}
   <div
     id="tooltip"
     use:popperContent={extraOpts}

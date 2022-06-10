@@ -12,12 +12,33 @@
       };
 
     const props = await get(`/announcements.json`, fetch);
+    props.jwt = session.jwt;
+
+    let authRequired = [/a\/create/, /edit/, /wallet/, ];
+    if (!session?.user && authRequired.find((p) => url.pathname.match(p))) {
+      return {
+        status: 302,
+        redirect: "/login",
+      };
+    }
+
+    let adminRequired = [/admin/];
+    if (
+      !session?.user?.is_admin &&
+      adminRequired.find((p) => url.pathname.match(p))
+    ) {
+      return {
+        status: 302,
+        redirect: "/login",
+      };
+    }
 
     if (
-      session &&
-      session.user &&
-      !session.user.wallet_initialized &&
-      !["/wallet", "/logout"].find((p) => url.pathname.includes(p))
+      session?.user &&
+      !(
+        session.user.wallet_initialized ||
+        ["/wallet", "/logout"].find((p) => url.pathname.includes(p))
+      )
     )
       return {
         status: 302,
@@ -35,20 +56,14 @@
   import { page, session } from "$app/stores";
   import decode from "jwt-decode";
   import { Sidebar, Navbar, Dialog, Footer, Snack, Head } from "$comp";
-  import {
-    meta,
-    popup as p,
-    password,
-    prompt,
-    poll,
-    user,
-    token,
-  } from "$lib/store";
+  import { meta, popup as p, password, prompt, poll, user, token } from "$lib/store";
   import { onDestroy, onMount } from "svelte";
   import branding from "$lib/branding";
   import { checkAuthFromLocalStorage } from "$lib/auth";
 
   export let popup;
+  export let jwt;
+
   let unsubscribeFromSession;
   let refreshInterval;
   let authCheckInterval;
@@ -82,7 +97,7 @@
 
     $p = popup;
     $user = $session.user;
-    $token = $session.jwt;
+    $token = jwt;
 
     refreshInterval = setInterval(refresh, 720000);
     authCheckInterval = setInterval(authCheck, 5000);

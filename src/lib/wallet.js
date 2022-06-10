@@ -1,3 +1,4 @@
+import { session } from "$app/stores";
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { api, electrs, hasura, query } from "$lib/api";
@@ -65,11 +66,11 @@ export const parseAsset = (v) => reverse(v.slice(1)).toString("hex");
 
 const nonce = Buffer.alloc(1);
 
-export const getBalances = async ({ user, jwt }) => {
-  await requirePassword({ jwt });
+export const getBalances = async () => {
+  await requirePassword();
 
   let { confirmed: c, pending: p } = await api
-    .auth(`Bearer ${jwt}`)
+    .auth(`Bearer ${get(token)}`)
     .url("/balance")
     .get()
     .json();
@@ -120,7 +121,7 @@ export const createWallet = (mnemonic, pass) => {
 };
 
 export const getMnemonic = (mnemonic, pass) => {
-  if (!mnemonic && user) mnemonic = get(user).mnemonic;
+  if (!mnemonic && get(user)) ({ mnemonic } = get(user));
   if (!pass) pass = get(password);
 
   mnemonic = cryptojs.AES.decrypt(mnemonic, pass).toString(cryptojs.enc.Utf8);
@@ -651,11 +652,10 @@ export const requireSign = async () => {
 
 export const sign = async (sighash, prompt = true) => {
   let p = get(psbt);
-  const loggedUser = get(user);
 
   let { privkey } = keypair();
 
-  if (prompt && loggedUser.prompt_sign) {
+  if (prompt && get(user).prompt_sign) {
     const signResult = await requireSign();
 
     if (signResult === CANCELLED) {

@@ -1,4 +1,5 @@
 <script>
+  import { session } from "$app/stores";
   import { err, goto } from "$lib/utils";
   import Seed from "../_seed.svelte";
   import { getMnemonic } from "$lib/wallet";

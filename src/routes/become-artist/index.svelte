@@ -1,5 +1,6 @@
 <script>
   import { session } from "$app/stores";
+  import { token } from "$lib/store";
   import Fa from "svelte-fa";
   import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
   import {
@@ -37,7 +38,7 @@
 
     if (file.size < 100000000) previewFile(file);
 
-    let hash = await upload(file, progress, $session.jwt);
+    let hash = await upload(file, progress);
     let url = preview || `/api/ipfs/${hash}`;
     url += "#t=0.5";
 

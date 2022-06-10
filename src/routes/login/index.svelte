@@ -1,21 +1,8 @@
-<script context="module">
-  export async function load({ session }) {
-    if (session && session.user) {
-      return {
-        status: 301,
-        redirect: "/",
-      };
-    }
-
-    return {};
-  }
-</script>
-
 <script>
   import Fa from "svelte-fa";
   import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
   import { page, session } from "$app/stores";
-  import { user, token } from "$lib/store";
+  import { token } from "$lib/store";
   import { dev, err, goto } from "$lib/utils";
   import { post } from "$lib/api";
   import cryptojs from "crypto-js";
@@ -35,15 +22,13 @@
   let login = async () => {
     try {
       let res = await post("/auth/login", { email, password }, fetch).json();
-
-      $user = res.user;
-      $session = { user: res.user, jwt: res.jwt_token };
-      $token = $session.jwt;
+      console.log("SET TOKEN", res);
+      $token = res.jwt_token;
       window.sessionStorage.setItem("password", password);
       window.sessionStorage.setItem("username", res.user.username);
-
-      goto("/");
+      window.location.href = '/';
     } catch (e) {
+      console.log("login error", e);
       err(e);
     }
   };

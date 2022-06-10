@@ -1,5 +1,6 @@
 import { fade as svelteFade } from "svelte/transition";
 import { get } from "svelte/store";
+import { session } from "$app/stores";
 import {
   acceptStatus,
   assets,
@@ -7,7 +8,6 @@ import {
   full,
   prompt,
   snack,
-  user,
 } from "$lib/store";
 import { goto as svelteGoto } from "$app/navigation";
 import { AcceptPrompt, InsufficientFunds } from "$comp";
@@ -287,25 +287,21 @@ function post(endpoint, data) {
 export const underway = ({ auction_start: s, auction_end: e }) =>
   e && isWithinInterval(new Date(), { start: parseISO(s), end: parseISO(e) });
 
-export const canCancel = ({ artwork, created_at, type, user: { id } }) => {
-  let $user = get(user);
-
+export const canCancel = ({ artwork, created_at, type, user: { id } }, user) => {
   return (
     type === "bid" &&
     isCurrent(artwork, created_at, type) &&
-    $user &&
-    $user.id === id
+    user?.id === id
   );
 };
 
 export const isCurrent = ({ transferred_at: t }, created_at, type) =>
   type === "bid" && (!t || compareAsc(parseISO(created_at), parseISO(t)) > 0);
 
-export const canAccept = ({ type, artwork, created_at, accepted }, debug) => {
-  let $user = get(user);
+export const canAccept = ({ type, artwork, created_at, accepted }, user) => {
   if (accepted) return false;
 
-  let isOwner = ({ owner }) => $user && $user.id === owner.id;
+  let isOwner = ({ owner }) => user && user.id === owner.id;
 
   let underway = ({ auction_start: s, auction_end: e }) =>
     e && isWithinInterval(new Date(), { start: parseISO(s), end: parseISO(e) });

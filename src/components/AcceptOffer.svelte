@@ -3,7 +3,7 @@
 <script>
   import { session } from "$app/stores";
   import { tick } from "svelte";
-  import { prompt, snack, psbt } from "$lib/store";
+  import { prompt, snack, psbt, token } from "$lib/store";
   import { broadcast, sign, requestSignature } from "$lib/wallet";
   import { err, info } from "$lib/utils";
   import { requirePassword } from "$lib/auth";
@@ -26,7 +26,7 @@
       }
 
       let result = await api
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .url("/accept")
         .post({
           id: artwork.id,

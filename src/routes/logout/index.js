@@ -6,10 +6,11 @@ const opts = {
   path: "/",
 };
 
-export async function post(request) {
+export async function get({ request: { headers } }) {
   return {
-    body: {},
+    status: 302,
     headers: {
+      location: "/logout/done",
       "set-cookie": [
         cookie.serialize("token", "", {
           ...opts,

@@ -36,7 +36,7 @@
     await confirm();
 
     await api
-      .auth(`Bearer ${$session.jwt}`)
+      .auth(`Bearer ${$token}`)
       .url("/cancel")
       .post({ id })
       .json()
@@ -158,7 +158,7 @@
             </div>
           </td>
           <td class="py-4 pl-6 text-sm ">
-            {#if canAccept(offer.transaction)}
+            {#if canAccept(offer.transaction, $session.user)}
               <a
                 href="/"
                 on:click|preventDefault={() => {
@@ -246,7 +246,7 @@
             </div>
           </td>
           <td class="py-4 pl-6 text-sm ">
-            {#if canCancel(offer.transaction)}
+            {#if canCancel(offer.transaction, $session.user)}
               <a
                 href="/"
                 on:click|preventDefault={() => cancel(offer.transaction)}

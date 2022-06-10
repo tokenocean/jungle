@@ -1,5 +1,4 @@
 <script>
-  import { session } from "$app/stores";
   import { Transaction } from "$comp";
   import { psbt } from "$lib/store";
   import { err, info } from "$lib/utils";
@@ -24,7 +23,7 @@
   };
 
   let signTx = async () => {
-    await requirePassword($session.jwt);
+    await requirePassword();
     $psbt = await sign();
     try {
       $psbt = await requestSignature(p);
