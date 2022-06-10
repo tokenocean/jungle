@@ -283,43 +283,47 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
       if (i > 0) artwork.slug += "-" + i + 1;
       artwork.slug += "-" + artwork.id.substr(0, 5);
 
-      ({ contract, psbt, openEditionPsbt } = transactions[i]);
-      let p = Psbt.fromBase64(psbt);
+      if (!artwork.open_edition) {
+        ({ contract, psbt, openEditionPsbt } = transactions[i]);
+        let p = Psbt.fromBase64(psbt);
 
-      try {
-        await broadcast(p);
-      } catch (e) {
-        if (!e.message.includes("already")) throw e;
+        try {
+          await broadcast(p);
+        } catch (e) {
+          if (!e.message.includes("already")) throw e;
+        }
+
+        let tx = p.extractTransaction();
+        let hash = tx.getId();
+        contract = JSON.stringify(contract);
+        artwork.asset = parseAsset(
+          tx.outs.find((o) => parseAsset(o.asset) !== btc).asset
+        );
       }
-
-      let tx = p.extractTransaction();
-      let hash = tx.getId();
-      contract = JSON.stringify(contract);
-      artwork.asset = parseAsset(
-        tx.outs.find((o) => parseAsset(o.asset) !== btc).asset
-      );
 
       await q(createArtwork, {
         artwork,
-        transaction: {
-          artwork_id: artwork.id,
-          user_id: artwork.artist_id,
-          type: "creation",
-          hash,
-          contract,
-          asset: artwork.asset,
-          amount: 1,
-          psbt: p.toBase64(),
-        },
         tags,
       });
 
       if (artwork.open_edition) {
-        console.log("OEP", openEditionPsbt);
         await q(createOpenEdition, {
           o: {
             artwork_id: artwork.id,
             psbt: openEditionPsbt,
+          },
+        });
+      } else {
+        await q(createTransaction, {
+          transaction: {
+            artwork_id: artwork.id,
+            user_id: artwork.artist_id,
+            type: "creation",
+            hash,
+            contract,
+            asset: artwork.asset,
+            amount: 1,
+            psbt: p.toBase64(),
           },
         });
       }
@@ -366,8 +370,10 @@ app.post("/issue", auth, async (req, res) => {
     await wait(async () => {
       if (++tries > 40) throw new Error("Issuance timed out");
       if (!(issuances[issuance].i > 0)) return false;
-      let utxos = [...(await lnft.url(`/address/${address}/utxo`).get().json()),
-      ...(await lnft.url(`/address/${multisig}/utxo`).get().json())];
+      let utxos = [
+        ...(await lnft.url(`/address/${address}/utxo`).get().json()),
+        ...(await lnft.url(`/address/${multisig}/utxo`).get().json()),
+      ];
       return utxos.find((tx) => tx.asset === issuances[issuance].asset);
     });
 

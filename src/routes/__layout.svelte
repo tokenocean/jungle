@@ -14,7 +14,7 @@
     const props = await get(`/announcements.json`, fetch);
     props.jwt = session.jwt;
 
-    let authRequired = [/a\/create/, /edit/, /wallet/, ];
+    let authRequired = [/create/, /edit/, /wallet/, /auction/];
     if (!session?.user && authRequired.find((p) => url.pathname.match(p))) {
       return {
         status: 302,

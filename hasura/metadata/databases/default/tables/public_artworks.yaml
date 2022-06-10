@@ -42,6 +42,13 @@ array_relationships:
         insertion_order: null
         column_mapping:
           id: artwork_id
+  - name: open_editions
+    using:
+      foreign_key_constraint_on:
+        column: artwork_id
+        table:
+          schema: public
+          name: open_editions
   - name: royalty_recipients
     using:
       foreign_key_constraint_on:

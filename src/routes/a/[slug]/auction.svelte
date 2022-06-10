@@ -1,11 +1,5 @@
 <script context="module">
   export async function load({ fetch, params: { slug }, session }) {
-    if (!(session && session.user))
-      return {
-        status: 302,
-        redirect: "/login",
-      };
-
     const props = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
 
     if (!props.artwork)
@@ -484,7 +478,7 @@
                 <div
                   class="absolute inset-y-0 right-0 flex items-center mr-2 mt-4"
                 >
-                  {assetLabel(artwork.asking_asset)}
+                  {ticker(artwork.asking_asset)}
                 </div>
               </div>
             </div>
@@ -509,19 +503,6 @@
                   </span>
                 </span></label
               >
-              <input
-                id="price"
-                class="form-input block w-full pl-7 pr-12"
-                placeholder={val(artwork.asking_asset, 0)}
-                bind:value={list_price}
-                bind:this={input}
-                disabled={auction_underway}
-              />
-              <div
-                class="absolute inset-y-0 right-0 flex items-center mr-2 mt-4"
-              >
-                {ticker(artwork.asking_asset)}
-              </div>
             </div>
             <div class="flex w-full sm:w-3/4 mb-4">
               <div class="relative mt-1 rounded-md w-2/3 mr-6">

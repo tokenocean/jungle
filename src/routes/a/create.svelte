@@ -173,13 +173,15 @@
     try {
       [inputs, total] = await getInputs();
 
-      for ($edition = 1; $edition <= artwork.editions; $edition++) {
-        await issue();
-        await sleep(10);
-        await info(
-          `Signed issuance transaction ${$edition} of ${artwork.editions}`
-        );
-        tries = 0;
+      if (!artwork.open_edition) {
+        for ($edition = 1; $edition <= artwork.editions; $edition++) {
+          await issue();
+          await sleep(10);
+          await info(
+            `Signed issuance transaction ${$edition} of ${artwork.editions}`
+          );
+          tries = 0;
+        }
       }
 
       if (total < required)

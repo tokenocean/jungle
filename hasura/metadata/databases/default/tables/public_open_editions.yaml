@@ -1,3 +1,7 @@
 table:
   schema: public
   name: open_editions
+object_relationships:
+  - name: artwork
+    using:
+      foreign_key_constraint_on: artwork_id
