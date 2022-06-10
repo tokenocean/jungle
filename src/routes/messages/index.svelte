@@ -1,5 +1,6 @@
 <script>
   import { token } from "$lib/store";
+  import { Avatar } from "$comp";
   import Fa from "svelte-fa";
   import { tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -104,11 +105,7 @@
               class="bg-[#31373e] flex justify-center items-center space-x-4 w-full p-2 px-10 rounded-r-lg"
               on:click={() => handleSelection(user)}
             >
-              <img
-                src="/api/public/{user.avatar_url}"
-                alt="avatar"
-                class="rounded-full w-12"
-              />
+            <Avatar {user} />
               <p>{user.username}</p>
               <p>
                 ({messages.filter(
@@ -126,12 +123,8 @@
         <div>
           <div class="flex justify-center">
             <div class="flex items-center">
-              <img
-                src="/api/public/{selectedUser.avatar_url}"
-                alt="avatar"
-                class="rounded-full w-12 mr-4"
-              />
-              <p>{selectedUser.username}</p>
+              <Avatar user={selectedUser} />
+              <p class="ml-1">{selectedUser.username}</p>
             </div>
           </div>
           <button

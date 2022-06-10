@@ -13,6 +13,8 @@
     faUserCircle,
     faEnvelopeOpen,
   } from "@fortawesome/free-solid-svg-icons";
+  import OutClick from "svelte-outclick";
+
   const [popperRef, popperContent] = createPopperActions({
     placement: "right",
   });
@@ -23,46 +25,52 @@
   let showTooltip = false;
 </script>
 
-{#if showTooltip && $session.user && user.username !== $session.user.username}
-  <div
-    id="tooltip"
-    use:popperContent={extraOpts}
-    class="bg-primary p-4 rounded-lg border border-black/25 shadow-lg z"
-  >
-    <div class="space-y-2">
-      <button on:click={() => (showTooltip = false)}>
-        <a
-          href={`/${user.username}`}
-          alt="profile"
+{#if showTooltip}
+  <OutClick on:outclick={() => (showTooltip = false)}>
+    <div
+      id="tooltip"
+      use:popperContent={extraOpts}
+      class="bg-primary p-4 rounded-lg border border-black/25 shadow-lg z"
+    >
+      <div class="space-y-2">
+        <button on:click={() => (showTooltip = false)}>
+          <a
+            href={`/${user.username}`}
+            alt="profile"
+            class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center"
+          >
+            <Fa icon={faUserCircle} class="mr-1" /> Profile</a
+          >
+        </button>
+        <button
           class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center"
+          on:click={() => {
+            showTooltip = false;
+            $messageUser = { id: user.id, username: user.username };
+            prompt.set(SendMessage);
+          }}
         >
-          <Fa icon={faUserCircle} class="mr-1" /> Profile</a
+          <Fa icon={faEnvelopeOpen} class="mr-1" /> Message</button
         >
-      </button>
-      <button
-        class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center"
-        on:click={() => {
-          showTooltip = false;
-          $messageUser = { id: user.id, username: user.username };
-          prompt.set(SendMessage);
-        }}
-      >
-        <Fa icon={faEnvelopeOpen} class="mr-1" /> Message</button
-      >
-      <button
-        class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center"
-        ><Fa icon={faWallet} class="mr-1" /> Tip<button /></button
-      >
+        <button
+          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center"
+          ><Fa icon={faWallet} class="mr-1" /> Tip<button /></button
+        >
+      </div>
+      <div id="arrow" data-popper-arrow />
     </div>
-    <div id="arrow" data-popper-arrow />
-  </div>
+  </OutClick>
 {/if}
 
 <div
   class={`${size} my-auto relative`}
   use:popperRef
-  on:click={() => {
-    showTooltip = !showTooltip;
+  on:click={(e) => {
+    if (!$session.user || (user && $session.user.username !== user.username)) {
+      e.preventDefault();
+      e.stopPropagation();
+      showTooltip = !showTooltip;
+    }
   }}
 >
   <div

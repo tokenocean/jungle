@@ -103,24 +103,28 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div class="text-sm">
-            <div class="flex">
-              <Avatar user={artwork.artist} size="xs" />
-              <div class="mx-1 w-3/4">
-                <div class="truncate">@{artwork.artist.username}</div>
-                <div class="text-xs text-gray-600">Artist</div>
+            <a href={`/${artwork.artist.username}`}>
+              <div class="flex">
+                <Avatar user={artwork.artist} size="xs" />
+                <div class="mx-1 w-3/4">
+                  <div class="truncate">@{artwork.artist.username}</div>
+                  <div class="text-xs text-gray-600">Artist</div>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
 
           {#if artwork.owner.id !== artwork.artist.id}
             <div class="text-sm">
-              <div class="flex">
-                <Avatar user={artwork.owner} size="xs" />
-                <div class="ml-2 w-3/4">
-                  <div class="truncate">@{artwork.owner.username}</div>
-                  <div class="text-xs text-gray-600">Owner</div>
+              <a href={`/${artwork.owner.username}`}>
+                <div class="flex">
+                  <Avatar user={artwork.owner} size="xs" />
+                  <div class="ml-2 w-3/4">
+                    <div class="truncate">@{artwork.owner.username}</div>
+                    <div class="text-xs text-gray-600">Owner</div>
+                  </div>
                 </div>
-              </div>
+              </a>
             </div>
           {/if}
         </div>
