@@ -5,27 +5,7 @@ object_relationships:
   - name: artist
     using:
       foreign_key_constraint_on: artist_id
-  - name: bid
-    using:
-      foreign_key_constraint_on: bid_id
-  - name: owner
-    using:
-      foreign_key_constraint_on: owner_id
 array_relationships:
-  - name: comments
-    using:
-      foreign_key_constraint_on:
-        column: artwork_id
-        table:
-          schema: public
-          name: comments
-  - name: favorites
-    using:
-      foreign_key_constraint_on:
-        column: artwork_id
-        table:
-          schema: public
-          name: favorites
   - name: featureds
     using:
       foreign_key_constraint_on:
@@ -33,15 +13,6 @@ array_relationships:
         table:
           schema: public
           name: featured
-  - name: offers
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: offers
-        insertion_order: null
-        column_mapping:
-          id: artwork_id
   - name: open_editions
     using:
       foreign_key_constraint_on:
@@ -49,13 +20,6 @@ array_relationships:
         table:
           schema: public
           name: open_editions
-  - name: royalty_recipients
-    using:
-      foreign_key_constraint_on:
-        column: artwork_id
-        table:
-          schema: public
-          name: royalty_recipients
   - name: tags
     using:
       foreign_key_constraint_on:
@@ -63,13 +27,6 @@ array_relationships:
         table:
           schema: public
           name: tags
-  - name: transactions
-    using:
-      foreign_key_constraint_on:
-        column: artwork_id
-        table:
-          schema: public
-          name: transactions
 computed_fields:
   - name: artist_owned
     definition:
@@ -114,31 +71,16 @@ insert_permissions:
         owner_id: x-hasura-User-Id
       columns:
         - artist_id
-        - asking_asset
-        - asset
-        - auction_end
-        - auction_start
-        - bid_increment
         - description
-        - edition
         - editions
-        - extension_interval
         - filename
         - filetype
         - id
-        - instagram
         - is_physical
-        - list_price
-        - list_price_tx
-        - max_extensions
         - open_edition
         - open_edition_end
         - open_edition_start
-        - owner_id
-        - redeem_code
-        - reserve_price
         - slug
-        - ticker
         - title
       backend_only: false
 select_permissions:
@@ -146,44 +88,19 @@ select_permissions:
     permission:
       columns:
         - artist_id
-        - asking_asset
-        - asset
-        - auction_end
-        - auction_start
         - auction_tx
-        - bid_id
-        - bid_increment
         - created_at
         - description
-        - edition
         - editions
-        - extension_interval
         - filename
         - filetype
-        - held
         - id
-        - instagram
         - is_physical
-        - list_price
-        - list_price_tx
-        - max_extensions
         - open_edition
         - open_edition_end
         - open_edition_start
-        - owner_id
-        - redeem_code
-        - reserve_price
         - slug
-        - ticker
         - title
-        - transferred_at
-        - views
-      computed_fields:
-        - artist_owned
-        - favorited
-        - has_royalty
-        - last_active
-        - num_favorites
       filter:
         _or:
           - asking_asset:
@@ -195,44 +112,18 @@ select_permissions:
     permission:
       columns:
         - artist_id
-        - asking_asset
-        - asset
-        - auction_end
-        - auction_start
-        - auction_tx
-        - bid_id
-        - bid_increment
         - created_at
         - description
-        - edition
         - editions
-        - extension_interval
         - filename
         - filetype
-        - held
         - id
-        - instagram
         - is_physical
-        - list_price
-        - list_price_tx
-        - max_extensions
         - open_edition
         - open_edition_end
         - open_edition_start
-        - owner_id
-        - redeem_code
-        - reserve_price
         - slug
-        - ticker
         - title
-        - transferred_at
-        - views
-      computed_fields:
-        - artist_owned
-        - favorited
-        - has_royalty
-        - last_active
-        - num_favorites
       filter:
         _or:
           - owner_id:
@@ -256,29 +147,13 @@ update_permissions:
   - role: user
     permission:
       columns:
-        - asking_asset
-        - auction_end
-        - auction_release_tx
-        - auction_start
-        - auction_tx
-        - bid_increment
         - description
-        - edition
         - editions
-        - extension_interval
-        - held
         - id
-        - instagram
         - is_physical
-        - list_price
-        - list_price_tx
-        - max_extensions
         - open_edition
         - open_edition_end
         - open_edition_start
-        - owner_id
-        - redeem_code
-        - reserve_price
         - title
       filter:
         owner_id:

@@ -2,15 +2,15 @@ table:
   schema: public
   name: offers
 object_relationships:
-  - name: artwork
+  - name: edition
     using:
       manual_configuration:
         remote_table:
           schema: public
-          name: artworks
+          name: editions
         insertion_order: null
         column_mapping:
-          artwork_id: id
+          edition_id: id
   - name: transaction
     using:
       manual_configuration:
@@ -25,7 +25,7 @@ select_permissions:
     permission:
       columns:
         - amount
-        - artwork_id
+        - edition_id
         - id
         - psbt
       filter: {}
@@ -33,10 +33,11 @@ select_permissions:
     permission:
       columns:
         - amount
-        - artwork_id
+        - edition_id
         - id
+        - owner_id
         - psbt
       filter:
-        artwork:
+        edition:
           owner_id:
             _eq: X-Hasura-User-Id

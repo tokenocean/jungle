@@ -15,6 +15,16 @@ object_relationships:
   - name: bid
     using:
       foreign_key_constraint_on: bid_id
+  - name: edition
+    using:
+      foreign_key_constraint_on: edition_id
+  - name: editionById
+    using:
+      foreign_key_constraint_on:
+        column: bid_id
+        table:
+          schema: public
+          name: editions
   - name: user
     using:
       manual_configuration:
@@ -47,7 +57,6 @@ insert_permissions:
         user_id: x-hasura-User-Id
       columns:
         - amount
-        - artwork_id
         - asset
         - bid_id
         - contract
@@ -60,27 +69,26 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - confirmed
-        - amount
-        - sequence
         - address
+        - amount
         - asset
+        - bid_id
+        - confirmed
         - contract
+        - created_at
         - hash
         - hex
+        - id
         - json
         - psbt
+        - sequence
         - type
-        - created_at
-        - artwork_id
-        - bid_id
-        - id
         - user_id
       filter:
         _or:
-          - artwork_id:
+          - edition_id:
               _is_null: true
-          - artwork:
+          - edition:
               _or:
                 - transferred_at:
                     _is_null: false
@@ -89,31 +97,31 @@ select_permissions:
   - role: user
     permission:
       columns:
-        - confirmed
-        - amount
-        - sequence
         - address
+        - amount
         - asset
+        - bid_id
+        - confirmed
         - contract
+        - created_at
         - hash
         - hex
+        - id
         - json
         - psbt
+        - sequence
         - type
-        - created_at
-        - artwork_id
-        - bid_id
-        - id
         - user_id
       filter:
         _or:
-          - artwork_id:
+          - edition_id:
               _is_null: true
-          - artwork:
+          - edition:
               _or:
                 - transferred_at:
                     _is_null: false
                 - asking_asset:
                     _is_null: false
-                - artist_id:
-                    _eq: X-Hasura-User-Id
+                - artwork:
+                    artist_id:
+                      _eq: X-Hasura-User-Id
