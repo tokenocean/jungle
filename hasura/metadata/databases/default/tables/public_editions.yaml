@@ -1,0 +1,10 @@
+table:
+  schema: public
+  name: editions
+object_relationships:
+  - name: artwork
+    using:
+      foreign_key_constraint_on: artwork_id
+  - name: bid
+    using:
+      foreign_key_constraint_on: bid_id

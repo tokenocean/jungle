@@ -1,0 +1,2 @@
+CREATE TABLE "public"."auctions" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "edition_id" uuid NOT NULL, "start" timestamptz NOT NULL, "end" timestamptz NOT NULL, "reserve" int8 NOT NULL, "max_extensions" integer NOT NULL, "extension_interval" integer NOT NULL, "psbt" Text NOT NULL, "release_psbt" text NOT NULL, "bid_increment" int8 NOT NULL DEFAULT 10000, PRIMARY KEY ("id") , FOREIGN KEY ("edition_id") REFERENCES "public"."editions"("id") ON UPDATE restrict ON DELETE cascade, UNIQUE ("id"));
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
