@@ -1,0 +1,3 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- update transactions set edition_id = (select editions.id from editions where editions.artwork_id = transactions.artwork_id);

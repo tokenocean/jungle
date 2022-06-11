@@ -2,16 +2,6 @@ table:
   schema: public
   name: transactions
 object_relationships:
-  - name: artwork
-    using:
-      foreign_key_constraint_on: artwork_id
-  - name: artworkById
-    using:
-      foreign_key_constraint_on:
-        column: bid_id
-        table:
-          schema: public
-          name: artworks
   - name: bid
     using:
       foreign_key_constraint_on: bid_id
@@ -76,12 +66,12 @@ select_permissions:
         - confirmed
         - contract
         - created_at
+        - edition_id
         - hash
         - hex
         - id
         - json
         - psbt
-        - sequence
         - type
         - user_id
       filter:
@@ -104,12 +94,12 @@ select_permissions:
         - confirmed
         - contract
         - created_at
+        - edition_id
         - hash
         - hex
         - id
         - json
         - psbt
-        - sequence
         - type
         - user_id
       filter:

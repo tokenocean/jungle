@@ -8,3 +8,80 @@ object_relationships:
   - name: bid
     using:
       foreign_key_constraint_on: bid_id
+  - name: owner
+    using:
+      foreign_key_constraint_on: owner_id
+array_relationships:
+  - name: auctions
+    using:
+      foreign_key_constraint_on:
+        column: edition_id
+        table:
+          schema: public
+          name: auctions
+  - name: royalty_recipients
+    using:
+      foreign_key_constraint_on:
+        column: edition_id
+        table:
+          schema: public
+          name: royalty_recipients
+  - name: transactions
+    using:
+      foreign_key_constraint_on:
+        column: edition_id
+        table:
+          schema: public
+          name: transactions
+computed_fields:
+  - name: artist_owned
+    definition:
+      function:
+        schema: public
+        name: edition_artist_owned
+  - name: has_royalty
+    definition:
+      function:
+        schema: public
+        name: edition_has_royalty
+      table_argument: edition_row
+  - name: last_active
+    definition:
+      function:
+        schema: public
+        name: edition_last_tx
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - list_price
+        - edition
+        - views
+        - address
+        - asking_asset
+        - asset
+        - list_psbt
+        - slug
+        - transferred_at
+        - artwork_id
+        - bid_id
+        - id
+        - owner_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - list_price
+        - edition
+        - views
+        - address
+        - asking_asset
+        - asset
+        - list_psbt
+        - slug
+        - transferred_at
+        - artwork_id
+        - bid_id
+        - id
+        - owner_id
+      filter: {}

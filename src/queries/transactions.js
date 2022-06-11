@@ -1,9 +1,9 @@
-import { fields as artworkFields } from "./artworks";
+import { editionFields } from "./artworks";
 
 export const createTransaction = `mutation create_transaction($transaction: transactions_insert_input!) {
   insert_transactions_one(object: $transaction) {
     id,
-    artwork_id
+    edition_id
   } 
 }`;
 
@@ -28,14 +28,14 @@ export const fields = `
     username
     avatar_url
   } 
-  artwork_id
+  edition_id
 `;
 
 export const getArtworkTransactions = (id) => `query {
-  transactions(order_by: {created_at: desc}, where: {_and: {artwork_id: {_eq: "${id}"}}}) {
+  transactions(order_by: {created_at: desc}, where: {_and: {edition_id: {_eq: "${id}"}}}) {
     ${fields}
-    artwork {
-      ${artworkFields}
+    edition {
+      ${editionFields}
     } 
   }
 }`;
@@ -43,17 +43,17 @@ export const getArtworkTransactions = (id) => `query {
 export const getTransaction = `query($id: uuid!) {
   transactions_by_pk(id: $id) {
     ${fields}
-    artwork {
-      ${artworkFields}
+    edition {
+      ${editionFields}
     } 
   }
 }`;
 
 export const getTransactions = (limit = 10) => `query {
-  transactions(where: {artwork_id: {_is_null: false}}, order_by: {created_at: desc}, limit: ${limit}) {
+  transactions(where: {edition_id: {_is_null: false}}, order_by: {created_at: desc}, limit: ${limit}) {
     ${fields}
-    artwork {
-      ${artworkFields}
+    edition {
+      ${editionFields}
     } 
   }
 }`;
@@ -64,8 +64,8 @@ export const getActiveBids = (id) => `query {
     psbt
     amount
     type
-    artwork {
-      ${artworkFields}
+    edition {
+      ${editionFields}
     } 
   }
 }`;
@@ -73,17 +73,17 @@ export const getActiveBids = (id) => `query {
 export const getRecentActivity = (limit = 3) => `query {
   recentactivity(where: { type: { _neq: "royalty" }}, limit: ${limit}) {
     ${fields}
-    artwork {
-      ${artworkFields}
+    edition {
+      ${editionFields}
     } 
   }
 }`;
 
 export const getLatestPieces = (limit = 3) => `query {
-  transactions(where: {artwork_id: {_is_null: false}, type: {_eq: "creation"}}, order_by: [{created_at: desc}], limit: ${limit}) {
+  transactions(where: {edition_id: {_is_null: false}, type: {_eq: "creation"}}, order_by: [{created_at: desc}], limit: ${limit}) {
     ${fields}
-    artwork {
-      ${artworkFields}
+    edition {
+      ${editionFields}
     } 
   }
 }`;
@@ -92,8 +92,8 @@ export const getOffers = `query($id: uuid!) {
   offers(where: { user_id: { _eq: $id }}) {
     transaction {
       ${fields}
-      artwork {
-        ${artworkFields}
+      edition {
+        ${editionFields}
       } 
     }
   }

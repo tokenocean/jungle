@@ -35,13 +35,6 @@ array_relationships:
         table:
           schema: public
           name: artworks
-  - name: artworksByOwnerId
-    using:
-      foreign_key_constraint_on:
-        column: owner_id
-        table:
-          schema: public
-          name: artworks
   - name: comments
     using:
       foreign_key_constraint_on:
@@ -79,15 +72,6 @@ array_relationships:
         table:
           schema: public
           name: follows
-  - name: holdings
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: artworks
-        insertion_order: null
-        column_mapping:
-          id: owner_id
   - name: messages
     using:
       foreign_key_constraint_on:

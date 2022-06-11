@@ -12,4 +12,3 @@
         idle_timeout: 180
         max_connections: 50
   tables: "!include default/tables/tables.yaml"
-  functions: "!include default/functions/functions.yaml"

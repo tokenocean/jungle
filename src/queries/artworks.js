@@ -1,30 +1,30 @@
 export const marketFields = `
   id
-  edition
   editions
   title
   filename
   filetype
-  favorited
   list_price
-  auction_start
-  auction_end
-  asking_asset
-  has_royalty
   slug
-  views
+  favorited
   created_at
-  transferred_at
-  owner {
-    id
-    username
-    avatar_url
-  },
   artist {
     id
     username
     avatar_url
   },
+`;
+
+export const editionFields = `
+  transferred_at
+  owner_id
+  owner {
+    id
+    username
+    avatar_url
+  },
+  views
+  edition
   bid {
     id
     user {
@@ -37,71 +37,24 @@ export const marketFields = `
 
 export const fields = `
   id,
-  asset
-  edition
   editions
-  held
   title
   description
   artist_id
-  owner_id
   filename
   filetype
-  favorited
-  list_price
-  reserve_price
-  last_active
   created_at
-  auction_start
-  auction_end
-  list_price_tx
-  asking_asset
-  bid_increment
-  extension_interval
-  max_extensions
-  has_royalty
-  royalty_recipients {
-    id
-    name
-    artwork_id
-    asking_asset
-    amount
-    address
-    type
-  }
   slug
   is_physical
   open_edition
   open_edition_start
   open_edition_end
-  redeem_code
-  instagram
-  ticker
-  views
-  transferred_at
-  owner {
-    id
-    username
-    full_name
-    email
-    avatar_url
-    address
-    pubkey
-  },
   artist {
     id
     address
     username
     avatar_url
   },
-  bid {
-    id
-    user {
-      id
-      username
-    }
-    amount
-  }
 `;
 
 export const txFields = `
@@ -126,10 +79,6 @@ export const txFields = `
     avatar_url
     full_name
     email
-  }
-  artwork_id
-  artwork {
-    ${fields}
   }
 `;
 

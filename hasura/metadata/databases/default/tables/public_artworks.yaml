@@ -60,108 +60,54 @@ computed_fields:
       session_argument: hasura_session
       table_argument: artwork_row
     comment: ""
-insert_permissions:
-  - role: user
-    permission:
-      check:
-        artist_id:
-          _eq: X-Hasura-User-Id
-      set:
-        artist_id: x-hasura-User-Id
-        owner_id: x-hasura-User-Id
-      columns:
-        - artist_id
-        - description
-        - editions
-        - filename
-        - filetype
-        - id
-        - is_physical
-        - open_edition
-        - open_edition_end
-        - open_edition_start
-        - slug
-        - title
-      backend_only: false
 select_permissions:
   - role: anonymous
     permission:
       columns:
-        - artist_id
-        - auction_tx
-        - created_at
-        - description
-        - editions
-        - filename
-        - filetype
-        - id
         - is_physical
         - open_edition
-        - open_edition_end
-        - open_edition_start
+        - editions
+        - description
+        - filename
+        - filetype
         - slug
         - title
-      filter:
-        _or:
-          - asking_asset:
-              _is_null: false
-          - transferred_at:
-              _is_null: false
-      allow_aggregations: true
+        - created_at
+        - open_edition_end
+        - open_edition_start
+        - artist_id
+        - id
+      computed_fields:
+        - artist_owned
+        - favorited
+        - has_royalty
+        - last_active
+        - num_favorites
+      filter: {}
   - role: user
     permission:
       columns:
-        - artist_id
-        - created_at
-        - description
+        - is_physical
+        - open_edition
         - editions
+        - description
         - filename
         - filetype
-        - id
-        - is_physical
-        - open_edition
-        - open_edition_end
-        - open_edition_start
         - slug
         - title
-      filter:
-        _or:
-          - owner_id:
-              _eq: X-Hasura-User-Id
-          - asking_asset:
-              _is_null: false
-          - transferred_at:
-              _is_null: false
-          - _exists:
-              _where:
-                _and:
-                  - id:
-                      _eq: X-Hasura-User-Id
-                  - is_admin:
-                      _eq: true
-              _table:
-                schema: public
-                name: users
-      allow_aggregations: true
-update_permissions:
-  - role: user
-    permission:
-      columns:
-        - description
-        - editions
-        - id
-        - is_physical
-        - open_edition
+        - created_at
         - open_edition_end
         - open_edition_start
-        - title
-      filter:
-        owner_id:
-          _eq: X-Hasura-User-Id
-      check: null
+        - artist_id
+        - id
+      computed_fields:
+        - artist_owned
+        - favorited
+        - has_royalty
+        - last_active
+        - num_favorites
+      filter: {}
 delete_permissions:
   - role: user
     permission:
-      filter:
-        owner_id:
-          _eq: X-Hasura-User-Id
+      filter: {}
