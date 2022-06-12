@@ -7,6 +7,7 @@
   import { messageUser, prompt } from "$lib/store";
   import { createPopperActions } from "svelte-popperjs";
   import { SendMessage } from "$comp";
+  import { goto } from "$lib/utils";
   import Fa from "svelte-fa";
   import {
     faWallet,
@@ -33,28 +34,32 @@
       class="bg-primary p-4 rounded-lg border border-black/25 shadow-lg z"
     >
       <div class="space-y-2">
-        <button on:click={() => (showTooltip = false)}>
-          <a
-            href={`/${user.username}`}
-            alt="profile"
-            class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center"
-          >
-            <Fa icon={faUserCircle} class="mr-1" /> Profile</a
-          >
-        </button>
         <button
-          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center"
+          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
           on:click={() => {
             showTooltip = false;
-            $messageUser = { id: user.id, username: user.username };
-            prompt.set(SendMessage);
+            goto(`/${user.username}`);
+          }}
+        >
+          <Fa icon={faUserCircle} class="mr-1" /> Profile
+        </button>
+        <button
+          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
+          on:click={() => {
+            showTooltip = false;
+            if (!$session.user) {
+              goto("/login");
+            } else {
+              $messageUser = { id: user.id, username: user.username };
+              prompt.set(SendMessage);
+            }
           }}
         >
           <Fa icon={faEnvelopeOpen} class="mr-1" /> Message</button
         >
         <button
-          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center"
-          ><Fa icon={faWallet} class="mr-1" /> Tip<button /></button
+          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
+          ><Fa icon={faWallet} class="mr-1" /> Tip</button
         >
       </div>
       <div id="arrow" data-popper-arrow />
