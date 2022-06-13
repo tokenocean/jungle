@@ -35,7 +35,7 @@
     >
       <div class="space-y-2">
         <button
-          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
+          class="text-black block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
           on:click={() => {
             showTooltip = false;
             goto(`/${user.username}`);
@@ -44,7 +44,7 @@
           <Fa icon={faUserCircle} class="mr-1" /> Profile
         </button>
         <button
-          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
+          class="text-black block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
           on:click={() => {
             showTooltip = false;
             if (!$session.user) {
@@ -58,7 +58,7 @@
           <Fa icon={faEnvelopeOpen} class="mr-1" /> Message</button
         >
         <button
-          class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
+          class="text-black block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
           on:click={() => {
             showTooltip = false;
             if (!$session.user) {

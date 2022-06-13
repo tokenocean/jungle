@@ -19,6 +19,7 @@
 
   export let id;
   export let subject;
+  export let messages;
 
   $: pageChange($page);
 
@@ -128,7 +129,7 @@
         {/if}
         {#if $session?.user}
           {#if $session.user.id === subject.id}
-            <Menu />
+            <Menu {messages} />
           {:else}
             <div class="flex space-x-5">
               <button class="p-2 primary-btn follow mt-8" on:click={follow}>

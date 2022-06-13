@@ -5,6 +5,7 @@ export const getMessages = `query {
 		from
 		to
 		id
+    viewed
 		toUser {
       username
       avatar_url
