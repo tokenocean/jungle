@@ -1,16 +1,3 @@
-<script context="module">
-  import { get } from "$lib/api";
-  export async function load({ fetch, params }) {
-    const { subject } = await get(`/${params.username}.json`, fetch);
-
-    return {
-      props: {
-        subject,
-      },
-    };
-  }
-</script>
-
 <script>
   import { session } from "$app/stores";
   import { artworksLimit, prompt, messageUser } from "$lib/store";

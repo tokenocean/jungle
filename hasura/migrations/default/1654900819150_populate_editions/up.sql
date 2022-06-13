@@ -21,3 +21,5 @@ slug,
 bid_id,
 'unknown'
 FROM artworks;
+
+update artworks a set slug = (select slug from artworks b where a.title = b.title and a.artist_id = b.artist_id and b.edition = 1);

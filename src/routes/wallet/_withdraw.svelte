@@ -8,7 +8,7 @@
   import sign from "$lib/sign";
   import { ProgressLinear } from "$comp";
   import { requirePassword } from "$lib/auth";
-  import { getArtworkByAsset } from "$queries/artworks";
+  import { getEditionByAsset } from "$queries/artworks";
 
   export let withdrawing = false;
 
@@ -18,12 +18,12 @@
     : "";
 
   let loading;
-  let artwork;
+  let edition;
 
   $: updateAsset($asset);
   let updateAsset = ({ asset }) =>
-    asset && query(getArtworkByAsset, { asset })
-      .then(({ artworks }) => (artwork = artworks[0]))
+    asset && query(getEditionByAsset, { asset })
+      .then(({ editions }) => (edition = editions[0]))
       .catch(err);
 
   $: clearForm($asset);
@@ -37,11 +37,11 @@
     loading = true;
     try {
       let { asset: a } = $asset;
-      if (a !== btc && !artwork) artwork = { asset: a };
-      $psbt = await pay(artwork, to.trim(), sats(a, amount));
+      if (a !== btc && !edition) edition = { asset: a };
+      $psbt = await pay(edition, to.trim(), sats(a, amount));
       $psbt = await sign();
 
-      if (artwork && (artwork.auction_end || artwork.has_royalty)) {
+      if (edition && edition.held === "multisig") {
         $psbt = await requestSignature($psbt);
       }
 

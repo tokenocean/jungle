@@ -13,7 +13,7 @@ import { goto as svelteGoto } from "$app/navigation";
 import { AcceptPrompt, InsufficientFunds } from "$comp";
 import { isWithinInterval, parseISO, compareAsc } from "date-fns";
 import { query } from "$lib/api";
-import { getArtworkByAsset } from "$queries/artworks.js";
+import { getEditionByAsset } from "$queries/artworks.js";
 import { getUserByAddress } from "$queries/users.js";
 
 export const btc = import.meta.env.VITE_BTC;
@@ -76,12 +76,12 @@ export const addressLabel = async (address) => {
 };
 
 export const assetLabel = async (asset) => {
-  const { artworks } = await query(getArtworkByAsset, { asset });
+  const { editions } = await query(getEditionByAsset, { asset });
 
-  if (artworks.length) {
-    let r = artworks[0];
-    return r.title
-      ? r.title + (r.editions > 1 ? ` ${r.edition}/${r.editions}` : "")
+  if (editions.length) {
+    let r = editions[0];
+    return r.artwork.title
+      ? r.artwork.title + (r.artwork.editions > 1 ? ` ${r.edition}/${r.artwork.editions}` : "")
       : "Untitled";
   }
 };

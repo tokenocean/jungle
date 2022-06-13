@@ -1,5 +1,5 @@
 import decode from "jwt-decode";
-import { marketFields as artworkFields } from "./artworks";
+import { editionFields, marketFields as artworkFields } from "./artworks";
 import { fields as txFields } from "./transactions";
 
 let fields =
@@ -40,7 +40,7 @@ export const getUserByUsername = `query($username: String!, $artworksLimit: Int)
     ${fields}
     ${computed}
     holdings(where: { held: {_is_null: false }}, limit: $artworksLimit, order_by: { created_at: desc }) {
-      ${artworkFields}
+      ${editionFields}
     }
     creations(limit: $artworksLimit, order_by: { created_at: desc }) {
       ${artworkFields}
@@ -48,16 +48,16 @@ export const getUserByUsername = `query($username: String!, $artworksLimit: Int)
     offers {
       transaction {
         ${txFields}
-        artwork {
-          ${artworkFields}
+        edition {
+          ${editionFields}
         }
       }
     }
     activebids {
       transaction {
         ${txFields}
-        artwork {
-          ${artworkFields}
+        edition {
+          ${editionFields}
         }
       }
     }

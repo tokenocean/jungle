@@ -17,7 +17,7 @@ import {
   deleteUtxo,
   getActiveBids,
   getActiveListings,
-  getAssetArtworks,
+  getAssets,
   getAvatars,
   getContract,
   getCurrentUser,
@@ -109,7 +109,7 @@ const checkBids = async () => {
       await sleep(1000);
       let p = Psbt.fromBase64(tx.psbt);
       try {
-        if (await isSpent(p.data.globalMap.unsignedTx.tx, tx.artwork_id))
+        if (await isSpent(p.data.globalMap.unsignedTx.tx, tx.edition_id))
           await q(cancelBid, { id: tx.id });
       } catch (e) {
         // keep going
@@ -242,8 +242,8 @@ app.get("/transactions", auth, async (req, res) => {
     for (let i = 0; i < transactions.length; i++) {
       let { asset } = transactions[i];
       if (asset !== btc && !titles[asset]) {
-        let { artworks } = await q(getAssetArtworks, { assets: transactions.map(tx => tx.asset) });
-        artworks.map((a) => (titles[a.asset] = a.title));
+        let { editions } = await q(getAssets, { assets: transactions.map(tx => tx.asset) });
+        editions.map((a) => (titles[a.asset] = a.artwork.title));
       } 
 
       transactions[i].label = titles[asset];
@@ -372,7 +372,7 @@ let updateTransactions = async (address, user_id) => {
         console.log("inserting transaction", type, txid);
         transactions.push(transaction);
       } catch (e) {
-        console.log(e, type, txid, asset, user_id);
+        console.log("failed to create transaction", e, type, txid, asset, user_id);
         continue;
       }
     }
@@ -389,11 +389,13 @@ let scanUtxos = async (address) => {
   let { id } = users[0];
   let { utxos } = await q(getUtxos, { address });
 
+  console.log("UTXOS", address, utxos);
+
   let outs = utxos.map(
     ({
       id,
       transaction_id,
-      tx: { hash, sequence, confirmed },
+      tx: { hash, confirmed },
       vout,
       value,
       asset,
@@ -403,7 +405,6 @@ let scanUtxos = async (address) => {
       vout,
       value,
       asset,
-      sequence,
       confirmed,
       transaction_id,
     })
@@ -415,7 +416,7 @@ let scanUtxos = async (address) => {
   let { transactions } = await q(getTransactions, { id });
 
   transactions = uniq(
-    transactions.sort((a, b) => a.sequence - b.sequence),
+    transactions,
     (tx) => tx.hash + tx.asset
   )
 
@@ -496,6 +497,7 @@ app.get("/balance", auth, async (req, res) => {
   try {
     let { address, multisig, id, last_seen_tx } = await getUser(req);
     let outs = [...(await scanUtxos(address)), ...(await scanUtxos(multisig))];
+
     let pending = [];
 
     outs = outs.filter((o) => (o.confirmed ? true : pending.push(o) && false));

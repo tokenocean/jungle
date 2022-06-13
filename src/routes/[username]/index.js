@@ -1,9 +1,6 @@
 import { getUserByUsername } from "$queries/users";
-export async function get({
-  request: { headers },
-  locals: { q },
-  params: { username },
-}) {
+
+export async function get({ locals: { q }, params: { username } }) {
   try {
     let { users } = await q(getUserByUsername, { username, artworksLimit: 10 });
 
@@ -13,7 +10,6 @@ export async function get({
       body: {
         subject: users[0],
       },
-      headers,
     };
   } catch (e) {
     console.log(e);

@@ -5,7 +5,6 @@
   import { border, bg } from "./_colors";
   import { page } from "$app/stores";
   import { browser } from "$app/env";
-  import { query } from "$lib/api";
   import { onDestroy, onMount, tick } from "svelte";
   import { asset, assets, balances, pending, password } from "$lib/store";
   import { ProgressLinear } from "$comp";

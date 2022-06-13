@@ -1,6 +1,5 @@
 export const marketFields = `
   id
-  editions
   title
   filename
   filetype
@@ -15,8 +14,12 @@ export const marketFields = `
 `;
 
 export const editionFields = `
+  list_price
   transferred_at
   owner_id
+  artwork {
+    ${marketFields}
+  } 
   owner {
     id
     username
@@ -36,7 +39,9 @@ export const editionFields = `
 
 export const fields = `
   id,
-  editions
+  editions {
+    edition
+  } 
   title
   description
   artist_id
@@ -126,11 +131,18 @@ export const getArtworksByOwner = (id) => `query {
   }
 }`;
 
-export const getArtworkByAsset = `query($asset: String!) {
-  artworks(where: {asset: {_eq: $asset}}, limit: 1) {
-    ${fields}
+export const getEdition = `query($slug: String!, $edition: Int!) {
+  editions(where: {artwork: { slug: {_eq: $slug}}, edition: {_eq: $edition}}) {
+    ${editionFields}
   }
 }`;
+
+export const getEditionByAsset = `query($asset: String!) {
+  editions(where: {asset: {_eq: $asset}}, limit: 1) {
+    ${editionFields}
+  }
+}`;
+
 
 export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
   artworks(where: {slug : {_eq: $slug}}, limit: 1) {
@@ -144,9 +156,6 @@ export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
         avatar_url
         id
       }
-    }
-    transactions(where: { type: { _neq: "royalty" }}, order_by: { created_at: desc }) {
-      ${txFields}
     }
     tags {
       tag

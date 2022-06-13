@@ -4,42 +4,34 @@ import { combine, release, sign, broadcast } from "./wallet.js";
 import { check } from "./signing.js";
 import {
   cancelBids,
-  closeAuction,
   getFinishedAuctions,
   releaseToken,
 } from "./queries.js";
 
 setInterval(async () => {
   try {
-    let { artworks } = await q(getFinishedAuctions, {
+    let { auctions } = await q(getFinishedAuctions, {
       now: formatISO(new Date()),
     });
 
-    for (let i = 0; i < artworks.length; i++) {
-      let artwork = artworks[i];
-      let { bid } = artwork;
+    for (let i = 0; i < auctions.length; i++) {
+      let auction = auctions[i];
+      let { edition } = auction;
+      let { bid } = edition;
 
-      await q(closeAuction, {
-        id: artwork.id,
-        artwork: {
-          auction_start: null,
-          auction_end: null,
-        },
-      });
-
-      console.log("finalizing auction for", artwork.slug);
-      console.log("reserve price", artwork.reserve_price);
+      console.log("finalizing auction ", auction.id);
+      console.log("reserve price", auction.reserve);
 
       try {
         if (
           !(bid && bid.psbt) ||
-          compareAsc(parseISO(bid.created_at), parseISO(artwork.auction_end)) >
+          compareAsc(parseISO(bid.created_at), parseISO(auction.auction_end)) >
             0 ||
-          bid.amount < artwork.reserve_price
+          bid.amount < auction.reserve
         )
           throw new Error("no bid");
 
-        let combined = combine(artwork.auction_tx, bid.psbt);
+        let combined = combine(auction.psbt, bid.psbt);
 
         await check(combined);
 
@@ -48,12 +40,12 @@ setInterval(async () => {
         await broadcast(psbt);
 
         await q(releaseToken, {
-          id: artwork.id,
+          id: edition.id,
           owner_id: bid.user.id,
           amount: bid.amount,
           hash: psbt.extractTransaction().getId(),
           psbt: psbt.toBase64(),
-          asset: artwork.asking_asset,
+          asset: edition.asking_asset,
           bid_id: bid.id,
           type: "release",
         });
@@ -63,15 +55,15 @@ setInterval(async () => {
         console.log("couldn't release to bidder,", e.message);
 
         await q(cancelBids, {
-          id: artwork.id,
-          start: artwork.auction_start,
-          end: artwork.auction_end,
+          id: edition.id,
+          start: auction.auction_start,
+          end: auction.auction_end,
         });
 
-        if (artwork.has_royalty) continue;
+        if (edition.has_royalty) continue;
 
         try {
-          let psbt = await sign(artwork.auction_release_tx);
+          let psbt = await sign(auction.release_psbt);
           await broadcast(psbt);
 
           console.log("released to current owner");

@@ -47,11 +47,12 @@
   import { Psbt } from "liquidjs-lib";
   import { query } from "$lib/api";
 
-  export let artwork, others, metadata, views;
+  export let edition, others, metadata, views;
+  let { artwork } = edition;
 
   let release = async () => {
     await requirePassword($session);
-    $psbt = await releaseToSelf(artwork);
+    $psbt = await releaseToSelf(edition);
     $psbt = await sign();
     $psbt = await requestSignature($psbt);
     await broadcast($psbt);
@@ -59,8 +60,8 @@
 
   $: disabled =
     loading ||
-    (artwork.owner_id === $session.user?.id && underway(artwork)) ||
-    artwork.transactions.some(
+    (edition.owner_id === $session.user?.id && underway(edition)) ||
+    edition.transactions.some(
       (t) => ["purchase", "creation", "cancel"].includes(t.type) && !t.confirmed
     );
 
@@ -68,12 +69,13 @@
 
   let refreshArtwork = async () => {
     try {
-      let { artworks } = await query(getArtworkBySlug, {
-        slug: artwork.slug,
-        limit: $commentsLimit,
+      let { editions } = await query(getEdition, {
+        slug: edition.slug,
+        edition: edition.edition
       });
-      artwork = artworks[0];
-      artwork.views = views;
+      edition = editions[0];
+      edition.views = views;
+      artwork  = edition.artwork;
     } catch (e) {
       console.log(e);
     }
@@ -86,10 +88,9 @@
     clearInterval(poll);
   });
 
-  $: update(artwork);
+  $: update(edition);
   let update = () => {
     if (!artwork) return;
-    $art = artwork;
 
     let count = () => {
       clearTimeout(timeout);

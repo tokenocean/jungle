@@ -35,7 +35,7 @@ import {
 import cryptojs from "crypto-js";
 import { btc, info } from "$lib/utils";
 import { requirePassword } from "$lib/auth";
-import { getArtworkByAsset } from "$queries/artworks";
+import { getEditionByAsset } from "$queries/artworks";
 import { getActiveBids } from "$queries/transactions";
 import { compareAsc, parseISO } from "date-fns";
 import { SignaturePrompt, AcceptPrompt } from "$comp";

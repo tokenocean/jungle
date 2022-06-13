@@ -4,25 +4,21 @@ import branding from "$lib/branding";
 import { host } from "$lib/utils";
 import { validate } from "uuid";
 import {
-  getArtwork,
+  getEdition,
   getArtworksByArtist,
-  getArtworkBySlug,
 } from "$queries/artworks";
 import { getArtworkTransactions } from "$queries/transactions";
 
 export async function get({ request: { headers }, locals, params }) {
-  let { slug } = params;
+  let { edition: n, slug } = params;
   let { q } = locals;
 
-  let artwork;
-  if (validate(slug)) {
-    ({ artworks_by_pk: artwork } = await q(getArtwork, { id: slug }));
-  } else {
-    let { artworks } = await q(getArtworkBySlug, { slug });
-    artwork = artworks[0];
-  }
-
-  if (!artwork) return { status: 500 };
+  console.log(getEdition);
+  let { editions } = await q(getEdition, { slug, edition: n });
+  console.log(editions);
+  let edition = editions[0];
+  console.log("EDITION", edition, slug, n);
+  let { artwork } = edition;
 
   let { artworks: others } = await q(getArtworksByArtist, {
     id: artwork.artist_id,
@@ -30,12 +26,11 @@ export async function get({ request: { headers }, locals, params }) {
   });
 
   let { id } = artwork;
-
   others = others.filter((a) => a.id !== artwork.id).slice(0, 3);
 
-  // await api(headers).url("/held").post({ id }).json();
-  // await api(headers).url("/viewed").post({ id }).json();
-  artwork.views++;
+  await api(headers).url("/held").post({ id }).json();
+  await api(headers).url("/viewed").post({ id }).json();
+  edition.views++;
 
   let metadata = { ...branding.meta };
   metadata.title = metadata.title + " - " + artwork.title;
@@ -53,7 +48,7 @@ export async function get({ request: { headers }, locals, params }) {
 
   return {
     body: {
-      artwork,
+      edition,
       metadata,
     },
   };

@@ -39,7 +39,10 @@ export const query = async (query, variables, headers = {}) => {
     .headers(headers)
     .post({ query, variables })
     .json();
-  if (errors) throw new Error(errors[0].message);
+  if (errors) {
+    console.log("query error", query, variables);
+    throw new Error(errors[0].message);
+  } 
   return data;
 };
 

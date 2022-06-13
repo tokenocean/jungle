@@ -54,34 +54,36 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - list_price
-        - edition
-        - views
         - address
+        - artwork_id
         - asking_asset
         - asset
-        - list_psbt
-        - slug
-        - transferred_at
-        - artwork_id
         - bid_id
+        - created_at
+        - edition
+        - held
         - id
+        - list_price
+        - list_psbt
         - owner_id
+        - transferred_at
+        - views
       filter: {}
   - role: user
     permission:
       columns:
-        - list_price
-        - edition
-        - views
         - address
+        - artwork_id
         - asking_asset
         - asset
-        - list_psbt
-        - slug
-        - transferred_at
-        - artwork_id
         - bid_id
+        - created_at
+        - edition
+        - held
         - id
+        - list_price
+        - list_psbt
         - owner_id
+        - transferred_at
+        - views
       filter: {}

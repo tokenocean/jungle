@@ -1,7 +1,9 @@
-export const getAssetArtworks = `query($assets: [String]!) {
-  artworks(where: { asset: { _in: $assets }}) {
+export const getAssets = `query($assets: [String]!) {
+  editions(where: { asset: { _in: $assets }}) {
     asset
-    title
+    artwork {
+      title
+    }
   }
 }`;
 
@@ -40,8 +42,8 @@ export const cancelBid = `mutation ($id: uuid!) {
   }
 }`;
 
-export const cancelBids = `mutation ($artwork_id: uuid!, $start: timestamptz!, $end: timestamptz!) {
-  update_transactions(where: { artwork_id: { _eq: $artwork_id }, created_at: { _gte: $start, _lte: $end }},
+export const cancelBids = `mutation ($edition_id: uuid!, $start: timestamptz!, $end: timestamptz!) {
+  update_transactions(where: { edition_id: { _eq: $edition_id }, created_at: { _gte: $start, _lte: $end }},
     _set: {
       type: "cancelled_bid"
     }
@@ -214,7 +216,7 @@ export const getAvatars = `query { users { id, avatar_url }}`;
 export const getActiveBids = `query {
   activebids(where: { type: { _eq: "bid" }}) {
     id
-    artwork_id
+    edition_id
     psbt
   }
 }`;
@@ -305,7 +307,7 @@ export const getLastTransactionsForAddress = `query($address: String!) {
       address: {_eq: $address},
       type: {_in: ["deposit", "withdrawal"]}
     },
-    order_by: [{ sequence: desc }]
+    order_by: [{ created_at: desc }]
   ) {
     hash
     type
@@ -321,14 +323,13 @@ export const getTransactions = `query($id: uuid!, $limit: Int) {
       user_id: {_eq: $id},
       type: {_in: ["deposit", "withdrawal"]}
     },
-    order_by: {sequence: desc},
+    order_by: {created_at: desc},
     limit: $limit
   ) {
     id
     hash
     amount
     created_at
-    sequence
     asset
     type
     json
@@ -409,14 +410,13 @@ export const getArtwork = `query($id: uuid!) {
 }`;
 
 export const getUtxos = `query($address: String!) {
-  utxos(where: { address: { _eq: $address }}, order_by: [{ tx: { sequence: desc }}]) {
+  utxos(where: { address: { _eq: $address }}, order_by: [{ tx: { created_at: desc }}]) {
     id
     transaction_id
     tx {
       hash
       hex
       created_at
-      sequence
       confirmed
     }
     vout
@@ -446,9 +446,6 @@ export const createArtwork = `mutation($artwork: artworks_insert_input!, $tags: 
   insert_tags(objects: $tags) {
     affected_rows
   }
-  insert_transactions_one(object: $transaction) {
-    id
-  }
 }`;
 
 export const createComment = `mutation($comment: comments_insert_input!) {
@@ -476,23 +473,11 @@ export const deleteUserByEmail = `mutation($email: String!) {
   }
 }`;
 
-export const closeAuction = `mutation update_artwork($id: uuid!, $artwork: artworks_set_input!) {
-  update_artworks_by_pk(
-    pk_columns: { id: $id },
-    _set: $artwork
-  ) {
-    id
-  }
-}`;
-
-export const releaseToken = `mutation update_artwork($id: uuid!, $owner_id: uuid!, $amount: Int!, $psbt: String!, $asset: String!, $hash: String!, $bid_id: uuid, $type: String!) {
-  update_artworks_by_pk(
+export const releaseToken = `mutation($id: uuid!, $owner_id: uuid!, $amount: Int!, $psbt: String!, $asset: String!, $hash: String!, $bid_id: uuid, $type: String!) {
+  update_editions_by_pk(
     pk_columns: { id: $id },
     _set: {
       owner_id: $owner_id,
-      auction_release_tx: null,
-      auction_tx: null,
-      reserve_price: null,
     }
   ) {
     id
@@ -508,45 +493,30 @@ export const releaseToken = `mutation update_artwork($id: uuid!, $owner_id: uuid
     user_id: $owner_id,
   }) {
     id,
-    artwork_id
+    edition_id
   }
 }`;
 
 export const getFinishedAuctions = `query($now: timestamptz!) {
-  artworks(where: { _and: [
+  auctions(where: { _and: [
       { auction_end: { _lte: $now }},
-      { auction_tx: { _is_null: false }}
+      { psbt: { _is_null: false }}
     ]}) {
     id
-    title
-    slug
-    filename
-    filetype
-    reserve_price
-    asking_asset
-    has_royalty
+    reserve
     auction_end
-    transferred_at
-    list_price_tx
-    auction_tx
-    auction_release_tx
-    artist {
-      id
-      username
-      avatar_url
-    }
-    owner {
-      id
-      username
-      avatar_url
-    }
-    bid {
-      id
-      amount
-      psbt
-      user {
+    psbt
+    release_psbt
+    edition {
+      asking_asset
+      bid {
         id
-        username
+        amount
+        psbt
+        user {
+          id
+          username
+        }
       }
     }
   }
