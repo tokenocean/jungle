@@ -37,3 +37,4 @@ export { default as SignaturePrompt } from "./SignaturePrompt.svelte";
 export { default as AcceptPrompt } from "./AcceptPrompt.svelte";
 export { default as Popup } from "./Popup.svelte";
 export { default as SendMessage } from "./SendMessage.svelte";
+export { default as SendTip } from "./SendTip.svelte";

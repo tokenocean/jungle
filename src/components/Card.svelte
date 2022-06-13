@@ -4,6 +4,7 @@
   import { fade, units } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
   import { loaded } from "$lib/store";
+  import { session } from "$app/stores";
 
   export let justScrolled = false;
   export let artwork;
@@ -103,7 +104,19 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div class="text-sm">
-            <a href={`/${artwork.artist.username}`}>
+            <a
+              href={`/${artwork.artist.username}`}
+              on:click={(e) => {
+                if (
+                  !$session.user ||
+                  (artwork &&
+                    $session.user.username !== artwork.artist.username)
+                ) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+            >
               <div class="flex">
                 <Avatar user={artwork.artist} size="xs" />
                 <div class="mx-1 w-3/4">
@@ -116,7 +129,19 @@
 
           {#if artwork.owner.id !== artwork.artist.id}
             <div class="text-sm">
-              <a href={`/${artwork.owner.username}`}>
+              <a
+                href={`/${artwork.owner.username}`}
+                on:click={(e) => {
+                  if (
+                    !$session.user ||
+                    (artwork &&
+                      $session.user.username !== artwork.owner.username)
+                  ) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                }}
+              >
                 <div class="flex">
                   <Avatar user={artwork.owner} size="xs" />
                   <div class="ml-2 w-3/4">

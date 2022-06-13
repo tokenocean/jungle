@@ -4,13 +4,13 @@ export const createTransaction = `mutation create_transaction($transaction: tran
   insert_transactions_one(object: $transaction) {
     id,
     artwork_id
-  } 
+  }
 }`;
 
 export const fields = `
   id
   psbt
-  amount 
+  amount
   hash
   type
   created_at
@@ -19,15 +19,16 @@ export const fields = `
   bid {
     id
     user {
-      id 
+      id
       username
-    } 
-  } 
+    }
+  }
   user {
     id
     username
     avatar_url
-  } 
+    address
+  }
   artwork_id
 `;
 
@@ -36,7 +37,7 @@ export const getArtworkTransactions = (id) => `query {
     ${fields}
     artwork {
       ${artworkFields}
-    } 
+    }
   }
 }`;
 
@@ -45,7 +46,7 @@ export const getTransaction = `query($id: uuid!) {
     ${fields}
     artwork {
       ${artworkFields}
-    } 
+    }
   }
 }`;
 
@@ -54,7 +55,7 @@ export const getTransactions = (limit = 10) => `query {
     ${fields}
     artwork {
       ${artworkFields}
-    } 
+    }
   }
 }`;
 
@@ -66,7 +67,7 @@ export const getActiveBids = (id) => `query {
     type
     artwork {
       ${artworkFields}
-    } 
+    }
   }
 }`;
 
@@ -75,7 +76,7 @@ export const getRecentActivity = (limit = 3) => `query {
     ${fields}
     artwork {
       ${artworkFields}
-    } 
+    }
   }
 }`;
 
@@ -84,7 +85,7 @@ export const getLatestPieces = (limit = 3) => `query {
     ${fields}
     artwork {
       ${artworkFields}
-    } 
+    }
   }
 }`;
 
@@ -94,7 +95,7 @@ export const getOffers = `query($id: uuid!) {
       ${fields}
       artwork {
         ${artworkFields}
-      } 
+      }
     }
   }
 }`;

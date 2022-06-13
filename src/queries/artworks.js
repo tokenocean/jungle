@@ -19,11 +19,13 @@ export const marketFields = `
     id
     username
     avatar_url
+    address
   },
   artist {
     id
     username
     avatar_url
+    address
   },
   bid {
     id
@@ -122,6 +124,7 @@ export const txFields = `
     avatar_url
     full_name
     email
+    address
   }
   artwork_id
   artwork {
@@ -191,6 +194,7 @@ export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
         username
         avatar_url
         id
+        address
       }
     }
     transactions(where: { type: { _neq: "royalty" }}, order_by: { created_at: desc }) {
@@ -277,6 +281,7 @@ export const getArtwork = `query($id: uuid!) {
         username
         avatar_url
         id
+        address
       }
     }
     tags {
@@ -322,4 +327,3 @@ export const createComment = `mutation ($comment: comments_insert_input!) {
     id
   }
 }`;
-
