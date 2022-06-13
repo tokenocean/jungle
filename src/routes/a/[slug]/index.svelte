@@ -1,54 +1,3 @@
-<script context="module">
-  import { api, post } from "$lib/api";
-  import { browser } from "$app/env";
-  import branding from "$lib/branding";
-  import { host } from "$lib/utils";
-  import Comments from "./_comments.svelte";
-
-  export async function load({ fetch, params: { slug } }) {
-    const props = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
-
-    let { artwork } = props;
-
-    if (!artwork)
-      return {
-        status: 404,
-      };
-
-    await post("/artworks/held", { id: artwork.id }, fetch).res();
-    if (!browser) {
-      try {
-        await post("/artworks/viewed", { id: artwork.id }, fetch).res();
-        artwork.views++;
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    props.views = artwork.views;
-
-    let metadata = { ...branding.meta };
-    metadata.title = metadata.title + " - " + artwork.title;
-    metadata.keywords =
-      metadata.keywords + " " + artwork.tags.map((t) => t.tag).join(" ");
-    metadata.description = artwork.description.replace(/(?:\r\n|\r|\n)/g, " ");
-
-    let type = "image";
-    metadata[type] = `${host}/api/public/${artwork.filename}.png`;
-    if (artwork.filetype.includes("video")) type = "video";
-
-    metadata[type] = `${host}/api/public/${artwork.filename}.${
-      artwork.filetype.split("/")[1]
-    }`;
-
-    props.metadata = metadata;
-
-    return {
-      props,
-    };
-  }
-</script>
-
 <script>
   import { session } from "$app/stores";
   import { token } from "$lib/store";
@@ -70,6 +19,7 @@
     ProgressLinear,
     RoyaltyInfo,
   } from "$comp";
+  import Comments from "./_comments.svelte";
   import Sidebar from "./_sidebar.svelte";
   import { tick, onDestroy } from "svelte";
   import { art, meta, prompt, password, psbt, commentsLimit } from "$lib/store";
@@ -390,7 +340,9 @@
         {/if}
       </div>
 
+      <!--
       <RoyaltyInfo {artwork} />
+      -->
 
       {#if loading}
         <ProgressLinear />

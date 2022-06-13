@@ -4,7 +4,6 @@ export const marketFields = `
   title
   filename
   filetype
-  list_price
   slug
   favorited
   created_at

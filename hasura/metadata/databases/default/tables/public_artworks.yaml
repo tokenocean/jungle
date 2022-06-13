@@ -33,6 +33,12 @@ computed_fields:
       function:
         schema: public
         name: artwork_artist_owned
+  - name: comments
+    definition:
+      function:
+        schema: public
+        name: artwork_comments
+      table_argument: artwork_row
   - name: favorited
     definition:
       function:
@@ -60,6 +66,12 @@ computed_fields:
       session_argument: hasura_session
       table_argument: artwork_row
     comment: ""
+  - name: transactions
+    definition:
+      function:
+        schema: public
+        name: artwork_transactions
+      table_argument: artwork_row
 select_permissions:
   - role: anonymous
     permission:
@@ -84,6 +96,7 @@ select_permissions:
         - last_active
         - num_favorites
       filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:
@@ -107,6 +120,7 @@ select_permissions:
         - last_active
         - num_favorites
       filter: {}
+      allow_aggregations: true
 delete_permissions:
   - role: user
     permission:

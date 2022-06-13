@@ -114,6 +114,7 @@
             </a>
           </div>
 
+          <!--
           {#if artwork.owner.id !== artwork.artist.id}
             <div class="text-sm">
               <a href={`/${artwork.owner.username}`}>
@@ -127,6 +128,7 @@
               </a>
             </div>
           {/if}
+          -->
         </div>
       </div>
     </div>
