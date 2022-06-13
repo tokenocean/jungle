@@ -11,6 +11,7 @@ export const marketFields = `
     id
     username
     avatar_url
+    address
   },
 `;
 
@@ -25,6 +26,7 @@ export const editionFields = `
     id
     username
     avatar_url
+    address
   },
   edition
   bid {
@@ -84,6 +86,7 @@ export const txFields = `
     avatar_url
     full_name
     email
+    address
   }
 `;
 
@@ -157,6 +160,7 @@ export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
         username
         avatar_url
         id
+        address
       }
     }
     tags {
@@ -240,6 +244,7 @@ export const getArtwork = `query($id: uuid!) {
         username
         avatar_url
         id
+        address
       }
     }
     tags {
@@ -285,4 +290,3 @@ export const createComment = `mutation ($comment: comments_insert_input!) {
     id
   }
 }`;
-

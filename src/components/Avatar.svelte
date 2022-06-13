@@ -4,9 +4,9 @@
   export let overlay = undefined;
   export let size = "small";
   import { session } from "$app/stores";
-  import { messageUser, prompt } from "$lib/store";
+  import { messageUser, prompt, tipUser } from "$lib/store";
   import { createPopperActions } from "svelte-popperjs";
-  import { SendMessage } from "$comp";
+  import { SendMessage, SendTip } from "$comp";
   import { goto } from "$lib/utils";
   import Fa from "svelte-fa";
   import {
@@ -59,7 +59,15 @@
         >
         <button
           class="block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32 justify-center"
-          ><Fa icon={faWallet} class="mr-1" /> Tip</button
+          on:click={() => {
+            showTooltip = false;
+            if (!$session.user) {
+              goto("/login");
+            } else {
+              $tipUser = { username: user.username, address: user.address };
+              prompt.set(SendTip);
+            }
+          }}><Fa icon={faWallet} class="mr-1" /> Tip</button
         >
       </div>
       <div id="arrow" data-popper-arrow />

@@ -14,3 +14,4 @@ import "./monitor.js";
 import "./signing.js";
 import "./upload.js";
 import "./mail.js";
+import "./tips.js";

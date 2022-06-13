@@ -10,7 +10,7 @@ export const createTransaction = `mutation create_transaction($transaction: tran
 export const fields = `
   id
   psbt
-  amount 
+  amount
   hash
   type
   created_at
@@ -19,14 +19,15 @@ export const fields = `
   bid {
     id
     user {
-      id 
+      id
       username
-    } 
-  } 
+    }
+  }
   user {
     id
     username
     avatar_url
+    address
   } 
   edition_id
 `;
