@@ -1,6 +1,6 @@
 <script>
   import { token } from "$lib/store";
-  import { Avatar } from "$comp";
+
   import Fa from "svelte-fa";
   import { tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -65,6 +65,12 @@
   }
 
   async function handleSelection(user) {
+    messages.forEach((message) => {
+      if (message.from === user.id && message.viewed === false) {
+        message.viewed = true;
+      }
+    });
+
     selectedUser = user;
 
     await tick();
@@ -83,6 +89,12 @@
     }
 
     return 0;
+  };
+
+  const unreadMessages = (user) => {
+    return messages.filter(
+      (message) => message.from === user.id && message.viewed === false
+    );
   };
 </script>
 
@@ -105,14 +117,17 @@
               class="bg-[#31373e] flex justify-center items-center space-x-4 w-full p-2 px-10 rounded-r-lg"
               on:click={() => handleSelection(user)}
             >
-            <Avatar {user} />
+              <img
+                src={`/api/public/${user.avatar_url}`}
+                alt="avatar"
+                class="w-10 h-10 rounded-full"
+              />
               <p>{user.username}</p>
-              <p>
-                ({messages.filter(
-                  (message) =>
-                    message.from === user.id || message.to === user.id
-                ).length})
-              </p>
+              {#if unreadMessages(user).length > 0}
+                <p>
+                  ({unreadMessages(user).length})
+                </p>
+              {/if}
             </button>
           </div>
         {/each}
@@ -122,10 +137,17 @@
       {:else}
         <div>
           <div class="flex justify-center">
-            <div class="flex items-center">
-              <Avatar user={selectedUser} />
-              <p class="ml-1">{selectedUser.username}</p>
-            </div>
+            <a href={`/${selectedUser.username}`}>
+              <div class="flex items-center">
+                <img
+                  src={`/api/public/${selectedUser.avatar_url}`}
+                  alt="avatar"
+                  class="w-12 h-12 rounded-full"
+                />
+
+                <p class="ml-4">{selectedUser.username}</p>
+              </div>
+            </a>
           </div>
           <button
             class="text-[#30bfad]"

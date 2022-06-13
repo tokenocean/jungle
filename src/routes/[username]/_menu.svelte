@@ -8,6 +8,7 @@
     faEnvelopeOpen,
   } from "@fortawesome/free-solid-svg-icons";
   import { goto } from "$lib/utils";
+  export let messages;
 </script>
 
 <div class="mt-10 mb-5">
@@ -36,11 +37,16 @@
     </div>
   </a>
   <a href="/messages">
-    <div class="flex">
+    <div class="flex items-center">
       <div class="my-auto">
         <Fa icon={faEnvelopeOpen} />
       </div>
-      <div><span>View Messages</span></div>
+      <div>
+        <span>View Messages</span>
+      </div>
+      {#if messages.find((message) => message.to === $session.user.id && message.viewed === false)}
+        <div class="ml-2 w-2 h-2 rounded-full bg-primary" />
+      {/if}
     </div>
   </a>
   <a href="/logout" class="cursor-pointer">
