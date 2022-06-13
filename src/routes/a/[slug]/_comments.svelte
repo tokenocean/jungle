@@ -97,7 +97,7 @@
             {formatDistanceStrict(new Date(comment.created_at), new Date())}
             ago
           </div>
-          {#if $session.user.id === comment.user.id || $session.user.id === artwork.owner_id || $session.user.is_admin}
+          {#if ($session.user && $session.user.id === comment.user.id) || ($session.user && $session.user.id === artwork.owner_id) || ($session.user && $session.user.is_admin)}
             <button
               class="text-red-500 text-xs hover:text-red-700"
               on:click={() => handleDelete(comment.id)}>Delete</button
