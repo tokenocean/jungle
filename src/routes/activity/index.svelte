@@ -1,20 +1,6 @@
-<script context="module">
-  export async function load({ fetch }) {
-    const props = await fetch(`/activity.json`).then((r) =>
-      r.json()
-    );
-
-    return {
-      props,
-    };
-  }
-
-</script>
-
 <script>
   import { Activity } from "$comp";
   export let transactions;
-
 </script>
 
 <div class="container mx-auto my-10 md:my-20">

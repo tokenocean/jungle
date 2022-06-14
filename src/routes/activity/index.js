@@ -1,17 +1,9 @@
 import { getRecentActivity } from "$queries/transactions";
 
-export async function get({ request: { headers }, locals }) {
-  let { q } = locals;
-
+export async function get({ locals: { q }}) {
   try {
     let { recentactivity: transactions } = await q(getRecentActivity(80));
-
-    return {
-      body: {
-        transactions,
-      },
-      headers,
-    };
+    return { body: { transactions }};
   } catch (e) {
     console.log(e);
     return {
