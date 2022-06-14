@@ -102,7 +102,7 @@
   };
 </script>
 
-{#if artwork.filetype && artwork.filetype.includes("video")}
+{#if artwork.filetype && (artwork.filetype.includes("video") || (thumb && artwork.filetype.includes("gif")))}
   <div
     class="w-full"
     class:inline-block={!popup}
