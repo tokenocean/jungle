@@ -19,8 +19,8 @@
     ProgressLinear,
     RoyaltyInfo,
   } from "$comp";
-  import Comments from "./_comments.svelte";
-  import Sidebar from "./_sidebar.svelte";
+  import Comments from "../_comments.svelte";
+  import Sidebar from "../_sidebar.svelte";
   import { tick, onDestroy } from "svelte";
   import { art, meta, prompt, password, psbt, commentsLimit } from "$lib/store";
   import countdown from "$lib/countdown";

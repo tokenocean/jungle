@@ -20,6 +20,7 @@
   import { requirePassword } from "$lib/auth";
   import {
     DUST,
+    createIssuance,
     sign,
     parseAsset,
     parseVal,
@@ -101,13 +102,66 @@
     title: "",
     description: "",
     filename: "",
-    max_editions: 1,
+    asset: "",
+    edition: 1,
+    editions: 1,
     tags: [],
   };
 
+  let hash, tx, inputs, total, transactions;
+  let required = 0;
+  const issue = async () => {
+    let contract;
+    let domain = branding.urls.base;
+    let error, success;
+
+    contract = await createIssuance(artwork, domain, inputs.pop());
+
+    await sign(1, false);
+    await tick();
+
+    let base64 = $psbt.toBase64();
+    console.log(base64);
+    tx = $psbt.extractTransaction();
+
+    required += parseVal(tx.outs.find((o) => o.script.length === 0).value);
+
+    $txcache[tx.getId()] = tx;
+
+    if (
+      tx.outs.find(
+        (o) =>
+          parseAsset(o.asset) === btc &&
+          o.script.toString("hex") ===
+            address.toOutputScript($user.address, network).toString("hex") &&
+          parseVal(o.value) > DUST
+      )
+    ) {
+      inputs.unshift(tx);
+    }
+
+    let openEditionPsbt;
+    if (artwork.open_edition) {
+      let { asset } = tx.outs.find((o) => parseAsset(o.asset) !== btc);
+      await signOver({ asset: parseAsset(asset) }, tx);
+      await tick();
+      openEditionPsbt = $psbt.toBase64();
+    }
+
+    transactions.push({
+      contract,
+      psbt: base64,
+      openEditionPsbt,
+    });
+  };
+
+  let tries;
+  let l;
+
   let submit = async (e) => {
     e.preventDefault();
-
+    await requirePassword();
+    transactions = [];
     if (!artwork.title) return err("Please enter a title");
 
     if (!artwork.filename)
@@ -117,10 +171,29 @@
     loading = true;
 
     try {
-      let { slug } = await api
-        .url("/create")
+      [inputs, total] = await getInputs();
+
+      if (!artwork.open_edition) {
+        for ($edition = 1; $edition <= artwork.editions; $edition++) {
+          await issue();
+          await sleep(10);
+          await info(
+            `Signed issuance transaction ${$edition} of ${artwork.editions}`
+          );
+          tries = 0;
+        }
+      }
+
+      if (total < required)
+        throw { message: "Insufficient funds", required, btc, total };
+
+      let { issuance, slug } = await api
+        .url("/issue")
         .auth(`Bearer ${$token}`)
-        .post({ artwork })
+        .post({
+          artwork,
+          transactions,
+        })
         .json();
 
       goto(`/a/${slug}`);

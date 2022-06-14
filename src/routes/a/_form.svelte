@@ -90,11 +90,11 @@
   </div>
   {#if !artwork.id && !artwork.open_edition}
     <div class="flex flex-col mb-6">
-      <label for="editions">Number of editions</label>
+      <label for="max_editions">Number of editions</label>
       <input
-        id="editions"
+        id="max_editions"
         placeholder="Editions"
-        bind:value={artwork.editions}
+        bind:value={artwork.max_editions}
         class="w-1/2"
       />
     </div>

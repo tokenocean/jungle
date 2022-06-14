@@ -255,6 +255,36 @@ app.post("/accept", auth, async (req, res) => {
   }
 });
 
+app.post("/create", auth, async (req, res) => {
+  try {
+    let { artwork } = req.body;
+    let { id: user_id } = await getUser(req);
+
+    let tags = artwork.tags.map(({ tag }) => ({
+      tag,
+      artwork_id: artwork.id,
+    }));
+
+    delete artwork.tags;
+
+    let id = v4();
+
+    artwork.artist_id = user_id;
+    artwork.id = id;
+    artwork.slug = `${kebab(artwork.title || "untitled")}-${id.substr(0, 5)}`;
+
+    await q(createArtwork, {
+      artwork,
+      tags,
+    });
+
+    res.send(artwork);
+  } catch (e) {
+    console.log(e);
+    res.code(500).send(e.message);
+  }
+});
+
 const issuances = {};
 const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
   issuances[issuance] = { length: transactions.length, i: 0 };

@@ -7,7 +7,7 @@ import { auth } from "./auth.js";
 
 import {
   getUser,
-  getArtworkWithBidTransactionByHash,
+  getEditionWithBidTransactionByHash,
   getArtwork,
   getCurrentUser,
   getTransferTransactionsByPsbt,
@@ -110,20 +110,20 @@ app.post("/offer-notifications", auth, async (req, res) => {
     if (errors) throw new Error(errors[0].message);
     let currentUser = data.currentuser[0];
 
-    const { artworks_by_pk: artwork, transactions } = await query(
-      getArtworkWithBidTransactionByHash,
+    const { editions_by_pk: edition, transactions } = await query(
+      getEditionWithBidTransactionByHash,
       {
-        id: artworkId,
+        id: editionId,
         hash: transactionHash,
       }
     );
 
     const transaction = transactions.length ? transactions[0] : null;
 
-    if (!transaction || !artwork) {
+    if (!transaction || !edition) {
       return res
         .code(400)
-        .send(`Missing ${!artwork ? "artwork" : "transaction"}`);
+        .send(`Missing ${!edition ? "edition" : "transaction"}`);
     }
 
     const sortedBidTransactions = artwork.transactions.sort(

@@ -85,11 +85,6 @@ export const updateArtwork = `mutation ($artwork: artworks_set_input!, $id: uuid
 export const updateViews = `mutation ($id: uuid!) {
   update_artworks_by_pk(pk_columns: { id: $id }, _inc: { views: 1 }) {
     id
-    owner {
-      address
-      multisig
-    }
-    asset
   }
 }`;
 
@@ -163,7 +158,7 @@ export const setPsbt = `mutation update_transaction($id: uuid!, $psbt: String!) 
     }
   ) {
     id,
-    artwork_id
+    edition_id
   }
 }`;
 
@@ -185,7 +180,7 @@ export const acceptBid = `mutation update_artwork(
     id
   }
   insert_transactions_one(object: {
-    artwork_id: $id,
+    edition_id: $id,
     asset: $asset,
     type: "accept",
     amount: $amount,
@@ -194,7 +189,7 @@ export const acceptBid = `mutation update_artwork(
     bid_id: $bid_id,
   }) {
     id,
-    artwork_id
+    edition_id
   }
 }`;
 
@@ -224,17 +219,17 @@ export const getActiveBids = `query {
 export const getActiveListings = `query {
   activelistings {
     id
-    artwork_id
+    edition_id
     psbt
   }
 }`;
 
-export const cancelListing = `mutation ($id: uuid!, $artwork_id: uuid!) {
-  update_artworks_by_pk(
-    pk_columns: { id: $artwork_id },
+export const cancelListing = `mutation ($id: uuid!, $edition_id: uuid!) {
+  update_editions_by_pk(
+    pk_columns: { id: $edition_id },
     _set: {
       list_price: null,
-      list_price_tx: null
+      list_psbt: null
     }
   ) {
    id
@@ -273,9 +268,9 @@ export const setTransactionTime = `mutation($id: uuid!, $created_at: timestamptz
   }
 }`;
 
-export const getLastTransaction = `query($artwork_id: uuid!) {
+export const getLastTransaction = `query($edition_id: uuid!) {
   transactions(
-    where: { artwork_id: { _eq: $artwork_id }, confirmed: { _eq: true }},
+    where: { edition_id: { _eq: $edition_id }, confirmed: { _eq: true }},
     order_by: { created_at: desc },
     limit: 1
   ) {
@@ -286,7 +281,7 @@ export const getLastTransaction = `query($artwork_id: uuid!) {
 export const getContract = `query transactions($asset: String!) {
   transactions(where: {
     _and: [{
-        artwork: {
+        edition: {
           asset: { _eq: $asset }
         }
       },
@@ -349,15 +344,14 @@ export const setConfirmed = `mutation setConfirmed($id: uuid!) {
   ) {
     id
     user_id
-    artwork_id
+    edition_id
     hash
     psbt
     type
     asset
     contract
-    artwork {
+    edition {
       owner_id
-      editions
       asset
     }
     user {
@@ -370,8 +364,8 @@ export const setConfirmed = `mutation setConfirmed($id: uuid!) {
   }
 }`;
 
-export const getArtworkWithBidTransactionByHash = `query getArtworkWithBidTransactionByHash($id: uuid!, $hash: String!) {
-  artworks_by_pk(id: $id) {
+export const getEditionWithBidTransactionByHash = `query getEditionWithBidTransactionByHash($id: uuid!, $hash: String!) {
+  editions_by_pk(id: $id) {
     id
     title
     slug
@@ -439,7 +433,7 @@ export const getTransferTransactionsByPsbt = `query($psbt: String!) {
   }
 }`;
 
-export const createArtwork = `mutation($artwork: artworks_insert_input!, $tags: [tags_insert_input!]!, $transaction: transactions_insert_input!) {
+export const createArtwork = `mutation($artwork: artworks_insert_input!, $tags: [tags_insert_input!]!) {
   insert_artworks_one(object: $artwork) {
     id
   }
@@ -483,7 +477,7 @@ export const releaseToken = `mutation($id: uuid!, $owner_id: uuid!, $amount: Int
     id
   }
   insert_transactions_one(object: {
-    artwork_id: $id,
+    edition_id: $id,
     asset: $asset,
     type: $type,
     amount: $amount,

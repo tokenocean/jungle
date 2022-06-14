@@ -5,6 +5,7 @@
 - "!include auth_refresh_tokens.yaml"
 - "!include auth_roles.yaml"
 - "!include public_activebids.yaml"
+- "!include public_activelistings.yaml"
 - "!include public_announcements.yaml"
 - "!include public_artworks.yaml"
 - "!include public_auctions.yaml"

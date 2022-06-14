@@ -13,6 +13,13 @@ array_relationships:
         table:
           schema: public
           name: editions
+  - name: favorites
+    using:
+      foreign_key_constraint_on:
+        column: artwork_id
+        table:
+          schema: public
+          name: favorites
   - name: featureds
     using:
       foreign_key_constraint_on:
@@ -83,19 +90,20 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - is_physical
-        - open_edition
-        - max_editions
+        - artist_id
+        - created_at
         - description
         - filename
         - filetype
-        - slug
-        - title
-        - created_at
+        - id
+        - is_physical
+        - max_editions
+        - open_edition
         - open_edition_end
         - open_edition_start
-        - artist_id
-        - id
+        - slug
+        - title
+        - views
       computed_fields:
         - artist_owned
         - favorited
@@ -107,19 +115,20 @@ select_permissions:
   - role: user
     permission:
       columns:
-        - is_physical
-        - open_edition
-        - max_editions
+        - artist_id
+        - created_at
         - description
         - filename
         - filetype
-        - slug
-        - title
-        - created_at
+        - id
+        - is_physical
+        - max_editions
+        - open_edition
         - open_edition_end
         - open_edition_start
-        - artist_id
-        - id
+        - slug
+        - title
+        - views
       computed_fields:
         - artist_owned
         - favorited

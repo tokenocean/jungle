@@ -13,11 +13,8 @@ export async function get({ request: { headers }, locals, params }) {
   let { edition: n, slug } = params;
   let { q } = locals;
 
-  console.log(getEdition);
   let { editions } = await q(getEdition, { slug, edition: n });
-  console.log(editions);
   let edition = editions[0];
-  console.log("EDITION", edition, slug, n);
   let { artwork } = edition;
 
   let { artworks: others } = await q(getArtworksByArtist, {

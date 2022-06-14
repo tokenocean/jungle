@@ -6,6 +6,7 @@ export const marketFields = `
   slug
   favorited
   created_at
+  views
   artist {
     id
     username
@@ -25,7 +26,6 @@ export const editionFields = `
     username
     avatar_url
   },
-  views
   edition
   bid {
     id
@@ -53,6 +53,7 @@ export const fields = `
   open_edition
   open_edition_start
   open_edition_end
+  views
   artist {
     id
     address

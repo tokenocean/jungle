@@ -67,9 +67,9 @@ app.post("/updateAvatars", async (req, res) => {
   }
 });
 
-const isSpent = async ({ ins }, artwork_id) => {
+const isSpent = async ({ ins }, edition_id) => {
   try {
-    let { transactions } = await q(getLastTransaction, { artwork_id });
+    let { transactions } = await q(getLastTransaction, { edition_id });
 
     if (
       !transactions.length ||
@@ -157,7 +157,7 @@ const checkTransactions = async () => {
 
       if (confirmed) {
         let {
-          update_transactions_by_pk: { artwork_id, type, bid },
+          update_transactions_by_pk: { edition_id, type, bid },
         } = await q(setConfirmed, {
           id: tx.id,
         });
@@ -169,7 +169,7 @@ const checkTransactions = async () => {
           });
 
         if (type === "accept")
-          await q(setOwner, { id: artwork_id, owner_id: bid.user_id });
+          await q(setOwner, { id: edition_id, owner_id: bid.user_id });
       }
     }
   } catch (e) {
@@ -366,10 +366,10 @@ let updateTransactions = async (address, user_id) => {
         transaction.created_at = formatISO(new Date(1000 * status.block_time));
 
       try {
+        console.log("creating transaction", type, txid);
         let {
           insert_transactions_one: { id },
         } = await q(createTransaction, { transaction });
-        console.log("inserting transaction", type, txid);
         transactions.push(transaction);
       } catch (e) {
         console.log("failed to create transaction", e, type, txid, asset, user_id);
@@ -388,8 +388,6 @@ let scanUtxos = async (address) => {
   if (!users.length) return [];
   let { id } = users[0];
   let { utxos } = await q(getUtxos, { address });
-
-  console.log("UTXOS", address, utxos);
 
   let outs = utxos.map(
     ({
