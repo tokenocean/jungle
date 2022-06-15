@@ -51,6 +51,13 @@ array_relationships:
         insertion_order: null
         column_mapping:
           id: artist_id
+  - name: editions
+    using:
+      foreign_key_constraint_on:
+        column: owner_id
+        table:
+          schema: public
+          name: editions
   - name: favorites
     using:
       foreign_key_constraint_on:
@@ -72,13 +79,6 @@ array_relationships:
         table:
           schema: public
           name: follows
-  - name: holdings
-    using:
-      foreign_key_constraint_on:
-        column: owner_id
-        table:
-          schema: public
-          name: editions
   - name: messages
     using:
       foreign_key_constraint_on:

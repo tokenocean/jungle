@@ -5,10 +5,10 @@ object_relationships:
   - name: artwork
     using:
       foreign_key_constraint_on: artwork_id
-  - name: bid
+  - name: transaction
     using:
       foreign_key_constraint_on: bid_id
-  - name: owner
+  - name: user
     using:
       foreign_key_constraint_on: owner_id
 array_relationships:
@@ -19,6 +19,13 @@ array_relationships:
         table:
           schema: public
           name: auctions
+  - name: comments
+    using:
+      foreign_key_constraint_on:
+        column: edition_id
+        table:
+          schema: public
+          name: comments
   - name: royalty_recipients
     using:
       foreign_key_constraint_on:
@@ -33,57 +40,3 @@ array_relationships:
         table:
           schema: public
           name: transactions
-computed_fields:
-  - name: artist_owned
-    definition:
-      function:
-        schema: public
-        name: edition_artist_owned
-  - name: has_royalty
-    definition:
-      function:
-        schema: public
-        name: edition_has_royalty
-      table_argument: edition_row
-  - name: last_active
-    definition:
-      function:
-        schema: public
-        name: edition_last_tx
-select_permissions:
-  - role: anonymous
-    permission:
-      columns:
-        - address
-        - artwork_id
-        - asking_asset
-        - asset
-        - bid_id
-        - created_at
-        - edition
-        - held
-        - id
-        - list_price
-        - list_psbt
-        - owner_id
-        - transferred_at
-        - views
-      filter: {}
-  - role: user
-    permission:
-      columns:
-        - address
-        - artwork_id
-        - asking_asset
-        - asset
-        - bid_id
-        - created_at
-        - edition
-        - held
-        - id
-        - list_price
-        - list_psbt
-        - owner_id
-        - transferred_at
-        - views
-      filter: {}

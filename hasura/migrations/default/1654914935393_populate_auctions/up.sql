@@ -21,4 +21,6 @@ artworks.auction_release_tx,
 artworks.bid_increment
 from artworks join editions on artworks.id = editions.artwork_id
 where artworks.auction_start is not null
-and artworks.auction_end is not null;
+and artworks.auction_end is not null
+and artworks.auction_tx is not null
+and artworks.auction_release_tx is not null;

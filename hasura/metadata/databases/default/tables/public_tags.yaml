@@ -5,17 +5,6 @@ object_relationships:
   - name: artwork
     using:
       foreign_key_constraint_on: artwork_id
-insert_permissions:
-  - role: user
-    permission:
-      check:
-        artwork:
-          artist_id:
-            _eq: X-Hasura-User-Id
-      columns:
-        - tag
-        - artwork_id
-      backend_only: false
 select_permissions:
   - role: anonymous
     permission:
@@ -29,10 +18,3 @@ select_permissions:
         - artwork_id
         - tag
       filter: {}
-delete_permissions:
-  - role: user
-    permission:
-      filter:
-        artwork:
-          artist_id:
-            _eq: X-Hasura-User-Id

@@ -47,12 +47,6 @@ computed_fields:
       function:
         schema: public
         name: artwork_artist_owned
-  - name: comments
-    definition:
-      function:
-        schema: public
-        name: artwork_comments
-      table_argument: artwork_row
   - name: favorited
     definition:
       function:
@@ -80,72 +74,3 @@ computed_fields:
       session_argument: hasura_session
       table_argument: artwork_row
     comment: ""
-  - name: sold
-    definition:
-      function:
-        schema: public
-        name: artwork_sold
-      table_argument: artwork_row
-  - name: transactions
-    definition:
-      function:
-        schema: public
-        name: artwork_transactions
-      table_argument: artwork_row
-select_permissions:
-  - role: anonymous
-    permission:
-      columns:
-        - artist_id
-        - created_at
-        - description
-        - filename
-        - filetype
-        - id
-        - is_physical
-        - max_editions
-        - open_edition
-        - open_edition_end
-        - open_edition_start
-        - slug
-        - title
-        - views
-      computed_fields:
-        - artist_owned
-        - favorited
-        - has_royalty
-        - last_active
-        - num_favorites
-        - sold
-      filter: {}
-      allow_aggregations: true
-  - role: user
-    permission:
-      columns:
-        - artist_id
-        - created_at
-        - description
-        - filename
-        - filetype
-        - id
-        - is_physical
-        - max_editions
-        - open_edition
-        - open_edition_end
-        - open_edition_start
-        - slug
-        - title
-        - views
-      computed_fields:
-        - artist_owned
-        - favorited
-        - has_royalty
-        - last_active
-        - num_favorites
-        - sold
-      filter: {}
-      allow_aggregations: true
-delete_permissions:
-  - role: user
-    permission:
-      filter: {}
