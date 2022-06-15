@@ -1,5 +1,27 @@
 <script>
+  import { isValid, parse } from "date-fns";
+
   export let artwork;
+
+  let start_date, start_time, end_date, end_time;
+
+  $: updateDates(start_date, start_time, end_date, end_time);
+  let updateDates = () => {
+    artwork.open_edition_start = parse(
+      `${start_date} ${start_time}`,
+      "yyyy-MM-dd HH:mm",
+      new Date()
+    );
+
+    artwork.open_edition_end = parse(
+      `${end_date} ${end_time}`,
+      "yyyy-MM-dd HH:mm",
+      new Date()
+    );
+
+    if (!isValid(artwork.open_edition_start)) artwork.auction_start = undefined;
+    if (!isValid(artwork.open_edition_end)) artwork.auction_end = undefined;
+  };
 </script>
 
 <div class="toggle mb-6">
@@ -10,7 +32,7 @@
       type="checkbox"
       bind:checked={artwork.open_edition}
     />
-    <span class="ml-3">Open Edition (Date Duration)</span>
+    <span class="ml-3">Open Edition</span>
   </label>
 </div>
 {#if artwork.open_edition}
@@ -45,3 +67,14 @@
     </div>
   </div>
 {/if}
+
+<style>
+  input[type="checkbox"]:checked {
+    appearance: none;
+    border: 5px solid #fff;
+    outline: 2px solid #6ed8e0;
+    background-color: #6ed8e0;
+    padding: 2px;
+    border-radius: 0;
+  }
+</style>

@@ -9,11 +9,26 @@
   import { session } from "$app/stores";
   import { Avatar, Card, Head } from "$comp";
   import Sidebar from "./_sidebar.svelte";
-  import { linkify } from "$lib/utils";
+  import { confirm, err, goto, info, linkify } from "$lib/utils";
+  import { ACCEPTED } from "$lib/wallet";
+  import { query } from "$lib/api";
+  import { deleteArtwork } from "$queries/artworks";
 
   export let artwork, others, metadata;
 
   let loading, showMore, showPopup;
+
+  let handleDelete = async () => {
+    try {
+      if ((await confirm()) === ACCEPTED) {
+        await query(deleteArtwork, { id: artwork.id });
+        info("Artwork deleted");
+        goto("/market");
+      }
+    } catch (e) {
+      err(e);
+    }
+  };
 </script>
 
 <Head {metadata} />
@@ -25,6 +40,22 @@
         {artwork.title || "Untitled"}
       </h1>
       <div class="flex mt-4 mb-6">
+        {#if !artwork.open_edition}
+          <div class="my-auto">
+            {artwork.editions.length}
+            {#if artwork.max_editions}
+            of {artwork.max_editions}
+            {/if}
+            Editions Minted
+          </div>
+        {:else}
+          <div class="my-auto flex justify-center items-center">
+            Open Edition | BTC Rewards <Fa
+              class="mx-2 secondary-color"
+              icon={faInfoCircle}
+            />
+          </div>
+        {/if}
         {#if artwork.is_physical}
           <div
             class="flex ml-auto py-1 px-4 bg-gray-100 rounded rounded-full my-auto"
@@ -57,39 +88,19 @@
         </span>
       </div>
 
-      <div class="flex justify-between mb-6">
-        {#if artwork.list_price}
-          <div class="my-2">
-            <div class="text-sm mt-auto">List Price</div>
-            <div class="text-lg">{list_price} {ticker}</div>
-          </div>
-        {/if}
-        {#if artwork.reserve_price}
-          <div class="my-2">
-            <div class="text-sm mt-auto">Reserve Price</div>
-            <div class="flex-1 text-lg">
-              {val(artwork.reserve_price)}
-              {ticker}
-            </div>
-          </div>
-        {/if}
-        {#if artwork.bid && artwork.bid.amount}
-          <div class="my-2">
-            <div class="text-sm mt-auto">Current bid</div>
-            <div class="text-lg">{val(artwork.bid.amount)} {ticker}</div>
-          </div>
-        {/if}
-      </div>
-
-      {#if loading}
-        <ProgressLinear />
-      {:else if $session.user && $session.user.id === artwork.owner_id && artwork.held}
-        {#if $session.user.id === artwork.artist_id}
+      {#if $session?.user?.id === artwork.artist_id && !artwork.sold}
           <div class="w-full mb-2">
             <a
               href={`/a/${artwork.slug}/edit`}
               class="block text-center text-sm secondary-btn w-full"
-              class:disabled>Edit</a
+              >Edit</a
+            >
+          </div>
+          <div class="w-full mb-2">
+            <a
+              href={`/a/${artwork.slug}/mint`}
+              class="block text-center text-sm secondary-btn w-full"
+              >Mint</a
             >
           </div>
           <div class="w-full mb-2">
@@ -100,7 +111,6 @@
               >Delete</a
             >
           </div>
-        {/if}
       {/if}
 
       <Sidebar bind:artwork />

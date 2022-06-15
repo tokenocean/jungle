@@ -148,6 +148,7 @@ export const getEditionByAsset = `query($asset: String!) {
 export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
   artworks(where: {slug : {_eq: $slug}}, limit: 1) {
     ${fields}
+    sold
     comments(limit: $limit, order_by: {created_at: desc}) {
       created_at
       comment

@@ -10,6 +10,7 @@
   import { tick } from "svelte";
   import Select from "svelte-select";
   import { onMount } from "svelte";
+  import { OpenEdition } from "$comp";
 
   export let artwork;
   export let title;
@@ -77,20 +78,10 @@
       <span class="ml-3">This is a physical artwork</span>
     </label>
   </div>
-  <div class="toggle mb-6">
-    <label for="openedition" class="inline-flex items-center">
-      <input
-        id="openedition"
-        class="form-checkbox h-6 w-6"
-        type="checkbox"
-        bind:checked={artwork.open_edition}
-      />
-      <span class="ml-3">Open Edition</span>
-    </label>
-  </div>
-  {#if !artwork.id && !artwork.open_edition}
+  <OpenEdition {artwork} />
+  {#if !artwork.open_edition}
     <div class="flex flex-col mb-6">
-      <label for="max_editions">Number of editions</label>
+      <label for="max_editions">Total Editions</label>
       <input
         id="max_editions"
         placeholder="Editions"

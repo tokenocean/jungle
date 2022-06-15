@@ -217,18 +217,6 @@
     loading = false;
   };
 
-  let handleDelete = async () => {
-    try {
-      if ((await confirm()) === ACCEPTED) {
-        await query(deleteArtwork, { id: artwork.id });
-        info("Artwork deleted");
-        goto("/market");
-      }
-    } catch (e) {
-      err(e);
-    }
-  };
-
   let showPopup = false;
   let showMore = false;
   let showActivity = false;

@@ -80,6 +80,12 @@ computed_fields:
       session_argument: hasura_session
       table_argument: artwork_row
     comment: ""
+  - name: sold
+    definition:
+      function:
+        schema: public
+        name: artwork_sold
+      table_argument: artwork_row
   - name: transactions
     definition:
       function:
@@ -110,6 +116,7 @@ select_permissions:
         - has_royalty
         - last_active
         - num_favorites
+        - sold
       filter: {}
       allow_aggregations: true
   - role: user
@@ -135,6 +142,7 @@ select_permissions:
         - has_royalty
         - last_active
         - num_favorites
+        - sold
       filter: {}
       allow_aggregations: true
 delete_permissions:
