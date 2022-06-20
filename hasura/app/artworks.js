@@ -210,7 +210,7 @@ app.post("/transaction", auth, async (req, res) => {
       url: `${SERVER_URL}/a/${slug}`,
     };
 
-    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, headers);
+    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, req.headers);
     res.send(r);
   } catch (e) {
     console.log("problem creating transaction", e);
