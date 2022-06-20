@@ -470,7 +470,7 @@ export const updateUserByEmail = `mutation($user: users_set_input!, $email: Stri
 }`;
 
 export const deleteUserByEmail = `mutation($email: String!) {
-  delete_users(where: { account: { email: { _eq: $email } } })
+  delete_users(where: { display_name: { _eq: $email } } })
   {
     affected_rows
   }
