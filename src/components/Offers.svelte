@@ -36,7 +36,7 @@
     await confirm();
 
     await api
-      .auth(`Bearer ${$session.jwt}`)
+      .auth(`Bearer ${$token}`)
       .url("/cancel")
       .post({ id })
       .json()
@@ -106,7 +106,7 @@
         <tr>
           <td class="py-4 pr-6 text-sm ">
             <div class="flex flex-wrap justify-center items-center">
-              <div class="w-16 rounded-md">
+              <div class="w-16 rounded-md mr-1">
                 <ArtworkMedia
                   artwork={offer.transaction.artwork}
                   classes="rounded-md"
@@ -158,7 +158,7 @@
             </div>
           </td>
           <td class="py-4 pl-6 text-sm ">
-            {#if canAccept(offer.transaction)}
+            {#if canAccept(offer.transaction, $session.user)}
               <a
                 href="/"
                 on:click|preventDefault={() => {
@@ -194,7 +194,7 @@
         <tr>
           <td class="py-4 pr-6 text-sm ">
             <div class="flex flex-wrap justify-center items-center">
-              <div class="w-16 rounded-md">
+              <div class="w-16 rounded-md mr-1">
                 <ArtworkMedia
                   artwork={offer.transaction.artwork}
                   classes="rounded-md"
@@ -218,12 +218,12 @@
           <td class="py-4 px-6 text-sm ">
             <div class="flex">
               <div class="pr-1">
-                <Avatar size="xs" user={offer.transaction.user} />
+                <Avatar size="xs" user={offer.transaction.artwork.owner} />
               </div>
               <a
-                href={`/${offer.transaction.user.username}`}
+                href={`/${offer.transaction.artwork.owner.username}`}
                 class="secondary-color py-3"
-                >@{offer.transaction.user.username}</a
+                >@{offer.transaction.artwork.owner.username}</a
               >
             </div>
           </td>
@@ -246,7 +246,7 @@
             </div>
           </td>
           <td class="py-4 pl-6 text-sm ">
-            {#if canCancel(offer.transaction)}
+            {#if canCancel(offer.transaction, $session.user)}
               <a
                 href="/"
                 on:click|preventDefault={() => cancel(offer.transaction)}

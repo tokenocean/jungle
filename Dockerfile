@@ -1,19 +1,12 @@
-FROM node:17-alpine
+FROM gcr.io/coinos-326717/github.com/tokenocean/raretoshi:base
 
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 
-RUN apk add git python3 build-base
-RUN npm i -g pnpm
-
-RUN apk add git
-RUN npm i -g pnpm
-
-COPY package.json .
-RUN NODE_ENV=development pnpm i
-
+WORKDIR /app
 COPY . .
-RUN NODE_ENV=development pnpm i
+RUN mv /deps/node_modules /app
+RUN sed -i '/cypress/d' package.json
 RUN pnpm build
 
-CMD ["node", "build"]
+CMD ["node", "--inspect=0.0.0.0:9229", "build"]

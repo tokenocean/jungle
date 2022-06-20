@@ -1,15 +1,3 @@
-<script context="module">
-  export async function load({ session }) {
-    if (!(session && session.user))
-      return {
-        status: 302,
-        redirect: "/login",
-      };
-
-    return {};
-  }
-</script>
-
 <script>
   import { page, session } from "$app/stores";
   import Fa from "svelte-fa";
@@ -22,25 +10,28 @@
     fee,
     psbt,
     password,
-    titles,
     token,
     txcache,
+    user,
   } from "$lib/store";
   import { Dropzone, ProgressLinear } from "$comp";
   import { upload, supportedTypes } from "$lib/upload";
-  import { btc, kebab, goto, err } from "$lib/utils";
+  import { btc, kebab, goto, err, info, sleep } from "$lib/utils";
   import { requirePassword } from "$lib/auth";
   import {
-    createIssuance,
+    DUST,
     sign,
     parseAsset,
     parseVal,
     keypair,
     getInputs,
+    network,
+    signOver,
   } from "$lib/wallet";
   import reverse from "buffer-reverse";
   import { ArtworkMedia } from "$comp";
   import branding from "$lib/branding";
+  import { address } from "liquidjs-lib";
 
   import Form from "./_form.svelte";
   import Issuing from "./_issuing.svelte";
@@ -110,40 +101,13 @@
     title: "",
     description: "",
     filename: "",
-    asset: "",
-    edition: 1,
-    editions: 1,
+    max_editions: 1,
     tags: [],
   };
 
-  let hash, tx, inputs, total, transactions;
-  let required = 0;
-  const issue = async () => {
-    let contract;
-    let domain = branding.urls.base;
-    let error, success;
-
-    contract = await createIssuance(artwork, domain, inputs.pop());
-
-    $titles = [...$titles, artwork];
-
-    await sign(1, false);
-    await tick();
-
-    tx = $psbt.extractTransaction();
-    required += parseVal(tx.outs.find((o) => o.script.length === 0).value);
-    $txcache[tx.getId()] = tx;
-    inputs.unshift(tx);
-    transactions.push({ contract, psbt: $psbt.toBase64() });
-  };
-
-  let tries;
-  let l;
-
   let submit = async (e) => {
     e.preventDefault();
-    await requirePassword();
-    transactions = [];
+
     if (!artwork.title) return err("Please enter a title");
 
     if (!artwork.filename)
@@ -153,23 +117,10 @@
     loading = true;
 
     try {
-      [inputs, total] = await getInputs();
-
-      for ($edition = 1; $edition <= artwork.editions; $edition++) {
-        await issue();
-        tries = 0;
-      }
-
-      if (total < required)
-        throw { message: "Insufficient funds", required, btc, total };
-
-      let { issuance, slug } = await api
-        .url("/issue")
+      let { slug } = await api
+        .url("/create")
         .auth(`Bearer ${$token}`)
-        .post({
-          artwork,
-          transactions,
-        })
+        .post({ artwork })
         .json();
 
       goto(`/a/${slug}`);

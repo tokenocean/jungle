@@ -1,4 +1,4 @@
-import { session } from "$app/stores";
+import cookie from "cookie";
 import { api } from "$lib/api";
 import decode from "jwt-decode";
 import { tick } from "svelte";
@@ -44,5 +44,19 @@ export const checkAuthFromLocalStorage = (user) => {
 
   if (usernameFromStorage && user.username !== usernameFromStorage) {
     goto("/logout");
+  }
+};
+
+export const checkToken = (headers) => {
+  const cookies = cookie.parse(headers.get("cookie") || "");
+  if (!cookies.token || expired(cookies.token)) {
+    return {
+      headers: { location: "/login" },
+      status: 302,
+    };
+  } else {
+    return {
+      authorization: `Bearer ${cookies.token}`,
+    };
   }
 };

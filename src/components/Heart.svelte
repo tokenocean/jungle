@@ -1,5 +1,6 @@
 <script>
   import { session } from "$app/stores";
+  import { token } from "$lib/store";
   import { createFavorite, deleteFavorite } from "$queries/favorites";
   import { requireLogin } from "$lib/auth";
   import { err } from "$lib/utils";
@@ -11,22 +12,20 @@
 
   export let artwork;
 
-  let { favorited } = artwork;
-
   let favorite = async () => {
     try {
-      await requireLogin(null, $session.jwt);
+      await requireLogin(null, $token);
       let { id: artwork_id } = artwork;
       let { id: user_id } = $session.user;
 
-      if (favorited) {
+      if (artwork.favorited) {
         await query(deleteFavorite, { artwork_id, user_id });
         artwork.num_favorites--;
-        favorited = false;
+        artwork.favorited = false;
       } else {
         await query(createFavorite, { artwork_id });
         artwork.num_favorites++;
-        favorited = true;
+        artwork.favorited = true;
       }
     } catch (e) {
       err(e);
@@ -34,8 +33,8 @@
   };
 </script>
 
-<div on:click={favorite} class:favorited>
-  <Fa icon={favorited ? solidHeart : faHeart} size="1.5x" />
+<div on:click={favorite} class:favorited={artwork.favorited}>
+  <Fa icon={artwork.favorited ? solidHeart : faHeart} size="1.5x" />
 </div>
 
 <style>

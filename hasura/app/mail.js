@@ -1,13 +1,14 @@
 import Email from "email-templates";
 import nodemailer from "nodemailer";
+import path from "path";
 import { q as query, api } from "./api.js";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
 
 import {
   getUser,
-  getArtworkWithBidTransactionByHash,
-  getArtworkByPk,
+  getEditionWithBidTransactionByHash,
+  getArtwork,
   getCurrentUser,
   getTransferTransactionsByPsbt,
 } from "./queries.js";
@@ -41,7 +42,7 @@ export const mail = new Email({
   message: { from: SMTP_SENDER },
   send: true,
   views: {
-    // root: path.resolve(process.env.PWD || ".", "../custom/emails"),
+    root: path.resolve(process.env.PWD || ".", "emails"),
     options: {
       extension: "ejs",
     },
@@ -109,20 +110,20 @@ app.post("/offer-notifications", auth, async (req, res) => {
     if (errors) throw new Error(errors[0].message);
     let currentUser = data.currentuser[0];
 
-    const { artworks_by_pk: artwork, transactions } = await query(
-      getArtworkWithBidTransactionByHash,
+    const { editions_by_pk: edition, transactions } = await query(
+      getEditionWithBidTransactionByHash,
       {
-        id: artworkId,
+        id: editionId,
         hash: transactionHash,
       }
     );
 
     const transaction = transactions.length ? transactions[0] : null;
 
-    if (!transaction || !artwork) {
+    if (!transaction || !edition) {
       return res
         .code(400)
-        .send(`Missing ${!artwork ? "artwork" : "transaction"}`);
+        .send(`Missing ${!edition ? "edition" : "transaction"}`);
     }
 
     const sortedBidTransactions = artwork.transactions.sort(
@@ -193,7 +194,7 @@ app.post("/mail-purchase-successful", auth, async (req, res) => {
     }
     let { users_by_pk: user } = await query(getUser, { id });
 
-    const { artworks_by_pk: artwork } = await query(getArtworkByPk, {
+    const { artworks_by_pk: artwork } = await query(getArtwork, {
       id: artworkId,
     });
 
@@ -229,7 +230,7 @@ app.post("/mail-artwork-minted", auth, async (req, res) => {
     }
     let { users_by_pk: user } = await query(getUser, { id });
 
-    const { artworks_by_pk: artwork } = await query(getArtworkByPk, {
+    const { artworks_by_pk: artwork } = await query(getArtwork, {
       id: artworkId,
     });
 
@@ -264,7 +265,7 @@ app.post("/mail-artwork-sold", auth, async (req, res) => {
     }
     let { users_by_pk: user } = await query(getUser, { id });
 
-    const { artworks_by_pk: artwork } = await query(getArtworkByPk, {
+    const { artworks_by_pk: artwork } = await query(getArtwork, {
       id: artworkId,
     });
 
@@ -308,7 +309,7 @@ app.post("/mail-event-actions", async (req, res) => {
 
   const getArtworkById = async (artworkId) => {
     let { artworks_by_pk: artwork } = artworkId
-      ? await query(getArtworkByPk, {
+      ? await query(getArtwork, {
           id: artworkId,
         })
       : { artworks_by_pk: null };

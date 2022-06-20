@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { api, q, lnft } from "./api.js";
+import { q, lnft } from "./api.js";
 import { broadcast, btc, parseAsset } from "./wallet.js";
 import { Psbt } from "liquidjs-lib";
 import { compareAsc, parseISO } from "date-fns";
@@ -11,10 +11,10 @@ import {
   cancelBid,
   createArtwork,
   createComment,
+  createOpenEdition,
   createTransaction,
   deleteTransaction,
   getArtwork,
-  getCurrentUser,
   getUserByAddress,
   getTransactionArtwork,
   getTransactionUser,
@@ -27,18 +27,9 @@ import {
 } from "./queries.js";
 
 const { SERVER_URL } = process.env;
-import { kebab, sleep, wait } from "./utils.js";
+import { getUser, kebab, sleep, wait } from "./utils.js";
 import crypto from "crypto";
 import { app } from "./app.js";
-
-const getUser = async ({ headers }) => {
-  let { data, errors } = await api(headers)
-    .post({ query: getCurrentUser })
-    .json();
-
-  if (errors) throw new Error(errors[0].message);
-  return data.currentuser[0];
-};
 
 app.post("/cancel", auth, async (req, res) => {
   try {
@@ -56,24 +47,38 @@ app.post("/cancel", auth, async (req, res) => {
 });
 
 app.post("/transfer", auth, async (req, res) => {
+  let receipt_id, transfer_id;
   try {
     let sender = await getUser(req);
-    let { address, transaction } = req.body;
+    let { address, artwork, psbt } = req.body;
+
+    let transaction = {
+      amount: 1,
+      artwork_id: artwork.id,
+      asset: artwork.asset,
+      hash: Psbt.fromBase64(psbt).extractTransaction().getId(),
+      psbt,
+      type: "transfer",
+    };
+
+    let { insert_transactions_one: r } = await q(
+      createTransaction,
+      { transaction },
+      req.headers
+    );
+    transfer_id = r.id;
 
     let { users } = await q(getUserByAddress, { address });
-    let transaction_id;
 
     if (users.length) {
       let { id } = users[0];
-
-      console.log("transferring", transaction);
 
       transaction.user_id = id;
       transaction.type = "receipt";
       let { insert_transactions_one: r } = await q(createTransaction, {
         transaction,
       });
-      transaction_id = r.id;
+      receipt_id = r.id;
 
       await q(updateArtwork, {
         artwork: {
@@ -84,10 +89,10 @@ app.post("/transfer", auth, async (req, res) => {
     }
 
     try {
-      await broadcast(Psbt.fromBase64(transaction.psbt));
+      await broadcast(Psbt.fromBase64(psbt));
     } catch (e) {
       if (users.length) {
-        await q(deleteTransaction, { id: transaction_id });
+        await q(deleteTransaction, { id: receipt_id });
         await q(updateArtwork, {
           artwork: {
             owner_id: sender.id,
@@ -101,15 +106,21 @@ app.post("/transfer", auth, async (req, res) => {
 
     res.send({});
   } catch (e) {
+    try {
+      await q(deleteTransaction, { id: transfer_id });
+    } catch (e) {
+      console.log("failed to rollback transfer transaction", e);
+    }
+
     console.log("problem transferring artwork", e);
     res.code(500).send(e.message);
   }
 });
 
-app.post("/viewed", async (req, res) => {
+app.post("/held", async (req, res) => {
   try {
-    let { update_artworks_by_pk } = await q(updateViews, { id: req.body.id });
-    let { asset, owner } = update_artworks_by_pk;
+    let { artworks_by_pk: artwork } = await q(getArtwork, { id: req.body.id });
+    let { asset, owner } = artwork;
     let { address, multisig } = owner;
 
     let find = async (a) =>
@@ -121,8 +132,18 @@ app.post("/viewed", async (req, res) => {
     if (await find(address)) held = "single";
     if (await find(multisig)) held = "multisig";
 
-    await q(setHeld, { id: req.body.id, held });
+    let result = await q(setHeld, { id: req.body.id, held });
 
+    res.send({});
+  } catch (e) {
+    console.log(e);
+    res.code(500).send(e.message);
+  }
+});
+
+app.post("/viewed", async (req, res) => {
+  try {
+    let { update_artworks_by_pk } = await q(updateViews, { id: req.body.id });
     res.send({});
   } catch (e) {
     console.log(e);
@@ -194,38 +215,12 @@ app.post("/transaction", auth, async (req, res) => {
       url: `${SERVER_URL}/a/${slug}`,
     };
 
-    try {
-      await mail.send({
-        template: "notify-bid",
-        locals,
-        message: {
-          to: owner.display_name,
-        },
-      });
-
-      if (bid && bid.user) {
-        locals.outbid = true;
-
-        await mail.send({
-          template: "notify-bid",
-          locals,
-          message: {
-            to: bid.user.display_name,
-          },
-        });
-      }
-    } catch (err) {
-      console.error("Unable to send email");
-      console.error(err);
-    }
-
-    ({ data, errors } = await api(req.headers)
-      .post({ query: createTransaction, variables: { transaction } })
-      .json());
-
-    if (errors) throw new Error(errors[0].message);
-
-    res.send(data.insert_transactions_one);
+    let { insert_transactions_one: r } = await q(
+      createTransaction,
+      { transaction },
+      headers
+    );
+    res.send(r);
   } catch (e) {
     console.log("problem creating transaction", e);
     res.code(500).send(e.message);
@@ -253,10 +248,37 @@ app.post("/tx/update", auth, async (req, res) => {
 app.post("/accept", auth, async (req, res) => {
   try {
     await broadcast(Psbt.fromBase64(req.body.psbt));
-    let { data } = await api(req.headers)
-      .post({ query: acceptBid, variables: req.body })
-      .json();
-    res.send(data);
+    res.send(await q(acceptBid, req.body, req.headers));
+  } catch (e) {
+    console.log(e);
+    res.code(500).send(e.message);
+  }
+});
+
+app.post("/create", auth, async (req, res) => {
+  try {
+    let { artwork } = req.body;
+    let { id: user_id } = await getUser(req);
+
+    let tags = artwork.tags.map(({ tag }) => ({
+      tag,
+      artwork_id: artwork.id,
+    }));
+
+    delete artwork.tags;
+
+    let id = v4();
+
+    artwork.artist_id = user_id;
+    artwork.id = id;
+    artwork.slug = `${kebab(artwork.title || "untitled")}-${id.substr(0, 5)}`;
+
+    await q(createArtwork, {
+      artwork,
+      tags,
+    });
+
+    res.send(artwork);
   } catch (e) {
     console.log(e);
     res.code(500).send(e.message);
@@ -264,93 +286,85 @@ app.post("/accept", auth, async (req, res) => {
 });
 
 const issuances = {};
-const issue = async (
-  issuance,
-  ids,
-  { body: { artwork, transactions }, headers }
-) => {
+const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
   issuances[issuance] = { length: transactions.length, i: 0 };
   let tries = 0;
   let i = 0;
+  let contract, psbt, openEditionPsbt;
 
-  while (i < transactions.length && tries < 40) {
-    let slug;
+  let tags = artwork.tags.map(({ tag }) => ({
+    tag,
+    artwork_id: artwork.id,
+  }));
+
+  delete artwork.tags;
+
+  artwork.artist_id = user_id;
+  artwork.owner_id = user_id;
+
+  while (i < transactions.length && tries < 60) {
+    await sleep(600);
     try {
       artwork.id = ids[i];
       artwork.edition = i + 1;
       artwork.slug = kebab(artwork.title || "untitled");
+      tags.map((tag) => (tag.artwork_id = ids[i]));
 
       if (i > 0) artwork.slug += "-" + i + 1;
-
       artwork.slug += "-" + artwork.id.substr(0, 5);
-      if (i === 0) slug = artwork.slug;
 
-      let { contract, psbt } = transactions[i];
-      let p = Psbt.fromBase64(psbt);
-      await broadcast(p);
-      let tx = p.extractTransaction();
-      let hash = tx.getId();
-      contract = JSON.stringify(contract);
-      artwork.asset = parseAsset(
-        tx.outs.find((o) => parseAsset(o.asset) !== btc).asset
-      );
+      if (!artwork.open_edition) {
+        ({ contract, psbt, openEditionPsbt } = transactions[i]);
+        let p = Psbt.fromBase64(psbt);
 
-      let tags = artwork.tags.map(({ tag }) => ({
-        tag,
-        artwork_id: artwork.id,
-      }));
+        try {
+          await broadcast(p);
+        } catch (e) {
+          if (!e.message.includes("already")) throw e;
+        }
 
-      let {
-        id,
-        asset,
-        title,
-        description,
-        edition,
-        editions,
-        filename,
-        filetype,
-        is_physical,
-      } = artwork;
+        let tx = p.extractTransaction();
+        let hash = tx.getId();
+        contract = JSON.stringify(contract);
+        artwork.asset = parseAsset(
+          tx.outs.find((o) => parseAsset(o.asset) !== btc).asset
+        );
+      }
 
-      let variables = {
-        artwork: {
-          id,
-          title,
-          description,
-          asset,
-          slug,
-          edition,
-          editions,
-          filename,
-          filetype,
-          is_physical,
-        },
-        transaction: {
-          artwork_id: id,
-          type: "creation",
-          hash,
-          contract,
-          asset,
-          amount: 1,
-          psbt: p.toBase64(),
-        },
+      await q(createArtwork, {
+        artwork,
         tags,
-      };
+      });
 
-      let result = await api(headers)
-        .post({ query: createArtwork, variables })
-        .json();
-
-      if (result.errors) {
-        console.log(variables);
-        throw new Error(errors[0].message);
+      if (artwork.open_edition) {
+        await q(createOpenEdition, {
+          o: {
+            artwork_id: artwork.id,
+            psbt: openEditionPsbt,
+          },
+        });
+      } else {
+        await q(createTransaction, {
+          transaction: {
+            artwork_id: artwork.id,
+            user_id: artwork.artist_id,
+            type: "creation",
+            hash,
+            contract,
+            asset: artwork.asset,
+            amount: 1,
+            psbt: p.toBase64(),
+          },
+        });
       }
 
       tries = 0;
       issuances[issuance].i = ++i;
       issuances[issuance].asset = artwork.asset;
+
+      console.log("issued", artwork.slug);
     } catch (e) {
-      console.log("failed issuance", e);
+      console.log("failed issuance", e, artwork, psbt);
       await sleep(5000);
       tries++;
     }
@@ -370,22 +384,27 @@ const issue = async (
 };
 
 app.post("/issue", auth, async (req, res) => {
+  let tries = 0;
   try {
+    let { address, multisig, id: user_id } = await getUser(req);
     let { artwork, transactions } = req.body;
     let issuance = v4();
     let ids = transactions.map((t) => v4());
-    issue(issuance, ids, req);
+    issue(issuance, ids, {
+      artwork,
+      transactions,
+      user_id,
+    });
     let slug = kebab(artwork.title || "untitled") + "-" + ids[0].substr(0, 5);
-    let { address } = await getUser(req);
 
     await wait(async () => {
-      try {
-        if (!issuances[issuance]) return;
-        let utxos = await lnft.url(`/address/${address}/utxo`).get().json();
-        return utxos.find((tx) => tx.asset === issuances[issuance].asset);
-      } catch (e) {
-        console.log("failed to get utxos", e);
-      }
+      if (++tries > 40) throw new Error("Issuance timed out");
+      if (!(issuances[issuance].i > 0)) return false;
+      let utxos = [
+        ...(await lnft.url(`/address/${address}/utxo`).get().json()),
+        ...(await lnft.url(`/address/${multisig}/utxo`).get().json()),
+      ];
+      return utxos.find((tx) => tx.asset === issuances[issuance].asset);
     });
 
     res.send({ id: ids[0], asset: issuances[issuance].asset, issuance, slug });
@@ -419,29 +438,23 @@ app.post("/comment", auth, async (req, res) => {
         artwork_id,
         asset: btc,
         hash: Psbt.fromBase64(psbt).extractTransaction().getId(),
+        user_id: user.id,
         psbt,
         type: "comment",
       };
 
-      let { data, errors } = await api(req.headers)
-        .post({ query: createTransaction, variables: { transaction } })
-        .json();
-
-      if (errors) throw new Error(errors[0].message);
+      await q(createTransaction, { transaction });
     }
 
     let comment = {
       artwork_id,
+      user_id: user.id,
       comment: commentBody,
     };
 
-    ({ data, errors } = await api(req.headers)
-      .post({ query: createComment, variables: { comment } })
-      .json());
+    let r = await q(createComment, { comment });
 
-    if (errors) throw new Error(errors[0].message);
-
-    res.send(data);
+    res.send({ ok: true });
   } catch (e) {
     console.log(e);
     res.code(500).send(e.message);

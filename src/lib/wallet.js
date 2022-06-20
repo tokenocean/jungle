@@ -1,10 +1,10 @@
+import { session } from "$app/stores";
 import { tick } from "svelte";
 import { get } from "svelte/store";
-import { api, electrs, hasura } from "$lib/api";
+import { api, electrs, hasura, query } from "$lib/api";
 import * as middlewares from "wretch-middlewares";
 import { mnemonicToSeedSync } from "bip39";
-import { fromSeed } from "bip32";
-import { fromBase58 } from "bip32";
+import { fromBase58, fromSeed } from "bip32";
 import {
   address as Address,
   ECPair,
@@ -13,6 +13,7 @@ import {
   networks,
   Transaction,
 } from "liquidjs-lib";
+
 import reverse from "buffer-reverse";
 import {
   balances,
@@ -24,7 +25,6 @@ import {
   poll,
   psbt,
   sighash,
-  titles,
   txcache,
   transactions,
   signStatus,
@@ -35,6 +35,7 @@ import {
 import cryptojs from "crypto-js";
 import { btc, info } from "$lib/utils";
 import { requirePassword } from "$lib/auth";
+import { getEditionByAsset } from "$queries/artworks";
 import { getActiveBids } from "$queries/transactions";
 import { compareAsc, parseISO } from "date-fns";
 import { SignaturePrompt, AcceptPrompt } from "$comp";
@@ -49,7 +50,7 @@ export const ACCEPTED = "accepted";
 
 const { retry } = middlewares.default || middlewares;
 
-const DUST = 800;
+export const DUST = 800;
 const satsPerByte = 0.15;
 
 const serverKey = Buffer.from(import.meta.env.VITE_PUBKEY, "hex");
@@ -65,42 +66,23 @@ export const parseAsset = (v) => reverse(v.slice(1)).toString("hex");
 
 const nonce = Buffer.alloc(1);
 
-export const getTransactions = (user) => {
-  let { address } = user;
-  if (!get(poll).find((p) => p.name === "txns"))
-    poll.set([
-      ...get(poll),
-      {
-        name: "txns",
-        interval: setInterval(() => txns(), 10000),
-      },
-    ]);
-
-  let txns = async () => {
-    transactions.set(await electrs.url(`/address/${address}/txs`).get().json());
-  };
-
-  return txns();
-};
-
-export const getBalances = async ({ user, jwt }) => {
-  await requirePassword({ jwt });
+export const getBalances = async () => {
+  await requirePassword();
 
   let { confirmed: c, pending: p } = await api
-    .auth(`Bearer ${jwt}`)
+    .auth(`Bearer ${get(token)}`)
     .url("/balance")
     .get()
     .json();
 
-  Object.keys(c).map(async (a) => {
-    let artwork = get(titles).find(
-      (t) => t.asset === a && t.owner_id !== user.id
-    );
+  // Object.keys(c).map(async (a) => {
+  //   let { artworks } = await query(getArtworkByAsset, { asset: a });
+  //   let artwork = artworks[0];
 
-    if (artwork) {
-      await api.auth(`Bearer ${jwt}`).url("/claim").post({ artwork }).json();
-    }
-  });
+  //   if (artwork.owner_id !== user.id) {
+  //     await api.auth(`Bearer ${jwt}`).url("/claim").post({ artwork }).json();
+  //   }
+  // });
 
   balances.set(c);
   pending.set(p);
@@ -139,7 +121,7 @@ export const createWallet = (mnemonic, pass) => {
 };
 
 export const getMnemonic = (mnemonic, pass) => {
-  if (!mnemonic && user) mnemonic = get(user).mnemonic;
+  if (!mnemonic && get(user)) ({ mnemonic } = get(user));
   if (!pass) pass = get(password);
 
   mnemonic = cryptojs.AES.decrypt(mnemonic, pass).toString(cryptojs.enc.Utf8);
@@ -158,6 +140,7 @@ export const keypair = (mnemonic, pass) => {
 
     return { pubkey, privkey, seed, base58 };
   } catch (e) {
+    console.log(e);
     throw new Error("Failed to generated keys with mnemonic");
   }
 };
@@ -669,11 +652,10 @@ export const requireSign = async () => {
 
 export const sign = async (sighash, prompt = true) => {
   let p = get(psbt);
-  const loggedUser = get(user);
 
   let { privkey } = keypair();
 
-  if (prompt && loggedUser.prompt_sign) {
+  if (prompt && get(user).prompt_sign) {
     const signResult = await requireSign();
 
     if (signResult === CANCELLED) {
@@ -786,7 +768,7 @@ export const executeSwap = async (artwork) => {
 };
 
 export const createIssuance = async (
-  { filename: file, title: name },
+  { filename: file, title: name, open_edition },
   domain,
   tx
 ) => {
@@ -806,20 +788,20 @@ export const createIssuance = async (
     issuer_pubkey: keypair().pubkey.toString("hex"),
     name,
     precision: 0,
-    ticker: "DANG",
+    ticker: null,
     version: 0,
   };
 
-  let without = { ...contract };
-  delete without.file;
-
   let construct = async (p) => {
     if (tx) {
-      let index = tx.outs.findIndex(
-        (o) =>
-          parseAsset(o.asset) === btc &&
-          o.script.toString("hex") === out.output.toString("hex")
-      );
+      let txid = tx.getId();
+      let index =
+        tx.vout ||
+        tx.outs.findIndex(
+          (o) =>
+            parseAsset(o.asset) === btc &&
+            o.script.toString("hex") === out.output.toString("hex")
+        );
 
       if (index > -1) {
         let input = {
@@ -848,7 +830,7 @@ export const createIssuance = async (
 
     p.addIssuance({
       assetAmount: 1,
-      assetAddress: out.address,
+      assetAddress: open_edition ? multisig().address : out.address,
       tokenAmount: 0,
       precision: 0,
       net: network,
@@ -869,7 +851,7 @@ export const createIssuance = async (
 };
 
 export const getInputs = async () => {
-  let utxos = await electrs
+  let utxos = await api
     .url(`/address/${singlesig().address}/utxo`)
     .get()
     .json();
@@ -877,7 +859,9 @@ export const getInputs = async () => {
   let txns = [];
   let a = utxos.filter((o) => o.asset === btc && o.value > DUST);
   for (let i = 0; i < a.length; i++) {
-    txns.push(Transaction.fromHex(await getHex(a[i].txid)));
+    let tx = Transaction.fromHex(await getHex(a[i].txid));
+    tx.vout = a[i].vout;
+    txns.push(tx);
   }
 
   return [txns, utxos.reduce((a, b) => a + b.value, 0)];
@@ -892,6 +876,7 @@ export const signOver = async ({ asset }, tx) => {
       .get()
       .json();
     let prevout = utxos.find((o) => o.asset === asset);
+
     let hex = await getHex(prevout.txid);
     tx = Transaction.fromHex(hex);
   }
@@ -908,7 +893,7 @@ export const signOver = async ({ asset }, tx) => {
   });
 
   psbt.set(p);
-  sign(noneAnyoneCanPay);
+  await sign(noneAnyoneCanPay);
   return tx;
 };
 

@@ -1,15 +1,3 @@
-<script context="module">
-  export async function load({ session }) {
-    if (!(session && session.user))
-      return {
-        status: 302,
-        redirect: "/login",
-      };
-
-    return {};
-  }
-</script>
-
 <script>
   import { session } from "$app/stores";
   import Fa from "svelte-fa";
@@ -17,12 +5,11 @@
   import { border, bg } from "./_colors";
   import { page } from "$app/stores";
   import { browser } from "$app/env";
-  import { query } from "$lib/api";
   import { onDestroy, onMount, tick } from "svelte";
   import { asset, assets, balances, pending, password } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { getArtworksByOwner } from "$queries/artworks";
-  import { assetLabel, btc, err, sats, tickers, val } from "$lib/utils";
+  import { btc, err, label, sats, val } from "$lib/utils";
   import { requireLogin } from "$lib/auth";
   import { getBalances } from "$lib/wallet";
 
@@ -30,13 +17,12 @@
   import Withdraw from "./_withdraw.svelte";
   import Transactions from "./_transactions.svelte";
 
-  let balance;
-  balances.subscribe((b) => b && (balance = val($asset, b[$asset] || 0)));
+  export let transactions;
 
-  if (!$asset) $asset = btc;
-  let name = (a) => {
-    return tickers[a] ? tickers[a].name : assetLabel(a);
-  };
+  let balance;
+  balances.subscribe((b) => {
+    if (b) balance = val($asset.asset, b[$asset.asset] || 0);
+  });
 
   let funding;
   let withdrawing;
@@ -68,7 +54,7 @@
         <a class="secondary-color" href="/wallet/asset">
           <div class="flex">
             <div class="px-5 md:px-0">
-              {$assets.length}
+              {Object.keys($balances).length}
               assets available in this wallet
             </div>
             <div class="my-auto ml-1">
@@ -82,27 +68,28 @@
     <div class="dark-bg mb-2 pt-1 sm:rounded-lg">
       <div
         class={`border-l-8 text-center p-3 text-white text-xl w-1/2 rounded-r-full mt-5 font-bold ${border(
-          $asset
-        )} ${bg($asset)}`}
+          $asset.asset
+        )} ${bg($asset.asset)}`}
       >
-        {name($asset)}
+        {label($asset, "name")}
       </div>
 
       <div class="m-6">
         <div class="text-sm light-color">Balance</div>
         <div class="flex mt-3">
           <span class="text-4xl text-white mr-3">{balance}</span>
-          <span class="text-gray-400 mt-auto">{assetLabel($asset)}</span>
+          <span class="text-gray-400 mt-auto">{label($asset)}</span>
         </div>
       </div>
-      {#if $pending && val($asset, $pending[$asset])}
+      {#if $pending && val($asset.asset, $pending[$asset.asset])}
         <div class="m-6">
           <div class="text-sm light-color">Pending</div>
           <div class="flex mt-3">
             <span class="light-color mr-3"
-              >{$pending && val($asset, $pending[$asset] || 0)}</span
+              >{$pending &&
+                val($asset.asset, $pending[$asset.asset] || 0)}</span
             >
-            <span class="text-gray-400">{assetLabel($asset)}</span>
+            <span class="text-gray-400">{label($asset)}</span>
           </div>
         </div>
       {/if}
@@ -120,7 +107,7 @@
     <div>
       <Fund bind:funding />
       <Withdraw bind:withdrawing />
-      <Transactions />
+      <Transactions {transactions} />
     </div>
   </div>
 {/if}

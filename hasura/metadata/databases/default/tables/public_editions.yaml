@@ -1,0 +1,42 @@
+table:
+  schema: public
+  name: editions
+object_relationships:
+  - name: artwork
+    using:
+      foreign_key_constraint_on: artwork_id
+  - name: transaction
+    using:
+      foreign_key_constraint_on: bid_id
+  - name: user
+    using:
+      foreign_key_constraint_on: owner_id
+array_relationships:
+  - name: auctions
+    using:
+      foreign_key_constraint_on:
+        column: edition_id
+        table:
+          schema: public
+          name: auctions
+  - name: comments
+    using:
+      foreign_key_constraint_on:
+        column: edition_id
+        table:
+          schema: public
+          name: comments
+  - name: royalty_recipients
+    using:
+      foreign_key_constraint_on:
+        column: edition_id
+        table:
+          schema: public
+          name: royalty_recipients
+  - name: transactions
+    using:
+      foreign_key_constraint_on:
+        column: edition_id
+        table:
+          schema: public
+          name: transactions

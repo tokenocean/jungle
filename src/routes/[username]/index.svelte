@@ -1,18 +1,6 @@
-<script context="module">
-  import { get } from "$lib/api";
-  export async function load({ fetch, params }) {
-    const { subject } = await get(`/${params.username}.json`, fetch);
-
-    return {
-      props: {
-        subject,
-      },
-    };
-  }
-</script>
-
 <script>
   import { session } from "$app/stores";
+  import { artworksLimit, prompt, messageUser } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faEnvelope,
@@ -23,19 +11,33 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import { err, goto } from "$lib/utils";
-  import { Avatar, Card, Offers, ProgressLinear } from "$comp";
+  import { Avatar, Card, Offers, ProgressLinear, SendMessage } from "$comp";
   import { createFollow, deleteFollow } from "$queries/follows";
+  import { getUserByUsername } from "$queries/users";
   import Menu from "./_menu.svelte";
   import { query } from "$lib/api";
 
   export let id;
   export let subject;
+  export let messages;
 
   $: pageChange($page);
 
   const pageChange = ({ params }) => {
     if (params.id) ({ id } = params);
     else ({ id } = subject);
+  };
+
+  let refreshUser = async () => {
+    try {
+      let { users } = await query(getUserByUsername, {
+        username: subject.username,
+        artworksLimit: $artworksLimit,
+      });
+      subject = users[0];
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   let follow = () => {
@@ -125,13 +127,24 @@
         {#if subject.bio}
           <p>{subject.bio}</p>
         {/if}
-        {#if $session.user}
+        {#if $session?.user}
           {#if $session.user.id === subject.id}
-            <Menu />
+            <Menu {messages} />
           {:else}
-            <button class="p-2 primary-btn follow mt-8" on:click={follow}>
-              {subject.followed ? "Unfollow" : "Follow"}</button
-            >
+            <div class="flex space-x-5">
+              <button class="p-2 primary-btn follow mt-8" on:click={follow}>
+                {subject.followed ? "Unfollow" : "Follow"}</button
+              >
+              <button
+                class="p-2 primary-btn mt-8"
+                on:click={() => {
+                  $messageUser = { id: subject.id, username: subject.username };
+                  prompt.set(SendMessage);
+                }}
+              >
+                Message</button
+              >
+            </div>
           {/if}
         {/if}
       </div>
@@ -154,7 +167,7 @@
           >
             Collection
           </div>
-          {#if $session.user && $session.user.id === id}
+          {#if $session?.user && $session.user.id === id}
             <div
               class:hover={tab === "offers"}
               on:click={() => (tab = "offers")}
@@ -172,7 +185,7 @@
         {#if tab === "creations"}
           <div class="w-full justify-center">
             <div class="w-full max-w-sm mx-auto mb-12">
-              {#if $session.user && $session.user.is_artist && $session.user.id === subject.id}
+              {#if $session?.user?.is_artist && $session?.user?.id === subject.id}
                 <a href="/a/create" class="primary-btn">Submit a new artwork</a>
               {/if}
             </div>
@@ -184,6 +197,13 @@
               {:else}
                 <div class="mx-auto">No creations yet</div>
               {/each}
+              {#if $artworksLimit !== undefined && subject.creations.length}
+                <a
+                  sveltekit:prefetch
+                  class="primary-btn mx-auto mb-12 w-full"
+                  href={`/artist/${subject.username}`}>Show all</a
+                >
+              {/if}
             </div>
           </div>
         {:else if tab === "collection"}
@@ -196,6 +216,13 @@
               {:else}
                 <div class="mx-auto">Nothing collected yet</div>
               {/each}
+              {#if $artworksLimit !== undefined && subject.holdings.length}
+                <a
+                  sveltekit:prefetch
+                  class="primary-btn mx-auto mb-12 w-full"
+                  href={`/${subject.username}/collection`}>Show all</a
+                >
+              {/if}
             </div>
           </div>
         {:else if tab === "offers"}

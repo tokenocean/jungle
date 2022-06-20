@@ -4,6 +4,7 @@
   import { fade, units } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
   import { loaded } from "$lib/store";
+  import { session } from "$app/stores";
 
   export let justScrolled = false;
   export let artwork;
@@ -26,11 +27,17 @@
 
   let start_counter, end_counter;
   let timeout;
+  let auction_underway;
   let count = () => {
     if (!artwork) return;
     start_counter = countdown(new Date(artwork.auction_start));
     end_counter = countdown(new Date(artwork.auction_end));
     timeout = setTimeout(count, 1000);
+
+    let now = new Date();
+    auction_underway =
+      now > new Date(artwork.auction_start) &&
+      now < new Date(artwork.auction_end);
   };
 
   onMount(count);
@@ -97,7 +104,19 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div class="text-sm">
-            <a href={`/${artwork.artist.username}`}>
+            <a
+              href={`/${artwork.artist.username}`}
+              on:click={(e) => {
+                if (
+                  !$session.user ||
+                  (artwork &&
+                    $session.user.username !== artwork.artist.username)
+                ) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+            >
               <div class="flex">
                 <Avatar user={artwork.artist} size="xs" />
                 <div class="mx-1 w-3/4">
@@ -108,9 +127,22 @@
             </a>
           </div>
 
+          <!--
           {#if artwork.owner.id !== artwork.artist.id}
             <div class="text-sm">
-              <a href={`/${artwork.artist.username}`}>
+              <a
+                href={`/${artwork.owner.username}`}
+                on:click={(e) => {
+                  if (
+                    !$session.user ||
+                    (artwork &&
+                      $session.user.username !== artwork.owner.username)
+                  ) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                }}
+              >
                 <div class="flex">
                   <Avatar user={artwork.owner} size="xs" />
                   <div class="ml-2 w-3/4">
@@ -121,17 +153,18 @@
               </a>
             </div>
           {/if}
+          -->
         </div>
       </div>
     </div>
-    {#if end_counter}
+    {#if auction_underway}
       <div class="p-3 rounded-b-lg lightblue-grad text-black mt-auto">
         Time left:
         {end_counter}
       </div>
     {:else if start_counter}
       <div class="p-3 rounded-b-lg lightblue-grad text-black mt-auto">
-        Auction starts in:
+        Starts in:
         {start_counter}
       </div>
     {:else}

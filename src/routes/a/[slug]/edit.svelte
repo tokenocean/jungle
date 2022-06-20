@@ -4,16 +4,16 @@
       r.json()
     );
 
-    if (!(session && session.user)) return {
-      status: 302,
-      redirect: '/login'
-    } 
+    if (!(session && session.user))
+      return {
+        status: 302,
+        redirect: "/login",
+      };
 
     return {
       props,
     };
   }
-
 </script>
 
 <script>
@@ -25,7 +25,7 @@
   import { getArtwork } from "$queries/artworks";
   import { updateArtwork, updateTags } from "$queries/artworks";
   import { err, goto } from "$lib/utils";
-  import { password, user, token } from "$lib/store";
+  import { password, token } from "$lib/store";
   import { query } from "$lib/api";
 
   export let artwork;
@@ -51,18 +51,17 @@
       })
       .catch(err);
   };
-
 </script>
 
 <div class="container mx-auto md:p-20">
   <div class="w-full max-w-4xl mx-auto bg-white md:p-10 rounded-xl">
-      <a class="block mb-6 text-midblue" href={`/a/${artwork.slug}`}>
-        <div class="flex">
-          <Fa icon={faChevronLeft} class="my-auto mr-1" />
-          <div>Back</div>
-        </div>
-      </a>
+    <a class="block mb-6 text-midblue" href={`/a/${artwork.slug}`}>
+      <div class="flex">
+        <Fa icon={faChevronLeft} class="my-auto mr-1" />
+        <div>Back</div>
+      </div>
+    </a>
     <h2>Edit artwork</h2>
-      <Form bind:artwork title={artwork.title} on:submit={update} />
+    <Form bind:artwork title={artwork.title} on:submit={update} />
   </div>
 </div>

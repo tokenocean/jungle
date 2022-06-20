@@ -1,30 +1,34 @@
 export const marketFields = `
   id
-  edition
-  editions
   title
   filename
   filetype
-  favorited
-  list_price
-  auction_start
-  auction_end
-  asking_asset
-  has_royalty
   slug
-  views
+  favorited
   created_at
-  transferred_at
-  owner {
-    id
-    username
-    avatar_url
-  },
+  views
   artist {
     id
     username
     avatar_url
+    address
   },
+`;
+
+export const editionFields = `
+  list_price
+  transferred_at
+  owner_id
+  artwork {
+    ${marketFields}
+  } 
+  owner {
+    id
+    username
+    avatar_url
+    address
+  },
+  edition
   bid {
     id
     user {
@@ -37,67 +41,27 @@ export const marketFields = `
 
 export const fields = `
   id,
-  asset
-  edition
-  editions
-  held
+  editions {
+    edition
+  } 
   title
   description
   artist_id
-  owner_id
   filename
   filetype
-  favorited
-  list_price
-  reserve_price
-  last_active
   created_at
-  auction_start
-  auction_end
-  list_price_tx
-  asking_asset
-  bid_increment
-  extension_interval
-  max_extensions
-  has_royalty
-  royalty_recipients {
-    id
-    name
-    artwork_id
-    asking_asset
-    amount
-    address
-    type
-  }
   slug
   is_physical
-  instagram
-  ticker
+  open_edition
+  open_edition_start
+  open_edition_end
   views
-  transferred_at
-  owner {
-    id
-    username
-    full_name
-    email
-    avatar_url
-    address
-    pubkey
-  },
   artist {
     id
     address
     username
     avatar_url
   },
-  bid {
-    id
-    user {
-      id
-      username
-    }
-    amount
-  }
 `;
 
 export const txFields = `
@@ -122,10 +86,7 @@ export const txFields = `
     avatar_url
     full_name
     email
-  }
-  artwork_id
-  artwork {
-    ${fields}
+    address
   }
 `;
 
@@ -174,25 +135,32 @@ export const getArtworksByOwner = (id) => `query {
   }
 }`;
 
-export const getArtworkByAsset = (asset) => `query {
-  artworks(where: {asset: {_eq: "${asset}"}}, limit: 1) {
-    ${fields}
+export const getEdition = `query($slug: String!, $edition: Int!) {
+  editions(where: {artwork: { slug: {_eq: $slug}}, edition: {_eq: $edition}}) {
+    ${editionFields}
   }
 }`;
 
-export const getArtworkBySlug = `query($slug: String!) {
+export const getEditionByAsset = `query($asset: String!) {
+  editions(where: {asset: {_eq: $asset}}, limit: 1) {
+    ${editionFields}
+  }
+}`;
+
+export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
   artworks(where: {slug : {_eq: $slug}}, limit: 1) {
     ${fields}
-    comments {
+    sold
+    comments(limit: $limit, order_by: {created_at: desc}) {
       created_at
       comment
+      id
       user {
         username
         avatar_url
+        id
+        address
       }
-    }
-    transactions(where: { type: { _neq: "royalty" }}, order_by: { created_at: desc }) {
-      ${txFields}
     }
     tags {
       tag
@@ -213,6 +181,12 @@ export const getArtworksByUsername = (username) => `query {
   }
 }`;
 
+export const getCollectionByUsername = `query($username: String!) {
+  artworks(where: {owner: { username: {_eq: $username }}}) {
+    ${marketFields}
+  }
+}`;
+
 export const getArtworksByTag = (tag) => `query {
   artworks(where: {tags: {tag: {_ilike: "${tag}"}}}, order_by: { created_at: asc }) {
     ${fields}
@@ -227,6 +201,12 @@ export const updateArtwork = `mutation update_artwork($artwork: artworks_set_inp
 
 export const deleteArtwork = `mutation delete_artwork($id: uuid!) {
   delete_artworks_by_pk(id: $id) {
+    id
+  }
+}`;
+
+export const deleteComment = `mutation delete_comment($id: uuid!) {
+  delete_comments_by_pk(id: $id) {
     id
   }
 }`;
@@ -258,9 +238,12 @@ export const getArtwork = `query($id: uuid!) {
     comments {
       created_at
       comment
+      id
       user {
         username
         avatar_url
+        id
+        address
       }
     }
     tags {

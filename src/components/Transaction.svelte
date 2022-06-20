@@ -1,5 +1,4 @@
 <script>
-  import { session } from "$app/stores";
   import { tick } from "svelte";
   import Fa from "svelte-fa";
   import {
@@ -7,7 +6,7 @@
     faChevronUp,
   } from "@fortawesome/free-solid-svg-icons";
   import { Avatar, ProgressLinear } from "$comp";
-  import { addresses, psbt, txcache } from "$lib/store";
+  import { txcache } from "$lib/store";
   import reverse from "buffer-reverse";
   import { electrs } from "$lib/api";
   import {
@@ -20,13 +19,11 @@
     sign,
     requestSignature,
   } from "$lib/wallet";
-  import { requirePassword } from "$lib/auth";
   import { address as Address, Psbt, Transaction } from "liquidjs-lib";
   import {
     explorer,
     addressLabel,
     addressUser,
-    artworkId,
     assetLabel,
     copy,
     ticker,
@@ -37,182 +34,141 @@
     err,
   } from "$lib/utils";
 
-  export let summary;
-  export let tx = undefined;
-  export let debug = false;
+  export let summary = false;
+  export let psbt;
 
-  let ins, outs, totals, senders, recipients, showDetails, users, lock, pp, uu;
-  let loading;
-  $: init($psbt, $session.user, $addresses, tx);
+  let ins,
+    outs,
+    totals,
+    senders,
+    recipients,
+    showDetails,
+    users,
+    loading,
+    pp,
+    uu;
+
+  let labels = {};
   let retries = 0;
+  let { tx } = psbt.data.globalMap.unsignedTx;
+
+  $: init(psbt);
   let init = async (p, u) => {
-    if (lock) return setTimeout(() => init(p, u), 50);
-    lock = true;
-    p = $psbt;
-    u = $session.user;
-    if (!p) return (lock = false);
+    try {
+      if (loading) return setTimeout(() => init(p, u), 50);
+      loading = true;
+      if (!p) return (loading = false);
 
-    ins = [];
-    outs = [];
+      ins = [];
+      outs = [];
 
-    if (!tx) {
-      try {
-        tx = p.extractTransaction();
-      } catch (e) {
-        try {
-          tx = p.data.globalMap.unsignedTx.tx;
-        } catch (e) {
-          err(e);
-        }
-      }
-    }
+      totals = {};
+      senders = {};
+      recipients = {};
+      users = {};
 
-    totals = {};
-    senders = {};
-    recipients = {};
-    users = {};
+      let address, asset, value;
 
-    let address, asset, value;
+      for (let i = 0; i < tx.ins.length; i++) {
+        let { hash, index } = tx.ins[i];
+        let txid = reverse(hash).toString("hex");
 
-    for (let i = 0; i < tx.ins.length; i++) {
-      let { hash, index } = tx.ins[i];
-      let txid = reverse(hash).toString("hex");
-      let prev = ($txcache[txid] || (await getTx(txid))).outs[index];
+        let prev = ($txcache[txid] || (await getTx(txid))).outs[index];
 
-      asset = parseAsset(prev.asset);
-      address = Address.fromOutputScript(prev.script, network);
-      value = parseVal(prev.value);
+        asset = parseAsset(prev.asset);
+        address = Address.fromOutputScript(prev.script, network);
+        value = parseVal(prev.value);
 
-      let input = {
-        address,
-        asset,
-        signed:
-          p.data.inputs[i] &&
-          (!!p.data.inputs[i].partialSig || !!p.data.inputs[i].finalScriptSig),
-        pSig: p.data.inputs[i] && !!p.data.inputs[i].partialSig,
-        index,
-        txid,
-        value,
-      };
+        let { spent } = await electrs
+          .url(`/tx/${txid}/outspend/${index}`)
+          .get()
+          .json();
 
-      try {
-        input.spent = (
-          await electrs.url(`/tx/${txid}/outspend/${index}`).get().json()
-        ).spent;
-      } catch (e) {
-        input.spent = false;
-      }
-
-      ins = [...ins, input];
-
-      let username = addressLabel(address);
-      users[username] = addressUser(address);
-
-      if (!totals[username]) totals[username] = {};
-      if (!totals[username][asset]) totals[username][asset] = 0;
-      totals[username][asset] += value;
-      senders[username] = true;
-    }
-
-    for (let j = 0; j < tx.outs.length; j++) {
-      let out = tx.outs[j];
-
-      asset = parseAsset(out.asset);
-      value = parseVal(out.value);
-
-      try {
-        address = getAddress(out);
-      } catch (e) {
-        if (!out.script.length) address = "Fee";
-        else {
-          outs = [
-            ...outs,
-            {
-              value,
-              asset,
-              address: "",
-            },
-          ];
-          continue;
-        }
-      }
-
-      let username = addressLabel(address);
-      users[username] = addressUser(address);
-
-      if (!totals[username]) totals[username] = {};
-      if (!totals[username][asset]) totals[username][asset] = 0;
-      totals[username][asset] -= value;
-      if (totals[username][asset] < 0) recipients[username] = true;
-
-      outs = [
-        ...outs,
-        {
-          value,
-          asset,
+        let input = {
           address,
-        },
-      ];
-    }
+          asset,
+          signed:
+            p.data.inputs[i] &&
+            (!!p.data.inputs[i].partialSig ||
+              !!p.data.inputs[i].finalScriptSig),
+          pSig: p.data.inputs[i] && !!p.data.inputs[i].partialSig,
+          index,
+          spent,
+          txid,
+          value,
+        };
 
-    lock = false;
-  };
+        ins = [...ins, input];
 
-  let clear = () => {
-    base64 = undefined;
-    $psbt = undefined;
-    tx = undefined;
-  };
+        let username = await addressLabel(address);
+        users[username] = await addressUser(address);
 
-  let parse = () => (base64 = x);
+        if (!totals[username]) totals[username] = {};
+        if (!totals[username][asset]) totals[username][asset] = 0;
+        totals[username][asset] += value;
+        senders[username] = true;
+      }
 
-  let base64;
-  let x;
-  $: read(base64);
-  let read = async (base64) => {
-    if (base64) {
-      tx = undefined;
-      $psbt = Psbt.fromBase64(base64);
-      await init($psbt, $session.user);
-    }
-  };
+      for (let j = 0; j < tx.outs.length; j++) {
+        let out = tx.outs[j];
 
-  let signTx = async () => {
-    await requirePassword($session.jwt);
-    $psbt = await sign();
-    try {
-      $psbt = await requestSignature($psbt);
+        asset = parseAsset(out.asset);
+        value = parseVal(out.value);
+
+        try {
+          address = getAddress(out);
+        } catch (e) {
+          if (!out.script.length) address = "Fee";
+          else {
+            outs = [
+              ...outs,
+              {
+                value,
+                asset,
+                address: "",
+              },
+            ];
+            continue;
+          }
+        }
+
+        let username = await addressLabel(address);
+        users[username] = await addressUser(address);
+
+        if (!totals[username]) totals[username] = {};
+        if (!totals[username][asset]) totals[username][asset] = 0;
+        totals[username][asset] -= value;
+        if (totals[username][asset] < 0) recipients[username] = true;
+
+        outs = [
+          ...outs,
+          {
+            value,
+            asset,
+            address,
+          },
+        ];
+      }
+
+      let assets = [...new Set([...ins, ...outs].map((o) => o.asset))];
+      for (let i = 0; i < assets.length; i++) {
+        let asset = assets[i];
+        labels[asset] = (await assetLabel(asset)) || ticker(asset);
+      }
+
+      loading = false;
     } catch (e) {
-      console.log(`Couldn't get server signature: ${e.message}`);
-    }
-    info("Signed");
-  };
-
-  let broadcastTx = async () => {
-    try {
-      await broadcast(true);
-    } catch (e) {
+      console.log(e);
       err(e);
     }
   };
+
+  let toggleDetails = async () => (showDetails = !showDetails);
 </script>
 
-{#if debug}
-  {#if tx}
-    <div class="flex">
-      <button on:click={clear} class="secondary-btn mr-2">Clear</button>
-      <button on:click={signTx} class="secondary-btn mr-2">Sign</button>
-      <button on:click={broadcastTx} class="secondary-btn">Broadcast</button>
-    </div>
-  {:else}
-    <textarea bind:value={x} class="w-full" rows={14} />
-    <div class="flex">
-      <button on:click={parse} class="secondary-btn mr-2">Parse</button>
-    </div>
-  {/if}
-{/if}
-
-{#if $addresses && tx}
+{#if loading}
+  <ProgressLinear />
+{:else}
   <div class="w-full mx-auto">
     <div
       class="grid grid-cols-1 gap-4"
@@ -229,7 +185,7 @@
               {#each Object.keys(totals[username]) as asset}
                 {#if totals[username][asset] > 0}
                   {#if users[username]}
-                    <div class="my-auto flex">
+                    <div class="my-auto flex mb-1">
                       <div class="flex">
                         {#if users[username]}
                           <Avatar
@@ -259,8 +215,8 @@
                       ).toFixed(8)}
                     </div>
                   </div>
-                  <div class="truncate ml-auto mr-2 my-auto">
-                    {assetLabel(asset)}
+                  <div class="truncate ml-2 my-auto w-full text-right">
+                    {labels[asset]}
                   </div>
                 {/if}
               {/each}
@@ -279,7 +235,7 @@
               {#each Object.keys(totals[username]) as asset}
                 {#if totals[username][asset] < 0}
                   {#if users[username]}
-                    <div class="my-auto flex">
+                    <div class="my-auto flex mb-1">
                       <div class="flex">
                         {#if users[username]}
                           <Avatar
@@ -309,39 +265,33 @@
                       ).toFixed(8)}
                     </div>
                   </div>
-                  <div class="truncate ml-auto mr-2 my-auto">
-                    {assetLabel(asset)}
+                  <div class="truncate ml-2 my-auto w-full text-right">
+                    {labels[asset]}
                   </div>
                 {/if}
               {/each}
             {/if}
           {/each}
-        </div>
-
-        {#if totals["Fee"]}
-          <div class="grid grid-cols-3 mb-4 w-full">
-            <h4 class="my-auto text-xs text-gray-400">Fee</h4>
+          {#if totals["Fee"]}
+            <div class="flex">
+              <Avatar src="/liquid.jpg" />
+              <div class="my-auto ml-2 truncate">liquid fee</div>
+            </div>
             <div class="my-auto ml-auto">
               {val(btc, Math.abs(totals["Fee"][btc]))}
             </div>
-            <div class="truncate ml-auto mr-2 my-auto">L-BTC</div>
-          </div>
-        {/if}
+            <div class="truncate ml-2 my-auto text-right w-full">L-BTC</div>
+          {/if}
+        </div>
       </div>
     </div>
 
     {#if showDetails}
-      <div
-        class="my-6 cursor-pointer"
-        on:click={() => (showDetails = !showDetails)}
-      >
+      <div class="my-6 cursor-pointer" on:click={toggleDetails}>
         <button class="secondary-btn w-full"> Hide details</button>
       </div>
     {:else}
-      <div
-        class="my-6 cursor-pointer"
-        on:click={() => (showDetails = !showDetails)}
-      >
+      <div class="my-6 cursor-pointer" on:click={toggleDetails}>
         <button class="secondary-btn w-full"> Show details </button>
       </div>
     {/if}
@@ -463,7 +413,7 @@
         <div class="grid grid-cols-2 gap-4">
           <button
             class="secondary-btn mb-2"
-            on:click={() => copy($psbt.toBase64())}>Copy PSBT Base64</button
+            on:click={() => copy(psbt.toBase64())}>Copy PSBT Base64</button
           >
           <button class="secondary-btn mb-2" on:click={() => copy(tx.toHex())}
             >Copy Tx Hex</button
@@ -472,6 +422,4 @@
       </div>
     {/if}
   </div>
-{:else if !debug}
-  <ProgressLinear />
 {/if}

@@ -1,5 +1,5 @@
 <script>
-  import { session } from "$app/stores";
+  import { token } from "$lib/store";
   import { browser } from "$app/env";
   import { err } from "$lib/utils";
   import { query } from "$lib/api";
@@ -10,11 +10,12 @@
   import { tick } from "svelte";
   import Select from "svelte-select";
   import { onMount } from "svelte";
+  import { OpenEdition } from "$comp";
 
   export let artwork;
   export let title;
 
-  let input, items, loading, timer;
+  let input, items, loading, timer, start_date, start_time, end_date, end_time;
 
   const debounce = (v) => {
     loading = true;
@@ -31,7 +32,7 @@
 
     try {
       let { tags } = await query(getTags, null, {
-        authorization: `Bearer ${$session.jwt}`,
+        authorization: `Bearer ${$token}`,
       });
       items = [...new Set(tags.map((t) => t.tag))].map((value) => ({
         value,
@@ -77,13 +78,14 @@
       <span class="ml-3">This is a physical artwork</span>
     </label>
   </div>
-  {#if !artwork.id}
+  <OpenEdition {artwork} />
+  {#if !artwork.open_edition}
     <div class="flex flex-col mb-6">
-      <label for="editions">Number of editions</label>
+      <label for="max_editions">Total Editions</label>
       <input
-        id="editions"
+        id="max_editions"
         placeholder="Editions"
-        bind:value={artwork.editions}
+        bind:value={artwork.max_editions}
         class="w-1/2"
       />
     </div>
@@ -118,20 +120,6 @@
 </form>
 
 <style>
-  .tooltip {
-    cursor: pointer;
-  }
-  .tooltip .tooltip-text {
-    display: none;
-    padding: 15px;
-    position: absolute;
-    z-index: 100;
-    width: 300px;
-    font-style: normal;
-  }
-  .tooltip:hover .tooltip-text {
-    display: block;
-  }
   input[type="checkbox"]:checked {
     appearance: none;
     border: 5px solid #fff;

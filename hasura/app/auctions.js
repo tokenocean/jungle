@@ -1,172 +1,78 @@
-import { api, adminApi } from "./api.js";
+import { api, q } from "./api.js";
 import { formatISO, compareAsc, parseISO } from "date-fns";
 import { combine, release, sign, broadcast } from "./wallet.js";
 import { check } from "./signing.js";
-
-const close = `mutation update_artwork($id: uuid!, $artwork: artworks_set_input!) {
-  update_artworks_by_pk(
-    pk_columns: { id: $id }, 
-    _set: $artwork
-  ) {
-    id
-  }
-}`;
-
-const releaseQuery = `mutation update_artwork($id: uuid!, $owner_id: uuid!, $amount: Int!, $psbt: String!, $asset: String!, $hash: String!, $bid_id: uuid, $type: String!) {
-  update_artworks_by_pk(
-    pk_columns: { id: $id }, 
-    _set: { 
-      owner_id: $owner_id,
-      auction_release_tx: null,
-      auction_tx: null,
-      reserve_price: null,
-    }
-  ) {
-    id
-  }
-  insert_transactions_one(object: {
-    artwork_id: $id,
-    asset: $asset,
-    type: $type,
-    amount: $amount,
-    hash: $hash,
-    psbt: $psbt,
-    bid_id: $bid_id,
-    user_id: $owner_id,
-  }) {
-    id,
-    artwork_id
-  } 
-}`;
+import { cancelBids, getFinishedAuctions, releaseToken } from "./queries.js";
 
 setInterval(async () => {
   try {
-    const query = `query {
-      artworks(where: { _and: [
-          { auction_end: { _lte: "${formatISO(new Date())}"}}, 
-          { auction_tx: { _is_null: false }}
-        ]}) {
-        id
-        title
-        slug
-        filename
-        filetype
-        reserve_price
-        asking_asset
-        has_royalty
-        auction_end
-        transferred_at
-        list_price_tx
-        auction_tx
-        auction_release_tx
-        artist {
-          id
-          username
-          avatar_url
-        } 
-        owner {
-          id
-          username
-          avatar_url
-        } 
-        bid {
-          id
-          amount
-          psbt
-          user {
-            id
-            username
-          } 
-        } 
-      } 
-    }`;
+    let { auctions } = await q(getFinishedAuctions, {
+      now: formatISO(new Date()),
+    });
 
-    let res = await adminApi.post({ query }).json();
-    let { data, errors } = res;
-    if (errors) throw new Error(errors[0].message);
-    let { artworks } = data;
+    for (let i = 0; i < auctions.length; i++) {
+      let auction = auctions[i];
+      let { edition } = auction;
+      let { bid } = edition;
 
-    for (let i = 0; i < artworks.length; i++) {
-      let artwork = artworks[i];
-      let { bid } = artwork;
-
-      hasura
-        .post({
-          query: close,
-          variables: {
-            id: artwork.id,
-            artwork: {
-              auction_start: null,
-              auction_end: null,
-            },
-          },
-        })
-        .json()
-        .catch(console.log);
-
-      console.log("finalizing auction for", artwork.slug);
-      console.log("reserve price", artwork.reserve_price);
+      console.log("finalizing auction ", auction.id);
+      console.log("reserve price", auction.reserve);
 
       try {
         if (
           !(bid && bid.psbt) ||
-          compareAsc(parseISO(bid.created_at), parseISO(artwork.auction_end)) >
+          compareAsc(parseISO(bid.created_at), parseISO(auction.auction_end)) >
             0 ||
-          bid.amount < artwork.reserve_price
+          bid.amount < auction.reserve
         )
           throw new Error("no bid");
 
-        let combined = combine(artwork.auction_tx, bid.psbt);
+        let combined = combine(auction.psbt, bid.psbt);
 
         await check(combined);
 
         let psbt = await sign(combined);
+
         await broadcast(psbt);
 
-        await hasura
-          .post({
-            query: releaseQuery,
-            variables: {
-              id: artwork.id,
-              owner_id: bid.user.id,
-              amount: bid.amount,
-              hash: psbt.extractTransaction().getId(),
-              psbt: psbt.toBase64(),
-              asset: artwork.asking_asset,
-              bid_id: bid.id,
-              type: "release",
-            },
-          })
-          .json();
+        await q(releaseToken, {
+          id: edition.id,
+          owner_id: bid.user.id,
+          amount: bid.amount,
+          hash: psbt.extractTransaction().getId(),
+          psbt: psbt.toBase64(),
+          asset: edition.asking_asset,
+          bid_id: bid.id,
+          type: "release",
+        });
 
         console.log("released to high bidder");
       } catch (e) {
         console.log("couldn't release to bidder,", e.message);
-        if (artwork.has_royalty) continue;
+
+        await q(cancelBids, {
+          id: edition.id,
+          start: auction.auction_start,
+          end: auction.auction_end,
+        });
+
+        if (edition.has_royalty) continue;
 
         try {
-          let psbt = await sign(artwork.auction_release_tx);
+          let psbt = await sign(auction.release_psbt);
           await broadcast(psbt);
 
           console.log("released to current owner");
 
-          let result = await hasura
-            .post({
-              query: releaseQuery,
-              variables: {
-                id: artwork.id,
-                owner_id: artwork.owner.id,
-                amount: 0,
-                hash: psbt.extractTransaction().getId(),
-                psbt: psbt.toBase64(),
-                asset: artwork.asking_asset,
-                type: "return",
-              },
-            })
-            .json();
-
-          if (result.errors && result.errors.length)
-            throw new Error(JSON.stringify(result.errors[0].message));
+          await q(releaseToken, {
+            id: artwork.id,
+            owner_id: artwork.owner.id,
+            amount: 0,
+            hash: psbt.extractTransaction().getId(),
+            psbt: psbt.toBase64(),
+            asset: artwork.asking_asset,
+            type: "return",
+          });
         } catch (e) {
           console.log("problem releasing", e);
         }

@@ -13,8 +13,16 @@
   import { ProgressLinear } from "$comp";
   import { onDestroy, onMount, tick } from "svelte";
   import qrcode from "qrcode-generator-es6";
-  import { balances, error, locked, pending, prompt } from "$lib/store";
-  import { assetLabel, btc, copy, err, fullscreen, val } from "$lib/utils";
+  import { balances, error, locked, pending, prompt, token } from "$lib/store";
+  import {
+    assetLabel,
+    btc,
+    copy,
+    err,
+    fullscreen,
+    ticker,
+    val,
+  } from "$lib/utils";
   import { getBalances } from "$lib/wallet";
   import { api } from "$lib/api";
 
@@ -26,6 +34,12 @@
     $error.asset,
     $error.asset === btc ? Math.max($error.amount, 1000) + fee : $error.amount
   );
+
+  let label;
+  $: getLabel($error);
+  let getLabel = async ({ asset }) => {
+    label = (await assetLabel(asset)) || ticker(asset);
+  };
 
   $: amountUpdated(amount);
   let amountUpdated = (a) => isNaN(a) && ($prompt = undefined);
@@ -50,7 +64,7 @@
   };
 
   onDestroy(() => clearInterval(poll));
-  let poll = setInterval(() => getBalances($session), 5000);
+  let poll = setInterval(() => getBalances(), 5000);
 
   let confidential = false;
   let toggleConfidential = () => {
@@ -89,7 +103,7 @@
     try {
       ({ address, fee } = await api
         .url("/bitcoin")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
           liquidAddress: $session.user.address,
@@ -117,7 +131,7 @@
     try {
       ({ address, fee } = await api
         .url("/liquid")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
           liquidAddress: $session.user.address,
@@ -137,7 +151,7 @@
     try {
       ({ address, fee } = await api
         .url("/lightning")
-        .auth(`Bearer ${$session.jwt}`)
+        .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
           liquidAddress: $session.user.address,
@@ -168,7 +182,7 @@
     <div class="text-xs mt-6">Unconfirmed Payment Detected</div>
     <span class="text-yellow-500 text-sm">
       +{val($error.asset, parseInt(incoming))}
-      {assetLabel($error.asset)}
+      {label}
     </span>
   {:else}
     {#if confirmed}
@@ -179,12 +193,12 @@
         <div class="text-xs mt-6">Current Balance</div>
         <div class="text-xl">
           {val($error.asset, parseInt(current))}
-          {assetLabel($error.asset)}
+          {label}
         </div>
       </div>
       <div class="w-1/2">
         <div class="text-xs mt-6">Funds Required</div>
-        <div class="text-xl">{amount} {assetLabel($error.asset)}</div>
+        <div class="text-xl">{amount} {label}</div>
       </div>
     </div>
 

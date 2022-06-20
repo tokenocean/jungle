@@ -7,6 +7,7 @@ const sleep = (n) => new Promise((r) => setTimeout(r, n));
 import { btc, network } from "./wallet.js";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
+import { getUser, wait } from "./utils.js";
 
 import {
   cancelBid,
@@ -16,6 +17,7 @@ import {
   deleteUtxo,
   getActiveBids,
   getActiveListings,
+  getAssets,
   getAvatars,
   getContract,
   getCurrentUser,
@@ -65,11 +67,9 @@ app.post("/updateAvatars", async (req, res) => {
   }
 });
 
-const transferOwnership = async (transaction) => {};
-
-const isSpent = async ({ ins }, artwork_id) => {
+const isSpent = async ({ ins }, edition_id) => {
   try {
-    let { transactions } = await q(getLastTransaction, { artwork_id });
+    let { transactions } = await q(getLastTransaction, { edition_id });
 
     if (
       !transactions.length ||
@@ -109,7 +109,7 @@ const checkBids = async () => {
       await sleep(1000);
       let p = Psbt.fromBase64(tx.psbt);
       try {
-        if (await isSpent(p.data.globalMap.unsignedTx.tx, tx.artwork_id))
+        if (await isSpent(p.data.globalMap.unsignedTx.tx, tx.edition_id))
           await q(cancelBid, { id: tx.id });
       } catch (e) {
         // keep going
@@ -157,7 +157,7 @@ const checkTransactions = async () => {
 
       if (confirmed) {
         let {
-          update_transactions_by_pk: { artwork_id, type, bid },
+          update_transactions_by_pk: { edition_id, type, bid },
         } = await q(setConfirmed, {
           id: tx.id,
         });
@@ -169,7 +169,7 @@ const checkTransactions = async () => {
           });
 
         if (type === "accept")
-          await q(setOwner, { id: artwork_id, owner_id: bid.user_id });
+          await q(setOwner, { id: edition_id, owner_id: bid.user_id });
       }
     }
   } catch (e) {
@@ -230,22 +230,28 @@ app.get("/proof/liquid-asset-proof-:asset", (req, res) => {
   else res.code(500).send("Unrecognized asset");
 });
 
-let getUser = async (headers) => {
-  let { data, errors } = await api(headers)
-    .post({ query: getCurrentUser })
-    .json();
-  if (errors) throw new Error(errors[0].message);
-  return data.currentuser[0];
-};
-
+let titles = {};
 app.get("/transactions", auth, async (req, res) => {
   try {
-    let { id, address, multisig } = await getUser(req.headers);
+    let { id, address, multisig } = await getUser(req);
 
     await updateTransactions(address, id);
     await updateTransactions(multisig, id);
 
-    res.send(await q(getTransactions, { id }));
+    let { transactions } = await q(getTransactions, { id });
+    for (let i = 0; i < transactions.length; i++) {
+      let { asset } = transactions[i];
+      if (asset !== btc && !titles[asset]) {
+        let { editions } = await q(getAssets, {
+          assets: transactions.map((tx) => tx.asset),
+        });
+        editions.map((a) => (titles[a.asset] = a.artwork.title));
+      }
+
+      transactions[i].label = titles[asset];
+    }
+
+    res.send(transactions);
   } catch (e) {
     console.log(e);
     res.code(500).send(e.message);
@@ -270,12 +276,17 @@ let getTxns = async (address, latest) => {
     txns.push(...curr);
   }
 
-  let index = txns.reduce((a, b, i) => (latest.includes(b.txid) ? a : i), 0);
-  ++index >= 0 && txns.splice(index);
+  let index = txns.reduce((a, b, i) => (latest.includes(b.txid) ? a : i), -1);
+  if (index < 0) return [];
+  txns.splice(index + 1);
   return txns;
 };
 
+let updating = {};
 let updateTransactions = async (address, user_id) => {
+  await wait(() => !updating[address]);
+  updating[address] = true;
+
   let { transactions } = await q(getLastTransactionsForAddress, { address });
   let txns = (
     await getTxns(
@@ -291,32 +302,39 @@ let updateTransactions = async (address, user_id) => {
     let { txid, vin, vout, status } = txns[i];
 
     let hex;
-    try {
-      hex =
-        hexcache[txid] || (await electrs.url(`/tx/${txid}/hex`).get().text());
-      hexcache[txid] = hex;
-    } catch (e) {
-      await sleep(3000);
-      hex =
-        hexcache[txid] || (await electrs.url(`/tx/${txid}/hex`).get().text());
-      hexcache[txid] = hex;
-    }
+    wait(async () => {
+      try {
+        hex =
+          hexcache[txid] || (await electrs.url(`/tx/${txid}/hex`).get().text());
+        hexcache[txid] = hex;
+        return true;
+      } catch (e) {
+        return false;
+      }
+    });
 
     let total = {};
 
     for (let j = 0; j < vin.length; j++) {
       let { txid: prev, vout } = vin[j];
 
-      let tx = txcache[prev] || (await electrs.url(`/tx/${prev}`).get().json());
-      txcache[prev] = tx;
+      try {
+        let tx =
+          txcache[prev] || (await electrs.url(`/tx/${prev}`).get().json());
+        txcache[prev] = tx;
 
-      let { asset, value, scriptpubkey_address: a } = tx.vout[vout];
-      if (address === a) total[asset] = (total[asset] || 0) - parseInt(value);
+        let { asset, value, scriptpubkey_address: a } = tx.vout[vout];
+        if (asset && address === a)
+          total[asset] = (total[asset] || 0) - parseInt(value);
+      } catch (e) {
+        console.log("problem finding input", prev, e);
+      }
     }
 
     for (let k = 0; k < vout.length; k++) {
       let { asset, value, scriptpubkey_address: a } = vout[k];
-      if (address === a) total[asset] = (total[asset] || 0) + parseInt(value);
+      if (asset && address === a)
+        total[asset] = (total[asset] || 0) + parseInt(value);
     }
 
     let assets = Object.keys(total);
@@ -352,17 +370,27 @@ let updateTransactions = async (address, user_id) => {
         transaction.created_at = formatISO(new Date(1000 * status.block_time));
 
       try {
+        console.log("creating transaction", type, txid);
         let {
           insert_transactions_one: { id },
         } = await q(createTransaction, { transaction });
         transactions.push(transaction);
       } catch (e) {
-        // console.log(e);
+        console.log(
+          "failed to create transaction",
+          e,
+          type,
+          txid,
+          asset,
+          user_id
+        );
         continue;
       }
     }
   }
 
+  if (txns.length) console.log("done updating", address);
+  delete updating[address];
   return txns;
 };
 
@@ -373,20 +401,12 @@ let scanUtxos = async (address) => {
   let { utxos } = await q(getUtxos, { address });
 
   let outs = utxos.map(
-    ({
-      id,
-      transaction_id,
-      tx: { hash, sequence, confirmed },
-      vout,
-      value,
-      asset,
-    }) => ({
+    ({ id, transaction_id, tx: { hash, confirmed }, vout, value, asset }) => ({
       id,
       txid: hash,
       vout,
       value,
       asset,
-      sequence,
       confirmed,
       transaction_id,
     })
@@ -396,10 +416,8 @@ let scanUtxos = async (address) => {
 
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
   let { transactions } = await q(getTransactions, { id });
-  transactions = uniq(
-    transactions.sort((a, b) => a.sequence - b.sequence),
-    (tx) => tx.hash + tx.asset
-  ).filter((tx) => !outs.length || tx.sequence > outs[0].sequence);
+
+  transactions = uniq(transactions, (tx) => tx.hash + tx.asset);
 
   transactions.map(async ({ id, hash, asset: txAsset, json, confirmed }) => {
     try {
@@ -476,8 +494,9 @@ let scanUtxos = async (address) => {
 
 app.get("/balance", auth, async (req, res) => {
   try {
-    let { address, multisig, id, last_seen_tx } = await getUser(req.headers);
+    let { address, multisig, id, last_seen_tx } = await getUser(req);
     let outs = [...(await scanUtxos(address)), ...(await scanUtxos(multisig))];
+
     let pending = [];
 
     outs = outs.filter((o) => (o.confirmed ? true : pending.push(o) && false));
