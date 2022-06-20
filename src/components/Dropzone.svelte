@@ -59,7 +59,7 @@
         type="file"
         id="fileElem"
         multiple
-        accept="image/*,video/*"
+        accept="image/*,video/*,.mov,.quicktime"
         on:change={(e) => dispatch("file", e.target.files[0])}
       />
     </form>
