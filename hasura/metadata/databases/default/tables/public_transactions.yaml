@@ -1,124 +1,58 @@
 table:
-  name: transactions
   schema: public
+  name: transactions
 object_relationships:
-  - name: artwork
+  - name: bid
     using:
-      foreign_key_constraint_on: artwork_id
-  - name: artworkById
+      foreign_key_constraint_on: bid_id
+  - name: edition
+    using:
+      foreign_key_constraint_on: edition_id
+  - name: editionById
     using:
       foreign_key_constraint_on:
         column: bid_id
         table:
-          name: artworks
           schema: public
-  - name: bid
-    using:
-      foreign_key_constraint_on: bid_id
+          name: editions
   - name: user
     using:
       manual_configuration:
+        remote_table:
+          schema: public
+          name: users
+        insertion_order: null
         column_mapping:
           user_id: id
-        insertion_order: null
-        remote_table:
-          name: users
-          schema: public
 array_relationships:
   - name: transactions
     using:
       foreign_key_constraint_on:
         column: bid_id
         table:
-          name: transactions
           schema: public
+          name: transactions
   - name: utxos
     using:
       foreign_key_constraint_on:
         column: transaction_id
         table:
-          name: utxos
           schema: public
+          name: utxos
 insert_permissions:
-  - permission:
-      backend_only: false
+  - role: user
+    permission:
       check: {}
-      columns:
-        - amount
-        - artwork_id
-        - asset
-        - bid_id
-        - contract
-        - hash
-        - id
-        - psbt
-        - type
       set:
         user_id: x-hasura-User-Id
-    role: user
-select_permissions:
-  - permission:
       columns:
         - amount
         - artwork_id
         - asset
         - bid_id
-        - confirmed
-        - created_at
-        - hash
-        - id
-        - psbt
-        - type
-        - user_id
-      filter:
-        _or:
-          - artwork_id:
-              _is_null: true
-          - artwork:
-              _or:
-                - transferred_at:
-                    _is_null: false
-                - asking_asset:
-                    _is_null: false
-    role: anonymous
-  - permission:
-      columns:
-        - amount
-        - artwork_id
-        - asset
-        - bid_id
-        - confirmed
         - contract
-        - created_at
         - hash
         - id
         - psbt
         - type
-        - user_id
-      filter:
-        _or:
-          - artwork_id:
-              _is_null: true
-          - artwork:
-              _or:
-                - transferred_at:
-                    _is_null: false
-                - asking_asset:
-                    _is_null: false
-                - artist_id:
-                    _eq: X-Hasura-User-Id
-    role: user
-event_triggers:
-  - definition:
-      enable_manual: false
-      insert:
-        columns: "*"
-    headers:
-      - name: auth_event
-        value_from_env: AUTH_EVENT_VALUE
-    name: sendEmailByEvent
-    retry_conf:
-      interval_sec: 10
-      num_retries: 0
-      timeout_sec: 60
-    webhook: "{{SERVER_URL}}/api/mail-event-actions"
+      backend_only: false

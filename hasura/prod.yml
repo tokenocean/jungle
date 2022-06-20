@@ -43,16 +43,13 @@ services:
     image: postgres:12
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - ${DATA_DIR}:/var/lib/postgresql/data
     ports:
       - "5433:5432"
   hasura:
-    logging:
-      options:
-        max-size: "50k"
-        max-file: "3"
     container_name: hasura
     image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
     ports:
@@ -63,18 +60,16 @@ services:
     volumes:
       - ./migrations:/hasura-migrations
       - ./metadata:/hasura-metadata
+      - ./seeds:/hasura-seeds
     environment:
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: "http-log, query-log, startup"
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
-      SERVER_URL: '${SERVER_URL}'
-      AUTH_EVENT_VALUE: '${AUTH_EVENT_VALUE}'
   hbp:
     container_name: hbp
-    image: nhost/hasura-backend-plus:v2.2.3
+    image: nhost/hasura-backend-plus:v2.4.0
     depends_on:
       - hasura
     ports:
@@ -86,7 +81,6 @@ services:
       JWT_ALGORITHM: "${JWT_ALGORITHM}"
       JWT_KEY: "${JWT_KEY}"
       AUTO_MIGRATE: "true"
-      AUTO_ACTIVATE_NEW_USERS: "true"
       STORAGE_ENABLE: "false"
       MAX_REQUESTS: 10000
       LOST_PASSWORD_ENABLE: "true"
@@ -96,6 +90,9 @@ services:
       SMTP_USER: "${SMTP_USER}"
       SMTP_PASS: "${SMTP_PASS}"
       SMTP_SENDER: "${SMTP_SENDER}"
+      AUTO_ACTIVATE_NEW_USERS: "false"
+      VERIFY_EMAILS: "true"
+      SMTP_SECURE: "true"
     volumes:
       - ./custom:/app/custom
   ipfs:
