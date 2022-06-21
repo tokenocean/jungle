@@ -463,6 +463,12 @@ export const getUserByEmail = `query($email: String!) {
   }
 }`;
 
+export const getUserByUsername = `query($username: String!) {
+  users(where: {_or: [{display_name: {_eq: $username}}, {username: {_eq: $username }}]}, limit: 1) {
+    display_name
+  }
+}`;
+
 export const updateUserByEmail = `mutation($user: users_set_input!, $email: String!) {
   update_users(where: {display_name: {_eq: $email}}, _set: $user) {
     affected_rows

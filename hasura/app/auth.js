@@ -6,6 +6,7 @@ import wretch from "wretch";
 import {
   deleteUserByEmail,
   getUserByEmail,
+  getUserByUsername,
   updateUserByEmail,
 } from "./queries.js";
 
@@ -57,6 +58,10 @@ app.post("/register", async (req, res) => {
     req.body;
 
   try {
+    if (await q(getUserByUsername, {username})) {
+        throw new Error("Username taken");
+    }
+
     let response = await hbp
       .url("/auth/register")
       .post({ email, password })
@@ -83,7 +88,6 @@ app.post("/register", async (req, res) => {
 
     res.send("Registered!");
   } catch (e) {
-    console.log(e);
     res.code(500).send(e.message);
   }
 });
