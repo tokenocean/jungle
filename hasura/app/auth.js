@@ -58,7 +58,8 @@ app.post("/register", async (req, res) => {
     req.body;
 
   try {
-    if (await q(getUserByUsername, {username})) {
+    let { users } = await q(getUserByUsername, { username });
+    if (users.length) {
         throw new Error("Username taken");
     }
 
