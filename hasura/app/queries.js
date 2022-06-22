@@ -209,6 +209,14 @@ export const getUser = `query get_user_by_pk($id: uuid!) {
   }
 }`;
 
+export const getUserByTicket = `query ($ticket: uuid!) {
+  auth_accounts(where: { ticket: { _eq: $ticket }}) {
+    user {
+      id
+    } 
+  }
+}`;
+
 export const getAvatars = `query { users { id, avatar_url }}`;
 
 export const getActiveBids = `query {

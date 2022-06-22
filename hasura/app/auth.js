@@ -7,6 +7,8 @@ import {
   deleteUserByEmail,
   getUserByEmail,
   getUserByUsername,
+  getUserByTicket,
+  updateUser,
   updateUserByEmail,
 } from "./queries.js";
 
@@ -89,6 +91,7 @@ app.post("/register", async (req, res) => {
 
     res.send("Registered!");
   } catch (e) {
+    console.log(e);
     res.code(500).send(e.message);
   }
 });
@@ -111,6 +114,10 @@ app.get("/activate", async (req, res) => {
 
 app.post("/change-password", async (req, res) => {
   const { new_password, ticket } = req.body;
+  let { auth_accounts } = await q(getUserByTicket, { ticket });
+  let { user: { id }} = auth_accounts[0];
+  await q(updateUser, { id, user: { wallet_initialized: false }});
+
   res.send(
     await hbp
       .url("/auth/change-password/change")
