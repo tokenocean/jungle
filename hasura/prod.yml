@@ -47,14 +47,15 @@ services:
     image: postgres:12
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - ${DATA_DIR}:/var/lib/postgresql/data
     ports:
       - "5433:5432"
   hasura:
     container_name: hasura
-    image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
+    image: hasura/graphql-engine:v2.7.0
     ports:
       - "8080:8080"
     depends_on:
@@ -65,7 +66,7 @@ services:
       - ./metadata:/hasura-metadata
       - ./seeds:/hasura-seeds
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
