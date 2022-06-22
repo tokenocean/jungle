@@ -9,19 +9,21 @@
 
   export let users;
 
+  let headers = () => ({
+    "authorization": `Bearer ${$token}`,
+    "x-hasura-role": "approver",
+  })
+
   let makeArtist = async (user) => {
     try {
       user.is_artist = true;
       await query(
         updateUser,
-        { id: user.id, user: { is_artist: true, info: null } }, headers()
-        );
-
-      await query(
-        deleteSamples,
-        { user_id: user.id },
+        { id: user.id, user: { is_artist: true, info: null } },
         headers()
-        );
+      );
+
+      await query(deleteSamples, { user_id: user.id }, headers());
 
       await api
         .url("/mail-artist-application-approved")
