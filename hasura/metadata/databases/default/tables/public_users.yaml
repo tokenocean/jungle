@@ -3,6 +3,9 @@ table:
   name: users
 configuration:
   custom_root_fields: {}
+  column_config:
+    multisig:
+      custom_name: multisig
   custom_column_names:
     multisig: multisig
 object_relationships:
@@ -85,6 +88,20 @@ array_relationships:
         insertion_order: null
         column_mapping:
           id: owner_id
+  - name: messages
+    using:
+      foreign_key_constraint_on:
+        column: from
+        table:
+          schema: public
+          name: messages
+  - name: messagesByTo
+    using:
+      foreign_key_constraint_on:
+        column: to
+        table:
+          schema: public
+          name: messages
   - name: offers
     using:
       manual_configuration:
