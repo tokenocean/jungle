@@ -1,6 +1,6 @@
 <script>
   import { session } from "$app/stores";
-  import { artworksLimit, prompt, messageUser } from "$lib/store";
+  import { artworksLimit, prompt, messageUser, tipUser } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faEnvelope,
@@ -11,7 +11,14 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import { err, goto } from "$lib/utils";
-  import { Avatar, Card, Offers, ProgressLinear, SendMessage } from "$comp";
+  import {
+    Avatar,
+    Card,
+    Offers,
+    ProgressLinear,
+    SendMessage,
+    SendTip,
+  } from "$comp";
   import { createFollow, deleteFollow } from "$queries/follows";
   import { getUserByUsername } from "$queries/users";
   import Menu from "./_menu.svelte";
@@ -143,6 +150,18 @@
                 }}
               >
                 Message</button
+              >
+              <button
+                class="p-2 primary-btn mt-8"
+                on:click={() => {
+                  $tipUser = {
+                    username: subject.username,
+                    address: subject.address,
+                  };
+                  prompt.set(SendTip);
+                }}
+              >
+                Tip</button
               >
             </div>
           {/if}
