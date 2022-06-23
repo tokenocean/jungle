@@ -1,6 +1,6 @@
 <script>
   import { token } from "$lib/store";
-
+  import { encrypt, decrypt } from "$lib/utils";
   import Fa from "svelte-fa";
   import { tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -96,6 +96,19 @@
       (message) => message.from === user.id && message.viewed === false
     );
   };
+
+  let encryptedMessage = encrypt(
+    "sdfsdfsfd434",
+    "446801102d378f09aa200debc1acdff0f6fcf1c6d9bc1e2c7e14076d5fbc740e",
+    "hello"
+  );
+  console.log(encryptedMessage);
+  let decryptedMessage = decrypt(
+    "sdfsdfsfd434",
+    "tpubDHWKBXJrtJKiuZX297tjnCwNvEn528WytuaczKFbSHeEB41TNnPEsDre275LV9z9KjnWBaGkmw8GFqyiVxGDz8JmVzcz3pxbQH74JjcwBYh",
+    encryptedMessage
+  );
+  console.log(decryptedMessage);
 </script>
 
 <div class="flex justify-center items-center py-10">

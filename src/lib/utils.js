@@ -1,31 +1,24 @@
 import { fade as svelteFade } from "svelte/transition";
 import { get } from "svelte/store";
 import { session } from "$app/stores";
-import {
-  acceptStatus,
-  assets,
-  error,
-  full,
-  prompt,
-  snack,
-} from "$lib/store";
+import { acceptStatus, assets, error, full, prompt, snack } from "$lib/store";
 import { goto as svelteGoto } from "$app/navigation";
 import { AcceptPrompt, InsufficientFunds } from "$comp";
 import { isWithinInterval, parseISO, compareAsc } from "date-fns";
 import { query } from "$lib/api";
 import { getArtworkByAsset } from "$queries/artworks.js";
 import { getUserByAddress } from "$queries/users.js";
+import { browserifyCipher } from "browserify-cipher";
+import { buffer } from "buffer";
+import * as nobleSecp256k1 from "@noble/secp256k1";
 
 export const btc = import.meta.env.VITE_BTC;
 export const cad = import.meta.env.VITE_CAD;
 export const usd = import.meta.env.VITE_USD;
 export const host = import.meta.env.VITE_HOST;
 export const label = ({ asset, name }, field = "ticker") =>
-  name || (asset
-    ? tickers[asset]
-      ? tickers[asset][field]
-      : asset.substr(0, 5)
-    : "");
+  name ||
+  (asset ? (tickers[asset] ? tickers[asset][field] : asset.substr(0, 5)) : "");
 
 export const sleep = (n) => new Promise((r) => setTimeout(r, n));
 
@@ -287,11 +280,12 @@ function post(endpoint, data) {
 export const underway = ({ auction_start: s, auction_end: e }) =>
   e && isWithinInterval(new Date(), { start: parseISO(s), end: parseISO(e) });
 
-export const canCancel = ({ artwork, created_at, type, user: { id } }, user) => {
+export const canCancel = (
+  { artwork, created_at, type, user: { id } },
+  user
+) => {
   return (
-    type === "bid" &&
-    isCurrent(artwork, created_at, type) &&
-    user?.id === id
+    type === "bid" && isCurrent(artwork, created_at, type) && user?.id === id
   );
 };
 
@@ -313,3 +307,37 @@ export const canAccept = ({ type, artwork, created_at, accepted }, user) => {
     !underway(artwork)
   );
 };
+
+export function encrypt(privkey, pubkey, text) {
+  var key = nobleSecp256k1
+    .getSharedSecret(privkey, "02" + pubkey, true)
+    .substring(2);
+
+  var iv = window.crypto.getRandomValues(new Uint8Array(16));
+  var cipher = browserifyCipher.createCipheriv(
+    "aes-256-cbc",
+    buffer.Buffer.from(key, "hex"),
+    iv
+  );
+  var encryptedMessage = cipher.update(text, "utf8", "base64");
+  emsg = encryptedMessage + cipher.final("base64");
+
+  return emsg + "?iv=" + buffer.Buffer.from(iv.buffer).toString("base64");
+}
+
+export function decrypt(privkey, pubkey, ciphertext) {
+  var [emsg, iv] = ciphertext.split("?iv=");
+  var key = nobleSecp256k1
+    .getSharedSecret(privkey, "02" + pubkey, true)
+    .substring(2);
+
+  var decipher = browserifyCipher.createDecipheriv(
+    "aes-256-cbc",
+    buffer.Buffer.from(key, "hex"),
+    buffer.Buffer.from(iv, "base64")
+  );
+  var decryptedMessage = decipher.update(emsg, "base64");
+  dmsg = decryptedMessage + decipher.final("utf8");
+
+  return dmsg;
+}
