@@ -12,11 +12,18 @@
 
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
   let users = uniq(
-    messages.map(({ fromUser: { username, avatar_url, id } }) => ({
-      username,
-      avatar_url,
-      id,
-    })),
+    [
+      ...messages.map(({ fromUser: { username, avatar_url, id } }) => ({
+        username,
+        avatar_url,
+        id,
+      })),
+      ...messages.map(({ toUser: { username, avatar_url, id } }) => ({
+        username,
+        avatar_url,
+        id,
+      })),
+    ],
     (m) => m.username
   );
 
