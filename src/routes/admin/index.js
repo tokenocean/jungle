@@ -1,11 +1,11 @@
 import { getSamples } from "$queries/users";
 
-export async function get({ request: { headers }, locals: { q }, params }) {
+export async function get({ locals: { jwt, q }}) {
   return {
     body: {
       users: (
         await q(getSamples, undefined, {
-          ...headers,
+          "authorization": `Bearer ${jwt}`,
           "x-hasura-role": "approver",
         })
       ).users.sort(
