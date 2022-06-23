@@ -1,8 +1,11 @@
 <script>
+  import * as nobleSecp256k1 from "@noble/secp256k1";
+  import { fromBase58 } from "bip32";
+  import { keypair, network } from "$lib/wallet";
   import { token } from "$lib/store";
   import { encrypt, decrypt } from "$lib/utils";
   import Fa from "svelte-fa";
-  import { tick } from "svelte";
+  import { onMount, tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
   import { session } from "$app/stores";
   import { createMessage, updateMessage } from "$queries/messages";
@@ -97,18 +100,41 @@
     );
   };
 
-  let encryptedMessage = encrypt(
-    "sdfsdfsfd434",
-    "446801102d378f09aa200debc1acdff0f6fcf1c6d9bc1e2c7e14076d5fbc740e",
-    "hello"
-  );
-  console.log(encryptedMessage);
-  let decryptedMessage = decrypt(
-    "sdfsdfsfd434",
-    "tpubDHWKBXJrtJKiuZX297tjnCwNvEn528WytuaczKFbSHeEB41TNnPEsDre275LV9z9KjnWBaGkmw8GFqyiVxGDz8JmVzcz3pxbQH74JjcwBYh",
-    encryptedMessage
-  );
-  console.log(decryptedMessage);
+  onMount(() => {
+    try {
+      if (!$session.user) return;
+      let password = window.sessionStorage.getItem("password");
+
+      let alicesPrivKey = keypair().privkey.toString('hex');
+      var alicesPubKey = keypair().pubkey.toString("hex").substring(2);
+      console.log(alicesPubKey);
+
+      let bobsPrivKey =
+        "694a4089447f4d8a2e8277124fbfa75e8ea1fdaa655ce115626fd8ee03ef8580";
+      // var bobsPubKey = Buffer.from(nobleSecp256k1.getPublicKey(bobsPrivKey, true)).toString("hex").substring(2);
+
+      let bobsTpub = "tpubDHRoCVHSF4WHgmgvtwNeFMHjJT4xnNwSdRC95SopbyQZNm4EnYgT4r4zhr9Jrc2jC9Hh1YCtwfRCnmNqFtF9jPCx7SxRJGeneowQuJv8aZx";
+      let bobsPubKey = fromBase58(bobsTpub, network).publicKey.toString("hex").substring(2);
+
+      let encryptedMessage = encrypt(
+        alicesPrivKey,
+        bobsPubKey,
+        "hello"
+      );
+
+      console.log(encryptedMessage);
+
+      let decryptedMessage = decrypt(
+        bobsPrivKey,
+        alicesPubKey,
+        encryptedMessage
+      );
+
+      console.log(decryptedMessage);
+    } catch (e) {
+      console.log(e);
+    }
+  });
 </script>
 
 <div class="flex justify-center items-center py-10">

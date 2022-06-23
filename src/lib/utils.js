@@ -8,8 +8,7 @@ import { isWithinInterval, parseISO, compareAsc } from "date-fns";
 import { query } from "$lib/api";
 import { getArtworkByAsset } from "$queries/artworks.js";
 import { getUserByAddress } from "$queries/users.js";
-import { browserifyCipher } from "browserify-cipher";
-import { buffer } from "buffer";
+import * as browserifyCipher from "browserify-cipher";
 import * as nobleSecp256k1 from "@noble/secp256k1";
 
 export const btc = import.meta.env.VITE_BTC;
@@ -309,35 +308,39 @@ export const canAccept = ({ type, artwork, created_at, accepted }, user) => {
 };
 
 export function encrypt(privkey, pubkey, text) {
-  var key = nobleSecp256k1
-    .getSharedSecret(privkey, "02" + pubkey, true)
+  var key = Buffer.from(
+    nobleSecp256k1.getSharedSecret(privkey, "02" + pubkey, true)
+  )
+    .toString("hex")
     .substring(2);
 
   var iv = window.crypto.getRandomValues(new Uint8Array(16));
   var cipher = browserifyCipher.createCipheriv(
     "aes-256-cbc",
-    buffer.Buffer.from(key, "hex"),
+    Buffer.from(key, "hex"),
     iv
   );
   var encryptedMessage = cipher.update(text, "utf8", "base64");
-  emsg = encryptedMessage + cipher.final("base64");
+  let emsg = encryptedMessage + cipher.final("base64");
 
-  return emsg + "?iv=" + buffer.Buffer.from(iv.buffer).toString("base64");
+  return emsg + "?iv=" + Buffer.from(iv.buffer).toString("base64");
 }
 
 export function decrypt(privkey, pubkey, ciphertext) {
   var [emsg, iv] = ciphertext.split("?iv=");
-  var key = nobleSecp256k1
-    .getSharedSecret(privkey, "02" + pubkey, true)
+  var key = Buffer.from(
+    nobleSecp256k1.getSharedSecret(privkey, "02" + pubkey, true)
+  )
+    .toString("hex")
     .substring(2);
 
   var decipher = browserifyCipher.createDecipheriv(
     "aes-256-cbc",
-    buffer.Buffer.from(key, "hex"),
-    buffer.Buffer.from(iv, "base64")
+    Buffer.from(key, "hex"),
+    Buffer.from(iv, "base64")
   );
   var decryptedMessage = decipher.update(emsg, "base64");
-  dmsg = decryptedMessage + decipher.final("utf8");
+  let dmsg = decryptedMessage + decipher.final("utf8");
 
   return dmsg;
 }
