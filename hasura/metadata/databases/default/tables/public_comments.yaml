@@ -12,6 +12,7 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
+        - artwork_id
         - comment
         - created_at
         - id
@@ -20,6 +21,7 @@ select_permissions:
   - role: user
     permission:
       columns:
+        - artwork_id
         - comment
         - created_at
         - id

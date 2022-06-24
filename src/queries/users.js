@@ -22,6 +22,7 @@ export const getUsers = `query {
     address
     multisig
     avatar_url
+    pubkey
   }
 }`;
 
@@ -32,6 +33,7 @@ export const getUserByAddress = `query($address: String!) {
       multisig
       username
       avatar_url
+      pubkey
   }
 }`;
 
@@ -103,6 +105,8 @@ export const topCollectors = (limit) => `query {
     id
     username
     avatar_url
+    address
+    pubkey
     owned
     collected
     resold
@@ -116,6 +120,8 @@ export const topArtists = (limit) => `query {
     id
     username
     avatar_url
+    address
+    pubkey
     creations
     total_sales
     highest_sale

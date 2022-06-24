@@ -9,6 +9,11 @@
 
   export let users;
 
+  let headers = () => ({
+    authorization: `Bearer ${$token}`,
+    "x-hasura-role": "approver",
+  });
+
   let makeArtist = async (user) => {
     try {
       user.is_artist = true;

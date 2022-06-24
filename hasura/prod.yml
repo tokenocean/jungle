@@ -19,19 +19,19 @@ services:
       NODE_ENV: production
       APP_URL: "${APP_URL}"
       SERVER_URL: "${SERVER_URL}"
-      HASURA_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
-      CLOUDFLARE_TOKEN: '${CLOUDFLARE_TOKEN}'
-      CLOUDFLARE_ZONE: '${CLOUDFLARE_ZONE}'
-      DOMAIN: '${DOMAIN}'
-      COINOS_URL: '${COINOS_URL}'
-      COINOS_TOKEN: '${COINOS_TOKEN}'
-      HASURA_URL: '${HASURA_URL}'
-      HASURA_JWT: '${HASURA_GRAPHQL_JWT_SECRET}'
-      LIQUID_ELECTRS_URL: '${LIQUID_ELECTRS_URL}'
-      HBP_URL: '${HBP_URL}'
-      IPFS_URL: '${IPFS_URL}'
-      IPFS_WEB_URL: '${IPFS_WEB_URL}'
-      SIGNING_SERVER_MNEMONIC: '${SIGNING_SERVER_MNEMONIC}'
+      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      CLOUDFLARE_TOKEN: "${CLOUDFLARE_TOKEN}"
+      CLOUDFLARE_ZONE: "${CLOUDFLARE_ZONE}"
+      DOMAIN: "${DOMAIN}"
+      COINOS_URL: "${COINOS_URL}"
+      COINOS_TOKEN: "${COINOS_TOKEN}"
+      HASURA_URL: "${HASURA_URL}"
+      HASURA_JWT: "${HASURA_GRAPHQL_JWT_SECRET}"
+      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      HBP_URL: "${HBP_URL}"
+      IPFS_URL: "${IPFS_URL}"
+      IPFS_WEB_URL: "${IPFS_WEB_URL}"
+      SIGNING_SERVER_MNEMONIC: "${SIGNING_SERVER_MNEMONIC}"
       SMTP_HOST: "${SMTP_HOST}"
       SMTP_PORT: "${SMTP_PORT}"
       SMTP_USER: "${SMTP_USER}"
@@ -40,7 +40,7 @@ services:
     volumes:
       - ./custom:/opt/src/hasura/app/custom
       - ${STORAGE_DIR}:/export
-      ports:
+    ports:
       - "8091:8091"
   postgres:
     container_name: postgres

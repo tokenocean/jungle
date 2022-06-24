@@ -23,8 +23,8 @@
   $: updateAsset($asset);
   let updateAsset = ({ asset }) =>
     asset &&
-    query(getEditionByAsset, { asset })
-      .then(({ editions }) => (edition = editions[0]))
+    query(getArtworkByAsset, { asset })
+      .then(({ artworks }) => (artwork = artworks[0]))
       .catch(err);
 
   $: clearForm($asset);
@@ -38,8 +38,8 @@
     loading = true;
     try {
       let { asset: a } = $asset;
-      if (a !== btc && !edition) edition = { asset: a };
-      $psbt = await pay(edition, to.trim(), sats(a, amount));
+      if (a !== btc && !artwork) artwork = { asset: a };
+      $psbt = await pay(artwork, to.trim(), sats(a, amount));
       $psbt = await sign();
 
       if (edition && edition.held === "multisig") {

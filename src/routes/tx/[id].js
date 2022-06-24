@@ -13,7 +13,7 @@ export async function get({ request: { headers }, locals: { q }, params }) {
     if (!psbt) {
       let tx = await getTx(hash);
 
-      p = new Psbt();
+      let p = new Psbt();
       for (let i = 0; i < tx.ins.length; i++) {
         p.addInput(tx.ins[i]);
       }

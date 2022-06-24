@@ -85,6 +85,16 @@ array_relationships:
         column: from
         table:
           schema: public
+          name: artworks
+        insertion_order: null
+        column_mapping:
+          id: owner_id
+  - name: messages
+    using:
+      foreign_key_constraint_on:
+        column: from
+        table:
+          schema: public
           name: messages
   - name: messagesByTo
     using:

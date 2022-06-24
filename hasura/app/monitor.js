@@ -17,7 +17,7 @@ import {
   deleteUtxo,
   getActiveBids,
   getActiveListings,
-  getAssets,
+  getAssetArtworks,
   getAvatars,
   getContract,
   getCurrentUser,
@@ -242,10 +242,10 @@ app.get("/transactions", auth, async (req, res) => {
     for (let i = 0; i < transactions.length; i++) {
       let { asset } = transactions[i];
       if (asset !== btc && !titles[asset]) {
-        let { editions } = await q(getAssets, {
+        let { artworks } = await q(getAssetArtworks, {
           assets: transactions.map((tx) => tx.asset),
         });
-        editions.map((a) => (titles[a.asset] = a.artwork.title));
+        artworks.map((a) => (titles[a.asset] = a.title));
       }
 
       transactions[i].label = titles[asset];
@@ -417,7 +417,10 @@ let scanUtxos = async (address) => {
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
   let { transactions } = await q(getTransactions, { id });
 
-  transactions = uniq(transactions, (tx) => tx.hash + tx.asset);
+  transactions = uniq(
+    transactions.sort((a, b) => a.sequence - b.sequence),
+    (tx) => tx.hash + tx.asset
+  );
 
   transactions.map(async ({ id, hash, asset: txAsset, json, confirmed }) => {
     try {

@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 
 const btc = import.meta.env.VITE_BTC;
 
+export const art = writable();
 export const artworks = writable([]);
 export const artworksLimit = writable(10);
 export const asset = writable({ asset: btc });

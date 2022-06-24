@@ -1,3 +1,22 @@
+<script context="module">
+  export async function load({ fetch, params: { slug }, session }) {
+    if (!(session && session.user))
+      return {
+        status: 302,
+        redirect: "/login",
+      };
+
+    const { artwork } = await fetch(`/artworks/${slug}.json`).then((r) =>
+      r.json()
+    );
+    const { users } = await fetch(`/users.json`).then((r) => r.json());
+
+    return {
+      props: { artwork, users },
+    };
+  }
+</script>
+
 <script>
   import { session } from "$app/stores";
   import { Avatar, ProgressLinear } from "$comp";

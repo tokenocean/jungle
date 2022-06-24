@@ -56,3 +56,64 @@ insert_permissions:
         - psbt
         - type
       backend_only: false
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - confirmed
+        - amount
+        - sequence
+        - address
+        - asset
+        - contract
+        - hash
+        - hex
+        - json
+        - psbt
+        - type
+        - created_at
+        - artwork_id
+        - bid_id
+        - id
+        - user_id
+      filter:
+        _or:
+          - artwork_id:
+              _is_null: true
+          - artwork:
+              _or:
+                - transferred_at:
+                    _is_null: false
+                - asking_asset:
+                    _is_null: false
+  - role: user
+    permission:
+      columns:
+        - confirmed
+        - amount
+        - sequence
+        - address
+        - asset
+        - contract
+        - hash
+        - hex
+        - json
+        - psbt
+        - type
+        - created_at
+        - artwork_id
+        - bid_id
+        - id
+        - user_id
+      filter:
+        _or:
+          - artwork_id:
+              _is_null: true
+          - artwork:
+              _or:
+                - transferred_at:
+                    _is_null: false
+                - asking_asset:
+                    _is_null: false
+                - artist_id:
+                    _eq: X-Hasura-User-Id

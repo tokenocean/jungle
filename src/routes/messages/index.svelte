@@ -1,22 +1,42 @@
 <script>
+  import * as nobleSecp256k1 from "@noble/secp256k1";
+  import { fromBase58 } from "bip32";
+  import { keypair, network } from "$lib/wallet";
   import { token } from "$lib/store";
-
+  import { encrypt, decrypt } from "$lib/utils";
   import Fa from "svelte-fa";
-  import { tick } from "svelte";
+  import { onMount, tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
   import { session } from "$app/stores";
   import { createMessage, updateMessage } from "$queries/messages";
   import { api, query } from "$lib/api";
+  import { requirePassword } from "$lib/auth";
 
   export let messages;
+  let ownPrivKey;
+  let ownPubKey;
+  onMount(async () => {
+    await requirePassword();
+    ownPrivKey = keypair().privkey.toString("hex");
+    ownPubKey = keypair().pubkey.toString("hex").substring(2);
+  });
 
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
   let users = uniq(
-    messages.map(({ fromUser: { username, avatar_url, id } }) => ({
-      username,
-      avatar_url,
-      id,
-    })),
+    [
+      ...messages.map(({ fromUser: { username, avatar_url, id, pubkey } }) => ({
+        username,
+        avatar_url,
+        id,
+        pubkey,
+      })),
+      ...messages.map(({ toUser: { username, avatar_url, id, pubkey } }) => ({
+        username,
+        avatar_url,
+        id,
+        pubkey,
+      })),
+    ],
     (m) => m.username
   );
 
@@ -26,11 +46,17 @@
   let sendMessage;
 
   async function onSubmit() {
+    let encryptedMessage = encrypt(
+      ownPrivKey,
+      selectedUser.pubkeyFormatted,
+      sendMessage
+    );
+
     let {
       insert_messages_one: { id },
     } = await query(createMessage, {
       message: {
-        message: sendMessage,
+        message: encryptedMessage,
         to: selectedUser.id,
       },
     });
@@ -65,13 +91,24 @@
   }
 
   async function handleSelection(user) {
+    selectedUser = user;
+    selectedUser.pubkeyFormatted = fromBase58(user.pubkey, network)
+      .publicKey.toString("hex")
+      .substring(2);
+
     messages.forEach((message) => {
       if (message.from === user.id && message.viewed === false) {
         message.viewed = true;
       }
-    });
 
-    selectedUser = user;
+      let decryptedMessage = decrypt(
+        ownPrivKey,
+        selectedUser.pubkeyFormatted,
+        message.message
+      );
+
+      message.message = decryptedMessage;
+    });
 
     await tick();
     getFocus();

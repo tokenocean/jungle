@@ -1,9 +1,7 @@
-export const getAssets = `query($assets: [String]!) {
-  editions(where: { asset: { _in: $assets }}) {
+export const getAssetArtworks = `query($assets: [String]!) {
+  artworks(where: { asset: { _in: $assets }}) {
     asset
-    artwork {
-      title
-    }
+    title
   }
 }`;
 
@@ -206,6 +204,14 @@ export const getUser = `query get_user_by_pk($id: uuid!) {
   }
 }`;
 
+export const getUserByTicket = `query ($ticket: uuid!) {
+  auth_accounts(where: { ticket: { _eq: $ticket }}) {
+    user {
+      id
+    } 
+  }
+}`;
+
 export const getAvatars = `query { users { id, avatar_url }}`;
 
 export const getActiveBids = `query {
@@ -224,9 +230,9 @@ export const getActiveListings = `query {
   }
 }`;
 
-export const cancelListing = `mutation ($id: uuid!, $edition_id: uuid!) {
-  update_editions_by_pk(
-    pk_columns: { id: $edition_id },
+export const cancelListing = `mutation ($id: uuid!, $artwork_id: uuid!) {
+  update_artworks_by_pk(
+    pk_columns: { id: $artwork_id },
     _set: {
       list_price: null,
       list_psbt: null
@@ -268,9 +274,9 @@ export const setTransactionTime = `mutation($id: uuid!, $created_at: timestamptz
   }
 }`;
 
-export const getLastTransaction = `query($edition_id: uuid!) {
+export const getLastTransaction = `query($artwork_id: uuid!) {
   transactions(
-    where: { edition_id: { _eq: $edition_id }, confirmed: { _eq: true }},
+    where: { artwork_id: { _eq: $artwork_id }, confirmed: { _eq: true }},
     order_by: { created_at: desc },
     limit: 1
   ) {
@@ -318,7 +324,7 @@ export const getTransactions = `query($id: uuid!, $limit: Int) {
       user_id: {_eq: $id},
       type: {_in: ["deposit", "withdrawal"]}
     },
-    order_by: {created_at: desc},
+    order_by: {sequence: desc},
     limit: $limit
   ) {
     id
@@ -440,6 +446,9 @@ export const createArtwork = `mutation($artwork: artworks_insert_input!, $tags: 
   insert_tags(objects: $tags) {
     affected_rows
   }
+  insert_transactions_one(object: $transaction) {
+    id
+  }
 }`;
 
 export const createComment = `mutation($comment: comments_insert_input!) {
@@ -454,6 +463,12 @@ export const getUserByEmail = `query($email: String!) {
   }
 }`;
 
+export const getUserByUsername = `query($username: String!) {
+  users(where: {_or: [{display_name: {_eq: $username}}, {username: {_eq: $username }}]}, limit: 1) {
+    display_name
+  }
+}`;
+
 export const updateUserByEmail = `mutation($user: users_set_input!, $email: String!) {
   update_users(where: {display_name: {_eq: $email}}, _set: $user) {
     affected_rows
@@ -461,14 +476,23 @@ export const updateUserByEmail = `mutation($user: users_set_input!, $email: Stri
 }`;
 
 export const deleteUserByEmail = `mutation($email: String!) {
-  delete_users(where: { account: { email: { _eq: $email } } })
+  delete_users(where: { display_name: { _eq: $email } } })
   {
     affected_rows
   }
 }`;
 
-export const releaseToken = `mutation($id: uuid!, $owner_id: uuid!, $amount: Int!, $psbt: String!, $asset: String!, $hash: String!, $bid_id: uuid, $type: String!) {
-  update_editions_by_pk(
+export const closeAuction = `mutation update_artwork($id: uuid!, $artwork: artworks_set_input!) {
+  update_artworks_by_pk(
+    pk_columns: { id: $id },
+    _set: $artwork
+  ) {
+    id
+  }
+}`;
+
+export const releaseToken = `mutation update_artwork($id: uuid!, $owner_id: uuid!, $amount: Int!, $psbt: String!, $asset: String!, $hash: String!, $bid_id: uuid, $type: String!) {
+  update_artworks_by_pk(
     pk_columns: { id: $id },
     _set: {
       owner_id: $owner_id,
@@ -487,30 +511,39 @@ export const releaseToken = `mutation($id: uuid!, $owner_id: uuid!, $amount: Int
     user_id: $owner_id,
   }) {
     id,
-    edition_id
+    artwork_id
   }
 }`;
 
 export const getFinishedAuctions = `query($now: timestamptz!) {
-  auctions(where: { _and: [
+  artworks(where: { _and: [
       { auction_end: { _lte: $now }},
-      { psbt: { _is_null: false }}
+      { auction_tx: { _is_null: false }}
     ]}) {
     id
     reserve
     auction_end
-    psbt
-    release_psbt
-    edition {
-      asking_asset
-      bid {
+    transferred_at
+    list_price_tx
+    auction_tx
+    auction_release_tx
+    artist {
+      id
+      username
+      avatar_url
+    }
+    owner {
+      id
+      username
+      avatar_url
+    }
+    bid {
+      id
+      amount
+      psbt
+      user {
         id
-        amount
-        psbt
-        user {
-          id
-          username
-        }
+        username
       }
     }
   }
@@ -519,11 +552,5 @@ export const getFinishedAuctions = `query($now: timestamptz!) {
 export const updateMessages = `mutation($message: messages_set_input!, $from: uuid!, $to: uuid!) {
   update_messages(where: {from: {_eq: $from}, to: {_eq: $to}}, _set: $message) {
     affected_rows
-  }
-}`;
-
-export const createOpenEdition = `mutation ($o: open_editions_insert_input!) {
-  insert_open_editions_one(object: $o) {
-    id
   }
 }`;

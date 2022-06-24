@@ -8,6 +8,7 @@ hasura/app/*.log
 hasura/liquidregtest/config/regtest/
 hasura/liquidregtest/liquid-config/liquidregtest/
 hasura/db
+hasura/load
 hasura/storage
 hasura/.env
 hasura/.env.regtest

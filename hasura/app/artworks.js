@@ -218,7 +218,7 @@ app.post("/transaction", auth, async (req, res) => {
     let { insert_transactions_one: r } = await q(
       createTransaction,
       { transaction },
-      headers
+      req.headers
     );
     res.send(r);
   } catch (e) {
@@ -249,36 +249,6 @@ app.post("/accept", auth, async (req, res) => {
   try {
     await broadcast(Psbt.fromBase64(req.body.psbt));
     res.send(await q(acceptBid, req.body, req.headers));
-  } catch (e) {
-    console.log(e);
-    res.code(500).send(e.message);
-  }
-});
-
-app.post("/create", auth, async (req, res) => {
-  try {
-    let { artwork } = req.body;
-    let { id: user_id } = await getUser(req);
-
-    let tags = artwork.tags.map(({ tag }) => ({
-      tag,
-      artwork_id: artwork.id,
-    }));
-
-    delete artwork.tags;
-
-    let id = v4();
-
-    artwork.artist_id = user_id;
-    artwork.id = id;
-    artwork.slug = `${kebab(artwork.title || "untitled")}-${id.substr(0, 5)}`;
-
-    await q(createArtwork, {
-      artwork,
-      tags,
-    });
-
-    res.send(artwork);
   } catch (e) {
     console.log(e);
     res.code(500).send(e.message);

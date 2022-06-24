@@ -6,12 +6,20 @@ export const marketFields = `
   slug
   favorited
   created_at
-  views
+  transferred_at
+  owner {
+    id
+    username
+    avatar_url
+    address
+    pubkey
+  },
   artist {
     id
     username
     avatar_url
     address
+    pubkey
   },
 `;
 
@@ -61,6 +69,7 @@ export const fields = `
     address
     username
     avatar_url
+    pubkey
   },
 `;
 
@@ -84,9 +93,14 @@ export const txFields = `
     id
     username
     avatar_url
+    pubkey
     full_name
     email
     address
+  }
+  artwork_id
+  artwork {
+    ${fields}
   }
 `;
 
@@ -135,15 +149,9 @@ export const getArtworksByOwner = (id) => `query {
   }
 }`;
 
-export const getEdition = `query($slug: String!, $edition: Int!) {
-  editions(where: {artwork: { slug: {_eq: $slug}}, edition: {_eq: $edition}}) {
-    ${editionFields}
-  }
-}`;
-
-export const getEditionByAsset = `query($asset: String!) {
-  editions(where: {asset: {_eq: $asset}}, limit: 1) {
-    ${editionFields}
+export const getArtworkByAsset = `query($asset: String!) {
+  artworks(where: {asset: {_eq: $asset}}, limit: 1) {
+    ${fields}
   }
 }`;
 
@@ -158,6 +166,7 @@ export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
       user {
         username
         avatar_url
+        pubkey
         id
         address
       }
@@ -242,6 +251,7 @@ export const getArtwork = `query($id: uuid!) {
       user {
         username
         avatar_url
+        pubkey
         id
         address
       }

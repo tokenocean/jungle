@@ -105,6 +105,40 @@
     tags: [],
   };
 
+  let hash, tx, inputs, total, transactions;
+  let required = 0;
+  const issue = async () => {
+    let contract;
+    let domain = branding.urls.base;
+    let error, success;
+
+    contract = await createIssuance(artwork, domain, inputs.pop());
+
+    await sign(1, false);
+    await tick();
+
+    tx = $psbt.extractTransaction();
+    required += parseVal(tx.outs.find((o) => o.script.length === 0).value);
+
+    $txcache[tx.getId()] = tx;
+
+    if (
+      tx.outs.find(
+        (o) =>
+          parseAsset(o.asset) === btc &&
+          o.script.toString("hex") ===
+            address.toOutputScript($user.address, network).toString("hex") &&
+          parseVal(o.value) > DUST
+      )
+    ) {
+      inputs.unshift(tx);
+    }
+    transactions.push({ contract, psbt: $psbt.toBase64() });
+  };
+
+  let tries;
+  let l;
+
   let submit = async (e) => {
     e.preventDefault();
 
