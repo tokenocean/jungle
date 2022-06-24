@@ -27,6 +27,7 @@ export const fields = `
     id
     username
     avatar_url
+    pubkey
     address
   }
   artwork_id

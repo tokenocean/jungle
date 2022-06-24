@@ -10,21 +10,31 @@
   import { session } from "$app/stores";
   import { createMessage, updateMessage } from "$queries/messages";
   import { api, query } from "$lib/api";
+  import { requirePassword } from "$lib/auth";
 
   export let messages;
+  let ownPrivKey;
+  let ownPubKey;
+  onMount(async () => {
+    await requirePassword();
+    ownPrivKey = keypair().privkey.toString("hex");
+    ownPubKey = keypair().pubkey.toString("hex").substring(2);
+  });
 
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
   let users = uniq(
     [
-      ...messages.map(({ fromUser: { username, avatar_url, id } }) => ({
+      ...messages.map(({ fromUser: { username, avatar_url, id, pubkey } }) => ({
         username,
         avatar_url,
         id,
+        pubkey,
       })),
-      ...messages.map(({ toUser: { username, avatar_url, id } }) => ({
+      ...messages.map(({ toUser: { username, avatar_url, id, pubkey } }) => ({
         username,
         avatar_url,
         id,
+        pubkey,
       })),
     ],
     (m) => m.username
@@ -36,11 +46,17 @@
   let sendMessage;
 
   async function onSubmit() {
+    let encryptedMessage = encrypt(
+      ownPrivKey,
+      selectedUser.pubkeyFormatted,
+      sendMessage
+    );
+
     let {
       insert_messages_one: { id },
     } = await query(createMessage, {
       message: {
-        message: sendMessage,
+        message: encryptedMessage,
         to: selectedUser.id,
       },
     });
@@ -75,13 +91,24 @@
   }
 
   async function handleSelection(user) {
+    selectedUser = user;
+    selectedUser.pubkeyFormatted = fromBase58(user.pubkey, network)
+      .publicKey.toString("hex")
+      .substring(2);
+
     messages.forEach((message) => {
       if (message.from === user.id && message.viewed === false) {
         message.viewed = true;
       }
-    });
 
-    selectedUser = user;
+      let decryptedMessage = decrypt(
+        ownPrivKey,
+        selectedUser.pubkeyFormatted,
+        message.message
+      );
+
+      message.message = decryptedMessage;
+    });
 
     await tick();
     getFocus();
@@ -106,42 +133,6 @@
       (message) => message.from === user.id && message.viewed === false
     );
   };
-
-  onMount(() => {
-    try {
-      if (!$session.user) return;
-      let password = window.sessionStorage.getItem("password");
-
-      let alicesPrivKey = keypair().privkey.toString('hex');
-      var alicesPubKey = keypair().pubkey.toString("hex").substring(2);
-      console.log(alicesPubKey);
-
-      let bobsPrivKey =
-        "694a4089447f4d8a2e8277124fbfa75e8ea1fdaa655ce115626fd8ee03ef8580";
-      // var bobsPubKey = Buffer.from(nobleSecp256k1.getPublicKey(bobsPrivKey, true)).toString("hex").substring(2);
-
-      let bobsTpub = "tpubDHRoCVHSF4WHgmgvtwNeFMHjJT4xnNwSdRC95SopbyQZNm4EnYgT4r4zhr9Jrc2jC9Hh1YCtwfRCnmNqFtF9jPCx7SxRJGeneowQuJv8aZx";
-      let bobsPubKey = fromBase58(bobsTpub, network).publicKey.toString("hex").substring(2);
-
-      let encryptedMessage = encrypt(
-        alicesPrivKey,
-        bobsPubKey,
-        "hello"
-      );
-
-      console.log(encryptedMessage);
-
-      let decryptedMessage = decrypt(
-        bobsPrivKey,
-        alicesPubKey,
-        encryptedMessage
-      );
-
-      console.log(decryptedMessage);
-    } catch (e) {
-      console.log(e);
-    }
-  });
 </script>
 
 <div class="flex justify-center items-center py-10">

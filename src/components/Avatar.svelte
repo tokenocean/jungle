@@ -9,6 +9,8 @@
   import { SendMessage, SendTip } from "$comp";
   import { goto } from "$lib/utils";
   import Fa from "svelte-fa";
+  import { fromBase58 } from "bip32";
+  import { network } from "$lib/wallet";
   import {
     faWallet,
     faUserCircle,
@@ -50,7 +52,13 @@
             if (!$session.user) {
               goto("/login");
             } else {
-              $messageUser = { id: user.id, username: user.username };
+              $messageUser = {
+                id: user.id,
+                username: user.username,
+                pubkeyFormatted: fromBase58(user.pubkey, network)
+                  .publicKey.toString("hex")
+                  .substring(2),
+              };
               prompt.set(SendMessage);
             }
           }}

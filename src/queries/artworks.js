@@ -20,12 +20,14 @@ export const marketFields = `
     username
     avatar_url
     address
+    pubkey
   },
   artist {
     id
     username
     avatar_url
     address
+    pubkey
   },
   bid {
     id
@@ -91,6 +93,7 @@ export const fields = `
     address
     username
     avatar_url
+    pubkey
   },
   bid {
     id
@@ -122,6 +125,7 @@ export const txFields = `
     id
     username
     avatar_url
+    pubkey
     full_name
     email
     address
@@ -193,6 +197,7 @@ export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
       user {
         username
         avatar_url
+        pubkey
         id
         address
       }
@@ -280,6 +285,7 @@ export const getArtwork = `query($id: uuid!) {
       user {
         username
         avatar_url
+        pubkey
         id
         address
       }

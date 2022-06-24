@@ -10,11 +10,13 @@ export const getMessages = `query {
       username
       avatar_url
       id
+      pubkey
     }
 		fromUser {
       username
       avatar_url
       id
+      pubkey
     }
   }
 }`;
