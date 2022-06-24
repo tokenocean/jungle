@@ -23,6 +23,7 @@
     "fastify-http-proxy": "^4.4.0",
     "fastify-redis": "^4.4.0",
     "fluent-ffmpeg": "^2.1.2",
+    "got": "^12.1.0",
     "http-proxy": "^1.18.1",
     "ipfs-http-client": "^49.0.4",
     "jsonwebtoken": "^8.5.1",
