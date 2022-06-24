@@ -11,6 +11,7 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import { err, goto } from "$lib/utils";
+  import { fromBase58 } from "bip32";
   import {
     Avatar,
     Card,
@@ -23,6 +24,7 @@
   import { getUserByUsername } from "$queries/users";
   import Menu from "./_menu.svelte";
   import { query } from "$lib/api";
+  import { network } from "$lib/wallet";
 
   export let id;
   export let subject;
@@ -145,7 +147,13 @@
               <button
                 class="p-2 primary-btn mt-8"
                 on:click={() => {
-                  $messageUser = { id: subject.id, username: subject.username };
+                  $messageUser = {
+                    id: subject.id,
+                    username: subject.username,
+                    pubkeyFormatted: fromBase58(subject.pubkey, network)
+                      .publicKey.toString("hex")
+                      .substring(2),
+                  };
                   prompt.set(SendMessage);
                 }}
               >
