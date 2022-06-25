@@ -33,6 +33,8 @@ services:
       - ./app:/app
       - ./custom:/opt/src/hasura/app/custom
       - ${STORAGE_DIR}:/export
+      ports:
+      - "8091:8091"
   ui:
     image: junglelab/jungle
     depends_on:
@@ -101,6 +103,7 @@ services:
       - 8081:8080
       - 4001:4001
       - 5001:5001
+      restart: unless-stopped
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
