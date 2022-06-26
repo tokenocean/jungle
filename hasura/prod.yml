@@ -1,14 +1,5 @@
 version: "3.6"
 services:
-  ui:
-    depends_on:
-      - lapp
-    container_name: ui
-    image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
-    restart: on-failure
-    ports:
-      - "3000:3000"
-      - "9229:9229"
   lapp:
     depends_on:
       - hbp
@@ -42,6 +33,15 @@ services:
       - ${STORAGE_DIR}:/export
     ports:
       - "8091:8091"
+  ui:
+    image: junglelab/jungle:latest
+    depends_on:
+      - lapp
+    container_name: ui
+    restart: on-failure
+    ports:
+      - "3000:3000"
+      - "9229:9229"
   postgres:
     container_name: postgres
     image: postgres:12
