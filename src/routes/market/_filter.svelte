@@ -55,6 +55,22 @@
       on:change={(e) => ($fc.hasRoyalties = e.target.checked)}
     />
   </div>
+  <div>
+    <ToggleSwitch
+      id="is-favorited"
+      label="Is favorited"
+      checked={$fc.isFavorited}
+      on:change={(e) => ($fc.isFavorited = e.target.checked)}
+    />
+  </div>
+  <div>
+    <ToggleSwitch
+      id="from-followed"
+      label="From followed"
+      checked={$fc.fromFollowed}
+      on:change={(e) => ($fc.fromFollowed = e.target.checked)}
+    />
+  </div>
 </div>
 
 <style>

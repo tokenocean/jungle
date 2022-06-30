@@ -13,6 +13,11 @@ export const getUser = `query {
   currentuser (limit: 1) {
     ${fields}
     ${privateFields}
+    user {
+      follows {
+        user_id
+      }
+    }
   }
 }`;
 
