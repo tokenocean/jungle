@@ -2,8 +2,9 @@
   import { api, post } from "$lib/api";
   import { browser } from "$app/env";
   import branding from "$lib/branding";
-  import { host } from "$lib/utils";
+  import { host, satsFormatted } from "$lib/utils";
   import Comments from "./_comments.svelte";
+  import { user, bitcoinUnitLocal } from "$lib/store";
 
   export async function load({ fetch, params: { slug } }) {
     const props = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
@@ -164,8 +165,12 @@
     try {
       if (e) e.preventDefault();
       offering = true;
+      if (ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats") {
+        transaction.amount = sats(amount / 100000000);
+      } else {
+        transaction.amount = sats(amount);
+      }
 
-      transaction.amount = sats(amount);
       transaction.asset = artwork.asset;
       transaction.type = "bid";
 
@@ -180,13 +185,10 @@
       await save();
       await refreshArtwork();
 
-      await api
-        .url("/offer-notifications")
-        .auth(`Bearer ${$token}`)
-        .post({
-          artworkId: artwork.id,
-          transactionHash: transaction.hash,
-        });
+      await api.url("/offer-notifications").auth(`Bearer ${$token}`).post({
+        artworkId: artwork.id,
+        transactionHash: transaction.hash,
+      });
 
       offering = false;
     } catch (e) {
@@ -246,13 +248,10 @@
       await save();
       await refreshArtwork();
 
-      await api
-        .url("/mail-purchase-successful")
-        .auth(`Bearer ${$token}`)
-        .post({
-          userId: $session.user.id,
-          artworkId: artwork.id,
-        });
+      await api.url("/mail-purchase-successful").auth(`Bearer ${$token}`).post({
+        userId: $session.user.id,
+        artworkId: artwork.id,
+      });
 
       await api.url("/mail-artwork-sold").auth(`Bearer ${$token}`).post({
         userId: artwork.owner.id,
@@ -313,24 +312,24 @@
 
       <div class="flex flex-wrap justify-between text-left">
         <a href={`/${artwork.artist.username}`}>
-        <div class="flex mb-6">
-          <Avatar user={artwork.artist} />
-          <div class="ml-2 secondary-color">
-            <div>@{artwork.artist.username}</div>
-            <div class="text-xs text-gray-600">Artist</div>
+          <div class="flex mb-6">
+            <Avatar user={artwork.artist} />
+            <div class="ml-2 secondary-color">
+              <div>@{artwork.artist.username}</div>
+              <div class="text-xs text-gray-600">Artist</div>
+            </div>
           </div>
-        </div>
         </a>
 
         {#if artwork.artist_id !== artwork.owner_id && artwork.held}
-        <a href={`/${artwork.owner.username}`}>
-          <div class="flex mb-6 secondary-color">
-            <Avatar user={artwork.owner} />
-            <div class="ml-2">
-              <div>@{artwork.owner.username}</div>
-              <div class="text-xs text-gray-600">Owner</div>
+          <a href={`/${artwork.owner.username}`}>
+            <div class="flex mb-6 secondary-color">
+              <Avatar user={artwork.owner} />
+              <div class="ml-2">
+                <div>@{artwork.owner.username}</div>
+                <div class="text-xs text-gray-600">Owner</div>
+              </div>
             </div>
-          </div>
           </a>
         {/if}
         {#if !artwork.held}
@@ -356,7 +355,18 @@
         {#if artwork.list_price}
           <div class="my-2">
             <div class="text-sm mt-auto">List Price</div>
-            <div class="text-lg">{list_price} {ticker}</div>
+            <div class="text-lg">
+              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                ? satsFormatted(list_price * 100000000)
+                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                ? satsFormatted(list_price * 100000000)
+                : list_price}
+              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                ? "sats"
+                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                ? "sats"
+                : ticker}
+            </div>
           </div>
         {/if}
         {#if artwork.reserve_price}
@@ -364,14 +374,29 @@
             <div class="text-sm mt-auto">Reserve Price</div>
             <div class="flex-1 text-lg">
               {val(artwork.reserve_price)}
-              {ticker}
+              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                ? "sats"
+                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                ? "sats"
+                : ticker}
             </div>
           </div>
         {/if}
         {#if artwork.bid && artwork.bid.amount}
           <div class="my-2">
             <div class="text-sm mt-auto">Current bid</div>
-            <div class="text-lg">{val(artwork.bid.amount)} {ticker}</div>
+            <div class="text-lg">
+              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                ? satsFormatted(artwork.bid.amount)
+                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                ? satsFormatted(artwork.bid.amount)
+                : val(artwork.bid.amount)}
+              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                ? "sats"
+                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                ? "sats"
+                : ticker}
+            </div>
           </div>
         {/if}
       </div>
@@ -451,7 +476,15 @@
                     <div
                       class="absolute inset-y-0 right-0 flex items-center mr-2"
                     >
-                      {ticker}
+                      {ticker === "L-BTC" &&
+                      $user &&
+                      $user.bitcoin_unit === "sats"
+                        ? "sats"
+                        : ticker === "L-BTC" &&
+                          !$user &&
+                          $bitcoinUnitLocal === "sats"
+                        ? "sats"
+                        : ticker}
                     </div>
                   </div>
                 </div>

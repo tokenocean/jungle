@@ -8,6 +8,7 @@ select_permissions:
         - address
         - avatar_url
         - bio
+        - bitcoin_unit
         - blindkey
         - confidential
         - created_at

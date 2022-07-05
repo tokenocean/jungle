@@ -1,15 +1,25 @@
 import { fade as svelteFade } from "svelte/transition";
 import { get } from "svelte/store";
 import { session } from "$app/stores";
-import { acceptStatus, assets, error, full, prompt, snack } from "$lib/store";
+import {
+  acceptStatus,
+  assets,
+  error,
+  full,
+  prompt,
+  snack,
+  user,
+  bitcoinUnitLocal,
+} from "$lib/store";
 import { goto as svelteGoto } from "$app/navigation";
 import { AcceptPrompt, InsufficientFunds } from "$comp";
 import { isWithinInterval, parseISO, compareAsc } from "date-fns";
 import { query } from "$lib/api";
 import { getArtworkByAsset } from "$queries/artworks.js";
-import { getUserByAddress } from "$queries/users.js";
+import { getUserByAddress, updateUser } from "$queries/users.js";
 import * as browserifyCipher from "browserify-cipher";
 import * as nobleSecp256k1 from "@noble/secp256k1";
+import { browser } from "$app/env";
 
 export const btc = import.meta.env.VITE_BTC;
 export const cad = import.meta.env.VITE_CAD;
@@ -344,3 +354,26 @@ export function decrypt(privkey, pubkey, ciphertext) {
 
   return dmsg;
 }
+
+export const updateBitcoinUnit = async (unit) => {
+  try {
+    let currentUser = get(user);
+
+    if (currentUser) {
+      const id = currentUser.id;
+      const setUnit = { bitcoin_unit: unit };
+      currentUser.bitcoin_unit = unit;
+      user.set(currentUser);
+      await query(updateUser, { user: setUnit, id });
+    } else {
+      browser && window.localStorage.setItem("unit", unit);
+      bitcoinUnitLocal.set(unit);
+    }
+  } catch (e) {
+    err(e);
+  }
+};
+
+export const satsFormatted = (amount) => {
+  return new Intl.NumberFormat().format(amount);
+};
