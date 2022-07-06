@@ -3,6 +3,9 @@ table:
   name: users
 configuration:
   custom_root_fields: {}
+  column_config:
+    multisig:
+      custom_name: multisig
   custom_column_names:
     multisig: multisig
 object_relationships:
@@ -183,6 +186,7 @@ select_permissions:
         - address
         - avatar_url
         - bio
+        - bitcoin_unit
         - created_at
         - display_name
         - email
