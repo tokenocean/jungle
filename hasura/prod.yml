@@ -1,10 +1,20 @@
 version: "3.6"
 services:
+  caddy:
+    container_name: caddy
+    image: caddy:2
+    ports:
+      - "8180:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    environment:
+      DOMAIN: "${DOMAIN}"
   ui:
     depends_on:
       - lapp
     container_name: ui
-    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi:staging
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi:prod
     restart: on-failure
     ports:
       - "3000:3000"
@@ -13,7 +23,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:staging
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:prod
     restart: on-failure
     environment:
       NODE_ENV: production
