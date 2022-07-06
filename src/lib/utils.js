@@ -362,8 +362,8 @@ export const updateBitcoinUnit = async (unit) => {
     if (currentUser) {
       const id = currentUser.id;
       const setUnit = { bitcoin_unit: unit };
-      currentUser.bitcoin_unit = unit;
-      user.set(currentUser);
+
+      bitcoinUnitLocal.set(unit);
       await query(updateUser, { user: setUnit, id });
     } else {
       browser && window.localStorage.setItem("unit", unit);

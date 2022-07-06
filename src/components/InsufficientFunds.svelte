@@ -20,7 +20,7 @@
     pending,
     prompt,
     token,
-    user,
+    bitcoinUnitLocal,
   } from "$lib/store";
   import {
     assetLabel,
@@ -175,6 +175,19 @@
 
   let address;
   $: if ($session.user) address = $session.user.address;
+
+  $: labelCalculated =
+    label === "L-BTC" && $bitcoinUnitLocal === "sats" ? "sats" : label;
+
+  $: currentBalance =
+    label === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(val($error.asset, parseInt(current)) * 100000000)
+      : val($error.asset, parseInt(current));
+
+  $: fundsRequired =
+    label === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(amount * 100000000)
+      : amount;
 </script>
 
 <div class="mb-2 rounded-lg">
@@ -201,23 +214,15 @@
       <div class="w-1/2">
         <div class="text-xs mt-6">Current Balance</div>
         <div class="text-xl">
-          {label === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-            ? satsFormatted(val($error.asset, parseInt(current)) * 100000000)
-            : val($error.asset, parseInt(current))}
-          {label === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-            ? "sats"
-            : label}
+          {currentBalance}
+          {labelCalculated}
         </div>
       </div>
       <div class="w-1/2">
         <div class="text-xs mt-6">Funds Required</div>
         <div class="text-xl">
-          {label === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-            ? satsFormatted(amount * 100000000)
-            : amount}
-          {label === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-            ? "sats"
-            : label}
+          {fundsRequired}
+          {labelCalculated}
         </div>
       </div>
     </div>

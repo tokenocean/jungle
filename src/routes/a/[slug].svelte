@@ -4,7 +4,7 @@
   import branding from "$lib/branding";
   import { host, satsFormatted } from "$lib/utils";
   import Comments from "./_comments.svelte";
-  import { user, bitcoinUnitLocal } from "$lib/store";
+  import { bitcoinUnitLocal } from "$lib/store";
 
   export async function load({ fetch, params: { slug } }) {
     const props = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
@@ -165,7 +165,7 @@
     try {
       if (e) e.preventDefault();
       offering = true;
-      if (ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats") {
+      if (ticker === "L-BTC" && $bitcoinUnitLocal === "sats") {
         transaction.amount = sats(amount / 100000000);
       } else {
         transaction.amount = sats(amount);
@@ -279,6 +279,24 @@
   let showPopup = false;
   let showMore = false;
   let showActivity = false;
+
+  $: tickerCalculated =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats" ? "sats" : ticker;
+
+  $: listPrice =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(list_price * 100000000)
+      : list_price;
+
+  $: reservePrice =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(artwork.reserve_price)
+      : val(artwork.reserve_price);
+
+  $: bidAmount =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(artwork.bid && artwork.bid.amount)
+      : val(artwork.bid && artwork.bid.amount);
 </script>
 
 <Head {metadata} />
@@ -356,16 +374,8 @@
           <div class="my-2">
             <div class="text-sm mt-auto">List Price</div>
             <div class="text-lg">
-              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                ? satsFormatted(list_price * 100000000)
-                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                ? satsFormatted(list_price * 100000000)
-                : list_price}
-              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                ? "sats"
-                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                ? "sats"
-                : ticker}
+              {listPrice}
+              {tickerCalculated}
             </div>
           </div>
         {/if}
@@ -373,12 +383,8 @@
           <div class="my-2">
             <div class="text-sm mt-auto">Reserve Price</div>
             <div class="flex-1 text-lg">
-              {val(artwork.reserve_price)}
-              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                ? "sats"
-                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                ? "sats"
-                : ticker}
+              {reservePrice}
+              {tickerCalculated}
             </div>
           </div>
         {/if}
@@ -386,16 +392,8 @@
           <div class="my-2">
             <div class="text-sm mt-auto">Current bid</div>
             <div class="text-lg">
-              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                ? satsFormatted(artwork.bid.amount)
-                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                ? satsFormatted(artwork.bid.amount)
-                : val(artwork.bid.amount)}
-              {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                ? "sats"
-                : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                ? "sats"
-                : ticker}
+              {bidAmount}
+              {tickerCalculated}
             </div>
           </div>
         {/if}
@@ -476,15 +474,7 @@
                     <div
                       class="absolute inset-y-0 right-0 flex items-center mr-2"
                     >
-                      {ticker === "L-BTC" &&
-                      $user &&
-                      $user.bitcoin_unit === "sats"
-                        ? "sats"
-                        : ticker === "L-BTC" &&
-                          !$user &&
-                          $bitcoinUnitLocal === "sats"
-                        ? "sats"
-                        : ticker}
+                      {tickerCalculated}
                     </div>
                   </div>
                 </div>

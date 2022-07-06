@@ -1,6 +1,6 @@
 <script>
   import { updateBitcoinUnit, info } from "$lib/utils";
-  import { user } from "$lib/store";
+  import { bitcoinUnitLocal } from "$lib/store";
   import Fa from "svelte-fa";
   import { faLifeRing } from "@fortawesome/free-solid-svg-icons";
 </script>
@@ -21,10 +21,8 @@
           info("Bitcoin unit set");
         }}
       >
-        <option value="btc" selected={$user && $user.bitcoin_unit === "btc"}
-          >BTC</option
-        >
-        <option value="sats" selected={$user && $user.bitcoin_unit === "sats"}
+        <option value="btc" selected={$bitcoinUnitLocal === "btc"}>BTC</option>
+        <option value="sats" selected={$bitcoinUnitLocal === "sats"}
           >sats</option
         >
       </select>
