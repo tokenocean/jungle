@@ -119,3 +119,8 @@ services:
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+      - ./redis:/data
