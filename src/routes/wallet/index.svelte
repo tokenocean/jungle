@@ -17,7 +17,15 @@
   } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { getArtworksByOwner } from "$queries/artworks";
-  import { btc, err, label, sats, val, satsFormatted } from "$lib/utils";
+  import {
+    btc,
+    err,
+    label,
+    sats,
+    val,
+    satsFormatted,
+    updateBitcoinUnit,
+  } from "$lib/utils";
   import { requireLogin } from "$lib/auth";
   import { getBalances } from "$lib/wallet";
 
@@ -56,7 +64,7 @@
 
   $: labelCalculated =
     label($asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
-      ? "sats"
+      ? "L-sats"
       : label($asset);
 
   $: balanceCalculated =
@@ -99,14 +107,19 @@
 
       <div class="m-6">
         <div class="text-sm light-color">Balance</div>
-        <div class="flex mt-3">
+        <button
+          class="flex mt-3"
+          on:click={() =>
+            updateBitcoinUnit($bitcoinUnitLocal === "sats" ? "btc" : "sats")}
+          disabled={label($asset) !== "L-BTC"}
+        >
           <span class="text-4xl text-white mr-3">
             {balanceCalculated}
           </span>
           <span class="text-gray-400 mt-auto">
             {labelCalculated}
           </span>
-        </div>
+        </button>
       </div>
       {#if $pending && val($asset.asset, $pending[$asset.asset])}
         <div class="m-6">

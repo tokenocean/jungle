@@ -10,7 +10,7 @@
 
   $: asset =
     ticker(transaction.asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
-      ? "sats"
+      ? "L-sats"
       : ticker(transaction.asset);
 
   $: amountPurchased =

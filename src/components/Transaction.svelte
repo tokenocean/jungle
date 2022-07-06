@@ -224,7 +224,7 @@
                   </div>
                   <div class="truncate ml-2 my-auto w-full text-right">
                     {labels[asset] === "L-BTC" && $bitcoinUnitLocal === "sats"
-                      ? "sats"
+                      ? "L-sats"
                       : labels[asset]}
                   </div>
                 {/if}
@@ -282,7 +282,7 @@
                   </div>
                   <div class="truncate ml-2 my-auto w-full text-right">
                     {labels[asset] === "L-BTC" && $bitcoinUnitLocal === "sats"
-                      ? "sats"
+                      ? "L-sats"
                       : labels[asset]}
                   </div>
                 {/if}
@@ -302,7 +302,7 @@
                 : val(btc, Math.abs(totals["Fee"][btc]))}
             </div>
             <div class="truncate ml-2 my-auto text-right w-full">
-              {$bitcoinUnitLocal === "sats" ? "sats" : "L-BTC"}
+              {$bitcoinUnitLocal === "sats" ? "L-sats" : "L-BTC"}
             </div>
           {/if}
         </div>

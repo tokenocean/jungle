@@ -72,7 +72,7 @@
             <div class="">
               {label({ asset: a, name }) === "L-BTC" &&
               $bitcoinUnitLocal === "sats"
-                ? "sats"
+                ? "L-sats"
                 : label({ asset: a, name })}
             </div>
           </div>

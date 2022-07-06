@@ -43,9 +43,8 @@
   onMount(count);
   onDestroy(() => clearTimeout(timeout));
 
-  let bitcoinUnit;
   $: tickerCalculated =
-    ticker === "L-BTC" && $bitcoinUnitLocal === "sats" ? "sats" : ticker;
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats" ? "L-sats" : ticker;
 
   $: listPrice =
     ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
@@ -99,7 +98,7 @@
               class="price"
               on:click={() => {
                 updateBitcoinUnit(
-                  bitcoinUnit.innerHTML === "sats" ? "btc" : "sats"
+                  $bitcoinUnitLocal === "sats" ? "btc" : "sats"
                 );
               }}
               disabled={ticker !== "L-BTC"}
@@ -107,16 +106,24 @@
               {#if artwork.list_price}
                 {listPrice}
               {:else}&mdash;{/if}
-              <span bind:this={bitcoinUnit}> {tickerCalculated}</span>
+              {tickerCalculated}
             </button>
             <div class="w-1/2 text-xs font-medium">List Price</div>
           </div>
           {#if artwork.bid && artwork.bid.user}
             <div class="1/2 flex-1">
-              <div class="price">
+              <button
+                class="price"
+                on:click={() => {
+                  updateBitcoinUnit(
+                    $bitcoinUnitLocal === "sats" ? "btc" : "sats"
+                  );
+                }}
+                disabled={ticker !== "L-BTC"}
+              >
                 {currentBid}
                 {tickerCalculated}
-              </div>
+              </button>
               <div class="text-xs font-medium">
                 Current bid by
                 <a

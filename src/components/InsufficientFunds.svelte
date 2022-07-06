@@ -177,7 +177,7 @@
   $: if ($session.user) address = $session.user.address;
 
   $: labelCalculated =
-    label === "L-BTC" && $bitcoinUnitLocal === "sats" ? "sats" : label;
+    label === "L-BTC" && $bitcoinUnitLocal === "sats" ? "L-sats" : label;
 
   $: currentBalance =
     label === "L-BTC" && $bitcoinUnitLocal === "sats"
