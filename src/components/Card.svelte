@@ -3,7 +3,7 @@
   import countdown from "$lib/countdown";
   import { fade, units, satsFormatted, updateBitcoinUnit } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
-  import { loaded, user, bitcoinUnitLocal } from "$lib/store";
+  import { loaded, bitcoinUnitLocal } from "$lib/store";
   import { session } from "$app/stores";
 
   export let justScrolled = false;
@@ -44,6 +44,18 @@
   onDestroy(() => clearTimeout(timeout));
 
   let bitcoinUnit;
+  $: tickerCalculated =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats" ? "sats" : ticker;
+
+  $: listPrice =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(artwork.list_price)
+      : val(artwork.list_price);
+
+  $: currentBid =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(artwork.bid && artwork.bid.amount)
+      : val(artwork.bid && artwork.bid.amount);
 </script>
 
 <div
@@ -93,35 +105,17 @@
               disabled={ticker !== "L-BTC"}
             >
               {#if artwork.list_price}
-                {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                  ? satsFormatted(artwork.list_price)
-                  : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                  ? satsFormatted(artwork.list_price)
-                  : val(artwork.list_price)}
+                {listPrice}
               {:else}&mdash;{/if}
-              <span bind:this={bitcoinUnit}>
-                {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                  ? "sats"
-                  : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                  ? "sats"
-                  : ticker}</span
-              >
+              <span bind:this={bitcoinUnit}> {tickerCalculated}</span>
             </button>
             <div class="w-1/2 text-xs font-medium">List Price</div>
           </div>
           {#if artwork.bid && artwork.bid.user}
             <div class="1/2 flex-1">
               <div class="price">
-                {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                  ? satsFormatted(artwork.bid.amount)
-                  : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                  ? satsFormatted(artwork.bid.amount)
-                  : val(artwork.bid.amount)}
-                {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
-                  ? "sats"
-                  : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
-                  ? "sats"
-                  : ticker}
+                {currentBid}
+                {tickerCalculated}
               </div>
               <div class="text-xs font-medium">
                 Current bid by

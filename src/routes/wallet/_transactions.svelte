@@ -4,7 +4,7 @@
   import { format, parseISO } from "date-fns";
   import { newapi as api } from "$lib/api";
   import { ToggleSwitch } from "$comp";
-  import { asset, assets, user } from "$lib/store";
+  import { asset, assets, bitcoinUnitLocal } from "$lib/store";
   import { label, ticker, val, units, satsFormatted } from "$lib/utils";
 
   export let transactions;
@@ -64,17 +64,14 @@
                 {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label({
                   asset: a,
                   name,
-                }) === "L-BTC" &&
-                $user &&
-                $user.bitcoin_unit === "sats"
+                }) === "L-BTC" && $bitcoinUnitLocal === "sats"
                   ? satsFormatted(val(a, Math.abs(amount)) * 100000000)
                   : val(a, Math.abs(amount))}
               </div>
             </div>
             <div class="">
               {label({ asset: a, name }) === "L-BTC" &&
-              $user &&
-              $user.bitcoin_unit === "sats"
+              $bitcoinUnitLocal === "sats"
                 ? "sats"
                 : label({ asset: a, name })}
             </div>

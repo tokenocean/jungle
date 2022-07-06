@@ -1,29 +1,22 @@
 <script>
   import { ticker, val, satsFormatted } from "$lib/utils";
-  import { user, bitcoinUnitLocal } from "$lib/store";
+  import { bitcoinUnitLocal } from "$lib/store";
   export let transaction;
 
-  let amount =
-    ticker(transaction.asset) === "L-BTC" &&
-    $user &&
-    $user.bitcoin_unit === "sats"
-      ? satsFormatted(transaction.amount)
-      : ticker(transaction.asset) === "L-BTC" &&
-        !$user &&
-        $bitcoinUnitLocal === "sats"
+  $: amount =
+    ticker(transaction.asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
       ? satsFormatted(transaction.amount)
       : val(transaction.asset, transaction.amount);
 
-  let asset =
-    ticker(transaction.asset) === "L-BTC" &&
-    $user &&
-    $user.bitcoin_unit === "sats"
-      ? "sats"
-      : ticker(transaction.asset) === "L-BTC" &&
-        !$user &&
-        $bitcoinUnitLocal === "sats"
+  $: asset =
+    ticker(transaction.asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
       ? "sats"
       : ticker(transaction.asset);
+
+  $: amountPurchased =
+    ticker(transaction.asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(Math.abs(transaction.amount))
+      : val(transaction.asset, Math.abs(transaction.amount));
 </script>
 
 {#if transaction}
@@ -65,15 +58,7 @@
       setup an auction for
     {:else if transaction.type === "purchase"}
       paid
-      {ticker(transaction.asset) === "L-BTC" &&
-      $user &&
-      $user.bitcoin_unit === "sats"
-        ? satsFormatted(Math.abs(transaction.amount))
-        : ticker(transaction.asset) === "L-BTC" &&
-          !$user &&
-          $bitcoinUnitLocal === "sats"
-        ? satsFormatted(Math.abs(transaction.amount))
-        : val(transaction.asset, Math.abs(transaction.amount))}
+      {amountPurchased}
 
       {asset}
       for
