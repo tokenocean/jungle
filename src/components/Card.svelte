@@ -1,9 +1,9 @@
 <script>
   import { Avatar, ArtworkMedia, Heart } from "$comp";
   import countdown from "$lib/countdown";
-  import { fade, units } from "$lib/utils";
+  import { fade, units, satsFormatted, updateBitcoinUnit } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
-  import { loaded } from "$lib/store";
+  import { loaded, user, bitcoinUnitLocal } from "$lib/store";
   import { session } from "$app/stores";
 
   export let justScrolled = false;
@@ -42,6 +42,8 @@
 
   onMount(count);
   onDestroy(() => clearTimeout(timeout));
+
+  let bitcoinUnit;
 </script>
 
 <div
@@ -81,17 +83,46 @@
         </div>
         <div class="flex mb-4">
           <div class="1/2 flex-1">
-            <div class="price">
+            <button
+              class="price"
+              on:click={() => {
+                updateBitcoinUnit(
+                  bitcoinUnit.innerHTML === "sats" ? "btc" : "sats"
+                );
+              }}
+              disabled={ticker !== "L-BTC"}
+            >
               {#if artwork.list_price}
-                {val(artwork.list_price)}
+                {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                  ? satsFormatted(artwork.list_price)
+                  : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                  ? satsFormatted(artwork.list_price)
+                  : val(artwork.list_price)}
               {:else}&mdash;{/if}
-              {ticker}
-            </div>
+              <span bind:this={bitcoinUnit}>
+                {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                  ? "sats"
+                  : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                  ? "sats"
+                  : ticker}</span
+              >
+            </button>
             <div class="w-1/2 text-xs font-medium">List Price</div>
           </div>
           {#if artwork.bid && artwork.bid.user}
             <div class="1/2 flex-1">
-              <div class="price">{val(artwork.bid.amount)} {ticker}</div>
+              <div class="price">
+                {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                  ? satsFormatted(artwork.bid.amount)
+                  : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                  ? satsFormatted(artwork.bid.amount)
+                  : val(artwork.bid.amount)}
+                {ticker === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+                  ? "sats"
+                  : ticker === "L-BTC" && !$user && $bitcoinUnitLocal === "sats"
+                  ? "sats"
+                  : ticker}
+              </div>
               <div class="text-xs font-medium">
                 Current bid by
                 <a

@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import { browser } from "$app/env";
 
 const btc = import.meta.env.VITE_BTC;
 
@@ -49,3 +50,8 @@ export const signStatus = writable();
 export const acceptStatus = writable();
 export const messageUser = writable({});
 export const tipUser = writable({});
+export const bitcoinUnitLocal = writable(
+  browser && window.localStorage.getItem("unit")
+    ? browser && window.localStorage.getItem("unit")
+    : "btc"
+);

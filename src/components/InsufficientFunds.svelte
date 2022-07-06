@@ -13,8 +13,25 @@
   import { ProgressLinear } from "$comp";
   import { onDestroy, onMount, tick } from "svelte";
   import qrcode from "qrcode-generator-es6";
-  import { balances, error, locked, pending, prompt, token } from "$lib/store";
-  import { assetLabel, btc, copy, err, fullscreen, ticker, val } from "$lib/utils";
+  import {
+    balances,
+    error,
+    locked,
+    pending,
+    prompt,
+    token,
+    user,
+  } from "$lib/store";
+  import {
+    assetLabel,
+    btc,
+    copy,
+    err,
+    fullscreen,
+    ticker,
+    val,
+    satsFormatted,
+  } from "$lib/utils";
   import { getBalances } from "$lib/wallet";
   import { api } from "$lib/api";
 
@@ -31,8 +48,8 @@
   $: getLabel($error);
   let getLabel = async ({ asset }) => {
     label = (await assetLabel(asset)) || ticker(asset);
-  } 
-  
+  };
+
   $: amountUpdated(amount);
   let amountUpdated = (a) => isNaN(a) && ($prompt = undefined);
 
@@ -184,13 +201,24 @@
       <div class="w-1/2">
         <div class="text-xs mt-6">Current Balance</div>
         <div class="text-xl">
-          {val($error.asset, parseInt(current))}
-          {label}
+          {label === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+            ? satsFormatted(val($error.asset, parseInt(current)) * 100000000)
+            : val($error.asset, parseInt(current))}
+          {label === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+            ? "sats"
+            : label}
         </div>
       </div>
       <div class="w-1/2">
         <div class="text-xs mt-6">Funds Required</div>
-        <div class="text-xl">{amount} {label}</div>
+        <div class="text-xl">
+          {label === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+            ? satsFormatted(amount * 100000000)
+            : amount}
+          {label === "L-BTC" && $user && $user.bitcoin_unit === "sats"
+            ? "sats"
+            : label}
+        </div>
       </div>
     </div>
 

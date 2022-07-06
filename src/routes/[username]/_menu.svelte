@@ -6,6 +6,7 @@
     faSignOutAlt,
     faWallet,
     faEnvelopeOpen,
+    faCog,
   } from "@fortawesome/free-solid-svg-icons";
   import { goto } from "$lib/utils";
   export let messages;
@@ -33,7 +34,7 @@
       <div class="my-auto">
         <Fa icon={faWallet} />
       </div>
-      <div><span>View Wallet</span></div>
+      <div><span>Wallet</span></div>
     </div>
   </a>
   <a href="/messages">
@@ -42,11 +43,21 @@
         <Fa icon={faEnvelopeOpen} />
       </div>
       <div>
-        <span>View Messages</span>
+        <span>Messages</span>
       </div>
       {#if messages.find((message) => message.to === $session.user.id && message.viewed === false)}
         <div class="ml-2 w-2 h-2 rounded-full bg-primary" />
       {/if}
+    </div>
+  </a>
+  <a href="/settings">
+    <div class="flex items-center">
+      <div class="my-auto">
+        <Fa icon={faCog} />
+      </div>
+      <div>
+        <span>Settings</span>
+      </div>
     </div>
   </a>
   <a href="/logout" class="cursor-pointer">

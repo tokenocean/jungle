@@ -6,7 +6,7 @@
     faChevronUp,
   } from "@fortawesome/free-solid-svg-icons";
   import { Avatar, ProgressLinear } from "$comp";
-  import { txcache } from "$lib/store";
+  import { txcache, user } from "$lib/store";
   import reverse from "buffer-reverse";
   import { electrs } from "$lib/api";
   import {
@@ -32,6 +32,7 @@
     goto,
     info,
     err,
+    satsFormatted,
   } from "$lib/utils";
 
   export let summary = false;
@@ -210,13 +211,25 @@
                   {/if}
                   <div class="my-auto ml-auto">
                     <div class="mr-1 ml-auto">
-                      {parseFloat(
-                        val(asset, Math.abs(totals[username][asset]))
-                      ).toFixed(8)}
+                      {labels[asset] === "L-BTC" &&
+                      $user &&
+                      $user.bitcoin_unit === "sats"
+                        ? satsFormatted(
+                            parseFloat(
+                              val(asset, Math.abs(totals[username][asset]))
+                            ) * 100000000
+                          )
+                        : parseFloat(
+                            val(asset, Math.abs(totals[username][asset]))
+                          ).toFixed(8)}
                     </div>
                   </div>
                   <div class="truncate ml-2 my-auto w-full text-right">
-                    {labels[asset]}
+                    {labels[asset] === "L-BTC" &&
+                    $user &&
+                    $user.bitcoin_unit === "sats"
+                      ? "sats"
+                      : labels[asset]}
                   </div>
                 {/if}
               {/each}
@@ -260,30 +273,47 @@
                   {/if}
                   <div class="my-auto ml-auto">
                     <div class="mr-1 ml-auto">
-                      {parseFloat(
-                        val(asset, Math.abs(totals[username][asset]))
-                      ).toFixed(8)}
+                      {labels[asset] === "L-BTC" &&
+                      $user &&
+                      $user.bitcoin_unit === "sats"
+                        ? satsFormatted(
+                            parseFloat(
+                              val(asset, Math.abs(totals[username][asset]))
+                            ) * 100000000
+                          )
+                        : parseFloat(
+                            val(asset, Math.abs(totals[username][asset]))
+                          ).toFixed(8)}
                     </div>
                   </div>
                   <div class="truncate ml-2 my-auto w-full text-right">
-                    {labels[asset]}
+                    {labels[asset] === "L-BTC" &&
+                    $user &&
+                    $user.bitcoin_unit === "sats"
+                      ? "sats"
+                      : labels[asset]}
                   </div>
                 {/if}
               {/each}
             {/if}
           {/each}
-        {#if totals["Fee"]}
-          <div class="flex">
-            <Avatar src="/liquid.jpg" />
-            <div class="my-auto ml-2 truncate">liquid fee</div>
-          </div>
-          <div class="my-auto ml-auto">
-            {val(btc, Math.abs(totals["Fee"][btc]))}
-          </div>
-          <div class="truncate ml-2 my-auto text-right w-full">L-BTC</div>
-        {/if}
+          {#if totals["Fee"]}
+            <div class="flex">
+              <Avatar src="/liquid.jpg" />
+              <div class="my-auto ml-2 truncate">liquid fee</div>
+            </div>
+            <div class="my-auto ml-auto">
+              {$user && $user.bitcoin_unit === "sats"
+                ? satsFormatted(
+                    val(btc, Math.abs(totals["Fee"][btc])) * 100000000
+                  )
+                : val(btc, Math.abs(totals["Fee"][btc]))}
+            </div>
+            <div class="truncate ml-2 my-auto text-right w-full">
+              {$user && $user.bitcoin_unit === "sats" ? "sats" : "L-BTC"}
+            </div>
+          {/if}
         </div>
-
       </div>
     </div>
 

@@ -4,8 +4,8 @@
   import { format, parseISO } from "date-fns";
   import { newapi as api } from "$lib/api";
   import { ToggleSwitch } from "$comp";
-  import { asset, assets } from "$lib/store";
-  import { label, ticker, val, units } from "$lib/utils";
+  import { asset, assets, user } from "$lib/store";
+  import { label, ticker, val, units, satsFormatted } from "$lib/utils";
 
   export let transactions;
 
@@ -61,14 +61,23 @@
                 class:pending={!confirmed}
                 class:text-secondary={confirmed && amount > 0}
               >
-                {amount > 0 ? "+" : amount < 0 ? "-" : ""}{val(
-                  a,
-                  Math.abs(amount)
-                )}
+                {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label({
+                  asset: a,
+                  name,
+                }) === "L-BTC" &&
+                $user &&
+                $user.bitcoin_unit === "sats"
+                  ? satsFormatted(val(a, Math.abs(amount)) * 100000000)
+                  : val(a, Math.abs(amount))}
               </div>
-
             </div>
-            <div class="">{label({ asset: a, name })}</div>
+            <div class="">
+              {label({ asset: a, name }) === "L-BTC" &&
+              $user &&
+              $user.bitcoin_unit === "sats"
+                ? "sats"
+                : label({ asset: a, name })}
+            </div>
           </div>
         </a>
       {/if}

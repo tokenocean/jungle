@@ -5,7 +5,7 @@
   import Fa from "svelte-fa";
   import {
     faChevronLeft,
-    faCog,
+    faLifeRing,
     faDollarSign,
     faSignOutAlt,
   } from "@fortawesome/free-solid-svg-icons";
@@ -41,8 +41,8 @@
           <div
             class="flex flex-wrap justify-center sm:justify-start items-center sm:items-start h-full"
           >
-            <Fa icon={faCog} class="my-auto mr-2" />
-            <div>Settings</div>
+            <Fa icon={faLifeRing} class="my-auto mr-2" />
+            <div>Recovery</div>
           </div>
         </a>
       {/if}

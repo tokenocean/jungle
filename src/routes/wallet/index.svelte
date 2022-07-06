@@ -7,10 +7,10 @@
   import { browser } from "$app/env";
   import { query } from "$lib/api";
   import { onDestroy, onMount, tick } from "svelte";
-  import { asset, assets, balances, pending, password } from "$lib/store";
+  import { asset, assets, balances, pending, password, user } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { getArtworksByOwner } from "$queries/artworks";
-  import { btc, err, label, sats, val } from "$lib/utils";
+  import { btc, err, label, sats, val, satsFormatted } from "$lib/utils";
   import { requireLogin } from "$lib/auth";
   import { getBalances } from "$lib/wallet";
 
@@ -22,7 +22,7 @@
 
   let balance;
   balances.subscribe((b) => {
-   if (b) balance = val($asset.asset, b[$asset.asset] || 0);
+    if (b) balance = val($asset.asset, b[$asset.asset] || 0);
   });
 
   let funding;
@@ -72,24 +72,47 @@
           $asset.asset
         )} ${bg($asset.asset)}`}
       >
-      {label($asset, "name")}
+        {label($asset, "name")}
       </div>
 
       <div class="m-6">
         <div class="text-sm light-color">Balance</div>
         <div class="flex mt-3">
-          <span class="text-4xl text-white mr-3">{balance}</span>
-          <span class="text-gray-400 mt-auto">{label($asset)}</span>
+          <span class="text-4xl text-white mr-3"
+            >{label($asset) === "L-BTC" &&
+            $user &&
+            $user.bitcoin_unit === "sats"
+              ? satsFormatted(balance * 100000000)
+              : balance}</span
+          >
+          <span class="text-gray-400 mt-auto"
+            >{label($asset) === "L-BTC" &&
+            $user &&
+            $user.bitcoin_unit === "sats"
+              ? "sats"
+              : label($asset)}</span
+          >
         </div>
       </div>
       {#if $pending && val($asset.asset, $pending[$asset.asset])}
         <div class="m-6">
           <div class="text-sm light-color">Pending</div>
           <div class="flex mt-3">
-            <span class="light-color mr-3"
-              >{$pending && val($asset.asset, $pending[$asset.asset] || 0)}</span
+            <span class="light-color mr-3">
+              {$pending &&
+              label($asset) === "L-BTC" &&
+              $user &&
+              $user.bitcoin_unit === "sats"
+                ? val($asset.asset, $pending[$asset.asset] || 0) * 100000000
+                : $pending && val($asset.asset, $pending[$asset.asset] || 0)}
+            </span>
+            <span class="text-gray-400"
+              >{label($asset) === "L-BTC" &&
+              $user &&
+              $user.bitcoin_unit === "sats"
+                ? "sats"
+                : label($asset)}</span
             >
-            <span class="text-gray-400">{label($asset)}</span>
           </div>
         </div>
       {/if}
