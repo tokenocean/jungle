@@ -7,69 +7,71 @@
 </script>
 
 <div class:showFilters class="hidden w-full space-y-4">
-  <div>
-    <ToggleSwitch
-      id="list-price"
-      label="Has list price"
-      checked={$fc.listPrice}
-      on:change={(e) => ($fc.listPrice = e.target.checked)}
-    />
-  </div>
-  <div>
-    <ToggleSwitch
-      id="open-bid"
-      label="Has open bid"
-      checked={$fc.openBid}
-      on:change={(e) => ($fc.openBid = e.target.checked)}
-    />
-  </div>
-  <div>
-    <ToggleSwitch
-      id="owned-by-creator"
-      label="Owned by creator"
-      checked={$fc.ownedByCreator}
-      on:change={(e) => ($fc.ownedByCreator = e.target.checked)}
-    />
-  </div>
-  <div>
-    <ToggleSwitch
-      id="has-sold"
-      label="Has sold"
-      checked={$fc.hasSold}
-      on:change={(e) => ($fc.hasSold = e.target.checked)}
-    />
-  </div>
-  <div>
-    <ToggleSwitch
-      id="is-physical"
-      label="Physical artwork"
-      checked={$fc.isPhysical}
-      on:change={(e) => ($fc.isPhysical = e.target.checked)}
-    />
-  </div>
-  <div>
-    <ToggleSwitch
-      id="has-royalties"
-      label="Has royalties"
-      checked={$fc.hasRoyalties}
-      on:change={(e) => ($fc.hasRoyalties = e.target.checked)}
-    />
-  </div>
-  <div>
-    <ToggleSwitch
-      id="is-favorited"
-      label="Is favorited"
-      checked={$fc.isFavorited}
-      on:change={(e) => ($fc.isFavorited = e.target.checked)}
-    />
-  </div>
-  <div>
-    <ToggleSwitch
-      id="from-followed"
-      label="From followed"
-      checked={$fc.fromFollowed}
-      on:change={(e) => ($fc.fromFollowed = e.target.checked)}
-    />
+  <div class="grid-container">
+    <div>
+      <ToggleSwitch
+        id="list-price"
+        label="Has list price"
+        checked={$fc.listPrice}
+        on:change={(e) => ($fc.listPrice = e.target.checked)}
+      />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="open-bid"
+        label="Has open bid"
+        checked={$fc.openBid}
+        on:change={(e) => ($fc.openBid = e.target.checked)}
+      />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="owned-by-creator"
+        label="Owned by creator"
+        checked={$fc.ownedByCreator}
+        on:change={(e) => ($fc.ownedByCreator = e.target.checked)}
+      />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="has-sold"
+        label="Has sold"
+        checked={$fc.hasSold}
+        on:change={(e) => ($fc.hasSold = e.target.checked)}
+      />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="is-physical"
+        label="Physical artwork"
+        checked={$fc.isPhysical}
+        on:change={(e) => ($fc.isPhysical = e.target.checked)}
+      />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="has-royalties"
+        label="Has royalties"
+        checked={$fc.hasRoyalties}
+        on:change={(e) => ($fc.hasRoyalties = e.target.checked)}
+      />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="is-favorited"
+        label="Is favorited"
+        checked={$fc.isFavorited}
+        on:change={(e) => ($fc.isFavorited = e.target.checked)}
+      />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="from-followed"
+        label="From followed"
+        checked={$fc.fromFollowed}
+        on:change={(e) => ($fc.fromFollowed = e.target.checked)}
+      />
+    </div>
   </div>
 </div>
 
@@ -77,5 +79,12 @@
   .showFilters {
     display: block !important;
     width: 100%;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px 10px;
+    padding-top: 20px;
   }
 </style>
