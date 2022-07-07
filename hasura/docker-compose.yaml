@@ -64,7 +64,7 @@ services:
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
   hbp:
     container_name: hbp
-    image: nhost/hasura-backend-plus:v2.2.3
+    image: nhost/hasura-backend-plus:v2.4.0
     depends_on:
       - hasura
     ports:
