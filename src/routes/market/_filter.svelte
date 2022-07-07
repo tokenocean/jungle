@@ -85,6 +85,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 10px 10px;
-    padding-top: 20px;
+    padding-top: 35px;
   }
 </style>

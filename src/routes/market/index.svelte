@@ -110,7 +110,7 @@
   <div
     class="flex flex-wrap justify-between items-center flex-row-reverse controls py-10"
   >
-    <div class="w-full flex filter-container justify-between">
+    <div class="w-full flex items-center filter-container justify-between">
       <div class="switch">
         <div
           class="flex cursor-pointer font-bold"
