@@ -2,7 +2,7 @@
   import * as nobleSecp256k1 from "@noble/secp256k1";
   import { fromBase58 } from "bip32";
   import { keypair, network } from "$lib/wallet";
-  import { token } from "$lib/store";
+  import { token, storeMessages } from "$lib/store";
   import { encrypt, decrypt } from "$lib/utils";
   import Fa from "svelte-fa";
   import { onMount, tick } from "svelte";
@@ -91,6 +91,7 @@
   }
 
   async function handleSelection(user) {
+    console.log($storeMessages);
     selectedUser = user;
     selectedUser.pubkeyFormatted = fromBase58(user.pubkey, network)
       .publicKey.toString("hex")
@@ -109,7 +110,17 @@
 
       message.message = decryptedMessage;
     });
-
+    console.log("test", $storeMessages);
+    $storeMessages.forEach((message) => {
+      if (message.from === user.id) {
+        message.viewed = true;
+      }
+    });
+    console.log($storeMessages);
+    $storeMessages = $storeMessages.filter(
+      (message) => message.viewed === false
+    );
+    console.log($storeMessages);
     await tick();
     getFocus();
 
@@ -128,11 +139,20 @@
     return 0;
   };
 
-  const unreadMessages = (user) => {
+  const unreadMessagesFromUser = (user) => {
     return messages.filter(
       (message) => message.from === user.id && message.viewed === false
     );
   };
+
+  $: unreadMessages = messages.filter(
+    (message) => message.to === $session.user.id && message.viewed === false
+  );
+
+  setTimeout(() => {
+    $storeMessages = unreadMessages;
+    console.log($storeMessages);
+  }, 1000);
 </script>
 
 <div class="flex justify-center items-center py-10">
@@ -160,9 +180,9 @@
                 class="w-10 h-10 rounded-full"
               />
               <p>{user.username}</p>
-              {#if unreadMessages(user).length > 0}
+              {#if unreadMessagesFromUser(user).length > 0}
                 <p>
-                  ({unreadMessages(user).length})
+                  ({unreadMessagesFromUser(user).length})
                 </p>
               {/if}
             </button>
