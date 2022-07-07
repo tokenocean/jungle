@@ -4,7 +4,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: asoltys/lnft-server
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:prod
     restart: on-failure
     command: ["pnpm", "dev"]
     environment:
@@ -28,7 +28,7 @@ services:
       SMTP_USER: "${SMTP_USER}"
       SMTP_PASS: "${SMTP_PASS}"
       SMTP_SENDER: "${SMTP_SENDER}"
-      AUTH_EVENT_VALUE: '${AUTH_EVENT_VALUE}'
+      AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
     volumes:
       - ./app:/app
       - ./custom:/opt/src/hasura/app/custom
@@ -74,8 +74,8 @@ services:
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
-      SERVER_URL: '${SERVER_URL}'
-      AUTH_EVENT_VALUE: '${AUTH_EVENT_VALUE}'
+      SERVER_URL: "${SERVER_URL}"
+      AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
     networks:
       default:
         ipv4_address: 172.18.0.14
@@ -121,6 +121,14 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.16
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+      - ./redis:/data
+    networks:
+      default:
+        ipv4_address: 172.18.0.17
 networks:
   default:
     external:

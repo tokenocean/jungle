@@ -19,6 +19,8 @@ export const filterCriteria = writable({
   hasSold: false,
   isPhysical: false,
   hasRoyalties: false,
+  isFavorited: false,
+  fromFollowed: false,
 });
 export const full = writable();
 export const loading = writable();
@@ -48,3 +50,4 @@ export const acceptStatus = writable();
 export const messageUser = writable({});
 export const tipUser = writable({});
 export const storeMessages = writable();
+export const bitcoinUnitLocal = writable("");

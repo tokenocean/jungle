@@ -13,8 +13,25 @@
   import { ProgressLinear } from "$comp";
   import { onDestroy, onMount, tick } from "svelte";
   import qrcode from "qrcode-generator-es6";
-  import { balances, error, locked, pending, prompt, token } from "$lib/store";
-  import { assetLabel, btc, copy, err, fullscreen, ticker, val } from "$lib/utils";
+  import {
+    balances,
+    error,
+    locked,
+    pending,
+    prompt,
+    token,
+    bitcoinUnitLocal,
+  } from "$lib/store";
+  import {
+    assetLabel,
+    btc,
+    copy,
+    err,
+    fullscreen,
+    ticker,
+    val,
+    satsFormatted,
+  } from "$lib/utils";
   import { getBalances } from "$lib/wallet";
   import { api } from "$lib/api";
 
@@ -31,8 +48,8 @@
   $: getLabel($error);
   let getLabel = async ({ asset }) => {
     label = (await assetLabel(asset)) || ticker(asset);
-  } 
-  
+  };
+
   $: amountUpdated(amount);
   let amountUpdated = (a) => isNaN(a) && ($prompt = undefined);
 
@@ -158,6 +175,19 @@
 
   let address;
   $: if ($session.user) address = $session.user.address;
+
+  $: labelCalculated =
+    label === "L-BTC" && $bitcoinUnitLocal === "sats" ? "L-sats" : label;
+
+  $: currentBalance =
+    label === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(val($error.asset, parseInt(current)) * 100000000)
+      : val($error.asset, parseInt(current));
+
+  $: fundsRequired =
+    label === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(amount * 100000000)
+      : amount;
 </script>
 
 <div class="mb-2 rounded-lg">
@@ -184,13 +214,16 @@
       <div class="w-1/2">
         <div class="text-xs mt-6">Current Balance</div>
         <div class="text-xl">
-          {val($error.asset, parseInt(current))}
-          {label}
+          {currentBalance}
+          {labelCalculated}
         </div>
       </div>
       <div class="w-1/2">
         <div class="text-xs mt-6">Funds Required</div>
-        <div class="text-xl">{amount} {label}</div>
+        <div class="text-xl">
+          {fundsRequired}
+          {labelCalculated}
+        </div>
       </div>
     </div>
 
