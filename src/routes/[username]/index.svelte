@@ -10,7 +10,7 @@
   import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
   import { page } from "$app/stores";
   import { onMount } from "svelte";
-  import { err, goto } from "$lib/utils";
+  import { err, goto, copy } from "$lib/utils";
   import { fromBase58 } from "bip32";
   import {
     Avatar,
@@ -25,6 +25,7 @@
   import Menu from "./_menu.svelte";
   import { query } from "$lib/api";
   import { network } from "$lib/wallet";
+  import qrcode from "qrcode-generator-es6";
 
   export let id;
   export let subject;
@@ -59,6 +60,14 @@
       subject.num_followers++;
     }
   };
+
+  let img;
+  let address = subject.address;
+  const qr = new qrcode(0, "H");
+  address = `bitcoin:${address}`;
+  qr.addData(address);
+  qr.make();
+  img = qr.createSvgTag({});
 
   let tab = subject.is_artist ? "creations" : "collection";
 </script>
@@ -139,6 +148,14 @@
           {#if $session.user.id === subject.id}
             <Menu />
           {:else}
+            <div
+              class="w-full cursor-pointer font-semibold text-xs text-center"
+              on:click={() => copy(subject.address)}
+            >
+              {@html img}
+              {subject.address}
+            </div>
+
             <div class="flex space-x-5">
               <button class="p-2 primary-btn follow mt-8" on:click={follow}>
                 {subject.followed ? "Unfollow" : "Follow"}</button
