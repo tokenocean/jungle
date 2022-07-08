@@ -2,8 +2,8 @@
   import * as nobleSecp256k1 from "@noble/secp256k1";
   import { fromBase58 } from "bip32";
   import { keypair, network } from "$lib/wallet";
-  import { token, storeMessages } from "$lib/store";
-  import { encrypt, decrypt } from "$lib/utils";
+  import { token, unreadMessages, storeMessages } from "$lib/store";
+  import { encrypt } from "$lib/utils";
   import Fa from "svelte-fa";
   import { onMount, tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +12,6 @@
   import { api, query } from "$lib/api";
   import { requirePassword } from "$lib/auth";
 
-  export let messages;
   let ownPrivKey;
   let ownPubKey;
   onMount(async () => {
@@ -22,25 +21,28 @@
   });
 
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
-  let users = uniq(
+
+  $: users = uniq(
     [
-      ...messages.map(({ fromUser: { username, avatar_url, id, pubkey } }) => ({
-        username,
-        avatar_url,
-        id,
-        pubkey,
-      })),
-      ...messages.map(({ toUser: { username, avatar_url, id, pubkey } }) => ({
-        username,
-        avatar_url,
-        id,
-        pubkey,
-      })),
+      ...$storeMessages.map(
+        ({ fromUser: { username, avatar_url, id, pubkey } }) => ({
+          username,
+          avatar_url,
+          id,
+          pubkey,
+        })
+      ),
+      ...$storeMessages.map(
+        ({ toUser: { username, avatar_url, id, pubkey } }) => ({
+          username,
+          avatar_url,
+          id,
+          pubkey,
+        })
+      ),
     ],
     (m) => m.username
-  );
-
-  users = users.filter((user) => user.username !== $session.user.username);
+  ).filter((user) => user.username !== $session.user.username);
 
   let selectedUser;
   let sendMessage;
@@ -61,20 +63,28 @@
       },
     });
 
-    messages.push({
+    $storeMessages.push({
       message: sendMessage,
       created_at: Date.now(),
       from: $session.user.id,
       to: selectedUser.id,
       id: id,
-      user: {
+      viewed: true,
+      toUser: {
         avatar_url: selectedUser.avatar,
         id: selectedUser.id,
         username: selectedUser.username,
+        pubkey: selectedUser.pubkey,
+      },
+      fromUser: {
+        avatar_url: $session.user.avatar_url,
+        id: $session.user.id,
+        username: $session.user.username,
+        pubkey: $session.user.pubkey,
       },
     });
 
-    messages = [...messages];
+    $storeMessages = [...$storeMessages];
     sendMessage = "";
     await tick();
     getFocus();
@@ -91,36 +101,28 @@
   }
 
   async function handleSelection(user) {
-    console.log($storeMessages);
     selectedUser = user;
+
     selectedUser.pubkeyFormatted = fromBase58(user.pubkey, network)
       .publicKey.toString("hex")
       .substring(2);
 
-    messages.forEach((message) => {
+    $storeMessages.forEach((message) => {
       if (message.from === user.id && message.viewed === false) {
         message.viewed = true;
       }
-
-      let decryptedMessage = decrypt(
-        ownPrivKey,
-        selectedUser.pubkeyFormatted,
-        message.message
-      );
-
-      message.message = decryptedMessage;
     });
-    console.log("test", $storeMessages);
-    $storeMessages.forEach((message) => {
+
+    $unreadMessages.forEach((message) => {
       if (message.from === user.id) {
         message.viewed = true;
       }
     });
-    console.log($storeMessages);
-    $storeMessages = $storeMessages.filter(
+
+    $unreadMessages = $unreadMessages.filter(
       (message) => message.viewed === false
     );
-    console.log($storeMessages);
+
     await tick();
     getFocus();
 
@@ -140,19 +142,8 @@
   };
 
   const unreadMessagesFromUser = (user) => {
-    return messages.filter(
-      (message) => message.from === user.id && message.viewed === false
-    );
+    return $unreadMessages.filter((message) => message.from === user.id);
   };
-
-  $: unreadMessages = messages.filter(
-    (message) => message.to === $session.user.id && message.viewed === false
-  );
-
-  setTimeout(() => {
-    $storeMessages = unreadMessages;
-    console.log($storeMessages);
-  }, 1000);
 </script>
 
 <div class="flex justify-center items-center py-10">
@@ -188,7 +179,7 @@
             </button>
           </div>
         {/each}
-        {#if messages.length === 0}
+        {#if $storeMessages.length === 0}
           <p class="text-center">No messages yet.</p>
         {/if}
       {:else}
@@ -219,7 +210,7 @@
         <div
           class="bg-[#31373e] border border-white/50 space-y-4 w-full py-4 px-5 md:px-10 rounded-lg max-h-96 overflow-auto"
         >
-          {#each messages
+          {#each $storeMessages
             .filter((message) => message.from === selectedUser.id || message.to === selectedUser.id)
             .sort(messagesSort) as message}
             <div

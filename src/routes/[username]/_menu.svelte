@@ -9,7 +9,7 @@
     faCog,
   } from "@fortawesome/free-solid-svg-icons";
   import { goto } from "$lib/utils";
-  export let messages;
+  import { unreadMessages } from "$lib/store";
 </script>
 
 <div class="mt-10 mb-5">
@@ -45,7 +45,7 @@
       <div>
         <span>Messages</span>
       </div>
-      {#if messages.find((message) => message.to === $session.user.id && message.viewed === false)}
+      {#if $unreadMessages.length > 0}
         <div class="ml-2 w-2 h-2 rounded-full bg-primary" />
       {/if}
     </div>
