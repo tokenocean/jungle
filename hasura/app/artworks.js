@@ -29,6 +29,7 @@ const { SERVER_URL } = process.env;
 import { getUser, kebab, sleep, wait } from "./utils.js";
 import crypto from "crypto";
 import { app } from "./app.js";
+import { getUtxos } from "./utxos.js";
 
 app.post("/cancel", auth, async (req, res) => {
   try {
@@ -60,7 +61,11 @@ app.post("/transfer", auth, async (req, res) => {
       type: "transfer",
     };
 
-    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, req.headers);
+    let { insert_transactions_one: r } = await q(
+      createTransaction,
+      { transaction },
+      req.headers
+    );
     transfer_id = r.id;
 
     let { users } = await q(getUserByAddress, { address });
@@ -119,9 +124,7 @@ app.post("/held", async (req, res) => {
     let { address, multisig } = owner;
 
     let find = async (a) =>
-      (await lnft.url(`/address/${a}/utxo`).get().json()).find(
-        (tx) => tx.asset === asset
-      );
+      (await getUtxos(a)).find((tx) => tx.asset === asset);
 
     let held = null;
     if (await find(address)) held = "single";
@@ -210,7 +213,11 @@ app.post("/transaction", auth, async (req, res) => {
       url: `${SERVER_URL}/a/${slug}`,
     };
 
-    let { insert_transactions_one: r } = await q(createTransaction, { transaction }, req.headers);
+    let { insert_transactions_one: r } = await q(
+      createTransaction,
+      { transaction },
+      req.headers
+    );
     res.send(r);
   } catch (e) {
     console.log("problem creating transaction", e);

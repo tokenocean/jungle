@@ -1,5 +1,7 @@
 import { mnemonicToSeedSync } from "bip39";
 import { fromSeed } from "bip32";
+import redis from "./redis.js";
+import { wait } from "./utils.js";
 
 import {
   address as Address,
@@ -113,3 +115,21 @@ export const parse = async (psbt) => {
 
   return [tx.getId(), inputs, outputs];
 };
+
+export const getHex = async (txid) => {
+  let hex = await redis.get(txid);
+  if (!hex) {
+    await wait(async () => {
+      try {
+        hex = await electrs.url(`/tx/${txid}/hex`).get().text();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    });
+  }
+
+  await redis.set(txid, hex);
+  return hex;
+};
+
