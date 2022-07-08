@@ -5,7 +5,7 @@
   import { token, unreadMessages, storeMessages } from "$lib/store";
   import { encrypt } from "$lib/utils";
   import Fa from "svelte-fa";
-  import { onMount, tick } from "svelte";
+  import { onMount, onDestroy, tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
   import { session } from "$app/stores";
   import { createMessage, updateMessage } from "$queries/messages";
@@ -18,6 +18,10 @@
     await requirePassword();
     ownPrivKey = keypair().privkey.toString("hex");
     ownPubKey = keypair().pubkey.toString("hex").substring(2);
+  });
+
+  onDestroy(() => {
+    clearInterval(readMessagesInterval);
   });
 
   let uniq = (a, k) => [...new Map(a.map((x) => [k(x), x])).values()];
@@ -46,6 +50,7 @@
 
   let selectedUser;
   let sendMessage;
+  let readMessagesInterval;
 
   async function onSubmit() {
     let encryptedMessage = encrypt(
@@ -100,13 +105,7 @@
     bottom.focus({ preventScroll: false });
   }
 
-  async function handleSelection(user) {
-    selectedUser = user;
-
-    selectedUser.pubkeyFormatted = fromBase58(user.pubkey, network)
-      .publicKey.toString("hex")
-      .substring(2);
-
+  const setReadMessages = async (user) => {
     $storeMessages.forEach((message) => {
       if (message.from === user.id && message.viewed === false) {
         message.viewed = true;
@@ -122,9 +121,19 @@
     $unreadMessages = $unreadMessages.filter(
       (message) => message.viewed === false
     );
-
     await tick();
     getFocus();
+  };
+
+  async function handleSelection(user) {
+    selectedUser = user;
+
+    selectedUser.pubkeyFormatted = fromBase58(user.pubkey, network)
+      .publicKey.toString("hex")
+      .substring(2);
+
+    setReadMessages(user);
+    readMessagesInterval = setInterval(setReadMessages(user), 1000);
 
     api.auth(`Bearer ${$token}`).url("/markRead").post({ from: user.id });
   }
@@ -199,7 +208,10 @@
           </div>
           <button
             class="text-[#30bfad]"
-            on:click={() => (selectedUser = undefined)}
+            on:click={() => {
+              selectedUser = undefined;
+              clearInterval(readMessagesInterval);
+            }}
           >
             <div class="flex">
               <Fa icon={faChevronLeft} class="my-auto mr-1" />

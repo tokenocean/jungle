@@ -12,8 +12,9 @@
       };
 
     /* const props = await get(`/announcements.json`, fetch); */
-    const props = await fetch('/announcements.json',
-                              { headers: { "content-type": "application/json" }}).then(r => r.json());
+    const props = await fetch("/announcements.json", {
+      headers: { "content-type": "application/json" },
+    }).then((r) => r.json());
     props.jwt = session.jwt;
 
     let authRequired = [/a\/create/, /edit/, /wallet/];
@@ -184,7 +185,7 @@
     }
 
     fetchMessages();
-    messagesInterval = setInterval(fetchMessages, 10000);
+    messagesInterval = setInterval(fetchMessages, 2000);
     refreshInterval = setInterval(refresh, 720000);
     authCheckInterval = setInterval(authCheck, 5000);
 
