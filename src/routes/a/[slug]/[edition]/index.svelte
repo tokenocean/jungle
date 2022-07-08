@@ -2,8 +2,9 @@
   import { api, post } from "$lib/api";
   import { browser } from "$app/env";
   import branding from "$lib/branding";
-  import { host } from "$lib/utils";
+  import { host, satsFormatted, updateBitcoinUnit } from "$lib/utils";
   import Comments from "./_comments.svelte";
+  import { bitcoinUnitLocal } from "$lib/store";
 
   export async function load({ fetch, params: { slug } }) {
     const props = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
@@ -167,8 +168,12 @@
     try {
       if (e) e.preventDefault();
       offering = true;
+      if (ticker === "L-BTC" && $bitcoinUnitLocal === "sats") {
+        transaction.amount = sats(amount / 100000000);
+      } else {
+        transaction.amount = sats(amount);
+      }
 
-      transaction.amount = sats(amount);
       transaction.asset = artwork.asset;
       transaction.type = "bid";
 
@@ -265,10 +270,24 @@
   let showPopup = false;
   let showMore = false;
   let showActivity = false;
-  let redeemInput = false;
-  let redeemCode;
 
-  const redeem = () => {};
+  $: tickerCalculated =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats" ? "L-sats" : ticker;
+
+  $: listPrice =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(list_price * 100000000)
+      : list_price;
+
+  $: reservePrice =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(artwork.reserve_price)
+      : val(artwork.reserve_price);
+
+  $: bidAmount =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(artwork.bid && artwork.bid.amount)
+      : val(artwork.bid && artwork.bid.amount);
 </script>
 
 <Head {metadata} />
@@ -354,22 +373,49 @@
         {#if artwork.list_price}
           <div class="my-2">
             <div class="text-sm mt-auto">List Price</div>
-            <div class="text-lg">{list_price} {ticker}</div>
+            <button
+              on:click={() =>
+                updateBitcoinUnit(
+                  $bitcoinUnitLocal === "sats" ? "btc" : "sats"
+                )}
+              disabled={ticker !== "L-BTC"}
+              class="text-lg"
+            >
+              {listPrice}
+              {tickerCalculated}
+            </button>
           </div>
         {/if}
         {#if artwork.reserve_price}
           <div class="my-2">
             <div class="text-sm mt-auto">Reserve Price</div>
-            <div class="flex-1 text-lg">
-              {val(artwork.reserve_price)}
-              {ticker}
-            </div>
+            <button
+              on:click={() =>
+                updateBitcoinUnit(
+                  $bitcoinUnitLocal === "sats" ? "btc" : "sats"
+                )}
+              disabled={ticker !== "L-BTC"}
+              class="flex-1 text-lg"
+            >
+              {reservePrice}
+              {tickerCalculated}
+            </button>
           </div>
         {/if}
         {#if artwork.bid && artwork.bid.amount}
           <div class="my-2">
             <div class="text-sm mt-auto">Current bid</div>
-            <div class="text-lg">{val(artwork.bid.amount)} {ticker}</div>
+            <button
+              on:click={() =>
+                updateBitcoinUnit(
+                  $bitcoinUnitLocal === "sats" ? "btc" : "sats"
+                )}
+              disabled={ticker !== "L-BTC"}
+              class="text-lg"
+            >
+              {bidAmount}
+              {tickerCalculated}
+            </button>
           </div>
         {/if}
       </div>
@@ -475,7 +521,7 @@
                     <div
                       class="absolute inset-y-0 right-0 flex items-center mr-2"
                     >
-                      {ticker}
+                      {tickerCalculated}
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,15 @@
 version: "3.6"
 services:
+  caddy:
+    container_name: caddy
+    image: caddy:2
+    ports:
+      - "8180:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    environment:
+      DOMAIN: "${DOMAIN}"
   ui:
     image: junglelab/jungle:latest
     depends_on:
@@ -108,3 +118,8 @@ services:
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+      - ./redis:/data

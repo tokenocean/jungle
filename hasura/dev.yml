@@ -4,7 +4,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: asoltys/lnft-server
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:prod
     restart: on-failure
     command: ["pnpm", "dev"]
     environment:
@@ -121,6 +121,14 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.16
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+      - ./redis:/data
+    networks:
+      default:
+        ipv4_address: 172.18.0.17
 networks:
   default:
     external:

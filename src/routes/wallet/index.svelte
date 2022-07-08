@@ -6,10 +6,25 @@
   import { page } from "$app/stores";
   import { browser } from "$app/env";
   import { onDestroy, onMount, tick } from "svelte";
-  import { asset, assets, balances, pending, password } from "$lib/store";
+  import {
+    asset,
+    assets,
+    balances,
+    pending,
+    password,
+    bitcoinUnitLocal,
+  } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { getArtworksByOwner } from "$queries/artworks";
-  import { btc, err, label, sats, val } from "$lib/utils";
+  import {
+    btc,
+    err,
+    label,
+    sats,
+    val,
+    satsFormatted,
+    updateBitcoinUnit,
+  } from "$lib/utils";
   import { requireLogin } from "$lib/auth";
   import { getBalances } from "$lib/wallet";
 
@@ -45,6 +60,21 @@
 
   onMount(pollBalances);
   onDestroy(() => clearTimeout(poll));
+
+  $: labelCalculated =
+    label($asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? "L-sats"
+      : label($asset);
+
+  $: balanceCalculated =
+    label($asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(balance * 100000000)
+      : balance;
+
+  $: pendingCalculated =
+    $pending && label($asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? val($asset.asset, $pending[$asset.asset] || 0) * 100000000
+      : $pending && val($asset.asset, $pending[$asset.asset] || 0);
 </script>
 
 {#if $balances && $pending}
@@ -76,20 +106,28 @@
 
       <div class="m-6">
         <div class="text-sm light-color">Balance</div>
-        <div class="flex mt-3">
-          <span class="text-4xl text-white mr-3">{balance}</span>
-          <span class="text-gray-400 mt-auto">{label($asset)}</span>
-        </div>
+        <button
+          class="flex mt-3"
+          on:click={() =>
+            updateBitcoinUnit($bitcoinUnitLocal === "sats" ? "btc" : "sats")}
+          disabled={label($asset) !== "L-BTC"}
+        >
+          <span class="text-4xl text-white mr-3">
+            {balanceCalculated}
+          </span>
+          <span class="text-gray-400 mt-auto">
+            {labelCalculated}
+          </span>
+        </button>
       </div>
       {#if $pending && val($asset.asset, $pending[$asset.asset])}
         <div class="m-6">
           <div class="text-sm light-color">Pending</div>
           <div class="flex mt-3">
-            <span class="light-color mr-3"
-              >{$pending &&
-                val($asset.asset, $pending[$asset.asset] || 0)}</span
-            >
-            <span class="text-gray-400">{label($asset)}</span>
+            <span class="light-color mr-3">
+              {pendingCalculated}
+            </span>
+            <span class="text-gray-400"> {labelCalculated}</span>
           </div>
         </div>
       {/if}

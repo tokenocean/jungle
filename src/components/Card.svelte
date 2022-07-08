@@ -1,9 +1,9 @@
 <script>
   import { Avatar, ArtworkMedia, Heart } from "$comp";
   import countdown from "$lib/countdown";
-  import { fade, units } from "$lib/utils";
+  import { fade, units, satsFormatted, updateBitcoinUnit } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
-  import { loaded } from "$lib/store";
+  import { loaded, bitcoinUnitLocal } from "$lib/store";
   import { session } from "$app/stores";
 
   export let justScrolled = false;
@@ -42,6 +42,19 @@
 
   onMount(count);
   onDestroy(() => clearTimeout(timeout));
+
+  $: tickerCalculated =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats" ? "L-sats" : ticker;
+
+  $: listPrice =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(artwork.list_price)
+      : val(artwork.list_price);
+
+  $: currentBid =
+    ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? satsFormatted(artwork.bid && artwork.bid.amount)
+      : val(artwork.bid && artwork.bid.amount);
 </script>
 
 <div
@@ -81,17 +94,36 @@
         </div>
         <div class="flex mb-4">
           <div class="1/2 flex-1">
-            <div class="price">
+            <button
+              class="price"
+              on:click={() => {
+                updateBitcoinUnit(
+                  $bitcoinUnitLocal === "sats" ? "btc" : "sats"
+                );
+              }}
+              disabled={ticker !== "L-BTC"}
+            >
               {#if artwork.list_price}
-                {val(artwork.list_price)}
+                {listPrice}
               {:else}&mdash;{/if}
-              {ticker}
-            </div>
+              {tickerCalculated}
+            </button>
             <div class="w-1/2 text-xs font-medium">List Price</div>
           </div>
           {#if artwork.bid && artwork.bid.user}
             <div class="1/2 flex-1">
-              <div class="price">{val(artwork.bid.amount)} {ticker}</div>
+              <button
+                class="price"
+                on:click={() => {
+                  updateBitcoinUnit(
+                    $bitcoinUnitLocal === "sats" ? "btc" : "sats"
+                  );
+                }}
+                disabled={ticker !== "L-BTC"}
+              >
+                {currentBid}
+                {tickerCalculated}
+              </button>
               <div class="text-xs font-medium">
                 Current bid by
                 <a

@@ -64,6 +64,7 @@
     poll,
     user,
     token,
+    bitcoinUnitLocal,
   } from "$lib/store";
   import { onDestroy, onMount } from "svelte";
   import branding from "$lib/branding";
@@ -71,6 +72,19 @@
 
   export let popup;
   export let jwt;
+
+  function initializeBTCUnits() {
+    if ($session.user) {
+      $bitcoinUnitLocal = $session.user.bitcoin_unit;
+    } else if (browser && window.localStorage.getItem("unit")) {
+      $bitcoinUnitLocal = browser && window.localStorage.getItem("unit");
+    } else {
+      browser && window.localStorage.setItem("unit", "btc");
+      $bitcoinUnitLocal = "btc";
+    }
+  }
+
+  initializeBTCUnits();
 
   let unsubscribeFromSession;
   let refreshInterval;

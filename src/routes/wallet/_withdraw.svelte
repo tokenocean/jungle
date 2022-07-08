@@ -2,7 +2,7 @@
   import { session } from "$app/stores";
   import { query } from "$lib/api";
   import { tick } from "svelte";
-  import { asset, assets, balances, psbt } from "$lib/store";
+  import { asset, assets, balances, psbt, bitcoinUnitLocal } from "$lib/store";
   import { broadcast, pay, keypair, requestSignature } from "$lib/wallet";
   import { btc, dev, err, info, sats, val, ticker } from "$lib/utils";
   import sign from "$lib/sign";
@@ -38,8 +38,18 @@
     loading = true;
     try {
       let { asset: a } = $asset;
+
       if (a !== btc && !artwork) artwork = { asset: a };
-      $psbt = await pay(artwork, to.trim(), sats(a, amount));
+      $psbt = await pay(
+        artwork,
+        to.trim(),
+        sats(
+          a,
+          a === btc && $bitcoinUnitLocal === "sats"
+            ? amount / 100000000
+            : amount
+        )
+      );
       $psbt = await sign();
 
       if (edition && edition.held === "multisig") {
@@ -56,6 +66,8 @@
     }
     loading = false;
   };
+
+  $: unitCalculated = $bitcoinUnitLocal === "sats" ? "L-sats" : "L-BTC";
 </script>
 
 {#if $session.user && withdrawing}
@@ -77,13 +89,18 @@
       </div>
       <div class="flex flex-col mb-4">
         <label for="amount">Amount</label>
-        <div class="flex justify-between text-black">
+        <div class="flex relative justify-between text-black">
           <input
             id="amount"
             class="w-full"
             placeholder={val($asset.asset, 0)}
             bind:value={amount}
           />
+          {#if ticker($asset.asset) === "L-BTC"}
+            <div class="absolute top-[17px] right-2">
+              {unitCalculated}
+            </div>
+          {/if}
         </div>
       </div>
       <div class="flex flex-col mb-4">
