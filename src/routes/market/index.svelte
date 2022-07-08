@@ -1,7 +1,10 @@
 <script context="module">
   import { post } from "$lib/api";
   export async function load({ fetch }) {
-    const r = await post("/artworks.json", {}, fetch).json();
+      const r = await fetch("/artworks.json", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+      }).then((r) => r.json());
 
     return {
       props: {
@@ -78,11 +81,11 @@
         most_viewed: { views: "desc" },
       }[$sc];
 
-      const r = await post(
-        "/artworks.json",
-        { offset: $offset, order_by, where },
-        fetch
-      ).json();
+      const r = await fetch("/artworks.json", {
+        method: "POST",
+        body: JSON.stringify({ offset: $offset, order_by, where }),
+        headers: { "content-type": "application/json" },
+      }).then((r) => r.json());
 
       filtered = [...r.artworks];
       total = r.total;
