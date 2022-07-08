@@ -103,6 +103,7 @@
   let bottom;
   function getFocus() {
     bottom.focus({ preventScroll: false });
+    console.log(bottom);
   }
 
   const setReadMessages = async (user) => {
@@ -121,7 +122,10 @@
     $unreadMessages = $unreadMessages.filter(
       (message) => message.viewed === false
     );
+
+    api.auth(`Bearer ${$token}`).url("/markRead").post({ from: user.id });
     await tick();
+
     getFocus();
   };
 
@@ -133,9 +137,7 @@
       .substring(2);
 
     setReadMessages(user);
-    readMessagesInterval = setInterval(setReadMessages(user), 1000);
-
-    api.auth(`Bearer ${$token}`).url("/markRead").post({ from: user.id });
+    readMessagesInterval = setInterval(() => setReadMessages(user), 1000);
   }
 
   const messagesSort = (messageA, messageB) => {
