@@ -11,7 +11,10 @@
         },
       };
 
-    const props = await get(`/announcements.json`, fetch);
+    /* const props = await get(`/announcements.json`, fetch); */
+    const props = await fetch("/announcements.json", {
+      headers: { "content-type": "application/json" },
+    }).then((r) => r.json());
     props.jwt = session.jwt;
 
     let authRequired = [/a\/create/, /edit/, /wallet/];
