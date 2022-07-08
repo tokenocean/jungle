@@ -48,7 +48,7 @@
   let loadMore = async () => {
     if (!browser) return;
     try {
-      let my_followers = $session.user.user.follows.map(x => x.user_id); // get list of follower ids
+      let my_followers = $session.user.user.follows.map((x) => x.user_id); // get list of follower ids
 
       let where = {};
       if ($sc === "ending_soon")
@@ -64,7 +64,10 @@
       if ($fc.hasRoyalties) where.has_royalty = { _eq: true };
       if ($fc.isFavorited) where.favorited = { _eq: true };
       if ($fc.fromFollowed)
-        where._or = { artist: { id: { _in: my_followers }}, owner: { id: { _in: my_followers }}};
+        where._or = {
+          artist: { id: { _in: my_followers } },
+          owner: { id: { _in: my_followers } },
+        };
 
       let order_by = {
         newest: { created_at: "desc" },

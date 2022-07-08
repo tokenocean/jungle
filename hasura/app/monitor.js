@@ -588,7 +588,10 @@ app.get("/address/:address/utxo", async (req, res) => {
         try {
           if (Address.fromOutputScript(script, network) === address) {
             await redis.sAdd(utxoSet, `${txid}:${j}`);
-            await redis.set(`${txid}:${j}`, `${parseAsset(asset)},${parseVal(value)}`);
+            await redis.set(
+              `${txid}:${j}`,
+              `${parseAsset(asset)},${parseVal(value)}`
+            );
           }
         } catch (e) {}
       }
@@ -605,7 +608,7 @@ app.get("/address/:address/utxo", async (req, res) => {
 
       vout = parseInt(vout);
       value = parseInt(value);
-      
+
       utxos.push({ txid, vout, asset, value });
     }
 
