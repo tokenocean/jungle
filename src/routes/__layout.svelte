@@ -11,7 +11,7 @@
         },
       };
 
-    const props = await fetch("/announcements.json", {
+    const props = await fetch("/announcements", {
       headers: { "content-type": "application/json" },
     }).then((r) => r.json());
 
@@ -76,7 +76,7 @@
   import branding from "$lib/branding";
   import { checkAuthFromLocalStorage, requirePassword } from "$lib/auth";
   import { query } from "$lib/api";
-  import { err, decrypt } from "$lib/utils";
+  import { err, decrypt, goto } from "$lib/utils";
   import { keypair, network } from "$lib/wallet";
   import { fromBase58 } from "bip32";
 
@@ -103,10 +103,12 @@
 
   let refresh = async () => {
     try {
-      let { jwt_token } = await get("/auth/refresh.json", fetch);
+      if (!$session.user) return;
+      let { jwt_token } = await get('/auth/refresh');
       $token = jwt_token;
     } catch (e) {
-      console.log(e);
+      console.log("problem refreshing token", e);
+      goto("/logout");
     }
   };
 
@@ -185,8 +187,8 @@
     }
 
     fetchMessages();
-    messagesInterval = setInterval(fetchMessages, 2000);
-    refreshInterval = setInterval(refresh, 720000);
+    messagesInterval = setInterval(fetchMessages, 5000);
+    refreshInterval = setInterval(refresh, 600000);
     authCheckInterval = setInterval(authCheck, 5000);
 
     unsubscribeFromSession = session.subscribe((value) => {

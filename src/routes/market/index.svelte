@@ -1,11 +1,13 @@
 <script context="module">
   import { post } from "$lib/api";
   export async function load({ fetch }) {
-      const r = await fetch("/artworks.json", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-      }).then((r) => r.json());
+    // const r = await fetch("/artworks", {
+    //   method: "POST",
+    //   body: "{}",
+    //   headers: { "content-type": "application/json" },
+    // }).then((r) => r.json());
 
+    const r = await post("/artworks", {}, fetch);
     return {
       props: {
         total: r.total,
@@ -51,8 +53,6 @@
   let loadMore = async () => {
     if (!browser) return;
     try {
-      let my_followers = $session.user.user.follows.map((x) => x.user_id); // get list of follower ids
-
       let where = {};
       if ($sc === "ending_soon")
         where.auction_end = { _is_null: false, _gte: new Date() };
@@ -66,11 +66,14 @@
       if ($fc.isPhysical) where.is_physical = { _eq: true };
       if ($fc.hasRoyalties) where.has_royalty = { _eq: true };
       if ($fc.isFavorited) where.favorited = { _eq: true };
-      if ($fc.fromFollowed)
+
+      if ($session.user && $fc.fromFollowed) {
+        let follows = $session.user.user.follows.map((u) => u.user_id);
         where._or = {
-          artist: { id: { _in: my_followers } },
-          owner: { id: { _in: my_followers } },
+          artist: { id: { _in: follows } },
+          owner: { id: { _in: follows } },
         };
+      }
 
       let order_by = {
         newest: { created_at: "desc" },
@@ -81,7 +84,7 @@
         most_viewed: { views: "desc" },
       }[$sc];
 
-      const r = await fetch("/artworks.json", {
+      const r = await fetch("/artworks", {
         method: "POST",
         body: JSON.stringify({ offset: $offset, order_by, where }),
         headers: { "content-type": "application/json" },
@@ -90,7 +93,7 @@
       filtered = [...r.artworks];
       total = r.total;
     } catch (e) {
-      console.log(e);
+      console.log("problem fetching artworks", e);
     }
   };
 </script>

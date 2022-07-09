@@ -116,7 +116,7 @@ export const parse = async (psbt) => {
   return [tx.getId(), inputs, outputs];
 };
 
-export const getHex = async (txid) => {
+export const hex = async (txid) => {
   let hex = await redis.get(txid);
   if (!hex) {
     await wait(async () => {

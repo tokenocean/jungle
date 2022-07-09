@@ -3,9 +3,9 @@ import { marketFields as artworkFields } from "./artworks";
 import { fields as txFields } from "./transactions";
 
 let fields =
-  "id, username, location, bio, email, full_name, website, twitter, instagram, avatar_url, address, multisig, pubkey, is_artist, prompt_sign, bitcoin_unit";
+  "id, username, location, bio, email, full_name, website, twitter, instagram, avatar_url, address, multisig, pubkey, is_artist, prompt_sign";
 
-let privateFields = "mnemonic, wallet_initialized, is_admin, info, has_samples";
+let privateFields = "mnemonic, wallet_initialized, is_admin, info, has_samples, bitcoin_unit";
 
 let computed = "followed, num_follows, num_followers";
 

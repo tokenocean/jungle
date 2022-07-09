@@ -4,10 +4,11 @@ import reverse from "buffer-reverse";
 import fs from "fs";
 import { address as Address, Psbt, Transaction } from "liquidjs-lib";
 const sleep = (n) => new Promise((r) => setTimeout(r, n));
-import { btc, network, parseVal, parseAsset } from "./wallet.js";
+import { btc, hex, network } from "./wallet.js";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
 import { getUser, wait } from "./utils.js";
+import { utxos } from "./utxos.js";
 
 import {
   cancelBid,
@@ -414,7 +415,7 @@ let scanUtxos = async (address) => {
 
   transactions.map(async ({ id, hash, asset: txAsset, confirmed }) => {
     try {
-      let tx = Transaction.fromHex(await getHex(hash));
+      let tx = Transaction.fromHex(await hex(hash));
 
       tx.outs.map(
         ({ value, asset, script }, vout) =>
@@ -505,9 +506,7 @@ app.get("/balance", auth, async (req, res) => {
 
 app.get("/address/:address/utxo", async (req, res) => {
   try {
-    let { address } = req.params;
-
-    res.send({ utxos });
+    res.send(await utxos(req.params.address));
   } catch (e) {
     console.log("problem getting utxos", e);
     res.code(500).send(e.message);

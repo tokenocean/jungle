@@ -29,7 +29,7 @@ const { SERVER_URL } = process.env;
 import { getUser, kebab, sleep, wait } from "./utils.js";
 import crypto from "crypto";
 import { app } from "./app.js";
-import { getUtxos } from "./utxos.js";
+import { utxos } from "./utxos.js";
 
 app.post("/cancel", auth, async (req, res) => {
   try {
@@ -124,7 +124,7 @@ app.post("/held", async (req, res) => {
     let { address, multisig } = owner;
 
     let find = async (a) =>
-      (await getUtxos(a)).find((tx) => tx.asset === asset);
+      (await utxos(a)).find((tx) => tx.asset === asset);
 
     let held = null;
     if (await find(address)) held = "single";

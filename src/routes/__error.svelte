@@ -1,6 +1,7 @@
 <script context="module">
   export function load({ error, status }) {
-    console.log(error, status);
+console.trace();
+    console.log(error, error.stack, status);
     return {
       props: {
         title: `${status}: ${error.message}`,
