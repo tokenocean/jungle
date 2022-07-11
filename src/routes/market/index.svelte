@@ -1,22 +1,3 @@
-<script context="module">
-  import { post } from "$lib/api";
-  export async function load({ fetch }) {
-    // const r = await fetch("/artworks", {
-    //   method: "POST",
-    //   body: "{}",
-    //   headers: { "content-type": "application/json" },
-    // }).then((r) => r.json());
-
-    const r = await post("/artworks", {}, fetch);
-    return {
-      props: {
-        total: r.total,
-        initialArtworks: r.artworks,
-      },
-    };
-  }
-</script>
-
 <script>
   import { session } from "$app/stores";
   import { ProgressLinear } from "$comp";
