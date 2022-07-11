@@ -6,6 +6,7 @@ import { PassThrough } from "stream";
 import Clone from "readable-stream-clone";
 import { app } from "./app.js";
 import fastifyMultipart from "@fastify/multipart";
+import FormData from "form-data";
 
 app.register(fastifyMultipart);
 
@@ -17,6 +18,7 @@ app.post("/upload", async function (req, res) {
     const s1 = new Clone(data.file);
     const s2 = new Clone(data.file);
     const s3 = new Clone(data.file);
+    const s4 = new Clone(data.file);
 
     const { cid } = await ipfs.add(s1);
     const name = cid.toString();
@@ -26,7 +28,29 @@ app.post("/upload", async function (req, res) {
     const thumb = `${path}.${ext}`;
     const tmp = `/tmp/${name}`;
 
-    await new Promise((resolve) => s2.pipe(fs.createWriteStream(tmp).on('finish', resolve)));
+    await new Promise((resolve) =>
+      s2.pipe(fs.createWriteStream(tmp).on("finish", resolve))
+    );
+
+
+    const form = new FormData();
+    form.append("file", s4, {
+      filename: name,
+      contentType: data.mimetype,
+    });
+
+    form.submit(
+      {
+        host: "api.nft.storage",
+        path: "/upload",
+        method: "POST",
+        protocol: "https:",
+        headers: {
+          Authorization: `Bearer ${process.env.NFT_STORAGE_TOKEN}`,
+        },
+      },
+      (err, res) => err && console.log(err)
+    );
 
     try {
       if (format === "video" || ext === "gif") {
@@ -54,4 +78,3 @@ app.post("/upload", async function (req, res) {
     return res.status(500).send(e);
   }
 });
-
