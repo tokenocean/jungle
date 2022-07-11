@@ -1,22 +1,3 @@
-<script context="module">
-  import { post } from "$lib/api";
-  export async function load({ fetch }) {
-    // const r = await fetch("/artworks", {
-    //   method: "POST",
-    //   body: "{}",
-    //   headers: { "content-type": "application/json" },
-    // }).then((r) => r.json());
-
-    const r = await post("/artworks", {}, fetch);
-    return {
-      props: {
-        total: r.total,
-        initialArtworks: r.artworks,
-      },
-    };
-  }
-</script>
-
 <script>
   import { session } from "$app/stores";
   import { ProgressLinear } from "$comp";
@@ -37,27 +18,18 @@
   import { requirePassword } from "$lib/auth";
   import { compareAsc, differenceInMilliseconds, parseISO } from "date-fns";
   import { browser } from "$app/env";
-
   export let total;
   export let initialArtworks = [];
-
   let showFilters;
   let filtered = [...initialArtworks];
-
   $: filtersUpdated($fc, $sc);
   let filtersUpdated = () => {
     $offset = 0;
     loadMore();
   };
-
   let loadMore = async () => {
     if (!browser) return;
     try {
-<<<<<<< HEAD
-      let my_followers = $session.user.user.follows.map((x) => x.user_id); // get list of follower ids
-
-=======
->>>>>>> tokenocean/master
       let where = {};
       if ($sc === "ending_soon")
         where.auction_end = { _is_null: false, _gte: new Date() };
@@ -71,14 +43,6 @@
       if ($fc.isPhysical) where.is_physical = { _eq: true };
       if ($fc.hasRoyalties) where.has_royalty = { _eq: true };
       if ($fc.isFavorited) where.favorited = { _eq: true };
-<<<<<<< HEAD
-      if ($fc.fromFollowed)
-        where._or = {
-          artist: { id: { _in: my_followers } },
-          owner: { id: { _in: my_followers } },
-        };
-=======
-
       if ($session.user && $fc.fromFollowed) {
         let follows = $session.user.user.follows.map((u) => u.user_id);
         where._or = {
@@ -86,8 +50,6 @@
           owner: { id: { _in: follows } },
         };
       }
->>>>>>> tokenocean/master
-
       let order_by = {
         newest: { created_at: "desc" },
         oldest: { created_at: "asc" },
@@ -96,13 +58,11 @@
         ending_soon: { auction_end: "asc" },
         most_viewed: { views: "desc" },
       }[$sc];
-
       const r = await fetch("/artworks", {
         method: "POST",
         body: JSON.stringify({ offset: $offset, order_by, where }),
         headers: { "content-type": "application/json" },
       }).then((r) => r.json());
-
       filtered = [...r.artworks];
       total = r.total;
     } catch (e) {
@@ -119,7 +79,7 @@
   <h2 class="md:mb-0">Market</h2>
   {#if $session.user && $session.user.is_artist}
     <a href="/a/create" class="primary-btn" data-cy="new-artwork"
-      >Submit a new asset</a
+      >Submit a new artwork</a
     >
   {/if}
 </div>
@@ -157,10 +117,9 @@
       width: 90%;
       appearance: none;
       border: 0;
-      border-bottom: 1px solid #ff9900;
+      border-bottom: 1px solid #6ed8e0;
     }
   }
-
   @media only screen and (max-width: 767px) {
     .primary-btn {
       width: 300px;
