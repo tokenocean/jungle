@@ -1,4 +1,4 @@
-import { editionFields } from "./artworks";
+import { fields as artworkFields } from "./artworks";
 
 export const createTransaction = `mutation create_transaction($transaction: transactions_insert_input!) {
   insert_transactions_one(object: $transaction) {
@@ -34,7 +34,7 @@ export const fields = `
 `;
 
 export const getArtworkTransactions = (id) => `query {
-  transactions(order_by: {created_at: desc}, where: {_and: {edition_id: {_eq: "${id}"}}}) {
+  transactions(order_by: {created_at: desc}, where: {_and: {artwork_id: {_eq: "${id}"}}}) {
     ${fields}
     artwork {
       ${artworkFields}
@@ -52,7 +52,7 @@ export const getTransaction = `query($id: uuid!) {
 }`;
 
 export const getTransactions = (limit = 10) => `query {
-  transactions(where: {edition_id: {_is_null: false}}, order_by: {created_at: desc}, limit: ${limit}) {
+  transactions(where: {artwork_id: {_is_null: false}}, order_by: {created_at: desc}, limit: ${limit}) {
     ${fields}
     artwork {
       ${artworkFields}
@@ -82,7 +82,7 @@ export const getRecentActivity = (limit = 3) => `query {
 }`;
 
 export const getLatestPieces = (limit = 3) => `query {
-  transactions(where: {edition_id: {_is_null: false}, type: {_eq: "creation"}}, order_by: [{created_at: desc}], limit: ${limit}) {
+  transactions(where: {artwork_id: {_is_null: false}, type: {_eq: "creation"}}, order_by: [{created_at: desc}], limit: ${limit}) {
     ${fields}
     artwork {
       ${artworkFields}
