@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "cypress:open": "cypress open",
-    "dev": "TAILWIND_MODE=watch vite dev --host",
+    "dev": "cross-env TAILWIND_MODE=watch vite dev --host",
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
@@ -30,6 +30,7 @@
     "cipher-base": "github:asoltys/cipher-base",
     "cookie": "^0.4.2",
     "create-hash": "^1.2.0",
+    "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
     "cssnano": "^5.1.12",
     "cypress": "^9.7.0",
