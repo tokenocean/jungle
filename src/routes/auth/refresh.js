@@ -12,24 +12,27 @@ export async function get({ request: { headers } }) {
   try {
     const cookies = cookie.parse(headers.get("cookie") || "");
     let { refresh_token, token: jwt } = cookies;
+
     if (!refresh_token) throw new Error("no refresh token");
 
-    let res = await hbp
-      .headers(headers)
+    let body = await hbp
       .url(`/auth/token/refresh?refresh_token=${refresh_token}`)
       .get()
-      .res();
-
-    let body = await res.json();
+      .json();
     let { jwt_token, jwt_expires_in } = body;
-
+    ({ refresh_token } = body);
     let tokenExpiry = parseInt(jwt_expires_in / 1000);
+    let refreshExpiry = parseInt(259200);
 
     return {
       body,
       headers: {
         "set-cookie": [
-          res.headers.get("set-cookie").split(",").slice(0, 2).join(""),
+          cookie.serialize("refresh_token", refresh_token, {
+            ...opts,
+            maxAge: refreshExpiry,
+            expires: addSeconds(new Date(), refreshExpiry),
+          }),
           cookie.serialize("token", jwt_token, {
             ...opts,
             maxAge: tokenExpiry,
@@ -38,10 +41,10 @@ export async function get({ request: { headers } }) {
         ],
       },
     };
-  } catch (e) {
+  } catch (error) {
     return {
-      body: {},
-      status: 200,
+      status: 500,
+      error,
       headers: new Headers({
         "set-cookie": [
           cookie.serialize("token", "", {

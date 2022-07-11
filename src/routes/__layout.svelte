@@ -11,10 +11,10 @@
         },
       };
 
-    /* const props = await get(`/announcements.json`, fetch); */
-    const props = await fetch("/announcements.json", {
+    const props = await fetch("/announcements", {
       headers: { "content-type": "application/json" },
     }).then((r) => r.json());
+
     props.jwt = session.jwt;
 
     let authRequired = [/a\/create/, /edit/, /wallet/];
@@ -59,6 +59,7 @@
   import { page, session } from "$app/stores";
   import decode from "jwt-decode";
   import { Sidebar, Navbar, Dialog, Footer, Snack, Head } from "$comp";
+  import { getMessages } from "$queries/messages";
   import {
     meta,
     popup as p,
@@ -68,10 +69,16 @@
     user,
     token,
     bitcoinUnitLocal,
+    storeMessages,
+    unreadMessages,
   } from "$lib/store";
   import { onDestroy, onMount } from "svelte";
   import branding from "$lib/branding";
-  import { checkAuthFromLocalStorage } from "$lib/auth";
+  import { checkAuthFromLocalStorage, requirePassword } from "$lib/auth";
+  import { query } from "$lib/api";
+  import { err, decrypt, goto } from "$lib/utils";
+  import { keypair, network } from "$lib/wallet";
+  import { fromBase58 } from "bip32";
 
   export let popup;
   export let jwt;
@@ -92,13 +99,16 @@
   let unsubscribeFromSession;
   let refreshInterval;
   let authCheckInterval;
+  let messagesInterval;
 
   let refresh = async () => {
     try {
-      let { jwt_token } = await get("/auth/refresh.json", fetch);
+      if (!$session.user) return;
+      let { jwt_token } = await get("/auth/refresh");
       $token = jwt_token;
     } catch (e) {
-      console.log(e);
+      console.log("problem refreshing token", e);
+      goto("/logout");
     }
   };
 
@@ -124,7 +134,61 @@
     $user = $session.user;
     $token = jwt;
 
-    refreshInterval = setInterval(refresh, 720000);
+    let ownPrivKey;
+    let messages = [];
+
+    async function getPrivKey() {
+      if ($session.user) {
+        await requirePassword();
+        ownPrivKey = keypair().privkey.toString("hex");
+      }
+    }
+
+    getPrivKey();
+
+    async function fetchMessages() {
+      if ($session.user) {
+        try {
+          ({ messages } = await query(getMessages));
+          let newMessages = messages.filter(
+            (m) => !$storeMessages.find((o) => m.id === o.id)
+          );
+
+          messages.forEach((message) => {
+            let pubkeyFormatted = fromBase58(
+              message.from !== $session.user.id
+                ? message.fromUser.pubkey
+                : message.toUser.pubkey,
+              network
+            )
+              .publicKey.toString("hex")
+              .substring(2);
+
+            let decryptedMessage = decrypt(
+              ownPrivKey,
+              pubkeyFormatted,
+              message.message
+            );
+
+            message.message = decryptedMessage;
+          });
+          if (newMessages.length) {
+            $storeMessages = [...$storeMessages, ...newMessages];
+          }
+
+          $unreadMessages = messages.filter(
+            (message) =>
+              message.to === $session.user.id && message.viewed === false
+          );
+        } catch (e) {
+          err(e);
+        }
+      }
+    }
+
+    fetchMessages();
+    messagesInterval = setInterval(fetchMessages, 5000);
+    refreshInterval = setInterval(refresh, 600000);
     authCheckInterval = setInterval(authCheck, 5000);
 
     unsubscribeFromSession = session.subscribe((value) => {
@@ -144,11 +208,14 @@
   onDestroy(() => {
     clearInterval(refreshInterval);
     clearInterval(authCheckInterval);
+    clearInterval(messagesInterval);
     unsubscribeFromSession && unsubscribeFromSession();
   });
+
   onMount(() => {
-    if (browser && !$password)
+    if (browser && !$password) {
       $password = window.sessionStorage.getItem("password");
+    }
   });
 </script>
 

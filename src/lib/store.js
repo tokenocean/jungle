@@ -49,4 +49,6 @@ export const signStatus = writable();
 export const acceptStatus = writable();
 export const messageUser = writable({});
 export const tipUser = writable({});
+export const storeMessages = writable([]);
+export const unreadMessages = writable([]);
 export const bitcoinUnitLocal = writable("");

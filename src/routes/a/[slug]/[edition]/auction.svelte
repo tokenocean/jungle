@@ -9,8 +9,8 @@
 
     let { artwork } = props;
 
-    const { default_royalty_recipients } = await fetch(`/royalties.json`).then(
-      (r) => r.json()
+    const { default_royalty_recipients } = await fetch(`/royalties`).then((r) =>
+      r.json()
     );
 
     return {

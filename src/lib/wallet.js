@@ -856,6 +856,8 @@ export const getInputs = async () => {
     .get()
     .json();
 
+  console.log("UTXOS", utxos);
+
   let txns = [];
   let a = utxos.filter((o) => o.asset === btc && o.value > DUST);
   for (let i = 0; i < a.length; i++) {

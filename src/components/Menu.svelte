@@ -2,6 +2,7 @@
   import { session } from "$app/stores";
   import branding from "$lib/branding";
   import { Avatar, Search } from "$comp";
+  import { unreadMessages } from "$lib/store";
 
   export let open = false;
   let toggle = () => (open = !open);
@@ -23,11 +24,20 @@
     {#if $session.user.is_admin}
       <a href="/admin"><button on:click={toggle}>Admin</button></a>
     {/if}
-    <a href={`/${$session.user?.username}`}>
-      <button on:click={toggle} class="flex">
-        <Avatar user={$session.user} />
-      </button></a
-    >
+    <div class="relative">
+      <a href={`/${$session.user?.username}`}>
+        <button on:click={toggle} class="flex">
+          <Avatar user={$session.user} />
+        </button>
+      </a>
+      {#if $unreadMessages.length > 0}
+        <div
+          class="absolute top-0 right-2 bg-primary rounded-full cursor-default px-2 font-bold text-xs"
+        >
+          {$unreadMessages.length}
+        </div>
+      {/if}
+    </div>
   {:else}<a href="/login"><button on:click={toggle}>Sign In</button></a>{/if}
 </div>
 
