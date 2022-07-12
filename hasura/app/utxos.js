@@ -8,6 +8,7 @@ export const utxos = async (address) => {
   let utxoSet = `${address}:utxos`;
   let last = await redis.get(address);
 
+
   let curr = await electrs.url(`/address/${address}/txs`).get().json();
   let txns = [
     ...curr.filter((tx) => !tx.status.confirmed).reverse(),
@@ -41,13 +42,13 @@ export const utxos = async (address) => {
       if (!(await redis.sIsMember(utxoSet, `${txid}:${index}`))) {
         let k = txns.indexOf(txid);
         if (k > -1) {
-          console.log("DEFERRING", txid);
+          // console.log("DEFERRING", txid);
           defer = true;
           txns.splice(k, 1);
           txns.unshift(txid);
           break;
         } else {
-          console.log("SKIPPING", txid);
+          // console.log("SKIPPING", txid);
           skip[j] = true;
         }
       }
@@ -59,7 +60,7 @@ export const utxos = async (address) => {
       if (skip[j]) continue;
       let { hash, index } = ins[j];
       let txid = reverse(hash).toString("hex");
-      console.log("REMOVING", txid);
+      // console.log("REMOVING", txid);
       await redis.sRem(utxoSet, `${txid}:${index}`);
     }
 
@@ -69,7 +70,7 @@ export const utxos = async (address) => {
 
       try {
         if (Address.fromOutputScript(script, network) === address) {
-          console.log("ADDING", txid);
+          // console.log("ADDING", txid);
           await redis.sAdd(utxoSet, `${txid}:${j}`);
           await redis.set(
             `${txid}:${j}`,
