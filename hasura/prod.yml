@@ -26,27 +26,28 @@ services:
     image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:prod
     restart: on-failure
     environment:
-      NODE_ENV: production
       APP_URL: "${APP_URL}"
-      SERVER_URL: "${SERVER_URL}"
-      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       CLOUDFLARE_TOKEN: "${CLOUDFLARE_TOKEN}"
       CLOUDFLARE_ZONE: "${CLOUDFLARE_ZONE}"
-      DOMAIN: "${DOMAIN}"
-      COINOS_URL: "${COINOS_URL}"
       COINOS_TOKEN: "${COINOS_TOKEN}"
-      HASURA_URL: "${HASURA_URL}"
+      COINOS_URL: "${COINOS_URL}"
+      DOMAIN: "${DOMAIN}"
       HASURA_JWT: "${HASURA_GRAPHQL_JWT_SECRET}"
-      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      HASURA_URL: "${HASURA_URL}"
       HBP_URL: "${HBP_URL}"
       IPFS_URL: "${IPFS_URL}"
       IPFS_WEB_URL: "${IPFS_WEB_URL}"
+      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      NFT_STORAGE_TOKEN: "${NFT_STORAGE_TOKEN}"
+      NODE_ENV: "production"
+      SERVER_URL: "${SERVER_URL}"
       SIGNING_SERVER_MNEMONIC: "${SIGNING_SERVER_MNEMONIC}"
       SMTP_HOST: "${SMTP_HOST}"
-      SMTP_PORT: "${SMTP_PORT}"
-      SMTP_USER: "${SMTP_USER}"
       SMTP_PASS: "${SMTP_PASS}"
+      SMTP_PORT: "${SMTP_PORT}"
       SMTP_SENDER: "${SMTP_SENDER}"
+      SMTP_USER: "${SMTP_USER}"
     volumes:
       - ./custom:/opt/src/hasura/app/custom
       - ${STORAGE_DIR}:/export
