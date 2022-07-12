@@ -5,7 +5,7 @@
   "scripts": {
     "cypress:open": "cypress open",
     "dev": "cross-env TAILWIND_MODE=watch vite dev --host",
-    "build": "svelte-kit build",
+    "build": "vite build",
     "preview": "svelte-kit preview",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
