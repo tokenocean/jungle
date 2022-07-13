@@ -20,7 +20,7 @@
     try {
       let encryptedMessage = encrypt(
         ownPrivKey,
-        $messageUser.pubkeyFormatted,
+        $messageUser.pubkey,
         sendMessage
       );
 
