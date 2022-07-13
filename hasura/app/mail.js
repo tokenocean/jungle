@@ -66,6 +66,26 @@ app.post("/mail-message-received", auth, async (req, res) => {
   res.send(result);
 });
 
+app.post("/mail-comment-received", auth, async (req, res) => {
+  let { artistId, artworkName, commenterName, tipAmount } = req.body;
+  let user = await getUserById(artistId);
+
+  let result = await mail.send({
+    template: "message-received",
+    locals: {
+      artistName: user.full_name,
+      artworkName,
+      commenterName,
+      tipAmount,
+    },
+    message: {
+      to: user.display_name,
+    },
+  });
+
+  res.send(result);
+});
+
 app.post("/mail-artist-application-approved", auth, async (req, res) => {
   try {
     const { userId: id } = req.body;
