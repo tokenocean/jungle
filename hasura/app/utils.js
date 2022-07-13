@@ -1,5 +1,5 @@
 import { q } from "./api.js";
-import { getCurrentUser } from "./queries.js";
+import { getCurrentUser, getUser as getUserQuery } from "./queries.js";
 
 export const kebab = (str) =>
   str &&
@@ -19,4 +19,12 @@ export const getUser = async ({ headers }) => {
   if (!headers.authorization) throw new Error("missing auth token");
   let { currentuser } = await q(getCurrentUser, null, headers);
   return currentuser[0];
+};
+
+export const getUserById = async (id) => {
+  let { users_by_pk: user } = id
+    ? await query(getUserById, { id: userId })
+    : { users_by_pk: null };
+
+  return user;
 };
