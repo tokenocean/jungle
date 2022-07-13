@@ -51,7 +51,7 @@ export const mail = new Email({
 });
 
 app.post("/mail-message-received", auth, async (req, res) => {
-  let user = await getUser(req);
+  let user = await getUserById(req.body.userId);
 
   let result = await mail.send({
     template: "message-received",

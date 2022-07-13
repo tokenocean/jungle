@@ -23,7 +23,7 @@ export const getUser = async ({ headers }) => {
 
 export const getUserById = async (id) => {
   let { users_by_pk: user } = id
-    ? await query(getUserById, { id: userId })
+    ? await q(getUserQuery, { id })
     : { users_by_pk: null };
 
   return user;
