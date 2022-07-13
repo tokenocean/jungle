@@ -3,7 +3,7 @@
   import { fromBase58 } from "bip32";
   import { keypair, network } from "$lib/wallet";
   import { token, unreadMessages, storeMessages } from "$lib/store";
-  import { encrypt } from "$lib/utils";
+  import { encrypt, decrypt } from "$lib/utils";
   import Fa from "svelte-fa";
   import { onMount, onDestroy, tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -55,7 +55,7 @@
   async function onSubmit() {
     let encryptedMessage = encrypt(
       ownPrivKey,
-      selectedUser.pubkeyFormatted,
+      selectedUser.pubkey,
       sendMessage
     );
 
@@ -107,7 +107,6 @@
   let bottom;
   function getFocus() {
     bottom.focus({ preventScroll: false });
-    console.log(bottom);
   }
 
   const setReadMessages = async (user) => {
@@ -242,7 +241,13 @@
                   : 'bg-primary text-black'}"
               >
                 <p class="break-all">
-                  {message.message}
+                  {decrypt(
+                    ownPrivKey,
+                    message.from === selectedUser.id
+                      ? message.fromUser.pubkey
+                      : message.toUser.pubkey,
+                    message.message
+                  )}
                 </p>
                 <p class="text-xs text-gray-400 text-right">
                   {timestamp(message.created_at)}
