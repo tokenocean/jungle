@@ -18,7 +18,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@noble/secp256k1": "1.6.0",
     "@popperjs/core": "~2.11.5",
-    "@sveltejs/adapter-node": "^1.0.0-next.79",
+    "@sveltejs/adapter-node": "1.0.0-next.77",
     "@sveltejs/kit": "^1.0.0-next.367",
     "autoprefixer": "^10.4.7",
     "bip32": "^2.0.6",
