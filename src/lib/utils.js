@@ -15,11 +15,13 @@ import { goto as svelteGoto } from "$app/navigation";
 import { AcceptPrompt, InsufficientFunds } from "$comp";
 import { isWithinInterval, parseISO, compareAsc } from "date-fns";
 import { query } from "$lib/api";
-import { getArtworkByAsset } from "$queries/artworks.js";
-import { getUserByAddress, updateUser } from "$queries/users.js";
+import { getArtworkByAsset } from "$queries/artworks";
+import { getUserByAddress, updateUser } from "$queries/users";
 import * as browserifyCipher from "browserify-cipher";
 import * as nobleSecp256k1 from "@noble/secp256k1";
 import { browser } from "$app/env";
+import { fromBase58 } from "bip32";
+import { network } from "$lib/wallet";
 
 export const btc = import.meta.env.VITE_BTC;
 export const cad = import.meta.env.VITE_CAD;
@@ -318,6 +320,8 @@ export const canAccept = ({ type, artwork, created_at, accepted }, user) => {
 };
 
 export function encrypt(privkey, pubkey, text) {
+  pubkey = fromBase58(pubkey, network).publicKey.toString("hex").substring(2);
+
   var key = Buffer.from(
     nobleSecp256k1.getSharedSecret(privkey, "02" + pubkey, true)
   )
@@ -337,6 +341,7 @@ export function encrypt(privkey, pubkey, text) {
 }
 
 export function decrypt(privkey, pubkey, ciphertext) {
+  pubkey = fromBase58(pubkey, network).publicKey.toString("hex").substring(2);
   var [emsg, iv] = ciphertext.split("?iv=");
   var key = Buffer.from(
     nobleSecp256k1.getSharedSecret(privkey, "02" + pubkey, true)

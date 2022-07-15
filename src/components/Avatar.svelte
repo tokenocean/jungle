@@ -52,13 +52,7 @@
             if (!$session.user) {
               goto("/login");
             } else {
-              $messageUser = {
-                id: user.id,
-                username: user.username,
-                pubkeyFormatted: fromBase58(user.pubkey, network)
-                  .publicKey.toString("hex")
-                  .substring(2),
-              };
+              $messageUser = user;
               prompt.set(SendMessage);
             }
           }}

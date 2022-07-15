@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "cypress:open": "cypress open",
-    "dev": "TAILWIND_MODE=watch vite dev --host",
-    "build": "svelte-kit build",
+    "dev": "cross-env TAILWIND_MODE=watch vite dev --host",
+    "build": "vite build",
     "preview": "svelte-kit preview",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
@@ -18,7 +18,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@noble/secp256k1": "1.6.0",
     "@popperjs/core": "~2.11.5",
-    "@sveltejs/adapter-node": "^1.0.0-next.79",
+    "@sveltejs/adapter-node": "1.0.0-next.77",
     "@sveltejs/kit": "^1.0.0-next.367",
     "autoprefixer": "^10.4.7",
     "bip32": "^2.0.6",
@@ -30,6 +30,7 @@
     "cipher-base": "github:asoltys/cipher-base",
     "cookie": "^0.4.2",
     "create-hash": "^1.2.0",
+    "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
     "cssnano": "^5.1.12",
     "cypress": "^9.7.0",

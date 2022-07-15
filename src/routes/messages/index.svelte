@@ -3,7 +3,7 @@
   import { fromBase58 } from "bip32";
   import { keypair, network } from "$lib/wallet";
   import { token, unreadMessages, storeMessages } from "$lib/store";
-  import { encrypt } from "$lib/utils";
+  import { encrypt, decrypt } from "$lib/utils";
   import Fa from "svelte-fa";
   import { onMount, onDestroy, tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,7 @@
   import { api, query } from "$lib/api";
   import { requirePassword } from "$lib/auth";
 
+  let messageWindow;
   let ownPrivKey;
   let ownPubKey;
   onMount(async () => {
@@ -55,7 +56,7 @@
   async function onSubmit() {
     let encryptedMessage = encrypt(
       ownPrivKey,
-      selectedUser.pubkeyFormatted,
+      selectedUser.pubkey,
       sendMessage
     );
 
@@ -69,7 +70,7 @@
     });
 
     $storeMessages.push({
-      message: sendMessage,
+      message: encryptedMessage,
       created_at: Date.now(),
       from: $session.user.id,
       to: selectedUser.id,
@@ -91,8 +92,9 @@
 
     $storeMessages = [...$storeMessages];
     sendMessage = "";
+
     await tick();
-    getFocus();
+    scrollDown();
   }
 
   function timestamp(data) {
@@ -100,10 +102,10 @@
     return time.toLocaleDateString();
   }
 
-  let bottom;
-  function getFocus() {
-    bottom.focus({ preventScroll: false });
-    console.log(bottom);
+  $: scrollDown($storeMessages);
+  async function scrollDown(l) {
+    await tick();
+    if (messageWindow) messageWindow.scrollTop = messageWindow.scrollHeight;
   }
 
   const setReadMessages = async (user) => {
@@ -124,9 +126,6 @@
     );
 
     api.auth(`Bearer ${$token}`).url("/markRead").post({ from: user.id });
-    await tick();
-
-    getFocus();
   };
 
   async function handleSelection(user) {
@@ -138,6 +137,8 @@
 
     setReadMessages(user);
     readMessagesInterval = setInterval(() => setReadMessages(user), 1000);
+
+    scrollDown();
   }
 
   const messagesSort = (messageA, messageB) => {
@@ -223,6 +224,7 @@
         </div>
         <div
           class="bg-[#31373e] border border-white/50 space-y-4 w-full py-4 px-5 md:px-10 rounded-lg max-h-96 overflow-auto"
+          bind:this={messageWindow}
         >
           {#each $storeMessages
             .filter((message) => message.from === selectedUser.id || message.to === selectedUser.id)
@@ -238,7 +240,13 @@
                   : 'bg-primary text-black'}"
               >
                 <p class="break-all">
-                  {message.message}
+                  {decrypt(
+                    ownPrivKey,
+                    message.from === selectedUser.id
+                      ? message.fromUser.pubkey
+                      : message.toUser.pubkey,
+                    message.message
+                  )}
                 </p>
                 <p class="text-xs text-gray-400 text-right">
                   {timestamp(message.created_at)}
@@ -246,7 +254,6 @@
               </div>
             </div>
           {/each}
-          <a href="" bind:this={bottom} />
         </div>
         <form on:submit|preventDefault={onSubmit}>
           <textarea

@@ -29,6 +29,7 @@ services:
       SMTP_PASS: "${SMTP_PASS}"
       SMTP_SENDER: "${SMTP_SENDER}"
       AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
+      NFT_STORAGE_TOKEN: "${NFT_STORAGE_TOKEN}"
     volumes:
       - ./app:/app
       - ./custom:/opt/src/hasura/app/custom
