@@ -1,10 +1,18 @@
 export const marketFields = `
   id
+  edition
+  editions
   title
   filename
   filetype
-  slug
   favorited
+  list_price
+  auction_start
+  auction_end
+  asking_asset
+  has_royalty
+  slug
+  views
   created_at
   transferred_at
   owner {
@@ -21,22 +29,6 @@ export const marketFields = `
     address
     pubkey
   },
-`;
-
-export const editionFields = `
-  list_price
-  transferred_at
-  owner_id
-  artwork {
-    ${marketFields}
-  } 
-  owner {
-    id
-    username
-    avatar_url
-    address
-  },
-  edition
   bid {
     id
     user {
@@ -49,21 +41,53 @@ export const editionFields = `
 
 export const fields = `
   id,
-  editions {
-    edition
-  } 
+  asset
+  edition
+  editions
+  held
   title
   description
   artist_id
+  owner_id
   filename
   filetype
+  favorited
+  list_price
+  reserve_price
+  last_active
   created_at
+  auction_start
+  auction_end
+  list_price_tx
+  asking_asset
+  bid_increment
+  extension_interval
+  max_extensions
+  has_royalty
+  royalty_recipients {
+    id
+    name
+    artwork_id
+    asking_asset
+    amount
+    address
+    type
+  }
   slug
   is_physical
-  open_edition
-  open_edition_start
-  open_edition_end
+  instagram
+  ticker
   views
+  transferred_at
+  owner {
+    id
+    username
+    full_name
+    email
+    avatar_url
+    address
+    pubkey
+  },
   artist {
     id
     address
@@ -71,6 +95,14 @@ export const fields = `
     avatar_url
     pubkey
   },
+  bid {
+    id
+    user {
+      id
+      username
+    }
+    amount
+  }
 `;
 
 export const txFields = `
@@ -158,7 +190,6 @@ export const getArtworkByAsset = `query($asset: String!) {
 export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
   artworks(where: {slug : {_eq: $slug}}, limit: 1) {
     ${fields}
-    sold
     comments(limit: $limit, order_by: {created_at: desc}) {
       created_at
       comment
@@ -170,6 +201,9 @@ export const getArtworkBySlug = `query($slug: String!, $limit: Int) {
         id
         address
       }
+    }
+    transactions(where: { type: { _neq: "royalty" }}, order_by: { created_at: desc }) {
+      ${txFields}
     }
     tags {
       tag
