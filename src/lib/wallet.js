@@ -387,7 +387,8 @@ const fund = async (
 ) => {
   let { address, redeem, output } = out;
 
-  let utxos = await api.url(`/address/${address}/${asset}/utxo`).get().json();
+  let utxos = await api().url(`/address/${address}/${asset}/utxo`).get().json();
+  console.log(utxos)
   let l = (await getLocked(asset))
     .filter((t) => !(p.artwork_id && t.artwork.id === p.artwork_id))
     .map((t) => {
@@ -840,7 +841,7 @@ export const createIssuance = async (
 };
 
 export const getInputs = async () => {
-  let utxos = await api
+  let utxos = await api()
     .url(`/address/${singlesig().address}/utxo`)
     .get()
     .json();
@@ -1118,7 +1119,7 @@ export const sendToMultisig = async (artwork) => {
 };
 
 export const requestSignature = async (psbt) => {
-  let { base64 } = await api
+  let { base64 } = await api()
     .url("/sign")
     .headers({ authorization: `Bearer ${get(token)}` })
     .post({ psbt: psbt.toBase64() })

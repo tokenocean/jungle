@@ -252,7 +252,7 @@ app.get("/address/:address/utxo", async (req, res) => {
 app.get("/address/:address/:asset/utxo", async (req, res) => {
   try {
     let { asset, address } = req.params;
-    res.send(await utxos(address).filter((tx) => tx.asset === asset));
+    res.send((await utxos(address)).filter((tx) => tx.asset === asset));
   } catch (e) {
     console.log("problem getting utxos", e);
     res.code(500).send(e.message);
