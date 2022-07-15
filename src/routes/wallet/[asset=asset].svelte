@@ -9,6 +9,7 @@
 </script>
 
 <script>
+  import { prefetch } from "$app/navigation";
   import Fa from "svelte-fa";
   import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
   import { border, bg } from "./_colors";
@@ -42,6 +43,7 @@
   import Transactions from "./_transactions.svelte";
 
   export let a;
+
   let balance, pending, funding, withdrawing;
 
   let toggleFunding = () => {
@@ -65,6 +67,7 @@
   };
 
   let init = async () => {
+    browser && prefetch("/wallet/assets/1");
     if ($confirmed[a]) {
       balance = val(a, $confirmed[a] || 0);
       pending = val(a, $unconfirmed[a] || 0);
