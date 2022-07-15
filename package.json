@@ -19,7 +19,7 @@
     "@noble/secp256k1": "1.6.0",
     "@popperjs/core": "~2.11.5",
     "@sveltejs/adapter-node": "1.0.0-next.77",
-    "@sveltejs/kit": "^1.0.0-next.367",
+    "@sveltejs/kit": "1.0.0-next.377",
     "autoprefixer": "^10.4.7",
     "bip32": "^2.0.6",
     "bip39": "^3.0.4",
@@ -61,7 +61,7 @@
     "svelte-select": "^4.4.7",
     "tailwindcss": "^3.1.5",
     "uuid": "^8.3.2",
-    "vite": "^2.9.14",
+    "vite": "3",
     "vite-plugin-wasm-pack": "^0.1.12",
     "wretch": "^1.7.10",
     "wretch-middlewares": "^0.1.13"
