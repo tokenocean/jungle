@@ -194,7 +194,7 @@
   <div class="flex w-full">
     <h3 class="text-2xl flex-grow text-left">Add funds</h3>
     <button
-      class="closeBtn text-xl ml-auto font-thin w-10 h-10 bg-gray-100 rounded rounded-full"
+      class="closeBtn text-xl ml-auto font-thin w-10 h-10 bg-gray-100 rounded-full"
       on:click={() => ($prompt = undefined)}
     >
       <Fa icon={faTimes} />

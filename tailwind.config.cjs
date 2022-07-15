@@ -20,4 +20,8 @@ module.exports = {
   variants: {
     borderWidth: ["responsive", "hover", "focus"],
   },
+    "css.validate": false,
+    "editor.quickSuggestions": {
+        "strings": true
+}
 };
