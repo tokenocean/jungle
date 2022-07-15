@@ -10,12 +10,11 @@
   import { tick } from "svelte";
   import Select from "svelte-select";
   import { onMount } from "svelte";
-  import { OpenEdition } from "$comp";
 
   export let artwork;
   export let title;
 
-  let input, items, loading, timer, start_date, start_time, end_date, end_time;
+  let input, items, loading, timer;
 
   const debounce = (v) => {
     loading = true;
@@ -59,17 +58,12 @@
     // alert user about any illegal tags
     for (let i = 0; i < detail.length; i++) {
       if (!LEGAL_TAG.test(detail[i].value)) {
-        alert(
-          'Tag "' +
-            detail[i].value +
-            '" is not allowed - you may only use letters, numbers, dashes and underscores.'
-        );
+        alert("Tag \"" + detail[i].value
+            + "\" is not allowed - you may only use letters, numbers, dashes and underscores.");
       }
     }
     // only add tags that match the pattern
-    artwork.tags = detail
-      .map(({ value: tag }) => ({ tag }))
-      .filter((d) => LEGAL_TAG.test(d.tag));
+    artwork.tags = detail.map(({ value: tag }) => ({ tag })).filter(d => LEGAL_TAG.test(d.tag));
   };
 </script>
 
@@ -94,14 +88,13 @@
       <span class="ml-3">This is a physical artwork</span>
     </label>
   </div>
-  <OpenEdition {artwork} />
-  {#if !artwork.open_edition}
+  {#if !artwork.id}
     <div class="flex flex-col mb-6">
-      <label for="max_editions">Total Editions</label>
+      <label for="editions">Number of editions</label>
       <input
-        id="max_editions"
+        id="editions"
         placeholder="Editions"
-        bind:value={artwork.max_editions}
+        bind:value={artwork.editions}
         class="w-1/2"
       />
     </div>
@@ -139,8 +132,8 @@
   input[type="checkbox"]:checked {
     appearance: none;
     border: 5px solid #fff;
-    outline: 2px solid #43470b;
-    background-color: #43470b;
+    outline: 2px solid #6ed8e0;
+    background-color: #6ed8e0;
     padding: 2px;
     border-radius: 0;
   }
