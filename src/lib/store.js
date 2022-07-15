@@ -1,13 +1,22 @@
 import { writable } from "svelte/store";
+import { browser } from "$app/env";
+
 
 const btc = import.meta.env.VITE_BTC;
+
+const persisted = (k, i) => {
+  let s = writable(
+    browser && localStorage.getItem(k) ? JSON.parse(localStorage.getItem(k)) : i
+  );
+
+  s.subscribe((v) => browser && localStorage.setItem(k, JSON.stringify(v)));
+
+  return s;
+};
 
 export const art = writable();
 export const artworks = writable([]);
 export const artworksLimit = writable(10);
-export const asset = writable({ asset: btc });
-export const assets = writable([]);
-export const balances = writable({});
 export const commentsLimit = writable(10);
 export const edition = writable();
 export const error = writable();
@@ -30,7 +39,6 @@ export const loggedIn = writable();
 export const meta = writable();
 export const offset = writable(0);
 export const password = writable();
-export const pending = writable();
 export const poll = writable([]);
 export const prompt = writable();
 export const psbt = writable();
@@ -52,3 +60,9 @@ export const tipUser = writable({});
 export const storeMessages = writable([]);
 export const unreadMessages = writable([]);
 export const bitcoinUnitLocal = writable("");
+
+export const asset = persisted("asset", { name: "btc", asset: btc });
+export const count = persisted("count", 0);
+export const assets = persisted("assets", []);
+export const confirmed = persisted("confirmed", {});
+export const unconfirmed = persisted("unconfirmed", {});

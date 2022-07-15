@@ -51,7 +51,7 @@ export const checkToken = (headers) => {
   const cookies = cookie.parse(headers.get("cookie") || "");
   if (!cookies.token || expired(cookies.token)) {
     return {
-      headers: { location: '/login' },
+      headers: { location: '/logout' },
       status: 302,
     } 
   } else {

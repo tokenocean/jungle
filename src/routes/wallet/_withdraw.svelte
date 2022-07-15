@@ -2,7 +2,7 @@
   import { session } from "$app/stores";
   import { query } from "$lib/api";
   import { tick } from "svelte";
-  import { asset, assets, balances, psbt, bitcoinUnitLocal } from "$lib/store";
+  import { psbt, bitcoinUnitLocal } from "$lib/store";
   import { broadcast, pay, keypair, requestSignature } from "$lib/wallet";
   import { btc, dev, err, info, sats, val, ticker } from "$lib/utils";
   import sign from "$lib/sign";
@@ -10,6 +10,7 @@
   import { requirePassword } from "$lib/auth";
   import { getArtworkByAsset } from "$queries/artworks";
 
+  export let asset;
   export let withdrawing = false;
 
   let amount;
@@ -20,14 +21,14 @@
   let loading;
   let artwork;
 
-  $: updateAsset($asset);
-  let updateAsset = ({ asset }) =>
+  $: updateAsset(asset);
+  let updateAsset = (asset) =>
     asset &&
     query(getArtworkByAsset, { asset })
       .then(({ artworks }) => (artwork = artworks[0]))
       .catch(err);
 
-  $: clearForm($asset);
+  $: clearForm(asset);
   let clearForm = () => {
     amount = undefined;
   };
@@ -37,9 +38,7 @@
 
     loading = true;
     try {
-      let { asset: a } = $asset;
-
-      if (a !== btc && !artwork) artwork = { asset: a };
+      if (a !== btc && !artwork) artwork = { asset };
       $psbt = await pay(
         artwork,
         to.trim(),
@@ -52,7 +51,7 @@
       );
       $psbt = await sign();
 
-      if (artwork && (artwork.auction_end || artwork.has_royalty)) {
+      if (artwork?.held === "multisig") {
         $psbt = await requestSignature($psbt);
       }
 
@@ -72,7 +71,7 @@
 
 {#if $session.user && withdrawing}
   <form
-    class="dark-bg md:rounded-lg p-5 w-full flex flex-col"
+    class="dark-bg md:rounded-lg p-5 w-full flex flex-col mb-8"
     on:submit|preventDefault={send}
     autocomplete="off"
   >
@@ -80,23 +79,15 @@
       <ProgressLinear />
     {:else}
       <div class="flex flex-col mb-4">
-        <label for="asset">Asset</label>
-        <select id="asset" class="text-black" bind:value={$asset.asset}>
-          {#each $assets as { asset: a }}
-            <option value={a}>{ticker(a) || a}</option>
-          {/each}
-        </select>
-      </div>
-      <div class="flex flex-col mb-4">
         <label for="amount">Amount</label>
         <div class="flex relative justify-between text-black">
           <input
             id="amount"
             class="w-full"
-            placeholder={val($asset.asset, 0)}
+            placeholder={val(asset, 0)}
             bind:value={amount}
           />
-          {#if ticker($asset.asset) === "L-BTC"}
+          {#if ticker(asset) === "L-BTC"}
             <div class="absolute top-[17px] right-2">
               {unitCalculated}
             </div>

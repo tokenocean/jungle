@@ -1,16 +1,20 @@
 <script>
   import { session } from "$app/stores";
+  import { onMount } from "svelte";
   import Fa from "svelte-fa";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
   import { goto } from "$lib/utils";
-  import { page } from "$app/stores";
-  import { asset, assets, balances } from "$lib/store";
+  import { confirmed } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { btc, cad, usd, val } from "$lib/utils";
   import { border, bg, outer } from "./_colors";
+
+  export let assets, count, page = 1;
+  let offset = 25;
+  let pages = new Array(Math.ceil(count/offset));
 </script>
 
-{#if $balances}
+{#if $confirmed}
   <div class="container mx-auto">
     <div class="mb-5">
       <a href="/wallet" class="text-midblue">
@@ -21,13 +25,12 @@
       </a>
     </div>
     <div class="dark-bg p-4 rounded-lg">
-      {#each $assets as a}
-        {#if val(a.asset, $balances[a.asset] || 0) > 0}
+      {#each assets as a}
+        {#if val(a.asset, $confirmed[a.asset] || 0) > 0}
           <div
             class="flex mb-2 cursor-pointer"
             on:click={() => {
-              $asset = a;
-              goto("/wallet");
+              goto(`/wallet/${a.asset}`);
             }}
           >
             <div class={`py-2 ${outer(a.asset)} w-3 rounded-l-lg`} />
@@ -35,15 +38,25 @@
               class={`flex ${bg(
                 a.asset
               )} text-gray-300 rounded-r-lg p-4 flex-grow ${border(a.asset)}`}
-              class:active={$asset === a.asset}
             >
               <div class="flex-grow">{a.name}</div>
-              <div>{val(a.asset, $balances[a.asset] || 0)}</div>
+              <div>{val(a.asset, $confirmed[a.asset] || 0)}</div>
             </div>
           </div>
         {/if}
       {/each}
     </div>
+  <div class="full-width flex bg-white p-4 mx-auto">
+    <div class="mx-auto">
+      {#each pages as _, i}
+        <button
+          class="rounded-full w-12 h-12"
+          class:font-bold={(i + 1) === page}
+          on:click={() => goto(`/wallet/assets/${i+1}`)}>{i + 1}</button
+        >
+      {/each}
+    </div>
+  </div>
   </div>
 {/if}
 

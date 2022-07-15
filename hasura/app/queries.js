@@ -323,6 +323,25 @@ export const getLastTransactionsForAddress = `query($address: String!) {
   }
 }`;
 
+export const getTransactionsByTxid = `query($txids: [String!], $asset: String!) {
+  transactions(
+    where: {
+      hash: {_in: $txids},
+      asset: {_eq: $asset},
+    },
+  ) {
+    id
+    hash
+    amount
+    created_at
+    asset
+    type
+    user_id
+    address
+    confirmed
+  }
+}`;
+
 export const getTransactions = `query($id: uuid!, $limit: Int) {
   transactions(
     where: {

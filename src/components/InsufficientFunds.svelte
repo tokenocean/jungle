@@ -14,10 +14,10 @@
   import { onDestroy, onMount, tick } from "svelte";
   import qrcode from "qrcode-generator-es6";
   import {
-    balances,
+    confirmed as confirmedUtxos,
+    unconfirmed,
     error,
     locked,
-    pending,
     prompt,
     token,
     bitcoinUnitLocal,
@@ -32,12 +32,12 @@
     val,
     satsFormatted,
   } from "$lib/utils";
-  import { getBalances } from "$lib/wallet";
+  import { getBalance } from "$lib/wallet";
   import { api } from "$lib/api";
 
   let tab = "liquid";
 
-  let img, loading, explainer, amount, confirming, confirmed;
+  let img, loading, explainer, amount, confirming;
 
   $: amount = val(
     $error.asset,
@@ -73,8 +73,9 @@
   };
 
   onDestroy(() => clearInterval(poll));
-  let poll = setInterval(() => getBalances(), 5000);
+  let poll = setInterval(() => getBalance($error.asset), 5000);
 
+  let confirmed = false;
   let confidential = false;
   let toggleConfidential = () => {
     confidential = !confidential;
@@ -82,8 +83,8 @@
     else address = $session.user.address;
   };
 
-  $: current = ($balances && $balances[$error.asset]) || 0;
-  $: incoming = ($pending && $pending[$error.asset]) || 0;
+  $: current = ($confirmedUtxos && $confirmedUtxos[$error.asset]) || 0;
+  $: incoming = ($unconfirmed && $unconfirmed[$error.asset]) || 0;
   $: incoming && (confirming = true);
   $: newBalance(current);
   let newBalance = () => {
