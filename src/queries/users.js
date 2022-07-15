@@ -1,12 +1,11 @@
 import decode from "jwt-decode";
-import { editionFields, marketFields as artworkFields } from "./artworks";
+import { marketFields as artworkFields } from "./artworks";
 import { fields as txFields } from "./transactions";
 
 let fields =
   "id, username, location, bio, email, full_name, website, twitter, instagram, avatar_url, address, multisig, pubkey, is_artist, prompt_sign";
 
-let privateFields =
-  "mnemonic, wallet_initialized, is_admin, info, has_samples, bitcoin_unit";
+let privateFields = "mnemonic, wallet_initialized, is_admin, info, has_samples, bitcoin_unit";
 
 let computed = "followed, num_follows, num_followers";
 
@@ -48,7 +47,7 @@ export const getUserByUsername = `query($username: String!, $artworksLimit: Int)
     ${fields}
     ${computed}
     holdings(where: { held: {_is_null: false }}, limit: $artworksLimit, order_by: { created_at: desc }) {
-      ${editionFields}
+      ${artworkFields}
     }
     creations(limit: $artworksLimit, order_by: { created_at: desc }) {
       ${artworkFields}
@@ -56,16 +55,16 @@ export const getUserByUsername = `query($username: String!, $artworksLimit: Int)
     offers {
       transaction {
         ${txFields}
-        edition {
-          ${editionFields}
+        artwork {
+          ${artworkFields}
         }
       }
     }
     activebids {
       transaction {
         ${txFields}
-        edition {
-          ${editionFields}
+        artwork {
+          ${artworkFields}
         }
       }
     }
