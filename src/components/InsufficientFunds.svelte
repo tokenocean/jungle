@@ -14,10 +14,10 @@
   import { onDestroy, onMount, tick } from "svelte";
   import qrcode from "qrcode-generator-es6";
   import {
-    balances,
+    confirmed as confirmedUtxos,
+    unconfirmed,
     error,
     locked,
-    pending,
     prompt,
     token,
     bitcoinUnitLocal,
@@ -32,12 +32,12 @@
     val,
     satsFormatted,
   } from "$lib/utils";
-  import { getBalances } from "$lib/wallet";
+  import { getBalance } from "$lib/wallet";
   import { api } from "$lib/api";
 
   let tab = "liquid";
 
-  let img, loading, explainer, amount, confirming, confirmed;
+  let img, loading, explainer, amount, confirming;
 
   $: amount = val(
     $error.asset,
@@ -73,8 +73,9 @@
   };
 
   onDestroy(() => clearInterval(poll));
-  let poll = setInterval(() => getBalances(), 5000);
+  let poll = setInterval(() => getBalance($error.asset), 5000);
 
+  let confirmed = false;
   let confidential = false;
   let toggleConfidential = () => {
     confidential = !confidential;
@@ -82,8 +83,8 @@
     else address = $session.user.address;
   };
 
-  $: current = ($balances && $balances[$error.asset]) || 0;
-  $: incoming = ($pending && $pending[$error.asset]) || 0;
+  $: current = ($confirmedUtxos && $confirmedUtxos[$error.asset]) || 0;
+  $: incoming = ($unconfirmed && $unconfirmed[$error.asset]) || 0;
   $: incoming && (confirming = true);
   $: newBalance(current);
   let newBalance = () => {
@@ -243,7 +244,7 @@
         Funding through a confidential liquid address, bitcoin address, or
         lightning invoice is achieved by automatically converting to L-BTC
         through
-        <a href="https://coinos.io" style="color: #43470b">coinos.io</a>. Funds
+        <a href="https://coinos.io" style="color: #6ed8e0">coinos.io</a>. Funds
         will be subject to counterparty risk during the conversion process.
       </p>
 
@@ -258,7 +259,7 @@
         See
         <a
           href="https://help.blockstream.com/hc/en-us/articles/900000630846-How-do-I-get-Liquid-Bitcoin-L-BTC-"
-          style="color: #43470b">this article</a
+          style="color: #6ed8e0">this article</a
         >
         for other methods of acquiring L-BTC.
       </p>
@@ -336,7 +337,7 @@
 <style>
   .hover {
     @apply border-b-2;
-    border-bottom: 3px solid #f2a900;
+    border-bottom: 3px solid #6ed8e0;
   }
 
   .closeBtn {
@@ -347,7 +348,7 @@
     @apply mb-auto h-8 mx-2 md:mx-4 mt-6;
     &:hover {
       @apply border-b-2;
-      border-bottom: 3px solid #43470b;
+      border-bottom: 3px solid #6ed8e0;
     }
   }
 </style>
