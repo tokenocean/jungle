@@ -66,5 +66,8 @@
     "wretch": "^1.7.10",
     "wretch-middlewares": "^0.1.13"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "multiformats": "^9.7.0"
+  }
 }
