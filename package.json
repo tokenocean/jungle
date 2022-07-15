@@ -39,7 +39,7 @@
     "graphql": "^15.8.0",
     "hash-base": "github:asoltys/hash-base",
     "jwt-decode": "^3.1.2",
-    "liquidjs-lib": "6.0.2-liquid.7",
+    "liquidjs-lib": "github:asoltys/liquidjs-lib#v6.0.3",
     "long": "^4.0.0",
     "node-fetch": "^3.2.6",
     "postcss": "^8.4.14",
@@ -66,5 +66,8 @@
     "wretch": "^1.7.10",
     "wretch-middlewares": "^0.1.13"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "multiformats": "^9.7.0"
+  }
 }
