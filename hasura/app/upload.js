@@ -31,8 +31,6 @@ app.post("/upload", async function (req, res) {
     await new Promise((resolve) =>
       s2.pipe(fs.createWriteStream(tmp).on("finish", resolve))
     );
-<<<<<<< HEAD
-=======
 
 
     const form = new FormData();
@@ -53,7 +51,6 @@ app.post("/upload", async function (req, res) {
       },
       (err, res) => err && console.log(err)
     );
->>>>>>> upstream/staging
 
     try {
       if (format === "video" || ext === "gif") {
