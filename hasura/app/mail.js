@@ -6,12 +6,13 @@ import { app } from "./app.js";
 import { auth } from "./auth.js";
 
 import {
-  getUser,
   getArtworkWithBidTransactionByHash,
   getArtwork,
   getCurrentUser,
   getTransferTransactionsByPsbt,
 } from "./queries.js";
+
+import { getUser, getUserById } from "./utils.js";
 
 import constants from "./const.js";
 
@@ -49,13 +50,49 @@ export const mail = new Email({
   },
 });
 
+app.post("/mail-message-received", auth, async (req, res) => {
+  let user = await getUserById(req.body.userId);
+
+  let result = await mail.send({
+    template: "message-received",
+    locals: {
+      artistName: user.full_name,
+    },
+    message: {
+      to: user.display_name,
+    },
+  });
+
+  res.send(result);
+});
+
+app.post("/mail-comment-received", auth, async (req, res) => {
+  let { artistId, artworkName, commenterName, tipAmount } = req.body;
+  let user = await getUserById(artistId);
+
+  let result = await mail.send({
+    template: "message-received",
+    locals: {
+      artistName: user.full_name,
+      artworkName,
+      commenterName,
+      tipAmount,
+    },
+    message: {
+      to: user.display_name,
+    },
+  });
+
+  res.send(result);
+});
+
 app.post("/mail-artist-application-approved", auth, async (req, res) => {
   try {
     const { userId: id } = req.body;
     if (!id) {
       return res.code(400).send("Missing userId parameter.");
     }
-    let { users_by_pk: user } = await query(getUser, { id });
+    let user = await getUserById(id);
 
     await mail.send({
       template: "artist-application-approved",
@@ -80,7 +117,7 @@ app.post("/mail-artist-application-denied", auth, async (req, res) => {
     if (!id) {
       return res.code(400).send("Missing userId parameter.");
     }
-    const { users_by_pk: user } = await query(getUser, { id });
+    let user = await getUserById(id);
 
     await mail.send({
       template: "artist-application-denied",
@@ -192,7 +229,7 @@ app.post("/mail-purchase-successful", auth, async (req, res) => {
     if (!id) {
       return res.code(400).send("Missing userId parameter.");
     }
-    let { users_by_pk: user } = await query(getUser, { id });
+    let user = await getUserById(id);
 
     const { artworks_by_pk: artwork } = await query(getArtwork, {
       id: artworkId,
@@ -263,7 +300,7 @@ app.post("/mail-artwork-sold", auth, async (req, res) => {
     if (!id) {
       return res.code(400).send("Missing userId parameter.");
     }
-    let { users_by_pk: user } = await query(getUser, { id });
+    let user = await getUserById(id);
 
     const { artworks_by_pk: artwork } = await query(getArtwork, {
       id: artworkId,
@@ -298,14 +335,6 @@ app.post("/mail-event-actions", async (req, res) => {
     res.status(401).send("Unauthorized!");
   }
   const transaction = req.body.event.data.new;
-
-  const getUserById = async (userId) => {
-    let { users_by_pk: user } = userId
-      ? await query(getUser, { id: userId })
-      : { users_by_pk: null };
-
-    return user;
-  };
 
   const getArtworkById = async (artworkId) => {
     let { artworks_by_pk: artwork } = artworkId

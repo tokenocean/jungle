@@ -26,7 +26,7 @@ import {
 } from "./queries.js";
 
 const { SERVER_URL } = process.env;
-import { getUser, kebab, sleep, wait } from "./utils.js";
+import { getUser, getUserById, kebab, sleep, wait } from "./utils.js";
 import crypto from "crypto";
 import { app } from "./app.js";
 import { utxos } from "./utxos.js";
@@ -123,8 +123,7 @@ app.post("/held", async (req, res) => {
     let { asset, owner } = artwork;
     let { address, multisig } = owner;
 
-    let find = async (a) =>
-      (await utxos(a)).find((tx) => tx.asset === asset);
+    let find = async (a) => (await utxos(a)).find((tx) => tx.asset === asset);
 
     let held = null;
     if (await find(address)) held = "single";
@@ -379,9 +378,11 @@ app.post("/comment", auth, async (req, res) => {
     let { amount, comment: commentBody, psbt, artwork_id } = req.body;
 
     let {
-      artworks_by_pk: { owner_id },
+      artworks_by_pk: { owner_id, artist_id, title, artist: { bitcoin_unit } },
     } = await q(getArtwork, { id: artwork_id });
+
     let user = await getUser(req);
+    let artist = await getUserById(artist_id);
 
     if (user.id !== owner_id) {
       let transaction = {
@@ -404,6 +405,20 @@ app.post("/comment", auth, async (req, res) => {
     };
 
     let r = await q(createComment, { comment });
+
+    let result = await mail.send({
+      template: "comment-received",
+      locals: {
+        artistName: artist.full_name,
+        artworkName: title,
+        commenterName: user.full_name,
+        tipAmount: amount,
+        unit: bitcoin_unit === 'sats' ? 'L-sats' : 'L-BTC',
+      },
+      message: {
+        to: artist.display_name,
+      },
+    });
 
     res.send({ ok: true });
   } catch (e) {
