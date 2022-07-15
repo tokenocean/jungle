@@ -15,7 +15,6 @@ export { default as LatestPiecesCard } from "./LatestPiecesCard.svelte";
 export { default as Menu } from "./Menu.svelte";
 export { default as Navbar } from "./Navbar.svelte";
 export { default as Offers } from "./Offers.svelte";
-export { default as OpenEdition } from "./OpenEdition.svelte";
 export { default as Pagination } from "./Pagination.svelte";
 export { default as PasswordPrompt } from "./PasswordPrompt.svelte";
 export { default as ProgressLinear } from "./ProgressLinear.svelte";

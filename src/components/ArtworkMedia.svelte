@@ -7,6 +7,7 @@
     faHeadphones,
   } from "@fortawesome/free-solid-svg-icons";
   import { loaded } from "$lib/store";
+  import { CID } from 'multiformats/cid'
 
   export let artwork;
   export let showDetails;
@@ -17,11 +18,12 @@
   export let noAudio = false;
 
   let img, vid, aud;
+  $: cid = CID.parse(artwork.filename).toV1().toString();
   $: path =
     artwork &&
     (thumb
       ? `/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`
-      : `/api/ipfs/${artwork.filename}`);
+      : `https://${cid}.ipfs.nftstorage.link/`);
 
   $: cover = !showDetails;
   $: contain = showDetails;

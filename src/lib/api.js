@@ -18,15 +18,13 @@ export const newapi = (headers) => {
   let jwt = headers && cookie.parse(headers.get("cookie") || "").token;
 
   if (browser) {
-    url = `${host}/api`;
+    url = `${host}/api` 
     jwt = getStore(token);
-  }
+  } 
 
-  return wretch()
-    .url(url)
-    .auth(jwt ? `Bearer ${jwt}` : undefined);
-};
-
+  return wretch().url(url).auth(jwt ? `Bearer ${jwt}` : undefined);
+} 
+  
 export const electrs = wretch().url(`${host}/api/el`);
 
 export const hasura = wretch()
@@ -41,10 +39,7 @@ export const query = async (query, variables, headers = {}) => {
     .headers(headers)
     .post({ query, variables })
     .json();
-  if (errors) {
-    console.log("query error", query, variables);
-    throw new Error(errors[0].message);
-  }
+  if (errors) throw new Error(errors[0].message);
   return data;
 };
 
