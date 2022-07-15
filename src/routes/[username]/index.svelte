@@ -163,14 +163,8 @@
               <button
                 class="p-2 primary-btn mt-8"
                 on:click={() => {
-                  $messageUser = {
-                    id: subject.id,
-                    username: subject.username,
-                    pubkeyFormatted: fromBase58(subject.pubkey, network)
-                      .publicKey.toString("hex")
-                      .substring(2),
-                  };
-                  prompt.set(SendMessage);
+                $messageUser = subject;
+                prompt.set(SendMessage);
                 }}
               >
                 Message</button
