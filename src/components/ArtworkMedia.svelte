@@ -7,7 +7,7 @@
     faHeadphones,
   } from "@fortawesome/free-solid-svg-icons";
   import { loaded } from "$lib/store";
-  import { CID } from 'multiformats/cid'
+  import { CID } from "multiformats/cid";
 
   export let artwork;
   export let showDetails;

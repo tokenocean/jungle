@@ -19,6 +19,34 @@
   });
 </script>
 
+<div class="form-container bg-lightblue px-4">
+  <form class="mb-6" autocomplete="off">
+    {#if loading}
+      <ProgressLinear />
+    {:else if success}
+      <h2 class="mb-8">Email confirmed!</h2>
+      <p>Thank you! Your email is verified.</p>
+
+      <div class="flex">
+        <div class="ml-auto mt-8">
+          <a href="/login" class="primary-btn"
+            >Continue to {branding.projectName}</a
+          >
+        </div>
+      </div>
+    {:else}
+      <h2 class="mb-8">Something went wrong</h2>
+      <div class="flex">
+        <div class="ml-auto mt-8">
+          <a href="/login" class="primary-btn"
+            >Continue to {branding.projectName}</a
+          >
+        </div>
+      </div>
+    {/if}
+  </form>
+</div>
+
 <style>
   .form-container {
     width: 100%;
@@ -51,27 +79,3 @@
     }
   }
 </style>
-
-<div class="form-container bg-lightblue px-4">
-  <form class="mb-6" autocomplete="off">
-    {#if loading}
-      <ProgressLinear />
-    {:else if success}
-      <h2 class="mb-8">Email confirmed!</h2>
-      <p>Thank you! Your email is verified.</p>
-
-      <div class="flex">
-        <div class="ml-auto mt-8">
-          <a href="/login" class="primary-btn">Continue to {branding.projectName}</a>
-        </div>
-      </div>
-    {:else}
-      <h2 class="mb-8">Something went wrong</h2>
-      <div class="flex">
-        <div class="ml-auto mt-8">
-          <a href="/login" class="primary-btn">Continue to {branding.projectName}</a>
-        </div>
-      </div>
-    {/if}
-  </form>
-</div>

@@ -4,27 +4,14 @@ describe("The Home Page", () => {
   });
 
   it("links to /market", () => {
-    cy.contains("Start exploring").should(
-      "have.attr",
-      "href",
-      "/market"
-    );
+    cy.contains("Start exploring").should("have.attr", "href", "/market");
   });
 
+  it("links to /market", () => {
+    cy.contains("View gallery").should("have.attr", "href", "/market");
+  });
 
-    it("links to /market", () => {
-      cy.contains("View gallery").should(
-        "have.attr",
-        "href",
-        "/market"
-      );
-    });
-
-    it("links to /activity", () => {
-      cy.contains("View more").should(
-        "have.attr",
-        "href",
-        "/activity"
-      );
-    });
+  it("links to /activity", () => {
+    cy.contains("View more").should("have.attr", "href", "/activity");
+  });
 });

@@ -123,8 +123,7 @@ app.post("/held", async (req, res) => {
     let { asset, owner } = artwork;
     let { address, multisig } = owner;
 
-    let find = async (a) =>
-      (await utxos(a)).find((tx) => tx.asset === asset);
+    let find = async (a) => (await utxos(a)).find((tx) => tx.asset === asset);
 
     let held = null;
     if (await find(address)) held = "single";

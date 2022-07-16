@@ -1,7 +1,6 @@
 import { writable } from "svelte/store";
 import { browser } from "$app/env";
 
-
 const btc = import.meta.env.VITE_BTC;
 
 const persisted = (k, i) => {

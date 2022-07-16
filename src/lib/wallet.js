@@ -74,7 +74,7 @@ export const getBalance = async (asset) => {
     .json();
 
   confirmed.set({ ...get(confirmed), ...c });
-      unconfirmed.set({ ...get(unconfirmed), ...u });
+  unconfirmed.set({ ...get(unconfirmed), ...u });
 };
 
 const getHex = async (txid) => {

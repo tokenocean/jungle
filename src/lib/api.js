@@ -18,13 +18,15 @@ export const newapi = (headers) => {
   let jwt = headers && cookie.parse(headers.get("cookie") || "").token;
 
   if (browser) {
-    url = `${host}/api` 
+    url = `${host}/api`;
     jwt = getStore(token);
-  } 
+  }
 
-  return wretch().url(url).auth(jwt ? `Bearer ${jwt}` : undefined);
-} 
-  
+  return wretch()
+    .url(url)
+    .auth(jwt ? `Bearer ${jwt}` : undefined);
+};
+
 export const electrs = wretch().url(`${host}/api/el`);
 
 export const hasura = wretch()

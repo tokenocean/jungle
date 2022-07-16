@@ -1,64 +1,23 @@
 <script>
   import Fa from "svelte-fa";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-  import branding from '$lib/branding';
+  import branding from "$lib/branding";
 </script>
-
-<style>
-  h3 {
-    @apply mt-8;
-  }
-  p,
-  h3 {
-    @apply mb-4;
-    text-align: left;
-  }
-
-  h4 {
-    font-weight: bold;
-    margin: 20px 0 10px 0;
-  }
-
-  .faq-content {
-    display: flex;
-    text-align: justify;
-  }
-
-  ul {
-    list-style: disc;
-    padding: 0 20px;
-  }
-
-  ul li {
-    margin-bottom: 20px;
-    text-align: left;
-  }
-
-  @media only screen and (max-width: 1023px) {
-    h3 {
-      font-weight: bold;
-    }
-    .faq-content {
-      flex-wrap: wrap;
-    }
-  }
-
-</style>
 
 <div class="max-w-4xl container mx-auto sm:justify-between mt-10 md:mt-20">
   <div class="mx-auto">
-    <h2 class="mb-10">{ branding.projectName } Privacy Policy</h2>
+    <h2 class="mb-10">{branding.projectName} Privacy Policy</h2>
     <div class="faq-content">
       <div class="faq">
         <p>
-          At { branding.projectName } (“Website”, “we”) We are committed to protecting the
-          privacy and confidentiality of any personal data we collect when you
-          use this Website. This Privacy Policy describes the ways we collect
-          information from and about you, and what we do with the information,
-          so that you may decide whether or not to provide information to us. By
-          accessing or using { branding.projectName } ({ branding.urls.www }), you agree to be
-          bound by the terms and conditions described in this document and also
-          by any terms and conditions incorporated by reference.
+          At {branding.projectName} (“Website”, “we”) We are committed to protecting
+          the privacy and confidentiality of any personal data we collect when you
+          use this Website. This Privacy Policy describes the ways we collect information
+          from and about you, and what we do with the information, so that you may
+          decide whether or not to provide information to us. By accessing or using
+          {branding.projectName} ({branding.urls.www}), you agree to be bound by
+          the terms and conditions described in this document and also by any
+          terms and conditions incorporated by reference.
         </p>
         <h3>1. Scope of definitions</h3>
         <p>
@@ -68,13 +27,13 @@
 
         <p>
           “<b>Sites</b>” are all websites that are owned and operated by
-          { branding.projectName }, including { branding.urls.base } and all subdomains
+          {branding.projectName}, including {branding.urls.base} and all subdomains
         </p>
 
         <p>
-          “<b>Visitor</b>” includes anyone using the { branding.projectName } sites, whether
-          viewing pages or uploading/downloading information directly from those
-          sites using some other means.
+          “<b>Visitor</b>” includes anyone using the {branding.projectName} sites,
+          whether viewing pages or uploading/downloading information directly from
+          those sites using some other means.
         </p>
 
         <p>
@@ -85,14 +44,14 @@
 
         <p>
           <b>A Note to Users Outside of the United States.</b>
-          If you are a non-U.S. user of the Sites, by visiting the Sites and
-          providing us with data, you acknowledge and agree that your Personal
-          Information may be processed for the purposes identified in the
-          Privacy Policy. In addition, your Personal Information may be
-          processed in the country in which it was collected and in other
-          countries, including the United States, where laws regarding
-          processing of Personal Information may be less stringent than the laws
-          in your country. By providing your data, you consent to such transfer.
+          If you are a non-U.S. user of the Sites, by visiting the Sites and providing
+          us with data, you acknowledge and agree that your Personal Information
+          may be processed for the purposes identified in the Privacy Policy. In
+          addition, your Personal Information may be processed in the country in
+          which it was collected and in other countries, including the United States,
+          where laws regarding processing of Personal Information may be less stringent
+          than the laws in your country. By providing your data, you consent to such
+          transfer.
         </p>
 
         <h3>2. What information do we collect?</h3>
@@ -147,16 +106,16 @@
           services.
         </p>
 
-        <h4>Links to non-{ branding.projectName } Websites</h4>
+        <h4>Links to non-{branding.projectName} Websites</h4>
 
         <p>
           Some projects, tools, forums, or other publicly-available resources
-          associated with { branding.projectName } may be hosted on third-party websites.
-          Additionally, we may provide links to third-party websites for
-          informational purposes. The privacy practices of those sites may
-          differ from our practices, are not controlled by { branding.projectName }, and are
-          not covered by this Privacy Policy. We do not make any representations
-          about third-party websites. We encourage you to review their privacy
+          associated with {branding.projectName} may be hosted on third-party websites.
+          Additionally, we may provide links to third-party websites for informational
+          purposes. The privacy practices of those sites may differ from our practices,
+          are not controlled by {branding.projectName}, and are not covered by
+          this Privacy Policy. We do not make any representations about
+          third-party websites. We encourage you to review their privacy
           policies before submitting your personal data to such sites.
         </p>
 
@@ -168,26 +127,26 @@
           services are not designed for or directed to children under the age of
           18, and we will not intentionally collect or maintain information
           about anyone under the age of 13. If a child under 13 submits Personal
-          Information to { branding.projectName } and we learn that the Personal Information is
-          the information of a child under 13, we will attempt to delete the
-          information as soon as possible. If you believe that we might have any
-          Personal Data from a child under 13, please contact us at
-          { branding.emails.support }.
+          Information to {branding.projectName} and we learn that the Personal Information
+          is the information of a child under 13, we will attempt to delete the information
+          as soon as possible. If you believe that we might have any Personal Data
+          from a child under 13, please contact us at
+          {branding.emails.support}.
         </p>
 
         <h3>3. What do we use this information for?</h3>
         <p>
           We use web visit information to measure interest in and develop
-          { branding.projectName } and marketing plans, customize the content you view on your
-          web visits based on your activity on past visits, diagnose technical
-          problems, and to generally administer the Platform. If any Token is
-          associated with a physical item, we will use the shipping information
-          you provide in order to ship the products to your address.
+          {branding.projectName} and marketing plans, customize the content you view
+          on your web visits based on your activity on past visits, diagnose technical
+          problems, and to generally administer the Platform. If any Token is associated
+          with a physical item, we will use the shipping information you provide
+          in order to ship the products to your address.
         </p>
 
         <p>
           Any information actively collected, such as names and email addresses,
-          will be used to provide you with information regarding { branding.projectName }
+          will be used to provide you with information regarding {branding.projectName}
           services when you sign up on our Platform.
         </p>
 
@@ -195,7 +154,7 @@
 
         <p>
           Personal information we gather is for internal use only. We will not
-          authorize the release of this information to anyone outside { branding.projectName },
+          authorize the release of this information to anyone outside {branding.projectName},
           except:
         </p>
 
@@ -206,9 +165,10 @@
             you through our Site; to conduct quality assurance testing; to
             facilitate shipping of physical items in the Platform; to provide
             technical support; and/or to provide hosting and other services to
-            { branding.projectName }. In such events, personal information will only be shared
-            to the extent reasonably necessary to perform their functions and
-            they will not be authorized to use it for any other function,
+            {branding.projectName}. In such events, personal information will
+            only be shared to the extent reasonably necessary to perform their
+            functions and they will not be authorized to use it for any other
+            function,
           </li>
           <li>
             when we believe it is necessary to comply with the law, including in
@@ -230,7 +190,7 @@
         <p>
           If you have a question or complaint about this Privacy Policy or our
           information collection practices, please contact us at
-          { branding.emails.support }.
+          {branding.emails.support}.
         </p>
 
         <h3>7. Changes</h3>
@@ -252,3 +212,43 @@
     </div>
   </div>
 </div>
+
+<style>
+  h3 {
+    @apply mt-8;
+  }
+  p,
+  h3 {
+    @apply mb-4;
+    text-align: left;
+  }
+
+  h4 {
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+  }
+
+  .faq-content {
+    display: flex;
+    text-align: justify;
+  }
+
+  ul {
+    list-style: disc;
+    padding: 0 20px;
+  }
+
+  ul li {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  @media only screen and (max-width: 1023px) {
+    h3 {
+      font-weight: bold;
+    }
+    .faq-content {
+      flex-wrap: wrap;
+    }
+  }
+</style>

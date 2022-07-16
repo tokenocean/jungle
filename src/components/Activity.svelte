@@ -7,13 +7,13 @@
 </script>
 
 {#if transaction && transaction.user}
-<div class="flex mb-6 text-left">
-  <Avatar user={transaction.user} />
-  <div class="ml-3">
-    <TransactionText {transaction} />
-    <TransactionTime {transaction} on:accepted />
+  <div class="flex mb-6 text-left">
+    <Avatar user={transaction.user} />
+    <div class="ml-3">
+      <TransactionText {transaction} />
+      <TransactionTime {transaction} on:accepted />
+    </div>
   </div>
-</div>
 {/if}
 
 {#if showImage}

@@ -180,4 +180,3 @@ const checkTransactions = async () => {
 };
 
 setTimeout(checkTransactions, 8000);
-

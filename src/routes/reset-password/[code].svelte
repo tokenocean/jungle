@@ -15,7 +15,7 @@
         .post({ ticket: $page.params.code, new_password: password })
         .res();
       info("Password changed!");
-      goto('/login');
+      goto("/login");
     } catch (e) {
       err(e.message);
     }
@@ -25,6 +25,30 @@
   let pageChange = () => setTimeout(() => ref && ref.select(), 50);
   $: if (ref) pageChange($page);
 </script>
+
+<div class="form-container bg-lightblue">
+  <form class="mb-6" on:submit|preventDefault={reset} autocomplete="off">
+    <h2 class="mb-8">Reset password</h2>
+    <div class="flex flex-col mb-4">
+      <label class="mb-2 font-medium text-gray-600" for="password"
+        >New password</label
+      >
+      <input
+        type="password"
+        placeholder="Password"
+        bind:value={password}
+        bind:this={ref}
+      />
+    </div>
+    <button class="primary-btn w-full mb-4" type="submit">Confirm</button>
+    <a href="/login" class="text-midblue">
+      <div class="flex">
+        <Fa icon={faChevronLeft} class="my-auto mr-1" />
+        <div>Back to sign in</div>
+      </div>
+    </a>
+  </form>
+</div>
 
 <style>
   .form-container {
@@ -62,24 +86,3 @@
     }
   }
 </style>
-
-<div class="form-container bg-lightblue">
-  <form class="mb-6" on:submit|preventDefault={reset} autocomplete="off">
-    <h2 class="mb-8">Reset password</h2>
-    <div class="flex flex-col mb-4">
-      <label class="mb-2 font-medium text-gray-600" for="password">New password</label>
-      <input
-        type="password"
-        placeholder="Password"
-        bind:value={password}
-        bind:this={ref} />
-    </div>
-    <button class="primary-btn w-full mb-4" type="submit">Confirm</button>
-    <a href="/login" class="text-midblue">
-      <div class="flex">
-        <Fa icon={faChevronLeft} class="my-auto mr-1" />
-        <div>Back to sign in</div>
-      </div>
-    </a>
-  </form>
-</div>

@@ -32,7 +32,6 @@ app.post("/upload", async function (req, res) {
       s2.pipe(fs.createWriteStream(tmp).on("finish", resolve))
     );
 
-
     const form = new FormData();
     form.append("file", s4, {
       filename: name,

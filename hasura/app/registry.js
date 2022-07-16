@@ -49,4 +49,3 @@ app.get("/proof/liquid-asset-proof-:asset", (req, res) => {
     );
   else res.code(500).send("Unrecognized asset");
 });
-

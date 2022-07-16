@@ -9,9 +9,11 @@
   import { btc, cad, usd, val } from "$lib/utils";
   import { border, bg, outer } from "./_colors";
 
-  export let assets, count, page = 1;
+  export let assets,
+    count,
+    page = 1;
   let offset = 25;
-  let pages = new Array(Math.ceil(count/offset));
+  let pages = new Array(Math.ceil(count / offset));
 </script>
 
 {#if $confirmed}
@@ -46,17 +48,17 @@
         {/if}
       {/each}
     </div>
-  <div class="full-width flex bg-white p-4 mx-auto">
-    <div class="mx-auto">
-      {#each pages as _, i}
-        <button
-          class="rounded-full w-12 h-12"
-          class:font-bold={(i + 1) === page}
-          on:click={() => goto(`/wallet/assets/${i+1}`)}>{i + 1}</button
-        >
-      {/each}
+    <div class="full-width flex bg-white p-4 mx-auto">
+      <div class="mx-auto">
+        {#each pages as _, i}
+          <button
+            class="rounded-full w-12 h-12"
+            class:font-bold={i + 1 === page}
+            on:click={() => goto(`/wallet/assets/${i + 1}`)}>{i + 1}</button
+          >
+        {/each}
+      </div>
     </div>
-  </div>
   </div>
 {/if}
 

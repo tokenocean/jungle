@@ -205,11 +205,13 @@ app.get("/assets/:page", auth, async (req, res) => {
   for (let i = 0; i < unrecognized.length; i++) {
     let asset = unrecognized[i];
     let art = artworks.find((a) => a.asset === asset);
-    titles[asset] = asset === btc ? 'L-BTC' : art ? art.title : asset.substr(0, 6);
+    titles[asset] =
+      asset === btc ? "L-BTC" : art ? art.title : asset.substr(0, 6);
     await redis.set(asset, titles[asset]);
   }
 
-  assets = Object.keys(titles).map((asset) => ({ asset, name: titles[asset] }))
+  assets = Object.keys(titles)
+    .map((asset) => ({ asset, name: titles[asset] }))
     .sort((a, b) => a.name.localeCompare(b.name))
     .sort((a, b) => (a.name === "L-BTC" ? -1 : 1));
 
