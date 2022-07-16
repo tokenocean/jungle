@@ -103,7 +103,7 @@
   let refresh = async () => {
     try {
       if (!$session.user) return;
-      let { jwt_token } = await get("/auth/refresh");
+      let { jwt_token } = await get('/auth/refresh');
       $token = jwt_token;
     } catch (e) {
       console.log("problem refreshing token", e);
@@ -199,7 +199,7 @@
 <Snack />
 
 <Sidebar bind:open />
-<div class={y > 50 ? "sticky" : "sticky"}>
+<div class={y > 50 ? "sticky" : ""}>
   <Navbar bind:sidebar={open} />
 </div>
 <Dialog />
