@@ -69,6 +69,10 @@
       },
     });
 
+    await api.url("/mail-message-received").auth(`Bearer ${$token}`).post({
+      userId: selectedUser.id,
+    });
+
     $storeMessages.push({
       message: encryptedMessage,
       created_at: Date.now(),

@@ -34,6 +34,7 @@ export const utxos = async (address) => {
   let utxoSet = `${address}:utxos`;
   let last = await redis.get(address);
 
+
   let curr = await electrs.url(`/address/${address}/txs`).get().json();
   let txns = [
     ...curr.filter((tx) => !tx.status.confirmed).reverse(),
@@ -254,7 +255,7 @@ app.get("/address/:address/utxo", async (req, res) => {
 app.get("/address/:address/:asset/utxo", async (req, res) => {
   try {
     let { asset, address } = req.params;
-    res.send(await utxos(address).filter((tx) => tx.asset === asset));
+    res.send((await utxos(address)).filter((tx) => tx.asset === asset));
   } catch (e) {
     console.log("problem getting utxos", e);
     res.code(500).send(e.message);

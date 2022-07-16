@@ -1,7 +1,7 @@
 <script>
   import { createMessage } from "$queries/messages";
-  import { query } from "$lib/api";
-  import { messageUser, prompt } from "$lib/store";
+  import { api, query } from "$lib/api";
+  import { messageUser, prompt, token } from "$lib/store";
   import { info, err, encrypt } from "$lib/utils";
   import { keypair } from "$lib/wallet";
   import { requirePassword } from "$lib/auth";
@@ -29,6 +29,10 @@
           message: encryptedMessage,
           to: $messageUser.id,
         },
+      });
+
+      await api.url("/mail-message-received").auth(`Bearer ${$token}`).post({
+        userId: $messageUser.id,
       });
 
       $prompt = undefined;
