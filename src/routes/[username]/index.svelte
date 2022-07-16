@@ -163,8 +163,8 @@
               <button
                 class="p-2 primary-btn mt-8"
                 on:click={() => {
-                $messageUser = subject;
-                prompt.set(SendMessage);
+                  $messageUser = subject;
+                  prompt.set(SendMessage);
                 }}
               >
                 Message</button

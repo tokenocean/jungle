@@ -4,80 +4,64 @@
   import { format, parseISO } from "date-fns";
   import { newapi as api } from "$lib/api";
   import { ToggleSwitch } from "$comp";
-  import { asset, assets, bitcoinUnitLocal } from "$lib/store";
+  import { bitcoinUnitLocal } from "$lib/store";
   import { label, ticker, val, units, satsFormatted } from "$lib/utils";
 
-  export let transactions;
+  export let asset;
+  export let transactions = [];
 
-  let show = true;
-
-  $: txns = transactions.filter(
-    (t) => t.type === "withdrawal" || t.type === "deposit"
-  );
-
-  $: $assets = txns
-    .map(({ asset, label }) => ({ name: label || ticker(asset), asset }))
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .filter((a, i, r) => a && (!i || a.asset != r[i - 1].asset))
-    .sort((a, b) => (a.name === "L-BTC" ? -1 : 1));
-
+  let page = 1;
   let getTransactions = async () => {
-    transactions = await api().url("/transactions").get().json();
+    let { address, multisig } = $session.user;
+    transactions = [
+      ...(await api()
+        .url(`/${address}/${asset}/transactions/${page}`)
+        .get()
+        .json()),
+
+      ...(await api()
+        .url(`/${multisig}/${asset}/transactions/${page}`)
+        .get()
+        .json()),
+    ].sort((a,b) => parseISO(b.created_at) - parseISO(a.created_at));
+
+
   };
 
-  let poll;
-  let pollTransactions = async () => {
+  let timeout;
+  let poll = async () => {
     await getTransactions();
-    poll = setTimeout(pollTransactions, 5000);
+    timeout = setTimeout(poll, 5000);
   };
 
-  onMount(pollTransactions);
-  onDestroy(() => clearTimeout(poll));
+  onMount(poll);
+  onDestroy(() => clearTimeout(timeout));
 </script>
 
-<div class="px-5 sm:px-0">
-  {#if txns.length}
-    <div class="my-7 flex justify-center">
-      <div class="my-auto mr-2">Show all</div>
-      <ToggleSwitch
-        id="toggle"
-        checked={show}
-        label={`Show only ${ticker($asset.asset)}`}
-        on:change={(e) => {
-          show = !show;
-        }}
-      />
-    </div>
-
-    {#each txns as { amount, asset: a, created_at, confirmed, id, label: name }}
-      {#if amount && (!show || a === $asset.asset)}
+<div class="px-5 sm:px-0 mt-8">
+  {#if transactions.length}
+    {#each transactions as { amount, id, confirmed, created_at }}
         <a href={`/tx/${id}`}>
           <div class="w-full mb-4">
             <div class="flex">
-              <div class="flex-grow text-sm text-gray-500">
+              <div class="flex-grow text-sm text-gray-500 my-auto">
                 {format(parseISO(created_at), "MMM do, yyyy")}
               </div>
               <div
+                   class="my-auto"
                 class:pending={!confirmed}
                 class:text-secondary={confirmed && amount > 0}
               >
                 {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label({
-                  asset: a,
+                  asset,
                   name,
                 }) === "L-BTC" && $bitcoinUnitLocal === "sats"
-                  ? satsFormatted(val(a, Math.abs(amount)) * 100000000)
-                  : val(a, Math.abs(amount))}
+                  ? satsFormatted(val(asset, Math.abs(amount)) * 100000000)
+                  : val(asset, Math.abs(amount))}
               </div>
-            </div>
-            <div class="">
-              {label({ asset: a, name }) === "L-BTC" &&
-              $bitcoinUnitLocal === "sats"
-                ? "L-sats"
-                : label({ asset: a, name })}
             </div>
           </div>
         </a>
-      {/if}
     {/each}
   {/if}
 </div>

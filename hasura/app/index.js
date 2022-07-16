@@ -13,10 +13,12 @@ import "./coinos.js";
 import "./proxy.js";
 import "./messages.js";
 import "./monitor.js";
+import "./registry.js";
 import "./signing.js";
 import "./upload.js";
 import "./mail.js";
 import "./tips.js";
+import "./utxos.js";
 
 app.listen(process.env.PORT || 8091, "0.0.0.0", function (err, address) {
   if (err) {

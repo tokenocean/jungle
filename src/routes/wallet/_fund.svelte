@@ -9,11 +9,12 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { faClone } from "@fortawesome/free-solid-svg-icons";
   import qrcode from "qrcode-generator-es6";
-  import { asset, token } from "$lib/store";
+  import { token } from "$lib/store";
   import { btc, copy, err } from "$lib/utils";
   import { api } from "$lib/api";
   import { ProgressLinear } from "$comp";
 
+  export let asset;
   export let funding = false;
 
   let img;
@@ -162,7 +163,7 @@
       </p>
     {/if}
 
-    {#if $asset.asset === btc}
+    {#if asset === btc}
       <div
         class="flex justify-center text-center cursor-pointer tabs flex-wrap mb-2"
       >
