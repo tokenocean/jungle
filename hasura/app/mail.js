@@ -147,20 +147,20 @@ app.post("/offer-notifications", auth, async (req, res) => {
     if (errors) throw new Error(errors[0].message);
     let currentUser = data.currentuser[0];
 
-    const { editions_by_pk: edition, transactions } = await query(
-      getEditionWithBidTransactionByHash,
+    const { artworks_by_pk: artwork, transactions } = await query(
+      getArtworkWithBidTransactionByHash,
       {
-        id: editionId,
+        id: artworkId,
         hash: transactionHash,
       }
     );
 
     const transaction = transactions.length ? transactions[0] : null;
 
-    if (!transaction || !edition) {
+    if (!transaction || !artwork) {
       return res
         .code(400)
-        .send(`Missing ${!edition ? "edition" : "transaction"}`);
+        .send(`Missing ${!artwork ? "artwork" : "transaction"}`);
     }
 
     const sortedBidTransactions = artwork.transactions.sort(
