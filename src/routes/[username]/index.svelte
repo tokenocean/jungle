@@ -25,7 +25,7 @@
   import Menu from "./_menu.svelte";
   import { query } from "$lib/api";
   import { network } from "$lib/wallet";
-  import qrcode from "qrcode-generator-es6";
+  import qrcode from "qrcode";
 
   export let id;
   export let subject;
@@ -61,13 +61,12 @@
     }
   };
 
-  let img;
-  let address = subject.address;
-  const qr = new qrcode(0, "H");
-  address = `bitcoin:${address}`;
-  qr.addData(address);
-  qr.make();
-  img = qr.createSvgTag({});
+  let qr;
+  onMount(async () => {
+    let address = subject.address;
+    address = `bitcoin:${address}`;
+    qr = await qrcode.toDataURL(address);
+  });
 
   let tab = subject.is_artist ? "creations" : "collection";
 </script>
@@ -152,7 +151,7 @@
               class="w-full cursor-pointer font-semibold text-xs text-center"
               on:click={() => copy(subject.address)}
             >
-              {@html img}
+              <img src={qr} class="w-full" />
               {subject.address}
             </div>
 

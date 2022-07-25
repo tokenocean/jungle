@@ -12,7 +12,7 @@
   import { faClone } from "@fortawesome/free-regular-svg-icons";
   import { ProgressLinear } from "$comp";
   import { onDestroy, onMount, tick } from "svelte";
-  import qrcode from "qrcode-generator-es6";
+  import qrcode from "qrcode";
   import {
     confirmed as confirmedUtxos,
     unconfirmed,
@@ -37,7 +37,7 @@
 
   let tab = "liquid";
 
-  let img, loading, explainer, amount, confirming;
+  let loading, explainer, amount, confirming;
 
   $: amount = val(
     $error.asset,
@@ -62,14 +62,12 @@
 
   $: updateAddress(address);
 
-  let updateAddress = (address) => {
+  let qr;
+  let updateAddress = async (address) => {
     if (!address) return;
-    const qr = new qrcode(0, "H");
     if (address.startsWith("bc"))
       address = `bitcoin:${address}?amount=${amount}`;
-    qr.addData(address);
-    qr.make();
-    img = qr.createSvgTag({});
+    qr = await qrcode.toDataURL(address);
   };
 
   onDestroy(() => clearInterval(poll));
@@ -266,7 +264,7 @@
     {/if}
     <div class="mb-2 flex justify-center flex-col">
       <div class="flex mb-2 mx-auto w-4/5" class:invisible={loading}>
-        {@html img}
+        <img src={qr} class="w-full" />
       </div>
       {#if loading}
         <ProgressLinear />

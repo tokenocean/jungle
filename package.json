@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "cypress:open": "cypress open",
-    "dev": "cross-env TAILWIND_MODE=watch vite dev --host",
+    "dev": "cross-env TAILWIND_MODE=watch vite dev --host --port 3000",
     "build": "vite build",
     "preview": "svelte-kit preview",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
@@ -49,7 +49,7 @@
     "postcss-preset-env": "^6.7.1",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
-    "qrcode-generator-es6": "^1.1.4",
+    "qrcode": "^1.5.1",
     "rollup": "^2.76.0",
     "simple-svelte-autocomplete": "^2.4.0",
     "slip77": "^0.1.1",
