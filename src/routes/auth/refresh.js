@@ -9,7 +9,7 @@ const opts = {
 };
 
 
-export async function get({ request: { headers } }) {
+export async function GET({ request: { headers } }) {
   try {
     const cookies = cookie.parse(headers.get("cookie") || "");
     let { refresh_token, token: jwt } = cookies;

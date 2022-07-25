@@ -1,6 +1,6 @@
 import { getSamples } from "$queries/users";
 
-export async function get({ locals: { jwt, q }}) {
+export async function GET({ locals: { jwt, q }}) {
   return {
     body: {
       users: (

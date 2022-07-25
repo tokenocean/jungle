@@ -1,7 +1,7 @@
 import { checkToken } from "$lib/auth";
 import { newapi as api } from "$lib/api";
 
-export async function get({ request: { headers }, params }) {
+export async function GET({ request: { headers }, params }) {
   let r = checkToken(headers);
   if (r.status) return r;
  

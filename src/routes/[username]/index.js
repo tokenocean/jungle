@@ -1,6 +1,6 @@
 import { checkToken } from "$lib/auth";
 import { getUserByUsername } from "$queries/users";
-export async function get({
+export async function GET({
   request: { headers },
   locals: { q, user },
   params: { username },

@@ -1,6 +1,6 @@
 import { serverApi } from "$lib/api";
 
-export async function post({ locals, request }) {
+export async function POST({ locals, request }) {
   let { q } = locals;
   console.log("YO");
 

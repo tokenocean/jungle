@@ -6,7 +6,7 @@ const opts = {
   path: "/",
 };
 
-export async function get({ request: { headers } }) {
+export async function GET({ request: { headers } }) {
   return {
     status: 302,
     headers: {

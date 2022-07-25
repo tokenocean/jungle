@@ -1,6 +1,6 @@
 import { countArtworks, getLimited } from "$queries/artworks";
 
-export async function get({ locals: { q } }) {
+export async function GET({ locals: { q } }) {
   try {
     let {
       limit = 210,

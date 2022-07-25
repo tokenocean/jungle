@@ -1,5 +1,5 @@
 import { getUsers } from "$queries/users";
-export async function get({ request: { headers }, locals: { q } }) {
+export async function GET({ request: { headers }, locals: { q } }) {
   try {
     return {
       body: await q(getUsers),

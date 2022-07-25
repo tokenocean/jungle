@@ -1,5 +1,5 @@
 import { getAnnouncements } from "$queries/helpers";
-export async function get({ request: { headers }, locals: { q } }) {
+export async function GET({ request: { headers }, locals: { q } }) {
   try {
     let { popups } = await q(getAnnouncements);
     return {
