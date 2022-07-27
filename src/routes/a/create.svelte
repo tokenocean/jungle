@@ -93,7 +93,6 @@
       return;
     }
 
-    url = `/api/ipfs/${artwork.filename}`;
     await tick();
   };
 
