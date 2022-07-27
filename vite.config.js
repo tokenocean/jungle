@@ -1,5 +1,5 @@
 // vite.config.js
-import { sveltekit } from '@sveltejs/kit/vite';
+import { sveltekit } from "@sveltejs/kit/vite";
 import shim from "@asoltys/vite-plugin-stream-shim";
 import path from "path";
 

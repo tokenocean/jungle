@@ -176,7 +176,7 @@
       <div class="mb-2 flex justify-center flex-col">
         <div class="flex mb-2">
           <div class="mx-auto w-1/2 qr mt-6 mb-3">
-            <img src={qr} class="w-full" />
+            <img src={qr} class="w-full" alt="QR Code" />
           </div>
         </div>
         <div class="flex">

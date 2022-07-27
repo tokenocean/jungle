@@ -264,7 +264,7 @@
     {/if}
     <div class="mb-2 flex justify-center flex-col">
       <div class="flex mb-2 mx-auto w-4/5" class:invisible={loading}>
-        <img src={qr} class="w-full" />
+        <img src={qr} class="w-full" alt="QR Code" />
       </div>
       {#if loading}
         <ProgressLinear />

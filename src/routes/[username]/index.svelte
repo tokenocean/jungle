@@ -151,7 +151,7 @@
               class="w-full cursor-pointer font-semibold text-xs text-center"
               on:click={() => copy(subject.address)}
             >
-              <img src={qr} class="w-full" />
+              <img src={qr} class="w-full" alt="QR Code" />
               {subject.address}
             </div>
 

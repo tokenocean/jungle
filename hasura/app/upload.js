@@ -1,5 +1,5 @@
 import fs from "fs";
-import ipfsClient from "ipfs-http-client";
+import { create } from "ipfs-http-client";
 import sharp from "sharp";
 import ffmpeg from "fluent-ffmpeg";
 import { PassThrough } from "stream";
@@ -12,7 +12,7 @@ app.register(fastifyMultipart);
 
 app.post("/upload", async function (req, res) {
   try {
-    const ipfs = ipfsClient(process.env.IPFS_URL);
+    const ipfs = create(process.env.IPFS_URL);
     const data = await req.file();
 
     const s1 = new Clone(data.file);
@@ -26,10 +26,9 @@ app.post("/upload", async function (req, res) {
     const [format, ext] = data.mimetype.split("/");
     const path = `/export/${name}`;
     const thumb = `${path}.${ext}`;
-    const tmp = `/tmp/${name}`;
 
     await new Promise((resolve) =>
-      s2.pipe(fs.createWriteStream(tmp).on("finish", resolve))
+      s2.pipe(fs.createWriteStream(path).on("finish", resolve))
     );
 
 
@@ -55,7 +54,7 @@ app.post("/upload", async function (req, res) {
     try {
       if (format === "video" || ext === "gif") {
         ffmpeg()
-          .input(tmp)
+          .input(path)
           .size("400x?")
           .noAudio()
           .withVideoCodec("libvpx-vp9")

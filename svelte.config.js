@@ -1,17 +1,16 @@
-import preprocess from "svelte-preprocess";
-import tailwind from "tailwindcss";
-import autoprefixer from "autoprefixer";
-import postcss from "postcss-preset-env";
-import nesting from "postcss-nesting";
-import node from "@sveltejs/adapter-node";
+import adapter from '@sveltejs/adapter-auto';
+import preprocess from 'svelte-preprocess';
 
-export default {
-  kit: {
-    adapter: node(),
-  },
-  preprocess: preprocess({
-    postcss: {
-      plugins: [tailwind(), autoprefixer(), nesting()],
-    },
-  }),
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+	preprocess: [
+		preprocess({
+			postcss: true
+		})
+	],
+	kit: {
+		adapter: adapter()
+	}
 };
+
+export default config;
