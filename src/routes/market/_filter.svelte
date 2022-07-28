@@ -3,8 +3,9 @@
   import Select from "svelte-select"
   import { ToggleSwitch } from "$comp";
   import { filterCriteria as fc } from "$lib/store";
+  import { btc, usd, cad } from "$lib/utils";
 
-  const currencies = ['L-BTC', 'Tether'];
+  const currencies = ["L-BTC", "USDT", "L-CAD"];
 
   export let showFilters;
 </script>
@@ -90,7 +91,7 @@
         checked={$fc.filterByCurrency}
         on:change={(e) => ($fc.filterByCurrency = e.target.checked)}
       />
-      <select value={$fc.selectedCurrency} on:change="{() => answer = ''}">
+      <select bind:value={$fc.selectedCurrency}>
 		    {#each currencies as currency}
 			    <option value={currency}>
 				    {currency}

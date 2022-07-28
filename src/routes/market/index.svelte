@@ -11,7 +11,7 @@
     show,
     sortCriteria as sc,
   } from "$lib/store";
-  import { info, err, goto } from "$lib/utils";
+  import { info, err, goto, btc, usd, cad } from "$lib/utils";
   import { Gallery, Results, Search } from "$comp";
   import Filter from "./_filter.svelte";
   import Sort from "./_sort.svelte";
@@ -50,6 +50,19 @@
       if ($fc.hasOpenAuction) {
         where.auction_start = { _lte: new Date(), _is_null: false };
         where.auction_end = { _gt: new Date(), _is_null: false };
+      }
+      if ($fc.filterByCurrency) {
+        switch($fc.selectedCurrency) {
+          case "L-BTC":
+            where.asking_asset = { _eq: btc };
+            break;
+          case "USDT":
+            where.asking_asset = { _eq: usd };
+            break;
+          case "L-CAD":
+            where.asking_asset = { _eq: cad };
+            break;
+        }
       }
 
       if ($session.user && $fc.fromFollowed) {
