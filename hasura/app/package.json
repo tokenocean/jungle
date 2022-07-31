@@ -26,7 +26,7 @@
     "form-data": "^4.0.0",
     "got": "^12.1.0",
     "http-proxy": "^1.18.1",
-    "ipfs-http-client": "^49.0.4",
+    "ipfs-http-client": "57",
     "jsonwebtoken": "^8.5.1",
     "liquidjs-lib": "6.0.2-liquid.5",
     "make-promises-safe": "^5.1.0",
@@ -38,6 +38,7 @@
     "sharp": "^0.27.2",
     "slip77": "^0.1.1",
     "tiny-secp256k1": "^2.2.1",
+    "undici": "^5.8.0",
     "uuid": "^8.3.2",
     "wretch": "^1.7.10"
   },

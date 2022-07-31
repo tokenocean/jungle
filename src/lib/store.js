@@ -29,6 +29,9 @@ export const filterCriteria = writable({
   hasRoyalties: false,
   isFavorited: false,
   fromFollowed: false,
+  hasOpenAuction: false,
+  filterByCurrency: false,
+  selectedCurrency: null
 });
 export const full = writable();
 export const loading = writable();

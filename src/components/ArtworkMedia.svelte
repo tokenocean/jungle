@@ -18,12 +18,12 @@
   export let noAudio = false;
 
   let img, vid, aud;
-  $: cid = CID.parse(artwork.filename).toV1().toString();
+  $: cid = artwork.filename && CID.parse(artwork.filename).toV1().toString();
   $: path =
     artwork &&
     (thumb
       ? `/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`
-      : `https://${cid}.ipfs.nftstorage.link/`);
+      : cid && `https://${cid}.ipfs.nftstorage.link/`);
 
   $: cover = !showDetails;
   $: contain = showDetails;
@@ -160,7 +160,7 @@
   <div class="w-full" class:cover class:contain>
     <img
       class={`${classes}`}
-      src={preview || path ? path : "/liquid_logo.svg"}
+      src={preview || (path ? path : "/liquid_logo.svg")}
       alt={artwork.title}
       bind:this={img}
     />

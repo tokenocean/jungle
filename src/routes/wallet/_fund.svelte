@@ -8,7 +8,7 @@
     faTimes,
   } from "@fortawesome/free-solid-svg-icons";
   import { faClone } from "@fortawesome/free-solid-svg-icons";
-  import qrcode from "qrcode-generator-es6";
+  import qrcode from "qrcode";
   import { token } from "$lib/store";
   import { btc, copy, err } from "$lib/utils";
   import { api } from "$lib/api";
@@ -17,7 +17,6 @@
   export let asset;
   export let funding = false;
 
-  let img;
   let tab = "liquid";
 
   let showInvoice = false;
@@ -34,13 +33,11 @@
 
   $: updateAddress(address);
 
-  let updateAddress = (address) => {
+  let qr;
+  let updateAddress = async (address) => {
     if (!address) return;
-    const qr = new qrcode(0, "H");
     if (address.startsWith("bc")) address = `bitcoin:${address}`;
-    qr.addData(address);
-    qr.make();
-    img = qr.createSvgTag({});
+    qr = await qrcode.toDataURL(address);
   };
 
   let fee = 0;
@@ -118,10 +115,7 @@
   $: if ($session.user) address = $session.user.address;
 
   $: if ($session.user && $session.user.address) {
-    const qr = new qrcode(0, "H");
-    qr.addData($session.user.address);
-    qr.make();
-    img = qr.createSvgTag({});
+    qr = qrcode.toDataURL($session.user.address);
   }
 </script>
 
@@ -182,7 +176,7 @@
       <div class="mb-2 flex justify-center flex-col">
         <div class="flex mb-2">
           <div class="mx-auto w-1/2 qr mt-6 mb-3">
-            {@html img}
+            <img src={qr} class="w-full" alt="QR Code" />
           </div>
         </div>
         <div class="flex">

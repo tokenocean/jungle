@@ -1,7 +1,11 @@
 <script>
   import { onMount } from "svelte";
+  import Select from "svelte-select"
   import { ToggleSwitch } from "$comp";
   import { filterCriteria as fc } from "$lib/store";
+  import { btc, usd, cad } from "$lib/utils";
+
+  const currencies = ["L-BTC", "USDT", "L-CAD"];
 
   export let showFilters;
 </script>
@@ -71,6 +75,29 @@
         checked={$fc.fromFollowed}
         on:change={(e) => ($fc.fromFollowed = e.target.checked)}
       />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="has-open-auction"
+        label="Has Open Auction"
+        checked={$fc.hasOpenAuction}
+          on:change={(e) => ($fc.hasOpenAuction = e.target.checked)}
+      />
+    </div>
+    <div>
+      <ToggleSwitch
+        id="currency"
+        label="Currency is"
+        checked={$fc.filterByCurrency}
+        on:change={(e) => ($fc.filterByCurrency = e.target.checked)}
+      />
+      <select bind:value={$fc.selectedCurrency}>
+		    {#each currencies as currency}
+			    <option value={currency}>
+				    {currency}
+			    </option>
+		    {/each}
+	    </select>
     </div>
   </div>
 </div>

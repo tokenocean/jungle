@@ -3,7 +3,7 @@ import cookie from "cookie";
 import { addSeconds } from "date-fns";
 import { getUser } from "$queries/users";
 
-export async function post({ locals, request }) {
+export async function POST({ locals, request }) {
   let { q } = locals;
 
   try {
