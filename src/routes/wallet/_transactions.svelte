@@ -4,28 +4,25 @@
   import { format, parseISO } from "date-fns";
   import { newapi as api } from "$lib/api";
   import { ToggleSwitch } from "$comp";
-  import { bitcoinUnitLocal } from "$lib/store";
+  import { bitcoinUnitLocal, transactions } from "$lib/store";
   import { label, ticker, val, units, satsFormatted } from "$lib/utils";
 
-  export let asset;
-  export let transactions = [];
+  export let asset, page;
 
-  let page = 1;
+  let offset = 25;
+  let count = 200;
+  let pages = new Array(Math.ceil(count / offset));
+
   let getTransactions = async () => {
-    let { address, multisig } = $session.user;
-    transactions = [
-      ...(await api()
-        .url(`/${address}/${asset}/transactions/${page}`)
-        .get()
-        .json()),
-
-      ...(await api()
-        .url(`/${multisig}/${asset}/transactions/${page}`)
-        .get()
-        .json()),
-    ].sort((a,b) => parseISO(b.created_at) - parseISO(a.created_at));
-
-
+    let { username } = $session.user;
+    try {
+    $transactions = await api()
+      .url(`/${username}/${asset}/transactions/${page}`)
+      .get()
+      .json();
+    } catch(e) {
+      console.log("problem fetching transactions", e);
+    } 
   };
 
   let timeout;
@@ -39,35 +36,37 @@
 </script>
 
 <div class="px-5 sm:px-0 mt-8">
-  {#if transactions.length}
-    {#each transactions as { amount, id, confirmed, created_at }}
-        <a href={`/tx/${id}`}>
-          <div class="w-full mb-4">
-            <div class="flex">
-              <div class="flex-grow text-sm text-gray-500 my-auto">
-                {format(parseISO(created_at), "MMM do, yyyy")}
-              </div>
-              <div
-                   class="my-auto"
-                class:pending={!confirmed}
-                class:text-secondary={confirmed && amount > 0}
-              >
-                {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label({
-                  asset,
-                  name,
-                }) === "L-BTC" && $bitcoinUnitLocal === "sats"
-                  ? satsFormatted(val(asset, Math.abs(amount)) * 100000000)
-                  : val(asset, Math.abs(amount))}
-              </div>
+  {#if $transactions.length}
+    {#each $transactions as { amount, hash, confirmed, created_at }}
+      <a href={`/tx/${hash}`}>
+        <div class="w-full mb-4">
+          <div class="flex">
+            <div class="flex-grow text-sm text-gray-500 my-auto">
+              {format(parseISO(created_at), "MMM do, yyyy")}
+            </div>
+            <div class="my-auto" class:text-secondary={amount > 0}>
+              {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label({
+                asset,
+                name,
+              }) === "L-BTC" && $bitcoinUnitLocal === "sats"
+                ? satsFormatted(val(asset, Math.abs(amount)) * 100000000)
+                : val(asset, Math.abs(amount))}
             </div>
           </div>
-        </a>
+        </div>
+      </a>
     {/each}
   {/if}
 </div>
 
-<style>
-  .pending {
-    @apply text-orange-400;
-  }
-</style>
+<div class="full-width flex bg-white p-4 mx-auto">
+  <div class="mx-auto">
+    {#each pages as _, i}
+      <a href={`/wallet/${asset}/${i + 1}`}>
+        <button class="rounded-full w-12 h-12" class:font-bold={i + 1 === page}
+          >{i + 1}</button
+        >
+      </a>
+    {/each}
+  </div>
+</div>

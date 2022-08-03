@@ -68,16 +68,17 @@ export const parseAsset = (v) => reverse(v.slice(1)).toString("hex");
 const nonce = Buffer.alloc(1);
 
 export const getBalance = async (asset) => {
+  console.log("AAAA", asset)
   let { confirmed: c, unconfirmed: u } = await api()
     .url(`/${asset}/balance`)
     .get()
     .json();
 
   confirmed.set({ ...get(confirmed), ...c });
-      unconfirmed.set({ ...get(unconfirmed), ...u });
+  unconfirmed.set({ ...get(unconfirmed), ...u });
 };
 
-const getHex = async (txid) => {
+export const getHex = async (txid) => {
   return electrs.url(`/tx/${txid}/hex`).get().text();
 };
 
@@ -388,7 +389,7 @@ const fund = async (
   let { address, redeem, output } = out;
 
   let utxos = await api().url(`/address/${address}/${asset}/utxo`).get().json();
-  console.log(utxos)
+  console.log(utxos);
   let l = (await getLocked(asset))
     .filter((t) => !(p.artwork_id && t.artwork.id === p.artwork_id))
     .map((t) => {

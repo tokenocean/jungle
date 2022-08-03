@@ -11,7 +11,10 @@ export async function GET({ request: { headers }, params }) {
     let count = await api(headers).url(`/assets/count`).get().json();
     page = parseInt(page);
     return {
-      body: { assets, count, page }
+      body: { assets, count, page },
+      cache: {
+        maxage: 3600
+      } 
     };
   } catch (e) {
     console.log(e);

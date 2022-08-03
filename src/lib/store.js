@@ -1,15 +1,18 @@
 import { writable } from "svelte/store";
 import { browser } from "$app/env";
 
-
 const btc = import.meta.env.VITE_BTC;
 
 const persisted = (k, i) => {
   let s = writable(
-    browser && localStorage.getItem(k) ? JSON.parse(localStorage.getItem(k)) : i
+    browser &&
+      sessionStorage.getItem(k) &&
+      sessionStorage.getItem(k) !== "undefined"
+      ? JSON.parse(sessionStorage.getItem(k))
+      : i
   );
 
-  s.subscribe((v) => browser && localStorage.setItem(k, JSON.stringify(v)));
+  s.subscribe((v) => browser && sessionStorage.setItem(k, JSON.stringify(v)));
 
   return s;
 };
@@ -52,7 +55,6 @@ export const snack = writable();
 export const sortCriteria = writable("newest");
 export const popup = writable();
 export const txcache = writable({});
-export const transactions = writable([]);
 export const user = writable();
 export const token = writable();
 export const wallet = writable();
@@ -69,3 +71,4 @@ export const count = persisted("count", 0);
 export const assets = persisted("assets", []);
 export const confirmed = persisted("confirmed", {});
 export const unconfirmed = persisted("unconfirmed", {});
+export const transactions = persisted("transactions", []);
