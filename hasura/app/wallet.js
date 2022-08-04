@@ -14,12 +14,8 @@ import {
 
 import { ECPair } from "./ecc.js";
 
-import { electrs } from "./api.js";
+import { electrs, lq } from "./api.js";
 import reverse from "buffer-reverse";
-
-import rpc from "./rpc.js";
-
-const lq = rpc({ RPCHOST: 'lm', RPCPORT: 7041, RPCUSER: 'adam', RPCPASS: 'MPJzfq97', RPCWALLET: 'coinos' });
 
 export const network =
   networks[
