@@ -2,7 +2,7 @@ import { getTx } from "$lib/wallet";
 import { getTransaction } from "$queries/transactions.js";
 import { Psbt } from "liquidjs-lib";
 
-export async function GET({ request: { headers }, locals: { q }, params }) {
+export async function GET({ locals: { q }, params }) {
   let { id } = params;
 
   try {
@@ -26,7 +26,7 @@ export async function GET({ request: { headers }, locals: { q }, params }) {
     }
 
     return {
-      body: { hash, psbt },
+      body: { psbt },
     };
   } catch (e) {
     console.log(e);

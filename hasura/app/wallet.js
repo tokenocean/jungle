@@ -14,7 +14,7 @@ import {
 
 import { ECPair } from "./ecc.js";
 
-import { electrs } from "./api.js";
+import { electrs, lq } from "./api.js";
 import reverse from "buffer-reverse";
 
 export const network =
@@ -116,12 +116,19 @@ export const parse = async (psbt) => {
   return [tx.getId(), inputs, outputs];
 };
 
+export const blocktime = async (txid) => {
+  if (!txid) return;
+  let { blocktime } = await lq.getRawTransaction(txid, true);
+  return blocktime;
+} 
+
 export const hex = async (txid) => {
   let hex = await redis.get(txid);
   if (!hex) {
     await wait(async () => {
       try {
-        hex = await electrs.url(`/tx/${txid}/hex`).get().text();
+        // hex = await electrs.url(`/tx/${txid}/hex`).get().text();
+        hex = await lq.getRawTransaction(txid);
         return true;
       } catch (e) {
         return false;

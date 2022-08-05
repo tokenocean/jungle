@@ -1,6 +1,8 @@
 <script>
-  import { dev, host } from "$lib/utils";
+  import { dev } from "$lib/utils";
   import { page } from "$app/stores";
+
+  const host = import.meta.env.VITE_HOST;
   export let metadata;
 </script>
 

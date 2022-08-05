@@ -12,6 +12,9 @@ export async function GET({ request: { headers }, params }) {
     page = parseInt(page);
     return {
       body: { assets, count, page },
+      cache: {
+        maxage: 3600
+      } 
     };
   } catch (e) {
     console.log(e);

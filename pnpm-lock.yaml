@@ -60,7 +60,7 @@ devDependencies:
   '@noble/secp256k1': 1.6.0
   '@popperjs/core': 2.11.5
   '@sveltejs/adapter-node': 1.0.0-next.85
-  '@sveltejs/kit': 1.0.0-next.396_svelte@3.49.0+vite@3.0.3
+  '@sveltejs/kit': 1.0.0-next.401_svelte@3.49.0+vite@3.0.3
   autoprefixer: 10.4.7_postcss@8.4.14
   bip32: 2.0.6
   bip39: 3.0.4
@@ -233,10 +233,11 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.396_svelte@3.49.0+vite@3.0.3:
-    resolution: {integrity: sha512-bKFpuzp9QxPkOIOEIeNeedvxEMORNqBPxUmoJXDP/Se7MrSfcxYiamjBcKrG+bgGNWmV39nD3EvUox+CXno/Ig==}
+  /@sveltejs/kit/1.0.0-next.401_svelte@3.49.0+vite@3.0.3:
+    resolution: {integrity: sha512-VrpFtSSu1ADRVWWDxLl218GKf9l+TA7tNCCAmVFAuJdj5zVxPgJflu4Dh1p5C4efKP+x1v6W5nvxmNkbZLPoag==}
     engines: {node: '>=16.9'}
     hasBin: true
+    requiresBuild: true
     peerDependencies:
       svelte: ^3.44.0
       vite: ^3.0.0

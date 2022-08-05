@@ -1,23 +1,12 @@
-<script context="module">
-  export async function load({ params }) {
-    return {
-      props: {
-        a: params.asset,
-      },
-    };
-  }
-</script>
-
 <script>
   import { prefetch } from "$app/navigation";
   import Fa from "svelte-fa";
   import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-  import { border, bg } from "./_colors";
+  import { border, bg } from "../_colors";
   import { browser } from "$app/env";
   import { newapi as api, query } from "$lib/api";
   import { onDestroy, onMount, tick } from "svelte";
   import {
-    asset,
     count,
     confirmed,
     unconfirmed,
@@ -38,11 +27,14 @@
   import { requireLogin } from "$lib/auth";
   import { getBalance } from "$lib/wallet";
 
-  import Fund from "./_fund.svelte";
-  import Withdraw from "./_withdraw.svelte";
-  import Transactions from "./_transactions.svelte";
+  import Fund from "../_fund.svelte";
+  import Withdraw from "../_withdraw.svelte";
+  import Transactions from "../_transactions.svelte";
 
-  export let a;
+  export let asset;
+
+  let a = asset.asset;
+  let page = 1;
 
   let balance, pending, funding, withdrawing;
 
@@ -58,10 +50,14 @@
 
   let poll;
   let pollBalances = async () => {
-    await getBalance(a);
+    try {
+      await getBalance(a);
 
-    balance = val(a, $confirmed[a] || 0);
-    pending = val(a, $unconfirmed[a] || 0);
+      balance = val(a, $confirmed[a] || 0);
+      pending = val(a, $unconfirmed[a] || 0);
+    } catch (e) {
+      console.log("problem fetching balances");
+    }
 
     poll = setTimeout(pollBalances, 5000);
   };
@@ -74,7 +70,6 @@
     }
 
     $count = await api().url(`/assets/count`).get().json();
-    $asset = await api().url(`/asset/${a}`).get().json();
 
     pollBalances();
   };
@@ -83,17 +78,17 @@
   onDestroy(() => clearTimeout(poll));
 
   $: labelCalculated =
-    label($asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
+    label(asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
       ? "L-sats"
       : label(asset);
 
   $: balanceCalculated =
-    label($asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
+    label(asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
       ? satsFormatted(balance * 100000000)
       : balance;
 
   $: pendingCalculated =
-    label($asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
+    label(asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
       ? satsFormatted(pending * 100000000)
       : pending;
 </script>
@@ -102,7 +97,7 @@
   <div class="w-full">
     {#if $count > 1}
       <div class="mb-5">
-        <a class="secondary-color" href="/wallet/assets/1">
+        <a class="secondary-color" href="/wallet/assets/1" sveltekit:prefetch>
           <div class="flex">
             <div class="px-5 md:px-0">
               {$count} assets available in this wallet
@@ -121,7 +116,7 @@
           a
         )} ${bg(a)}`}
       >
-        {label($asset, "name")}
+        {label(asset, "name")}
       </div>
 
       <div class="m-6">
@@ -130,7 +125,7 @@
           class="flex mt-3"
           on:click={() =>
             updateBitcoinUnit($bitcoinUnitLocal === "sats" ? "btc" : "sats")}
-          disabled={label($asset) !== "L-BTC"}
+          disabled={label(asset) !== "L-BTC"}
         >
           <span class="text-4xl text-white mr-3">
             {balanceCalculated}
@@ -165,7 +160,7 @@
     <div>
       <Fund bind:funding asset={a} />
       <Withdraw bind:withdrawing asset={a} />
-      <Transactions asset={a} />
+      <Transactions asset={a} {page} />
     </div>
   </div>
 {/if}

@@ -103,7 +103,7 @@ services:
       JWT_ALGORITHM: "${JWT_ALGORITHM}"
       JWT_KEY: "${JWT_KEY}"
       AUTO_MIGRATE: "true"
-      AUTO_ACTIVATE_NEW_USERS: "true"
+      AUTO_ACTIVATE_NEW_USERS: "false"
       STORAGE_ENABLE: "false"
       MAX_REQUESTS: 10000
       LOST_PASSWORD_ENABLE: "true"
@@ -113,6 +113,7 @@ services:
       SMTP_USER: "${SMTP_USER}"
       SMTP_PASS: "${SMTP_PASS}"
       SMTP_SENDER: "${SMTP_SENDER}"
+      VERIFY_EMAILS: "true"
     volumes:
       - ./custom:/app/custom
     networks:

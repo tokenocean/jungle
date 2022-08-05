@@ -37,6 +37,7 @@
 
   export let summary = false;
   export let psbt;
+  export let tx;
 
   let ins,
     outs,
@@ -51,14 +52,14 @@
 
   let labels = {};
   let retries = 0;
-  let { tx } = psbt.data.globalMap.unsignedTx;
+  if (!tx) ({ tx } = psbt.data.globalMap.unsignedTx);
 
-  $: init(psbt);
-  let init = async (p, u) => {
+  $: init(tx);
+  let init = async (tx) => {
     try {
       if (loading) return setTimeout(() => init(p, u), 50);
       loading = true;
-      if (!p) return (loading = false);
+      if (!tx) return (loading = false);
 
       ins = [];
       outs = [];
@@ -85,14 +86,18 @@
           .get()
           .json();
 
+        let signed = 
+            psbt?.data.inputs[i] &&
+            (!!psbt?.data.inputs[i].partialSig ||
+             !!psbt?.data.inputs[i].finalScriptSig);
+
+        let pSig = psbt?.data.inputs[i] && !!psbt?.data.inputs[i].partialSig;
+
         let input = {
           address,
           asset,
-          signed:
-            p.data.inputs[i] &&
-            (!!p.data.inputs[i].partialSig ||
-              !!p.data.inputs[i].finalScriptSig),
-          pSig: p.data.inputs[i] && !!p.data.inputs[i].partialSig,
+          signed,
+          pSig, 
           index,
           spent,
           txid,
@@ -185,30 +190,26 @@
             {#if senders[username] && username !== "Fee"}
               {#each Object.keys(totals[username]) as asset}
                 {#if totals[username][asset] > 0}
-                  {#if users[username]}
-                    <div class="my-auto flex mb-1">
-                      <div class="flex">
-                        {#if users[username]}
-                          <Avatar
-                            user={users[username]}
-                            overlay={username.includes("2of2") &&
-                              "/logo-graphic.png"}
-                          />
-                        {:else}
-                          <Avatar
-                            src="QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z"
-                          />
-                        {/if}
-                      </div>
-                      <div class="my-auto ml-2 truncate">
-                        <a href={`/${username.replace(" 2of2", "")}`}>
+                  <div class="my-auto flex mb-1">
+                    <div class="flex">
+                      {#if users[username]}
+                        <Avatar user={users[username]} />
+                      {:else}
+                        <Avatar
+                          src="QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z"
+                        />
+                      {/if}
+                    </div>
+                    <div class="my-auto ml-2">
+                      {#if users[username]}
+                        <a href={`/${username}`}>
                           {username}
                         </a>
-                      </div>
+                      {:else}
+                        {username}
+                      {/if}
                     </div>
-                  {:else}
-                    <div>{username}</div>
-                  {/if}
+                  </div>
                   <div class="my-auto ml-auto">
                     <div class="mr-1 ml-auto">
                       {labels[asset] === "L-BTC" && $bitcoinUnitLocal === "sats"
@@ -243,30 +244,26 @@
             {#if recipients[username] && username !== "Fee"}
               {#each Object.keys(totals[username]) as asset}
                 {#if totals[username][asset] < 0}
-                  {#if users[username]}
-                    <div class="my-auto flex mb-1">
-                      <div class="flex">
-                        {#if users[username]}
-                          <Avatar
-                            user={users[username]}
-                            overlay={username.includes("2of2") &&
-                              "/logo-graphic.png"}
-                          />
-                        {:else}
-                          <Avatar
-                            src="QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z"
-                          />
-                        {/if}
-                      </div>
-                      <div class="my-auto ml-2 truncate">
-                        <a href={`/${username.replace(" 2of2", "")}`}>
+                  <div class="my-auto flex mb-1">
+                    <div class="flex">
+                      {#if users[username]}
+                        <Avatar user={users[username]} />
+                      {:else}
+                        <Avatar
+                          src="QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z"
+                        />
+                      {/if}
+                    </div>
+                    <div class="my-auto ml-2">
+                      {#if users[username]}
+                        <a href={`/${username}`}>
                           {username}
                         </a>
-                      </div>
+                      {:else}
+                        {username}
+                      {/if}
                     </div>
-                  {:else}
-                    <div>{username}</div>
-                  {/if}
+                  </div>
                   <div class="my-auto ml-auto">
                     <div class="mr-1 ml-auto">
                       {labels[asset] === "L-BTC" && $bitcoinUnitLocal === "sats"
@@ -434,10 +431,12 @@
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <button
-            class="secondary-btn mb-2"
-            on:click={() => copy(psbt.toBase64())}>Copy PSBT Base64</button
-          >
+          {#if psbt}
+            <button
+              class="secondary-btn mb-2"
+              on:click={() => copy(psbt.toBase64())}>Copy PSBT Base64</button
+            >
+          {/if}
           <button class="secondary-btn mb-2" on:click={() => copy(tx.toHex())}
             >Copy Tx Hex</button
           >

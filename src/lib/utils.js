@@ -71,12 +71,8 @@ export const addressUser = async (address) => {
 
 export const addressLabel = async (address) => {
   const { users } = await query(getUserByAddress, { address });
-  if (users.length) {
-    let user = users[0];
-    return user.address === address ? user.username : user.username + " 2of2";
-  }
-
-  return address.length > 6 ? address.substr(0, 6) + "..." : address;
+  if (users.length) return users[0].username;
+  return address.length > 6 ? address.slice(0, 3) + ".." + address.slice(-3) : address;
 };
 
 export const assetLabel = async (asset) => {

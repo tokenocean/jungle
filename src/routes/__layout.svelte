@@ -96,19 +96,24 @@
   initializeBTCUnits();
 
   let unsubscribeFromSession;
-  let refreshInterval;
-  let authCheckInterval;
-  let messagesInterval;
+  let refreshTimer,
+    refreshInterval = 60000;
+  let authTimer,
+    authInterval = 5000;
+  let messagesTimer,
+    messagesInterval = 5000;
 
   let refresh = async () => {
     try {
       if (!$session.user) return;
-      let { jwt_token } = await get('/auth/refresh');
+      let { jwt_token } = await get("/auth/refresh");
       $token = jwt_token;
     } catch (e) {
       console.log("problem refreshing token", e);
       goto("/logout");
     }
+
+    refreshTimer = setTimeout(refresh, refreshInterval);
   };
 
   let authCheck = async () => {
@@ -119,6 +124,34 @@
     } catch (e) {
       console.log(e);
     }
+
+    authTimer = setTimeout(authCheck, authInterval);
+  };
+
+  let messages = [];
+
+  let fetchMessages = async () => {
+    if ($session.user) {
+      try {
+        ({ messages } = await query(getMessages));
+        let newMessages = messages.filter(
+          (m) => !$storeMessages.find((o) => m.id === o.id)
+        );
+
+        if (newMessages.length) {
+          $storeMessages = [...$storeMessages, ...newMessages];
+        }
+
+        $unreadMessages = messages.filter(
+          (message) =>
+            message.to === $session.user.id && message.viewed === false
+        );
+      } catch (e) {
+        err(e);
+      }
+    }
+
+    messagesTimer = setTimeout(fetchMessages, messagesInterval);
   };
 
   if (browser) {
@@ -132,35 +165,6 @@
     $p = popup;
     $user = $session.user;
     $token = jwt;
-
-    let messages = [];
-
-    async function fetchMessages() {
-      if ($session.user) {
-        try {
-          ({ messages } = await query(getMessages));
-          let newMessages = messages.filter(
-            (m) => !$storeMessages.find((o) => m.id === o.id)
-          );
-
-          if (newMessages.length) {
-            $storeMessages = [...$storeMessages, ...newMessages];
-          }
-
-          $unreadMessages = messages.filter(
-            (message) =>
-              message.to === $session.user.id && message.viewed === false
-          );
-        } catch (e) {
-          err(e);
-        }
-      }
-    }
-
-    fetchMessages();
-    messagesInterval = setInterval(fetchMessages, 5000);
-    refreshInterval = setInterval(refresh, 600000);
-    authCheckInterval = setInterval(authCheck, 5000);
 
     unsubscribeFromSession = session.subscribe((value) => {
       value && value.user && checkAuthFromLocalStorage(value.user);
@@ -177,13 +181,18 @@
   $: stopPolling($page);
 
   onDestroy(() => {
-    clearInterval(refreshInterval);
-    clearInterval(authCheckInterval);
-    clearInterval(messagesInterval);
+    clearTimeout(refreshTimer);
+    clearTimeout(authTimer);
+    clearTimeout(messagesTimer);
     unsubscribeFromSession && unsubscribeFromSession();
   });
 
   onMount(() => {
+    fetchMessages();
+    authCheck();
+
+    refreshTimer = setTimeout(refresh, refreshInterval);
+
     if (browser && !$password) {
       $password = window.sessionStorage.getItem("password");
     }
