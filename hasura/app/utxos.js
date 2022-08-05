@@ -189,53 +189,58 @@ app.get("/asset/:asset", async (req, res) => {
 });
 
 app.get("/assets/:page", auth, async (req, res) => {
-  let { page } = req.params;
-  let offset = 25;
-  page--;
+  try {
+    let { page } = req.params;
+    let offset = 25;
+    page--;
 
-  let { address, multisig } = await getUser(req);
+    let { address, multisig } = await getUser(req);
 
-  let a = await balances(address);
-  let b = await balances(multisig);
+    let a = await balances(address);
+    let b = await balances(multisig);
 
-  ["confirmed", "unconfirmed"].map((v) =>
-    Object.keys(b[v]).map((k) =>
-      a[v][k] ? (a[v][k] += b[v][k]) : (a[v][k] = b[v][k])
-    )
-  );
+    ["confirmed", "unconfirmed"].map((v) =>
+      Object.keys(b[v]).map((k) =>
+        a[v][k] ? (a[v][k] += b[v][k]) : (a[v][k] = b[v][k])
+      )
+    );
 
-  let assets = [
-    ...new Set([...Object.keys(a.confirmed), ...Object.keys(a.unconfirmed)]),
-  ];
+    let assets = [
+      ...new Set([...Object.keys(a.confirmed), ...Object.keys(a.unconfirmed)]),
+    ];
 
-  let titles = {};
-  let unrecognized = [];
-  for (let i = 0; i < assets.length; i++) {
-    let asset = assets[i];
+    let titles = {};
+    let unrecognized = [];
+    for (let i = 0; i < assets.length; i++) {
+      let asset = assets[i];
 
-    titles[asset] = await redis.get(asset);
-    if (!titles[asset]) unrecognized.push(asset);
+      titles[asset] = await redis.get(asset);
+      if (!titles[asset]) unrecognized.push(asset);
+    }
+
+    let { artworks } = await q(getAssetArtworks, {
+      assets: unrecognized,
+    });
+
+    for (let i = 0; i < unrecognized.length; i++) {
+      let asset = unrecognized[i];
+      let art = artworks.find((a) => a.asset === asset);
+      titles[asset] =
+        asset === btc ? "L-BTC" : art ? art.title : asset.substr(0, 6);
+      await redis.set(asset, titles[asset]);
+    }
+
+    assets = Object.keys(titles)
+      .map((asset) => ({ asset, name: titles[asset] }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => (a.name === "L-BTC" ? -1 : 1));
+
+    let result = assets.slice(page * offset, page * offset + offset);
+    res.send(result);
+  } catch (e) {
+    console.log("problem getting assets", e);
+    res.code(500).send(e.message);
   }
-
-  let { artworks } = await q(getAssetArtworks, {
-    assets: unrecognized,
-  });
-
-  for (let i = 0; i < unrecognized.length; i++) {
-    let asset = unrecognized[i];
-    let art = artworks.find((a) => a.asset === asset);
-    titles[asset] =
-      asset === btc ? "L-BTC" : art ? art.title : asset.substr(0, 6);
-    await redis.set(asset, titles[asset]);
-  }
-
-  assets = Object.keys(titles)
-    .map((asset) => ({ asset, name: titles[asset] }))
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .sort((a, b) => (a.name === "L-BTC" ? -1 : 1));
-
-  let result = assets.slice(page * offset, page * offset + offset);
-  res.send(result);
 });
 
 app.get("/:address/:asset/balance", async (req, res) => {
@@ -320,12 +325,12 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
 
     if (totalCount < addressCount + multisigCount) {
       let last = await blocktime(await redis.lIndex(username, 0));
-      console.log("LAST", last)
+      console.log("LAST", last);
 
       for (let i = 0; i < addressCount; i++) {
         let txid = await redis.lIndex(`${address}:${asset}`, i);
         if ((await blocktime(txid)) <= last) break;
-        console.log("PUSHING")
+        console.log("PUSHING");
         await redis.lPush(username, txid);
       }
 
