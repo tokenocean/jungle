@@ -5,7 +5,8 @@ import * as middlewares from "wretch-middlewares";
 import { get as getStore } from "svelte/store";
 import { err } from "$lib/utils";
 import { token } from "$lib/store";
-const { retry } = middlewares;
+
+const { retry } = middlewares.default || middlewares;
 
 export const host = import.meta.env.VITE_HOST;
 export const app = import.meta.env.VITE_APP;
@@ -16,13 +17,15 @@ export const newapi = (headers) => {
   let jwt = headers && cookie.parse(headers.get("cookie") || "").token;
 
   if (browser) {
-    url = `${host}/api` 
+    url = `${host}/api`;
     jwt = getStore(token);
-  } 
+  }
 
-  return wretch().url(url).auth(jwt ? `Bearer ${jwt}` : undefined);
-} 
-  
+  return wretch()
+    .url(url)
+    .auth(jwt ? `Bearer ${jwt}` : undefined);
+};
+
 export const electrs = wretch().url(`${host}/api/el`);
 
 export const hasura = wretch()

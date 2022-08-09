@@ -41,7 +41,7 @@ import { compareAsc, parseISO } from "date-fns";
 import { SignaturePrompt, AcceptPrompt } from "$comp";
 import createHash from "create-hash";
 
-const { retry } = middlewares;
+const { retry } = middlewares.default || middlewares;
 
 function sha256(buffer) {
   return createHash("sha256").update(buffer).digest();
