@@ -1,7 +1,7 @@
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { newapi as api, electrs, hasura, query } from "$lib/api";
-import { retry } from "wretch-middlewares";
+import * as middlewares from "wretch-middlewares";
 import { mnemonicToSeedSync } from "bip39";
 import { fromBase58, fromSeed } from "bip32";
 import {
@@ -40,6 +40,8 @@ import { getActiveBids } from "$queries/transactions";
 import { compareAsc, parseISO } from "date-fns";
 import { SignaturePrompt, AcceptPrompt } from "$comp";
 import createHash from "create-hash";
+
+const { retry } = middlewares;
 
 function sha256(buffer) {
   return createHash("sha256").update(buffer).digest();
@@ -115,7 +117,6 @@ export const getMnemonic = (mnemonic, pass) => {
   if (!mnemonic && get(user)) ({ mnemonic } = get(user));
   if (!pass) pass = get(password);
 
-  console.log("MP", mnemonic, pass)
   mnemonic = cryptojs.AES.decrypt(mnemonic, pass).toString(cryptojs.enc.Utf8);
   if (!mnemonic) throw new Error("Unable to decrypt mnmemonic");
   return mnemonic;
@@ -391,7 +392,6 @@ const fund = async (
   let { address, redeem, output } = out;
 
   let utxos = await api().url(`/address/${address}/${asset}/utxo`).get().json();
-  console.log(utxos);
   let l = (await getLocked(asset))
     .filter((t) => !(p.artwork_id && t.artwork.id === p.artwork_id))
     .map((t) => {
@@ -553,6 +553,7 @@ export const releaseToSelf = async (artwork) => {
 
 export const pay = async (artwork, to, amount) => {
   fee.set(100);
+  console.log("AMOUNT", amount)
   if (!amount || amount <= 0) throw new Error("invalid amount");
   let asset = artwork ? artwork.asset : btc;
 

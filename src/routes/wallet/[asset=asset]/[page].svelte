@@ -185,7 +185,7 @@
     <div>
       <Fund bind:funding asset={a} />
       <Withdraw bind:withdrawing asset={a} />
-      <Transactions asset={a} {page} />
+      <Transactions {asset} {page} />
     </div>
   </div>
 {/if}
