@@ -77,7 +77,7 @@
         wallet_initialized,
         mnemonic,
         has_samples,
-        user,
+        user: u,
         ...rest
       } = form;
       $user = { ...$user, ...rest };

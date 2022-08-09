@@ -46,7 +46,7 @@
       ),
     ],
     (m) => m.username
-  ).filter((user) => user.username !== $user.username);
+  ).filter((u) => u.username !== $user.username);
 
   let selectedUser;
   let sendMessage;
