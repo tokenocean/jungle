@@ -43,8 +43,7 @@ export const checkAuthFromLocalStorage = (user) => {
   const usernameFromStorage = window.sessionStorage.getItem("username");
 
   if (usernameFromStorage && user.username !== usernameFromStorage) {
-    console.log("check auth", usernameFromStorage, user.username);
-    // goto("/logout");
+    goto("/logout");
   }
 };
 
