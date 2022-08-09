@@ -16,7 +16,7 @@
   import Filter from "./_filter.svelte";
   import Sort from "./_sort.svelte";
   import { requirePassword } from "$lib/auth";
-  import { compareAsc, differenceInMilliseconds, parseISO } from "date-fns";
+  import { compareAsc, parseISO } from "date-fns";
   import { browser } from "$app/env";
 
   export let total;

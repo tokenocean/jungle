@@ -26,10 +26,8 @@
               class:text-secondary={amount > 0}
               class:text-orange-500={!confirmed}
             >
-              {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label({
-                asset,
-                name,
-              }) === "L-BTC" && $bitcoinUnitLocal === "sats"
+            {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label(asset
+              ) === "L-BTC" && $bitcoinUnitLocal === "sats"
                 ? satsFormatted(val(asset, Math.abs(amount)) * 100000000)
                 : val(asset, Math.abs(amount))}
             </div>

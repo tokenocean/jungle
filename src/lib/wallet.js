@@ -1,7 +1,7 @@
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { newapi as api, electrs, hasura, query } from "$lib/api";
-import * as middlewares from "wretch-middlewares";
+import { retry } from "wretch-middlewares";
 import { mnemonicToSeedSync } from "bip39";
 import { fromBase58, fromSeed } from "bip32";
 import {
@@ -47,8 +47,6 @@ function sha256(buffer) {
 
 export const CANCELLED = "cancelled";
 export const ACCEPTED = "accepted";
-
-const { retry } = middlewares.default || middlewares;
 
 export const DUST = 800;
 const satsPerByte = 0.15;

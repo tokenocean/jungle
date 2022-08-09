@@ -23,7 +23,6 @@
   import { updateArtwork } from "$queries/artworks";
   import { createTransaction } from "$queries/transactions";
   import { newapi as api, query } from "$lib/api";
-  import { v4 as uuidv4 } from "uuid";
   import { page } from "$app/stores";
   import {
     broadcast,

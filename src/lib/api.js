@@ -1,16 +1,13 @@
 import { browser } from "$app/env";
 import cookie from "cookie";
 import wretch from "wretch";
-import * as middlewares from "wretch-middlewares";
+import { retry } from "wretch-middlewares";
 import { get as getStore } from "svelte/store";
 import { err } from "$lib/utils";
 import { token } from "$lib/store";
 
 export const host = import.meta.env.VITE_HOST;
 export const app = import.meta.env.VITE_APP;
-
-const { retry } = middlewares.default || middlewares;
-
 export const api = wretch().url(`${host}/api`);
 
 export const newapi = (headers) => {
