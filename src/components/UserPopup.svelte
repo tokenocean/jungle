@@ -1,8 +1,7 @@
 <script>
   import { SendMessage, SendTip } from "$comp";
-  import { session } from "$app/stores";
   import { goto } from "$lib/utils";
-  import { messageUser, prompt, tipUser } from "$lib/store";
+  import { messageUser, prompt, tipUser, user as currentuser } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faWallet,
@@ -35,7 +34,7 @@
     <button
       on:click={() => {
         showPopup = false;
-        if (!$session.user) {
+        if (!$currentuser) {
           goto("/login");
         } else {
           $messageUser = user;
@@ -48,7 +47,7 @@
     <button
       on:click={() => {
         showPopup = false;
-        if (!$session.user) {
+        if (!$currentuser) {
           goto("/login");
         } else {
           $tipUser = { username: user.username, address: user.address };

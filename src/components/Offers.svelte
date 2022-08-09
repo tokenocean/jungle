@@ -1,5 +1,4 @@
 <script>
-  import { session } from "$app/stores";
   import { AcceptOffer, ArtworkMedia, Activity, Avatar } from "$comp";
   import {
     canAccept,
@@ -11,8 +10,8 @@
     val,
   } from "$lib/utils";
   import { formatDistanceStrict } from "date-fns";
-  import { api } from "$lib/api";
-  import { token, prompt } from "$lib/store";
+  import { newapi as api } from "$lib/api";
+  import { user, token, prompt } from "$lib/store";
   import Fa from "svelte-fa";
   import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
@@ -35,8 +34,7 @@
 
     await confirm();
 
-    await api
-      .auth(`Bearer ${$token}`)
+    await api()
       .url("/cancel")
       .post({ id })
       .json()
@@ -158,7 +156,7 @@
             </div>
           </td>
           <td class="py-4 pl-6 text-sm ">
-            {#if canAccept(offer.transaction, $session.user)}
+            {#if canAccept(offer.transaction, $user)}
               <a
                 href="/"
                 on:click|preventDefault={() => {
@@ -246,7 +244,7 @@
             </div>
           </td>
           <td class="py-4 pl-6 text-sm ">
-            {#if canCancel(offer.transaction, $session.user)}
+            {#if canCancel(offer.transaction, $user)}
               <a
                 href="/"
                 on:click|preventDefault={() => cancel(offer.transaction)}

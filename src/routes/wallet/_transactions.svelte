@@ -1,5 +1,4 @@
 <script>
-  import { session } from "$app/stores";
   import { onMount, onDestroy } from "svelte";
   import { format, parseISO } from "date-fns";
   import { newapi as api } from "$lib/api";
@@ -15,23 +14,6 @@
   let timeout;
   let getTransactions = async () => {
     try {
-      let { username } = $session.user;
-      if (!username) return;
-
-      let { count } = await api()
-        .url(`/${username}/${asset}/transactions/count`)
-        .get()
-        .json();
-
-      $txCount = count;
-
-      $transactions = {
-        ...$transactions,
-        [page]: await api()
-          .url(`/${username}/${asset}/transactions/${page}`)
-          .get()
-          .json(),
-      };
     } catch (e) {
       console.log("problem fetching transactions", e);
     }
@@ -52,7 +34,11 @@
             <div class="flex-grow text-sm text-gray-500 my-auto">
               {format(parseISO(created_at), "MMM do, yyyy")}
             </div>
-            <div class="my-auto" class:text-secondary={amount > 0} class:text-orange-500={!confirmed}>
+            <div
+              class="my-auto"
+              class:text-secondary={amount > 0}
+              class:text-orange-500={!confirmed}
+            >
               {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label({
                 asset,
                 name,
@@ -68,15 +54,16 @@
 </div>
 
 {#if pages > 1}
-<div class="full-width flex bg-white p-4 mx-auto">
-  <div class="mx-auto">
-    {#each pages as _, i}
-      <a href={`/wallet/${asset}/${i + 1}`}>
-        <button class="rounded-full w-12 h-12" class:font-bold={i + 1 === page}
-          >{i + 1}</button
-        >
-      </a>
-    {/each}
+  <div class="full-width flex bg-white p-4 mx-auto">
+    <div class="mx-auto">
+      {#each pages as _, i}
+        <a href={`/wallet/${asset}/${i + 1}`}>
+          <button
+            class="rounded-full w-12 h-12"
+            class:font-bold={i + 1 === page}>{i + 1}</button
+          >
+        </a>
+      {/each}
+    </div>
   </div>
-</div>
 {/if}

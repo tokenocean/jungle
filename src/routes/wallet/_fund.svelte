@@ -1,5 +1,4 @@
 <script>
-  import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import {
     faUserSecret,
@@ -9,9 +8,9 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { faClone } from "@fortawesome/free-solid-svg-icons";
   import qrcode from "qrcode";
-  import { token } from "$lib/store";
+  import { user } from "$lib/store";
   import { btc, copy, err } from "$lib/utils";
-  import { api } from "$lib/api";
+  import { newapi as api } from "$lib/api";
   import { ProgressLinear } from "$comp";
 
   export let asset;
@@ -28,7 +27,7 @@
   let toggleConfidential = () => {
     confidential = !confidential;
     if (confidential) liquid();
-    else address = $session.user.address;
+    else address = $user.address;
   };
 
   $: updateAddress(address);
@@ -48,12 +47,11 @@
     loading = true;
     explainer = true;
     try {
-      ({ address, fee } = await api
+      ({ address, fee } = await api()
         .url("/bitcoin")
-        .auth(`Bearer ${$token}`)
         .post({
           amount: 10000,
-          liquidAddress: $session.user.address,
+          liquidAddress: $user.address,
         })
         .json());
     } catch (e) {
@@ -67,7 +65,7 @@
     fee = 0;
 
     if (!confidential) {
-      address = $session.user.address;
+      address = $user.address;
       explainer = false;
       return;
     }
@@ -81,7 +79,7 @@
         .auth(`Bearer ${$token}`)
         .post({
           amount: 10000,
-          liquidAddress: $session.user.address,
+          liquidAddress: $user.address,
         })
         .json());
     } catch (e) {
@@ -101,7 +99,7 @@
         .auth(`Bearer ${$token}`)
         .post({
           amount: 10000,
-          liquidAddress: $session.user.address,
+          liquidAddress: $user.address,
         })
         .json());
     } catch (e) {
@@ -112,14 +110,14 @@
   };
 
   let address;
-  $: if ($session.user) address = $session.user.address;
+  $: if ($user) address = $user.address;
 
-  $: if ($session.user && $session.user.address) {
-    qr = qrcode.toDataURL($session.user.address);
+  $: if ($user && $user.address) {
+    qr = qrcode.toDataURL($user.address);
   }
 </script>
 
-{#if $session.user && funding}
+{#if $user && funding}
   <div class="dark-bg mb-2 md:rounded-lg p-5">
     <div class="flex justify-between place-items-center text-gray-400">
       <p>Fund Wallet</p>

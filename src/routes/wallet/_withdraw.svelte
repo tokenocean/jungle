@@ -1,8 +1,7 @@
 <script>
-  import { session } from "$app/stores";
   import { query } from "$lib/api";
   import { tick } from "svelte";
-  import { psbt, bitcoinUnitLocal } from "$lib/store";
+  import { user, psbt, bitcoinUnitLocal } from "$lib/store";
   import { broadcast, pay, keypair, requestSignature } from "$lib/wallet";
   import { btc, dev, err, info, sats, val, ticker } from "$lib/utils";
   import sign from "$lib/sign";
@@ -34,7 +33,7 @@
   };
 
   let send = async (e) => {
-    await requirePassword($session);
+    await requirePassword();
 
     loading = true;
     try {
@@ -69,7 +68,7 @@
   $: unitCalculated = $bitcoinUnitLocal === "sats" ? "L-sats" : "L-BTC";
 </script>
 
-{#if $session.user && withdrawing}
+{#if $user && withdrawing}
   <form
     class="dark-bg md:rounded-lg p-5 w-full flex flex-col mb-8"
     on:submit|preventDefault={send}

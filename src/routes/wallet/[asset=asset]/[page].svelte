@@ -12,6 +12,7 @@
     unconfirmed,
     password,
     bitcoinUnitLocal,
+    user,
   } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { getArtworksByOwner } from "$queries/artworks";
@@ -47,18 +48,38 @@
     funding = false;
   };
 
-  let poll;
-  let pollBalances = async () => {
+  let timeout;
+  let poll = async () => {
     try {
+      let { username } = $user;
+      if (!username) return;
+
       await getBalance(a);
 
       balance = val(a, $confirmed[a] || 0);
       pending = val(a, $unconfirmed[a] || 0);
+
+
+
+      let { count } = await api()
+        .url(`/${username}/${asset}/transactions/count`)
+        .get()
+        .json();
+
+      $txCount = count;
+
+      $transactions = {
+        ...$transactions,
+        [page]: await api()
+          .url(`/${username}/${asset}/transactions/${page}`)
+          .get()
+          .json(),
+      };
     } catch (e) {
       console.log("problem fetching balances", e);
     }
 
-    poll = setTimeout(pollBalances, 5000);
+    timeout = setTimeout(poll, 5000);
   };
 
   let init = async () => {

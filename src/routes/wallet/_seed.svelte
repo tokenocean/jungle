@@ -1,11 +1,10 @@
 <script>
-  import { session } from "$app/stores";
   import { browser } from "$app/env";
   import { page } from "$app/stores";
   import { onMount, tick } from "svelte";
   import wordlist from "$lib/wordlist";
   import { ToggleSwitch } from "$comp";
-  import { password } from "$lib/store";
+  import { password, user } from "$lib/store";
   import { err, goto, info } from "$lib/utils";
   import { requirePassword } from "$lib/auth";
   import { createWallet } from "$lib/wallet";
@@ -17,7 +16,7 @@
   $: mnemonic = words.filter((w) => w).join(" ");
 
   export const importWallet = async (mnemonic) => {
-    await requirePassword($session);
+    await requirePassword();
 
     try {
       let params = createWallet(mnemonic);
@@ -25,12 +24,12 @@
 
       await query(updateUser, {
         user: params,
-        id: $session.user.id,
+        id: $user.id,
       });
 
       info("Wallet is ready!");
 
-      $session.user.wallet_initialized = true;
+      $user.wallet_initialized = true;
 
       setTimeout(() => goto("/wallet"), 50);
     } catch (e) {

@@ -16,14 +16,13 @@
 </script>
 
 <script>
-  import { session } from "$app/stores";
   import { Avatar, ProgressLinear } from "$comp";
   import AutoComplete from "simple-svelte-autocomplete";
-  import { art, psbt, token } from "$lib/store";
+  import { art, psbt, user } from "$lib/store";
   import { err, goto, info } from "$lib/utils";
   import { updateArtwork } from "$queries/artworks";
   import { createTransaction } from "$queries/transactions";
-  import { api, query } from "$lib/api";
+  import { newapi as api, query } from "$lib/api";
   import { v4 as uuidv4 } from "uuid";
   import { page } from "$app/stores";
   import {
@@ -49,7 +48,7 @@
   let loading;
 
   let send = async (e) => {
-    await requirePassword($session);
+    await requirePassword();
 
     loading = true;
 
@@ -65,8 +64,7 @@
 
       if (artwork.held === "multisig") $psbt = await requestSignature($psbt);
 
-      await api
-        .auth(`Bearer ${$token}`)
+      await api()
         .url("/transfer")
         .post({ address, artwork, psbt: $psbt.toBase64() })
         .json();
@@ -95,7 +93,7 @@
         <AutoComplete
           hideArrow={true}
           placeholder="Username"
-          items={users.filter((a) => a.id !== $session.user.id)}
+          items={users.filter((a) => a.id !== $user.id)}
           className="w-full"
           inputClassName="huh text-center"
           labelFieldName="username"

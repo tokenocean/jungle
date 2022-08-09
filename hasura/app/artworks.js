@@ -324,13 +324,7 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
   }
 
   try {
-    // await api
-    //   .url("/mail-artwork-minted")
-    //   .auth(`Bearer ${$session.jwt}`)
-    //   .post({
-    //     userId: $session.user.id,
-    //     artworkId: artwork.id,
-    //   });
+    // TODO send email
   } catch (e) {
     console.log(e);
   }

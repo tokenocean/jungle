@@ -1,7 +1,6 @@
 <svelte:options accessors={true} />
 
 <script>
-  import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import {
     faUserSecret,
@@ -19,6 +18,7 @@
     error,
     locked,
     prompt,
+    user,
     token,
     bitcoinUnitLocal,
   } from "$lib/store";
@@ -53,7 +53,7 @@
   $: amountUpdated(amount);
   let amountUpdated = (a) => isNaN(a) && ($prompt = undefined);
 
-  let url = `liquidnetwork:${$session.user.address}?amount=${amount}`;
+  let url = `liquidnetwork:${$user.address}?amount=${amount}`;
 
   let showInvoice = false;
   let toggle = () => {
@@ -78,7 +78,7 @@
   let toggleConfidential = () => {
     confidential = !confidential;
     if (confidential) liquid();
-    else address = $session.user.address;
+    else address = $user.address;
   };
 
   $: current = ($confirmedUtxos && $confirmedUtxos[$error.asset]) || 0;
@@ -114,7 +114,7 @@
         .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
-          liquidAddress: $session.user.address,
+          liquidAddress: $user.address,
         })
         .json());
     } catch (e) {
@@ -129,7 +129,7 @@
 
     if (!confidential) {
       explainer = false;
-      address = $session.user.address;
+      address = $user.address;
       return;
     }
 
@@ -142,7 +142,7 @@
         .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
-          liquidAddress: $session.user.address,
+          liquidAddress: $user.address,
         })
         .json());
     } catch (e) {
@@ -162,7 +162,7 @@
         .auth(`Bearer ${$token}`)
         .post({
           amount: Math.max($error.amount, 1000),
-          liquidAddress: $session.user.address,
+          liquidAddress: $user.address,
         })
         .json());
     } catch (e) {
@@ -173,7 +173,7 @@
   };
 
   let address;
-  $: if ($session.user) address = $session.user.address;
+  $: if ($user) address = $user.address;
 
   $: labelCalculated =
     label === "L-BTC" && $bitcoinUnitLocal === "sats" ? "L-sats" : label;

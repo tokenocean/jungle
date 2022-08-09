@@ -1,8 +1,7 @@
 <svelte:options accessors={true} />
 
 <script>
-  import { session } from "$app/stores";
-  import { psbt, prompt, signStatus } from "$lib/store";
+  import { psbt, prompt, user, signStatus } from "$lib/store";
   import { Transaction } from "$comp";
   import { copy, err } from "$lib/utils";
   import { requirePassword } from "$lib/auth";
@@ -17,13 +16,13 @@
   const disableSignPrompts = async () => {
     await query(updateUser, {
       user: { prompt_sign: false },
-      id: $session.user.id,
+      id: $user.id,
     });
-    $session.user.prompt_sign = false;
+    $user.prompt_sign = false;
   };
 
   export const submit = async (e) => {
-    await requirePassword($session);
+    await requirePassword();
 
     try {
       $signStatus = ACCEPTED;

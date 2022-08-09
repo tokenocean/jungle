@@ -57,7 +57,6 @@ export const popup = writable();
 export const txcache = writable({});
 export const user = writable();
 export const token = writable();
-export const wallet = writable();
 export const signStatus = writable();
 export const acceptStatus = writable();
 export const messageUser = writable({});

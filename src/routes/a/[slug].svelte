@@ -1,5 +1,5 @@
 <script context="module">
-  import { api, post } from "$lib/api";
+  import { newapi as api, post } from "$lib/api";
   import { browser } from "$app/env";
   import branding from "$lib/branding";
   import { host, satsFormatted, updateBitcoinUnit } from "$lib/utils";
@@ -51,8 +51,7 @@
 </script>
 
 <script>
-  import { session } from "$app/stores";
-  import { token } from "$lib/store";
+  import { user, token } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faChevronDown,
@@ -109,7 +108,7 @@
 
   $: disabled =
     loading ||
-    (artwork.owner_id === $session.user?.id && underway(artwork)) ||
+    (artwork.owner_id === $user?.id && underway(artwork)) ||
     artwork.transactions.some(
       (t) => ["purchase", "creation", "cancel"].includes(t.type) && !t.confirmed
     );
@@ -185,7 +184,7 @@
       await save();
       await refreshArtwork();
 
-      await api.url("/offer-notifications").auth(`Bearer ${$token}`).post({
+      await api().url("/offer-notifications").post({
         artworkId: artwork.id,
         transactionHash: transaction.hash,
       });
@@ -202,8 +201,7 @@
     transaction.artwork_id = artwork.id;
     transaction.asset = artwork.asking_asset;
 
-    let { data, errors } = await api
-      .auth(`Bearer ${$token}`)
+    let { data, errors } = await api()
       .url("/transaction")
       .post({ transaction })
       .json();
@@ -248,12 +246,12 @@
       await save();
       await refreshArtwork();
 
-      await api.url("/mail-purchase-successful").auth(`Bearer ${$token}`).post({
-        userId: $session.user.id,
+      await api().url("/mail-purchase-successful").post({
+        userId: $user.id,
         artworkId: artwork.id,
       });
 
-      await api.url("/mail-artwork-sold").auth(`Bearer ${$token}`).post({
+      await api().url("/mail-artwork-sold").post({
         userId: artwork.owner.id,
         artworkId: artwork.id,
       });
@@ -424,7 +422,7 @@
 
       {#if loading}
         <ProgressLinear />
-      {:else if $session.user && $session.user.id === artwork.owner_id && artwork.held}
+      {:else if $user && $user.id === artwork.owner_id && artwork.held}
         <div class="w-full mb-2">
           <a
             sveltekit:prefetch
@@ -451,7 +449,7 @@
           >
         </div>
 
-        {#if $session.user.id === artwork.artist_id}
+        {#if $user.id === artwork.artist_id}
           <div class="w-full mb-2">
             <a
               href={`/a/${artwork.slug}/edit`}

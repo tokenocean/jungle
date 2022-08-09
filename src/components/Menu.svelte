@@ -1,8 +1,7 @@
 <script>
-  import { session } from "$app/stores";
   import branding from "$lib/branding";
   import { Avatar, Search } from "$comp";
-  import { unreadMessages } from "$lib/store";
+  import { user, unreadMessages } from "$lib/store";
 
   export let open = false;
   let toggle = () => (open = !open);
@@ -20,14 +19,14 @@
     ><button on:click={toggle}>Blog</button></a
   >
   <a href="/help"><button on:click={toggle}>Help</button></a>
-  {#if $session.user}
-    {#if $session.user.is_admin}
+  {#if $user}
+    {#if $user.is_admin}
       <a href="/admin"><button on:click={toggle}>Admin</button></a>
     {/if}
     <div class="relative">
-      <a href={`/${$session.user?.username}`}>
+      <a href={`/${$user?.username}`}>
         <button on:click={toggle} class="flex">
-          <Avatar user={$session.user} />
+          <Avatar user={$user} />
         </button>
       </a>
       {#if $unreadMessages.length > 0}

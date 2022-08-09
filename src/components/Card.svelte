@@ -3,8 +3,7 @@
   import countdown from "$lib/countdown";
   import { fade, units, satsFormatted, updateBitcoinUnit } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
-  import { loaded, bitcoinUnitLocal } from "$lib/store";
-  import { session } from "$app/stores";
+  import { loaded, bitcoinUnitLocal, user } from "$lib/store";
 
   export let justScrolled = false;
   export let artwork;
@@ -140,9 +139,9 @@
               href={`/${artwork.artist.username}`}
               on:click={(e) => {
                 if (
-                  !$session.user ||
+                  !$user ||
                   (artwork &&
-                    $session.user.username !== artwork.artist.username)
+                    $user.username !== artwork.artist.username)
                 ) {
                   e.preventDefault();
                   e.stopPropagation();
@@ -165,9 +164,9 @@
                 href={`/${artwork.owner.username}`}
                 on:click={(e) => {
                   if (
-                    !$session.user ||
+                    !$user ||
                     (artwork &&
-                      $session.user.username !== artwork.owner.username)
+                      $user.username !== artwork.owner.username)
                   ) {
                     e.preventDefault();
                     e.stopPropagation();

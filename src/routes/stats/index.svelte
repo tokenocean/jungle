@@ -1,6 +1,6 @@
 <script context="module">
   export async function load({ session }) {
-    if (!(session?.user?.is_admin))
+    if (!session?.user?.is_admin)
       return {
         status: 302,
         redirect: "/login",
@@ -11,7 +11,6 @@
 </script>
 
 <script>
-  import { session } from "$app/stores";
   import {
     getUserStats,
     getArtworksStats,
@@ -21,12 +20,13 @@
   import { page } from "$app/stores";
   import { goto } from "$lib/utils";
   import { requireLogin } from "$lib/auth";
+  import { user } from "$lib/store";
 
-  $: pageChange($page, $session.user);
+  $: pageChange($page, $user);
   let pageChange = async () => {
     try {
       await requireLogin();
-      if (!$session?.user?.is_admin) goto("/");
+      if (!$user?.is_admin) goto("/");
     } catch (error) {
       err(error);
     }

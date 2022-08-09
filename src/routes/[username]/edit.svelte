@@ -7,7 +7,6 @@
 </script>
 
 <script>
-  import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import {
     faImage,
@@ -23,6 +22,7 @@
   import { upload } from "$lib/upload";
   import { updateUser } from "$queries/users";
   import { query } from "$lib/api";
+  import { user } from "$lib/store";
 
   export let form;
 
@@ -80,7 +80,7 @@
         user,
         ...rest
       } = form;
-      $session.user = { ...$session.user, ...rest };
+      $user = { ...$user, ...rest };
 
       await query(updateUser, { user: rest, id });
       info("Profile updated");
@@ -97,7 +97,7 @@
     <div
       class="mb-4 w-full sm:max-w-3xl md:shadow rounded-xl md:p-10 m-auto lg:flex-row  bg-white"
     >
-      <a class="block mb-6 text-midblue" href={`/${$session.user.username}`}>
+      <a class="block mb-6 text-midblue" href={`/${$user.username}`}>
         <div class="flex">
           <Fa icon={faChevronLeft} class="my-auto mr-1" />
           <div>Back</div>
@@ -174,7 +174,7 @@
           class="text-center mx-auto lg:ml-10 mb-10"
           on:click={() => fileInput.click()}
         >
-          <Avatar size="xl" src={preview || $session.user.avatar_url} />
+          <Avatar size="xl" src={preview || $user.avatar_url} />
           <button class="text-lightblue mt-5"
             >CHANGE AVATAR
             <Fa icon={faImage} pull="right" class="mt-1 ml-2" /></button

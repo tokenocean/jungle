@@ -2,14 +2,13 @@
   import * as nobleSecp256k1 from "@noble/secp256k1";
   import { fromBase58 } from "bip32";
   import { keypair, network } from "$lib/wallet";
-  import { token, unreadMessages, storeMessages } from "$lib/store";
+  import { user, unreadMessages, storeMessages } from "$lib/store";
   import { encrypt, decrypt } from "$lib/utils";
   import Fa from "svelte-fa";
   import { onMount, onDestroy, tick } from "svelte";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-  import { session } from "$app/stores";
   import { createMessage, updateMessage } from "$queries/messages";
-  import { api, query } from "$lib/api";
+  import { newapi as api, query } from "$lib/api";
   import { requirePassword } from "$lib/auth";
 
   let messageWindow;
@@ -47,7 +46,7 @@
       ),
     ],
     (m) => m.username
-  ).filter((user) => user.username !== $session.user.username);
+  ).filter((user) => user.username !== $user.username);
 
   let selectedUser;
   let sendMessage;
@@ -69,14 +68,14 @@
       },
     });
 
-    await api.url("/mail-message-received").auth(`Bearer ${$token}`).post({
+    await api().url("/mail-message-received").post({
       userId: selectedUser.id,
     });
 
     $storeMessages.push({
       message: encryptedMessage,
       created_at: Date.now(),
-      from: $session.user.id,
+      from: $user.id,
       to: selectedUser.id,
       id: id,
       viewed: true,
@@ -87,10 +86,10 @@
         pubkey: selectedUser.pubkey,
       },
       fromUser: {
-        avatar_url: $session.user.avatar_url,
-        id: $session.user.id,
-        username: $session.user.username,
-        pubkey: $session.user.pubkey,
+        avatar_url: $user.avatar_url,
+        id: $user.id,
+        username: $user.username,
+        pubkey: $user.pubkey,
       },
     });
 
@@ -129,7 +128,7 @@
       (message) => message.viewed === false
     );
 
-    api.auth(`Bearer ${$token}`).url("/markRead").post({ from: user.id });
+    api().url("/markRead").post({ from: user.id });
   };
 
   async function handleSelection(user) {
@@ -168,7 +167,7 @@
 
     <div class="border p-10 w-full rounded-lg space-y-4 dark-bg">
       {#if selectedUser === undefined}
-        <a href={`/${$session.user.username}`} class="text-[#30bfad]">
+        <a href={`/${$user.username}`} class="text-[#30bfad]">
           <div class="flex">
             <Fa icon={faChevronLeft} class="my-auto mr-1" />
             <div>Back to profile</div>

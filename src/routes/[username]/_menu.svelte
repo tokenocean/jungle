@@ -1,5 +1,4 @@
 <script>
-  import { session } from "$app/stores";
   import Fa from "svelte-fa";
   import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
   import {
@@ -9,17 +8,17 @@
     faCog,
   } from "@fortawesome/free-solid-svg-icons";
   import { goto } from "$lib/utils";
-  import { unreadMessages } from "$lib/store";
+  import { unreadMessages, user } from "$lib/store";
 </script>
 
 <div class="mt-10 mb-5">
-  <a class="primary-btn w-52" href={`/${$session.user.username}/edit`}
+  <a class="primary-btn w-52" href={`/${$user.username}/edit`}
     >Edit Profile</a
   >
 </div>
 
 <div class="menu uppercase">
-  {#if !$session.user.is_artist && !$session.user.has_samples}
+  {#if !$user.is_artist && !$user.has_samples}
     <a href="/become-artist">
       <div class="flex">
         <div class="my-auto">
