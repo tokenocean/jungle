@@ -1,7 +1,12 @@
 <script>
   import { SendMessage, SendTip } from "$comp";
   import { goto } from "$lib/utils";
-  import { messageUser, prompt, tipUser, user as currentuser } from "$lib/store";
+  import {
+    messageUser,
+    prompt,
+    tipUser,
+    user as currentuser,
+  } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faWallet,
@@ -60,7 +65,7 @@
 </div>
 
 <style>
-  button { 
+  button {
     @apply bg-white text-black block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32;
   }
-  </style>
+</style>

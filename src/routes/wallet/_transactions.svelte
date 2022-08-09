@@ -26,8 +26,8 @@
               class:text-secondary={amount > 0}
               class:text-orange-500={!confirmed}
             >
-            {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label(asset
-              ) === "L-BTC" && $bitcoinUnitLocal === "sats"
+              {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label(asset) ===
+                "L-BTC" && $bitcoinUnitLocal === "sats"
                 ? satsFormatted(val(asset, Math.abs(amount)) * 100000000)
                 : val(asset, Math.abs(amount))}
             </div>
@@ -38,7 +38,7 @@
   {/if}
 </div>
 
-{#if pages > 1}
+{#if pages.length > 1}
   <div class="full-width flex bg-white p-4 mx-auto">
     <div class="mx-auto">
       {#each pages as _, i}

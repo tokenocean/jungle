@@ -37,7 +37,6 @@
   export let asset, page;
 
   let a = asset.asset;
-
   let balance, pending, funding, withdrawing;
 
   let toggleFunding = () => {
@@ -51,7 +50,7 @@
   };
 
   let timeout;
-  let poll = async (a) => {
+  let poll = async () => {
     try {
       clearTimeout(timeout);
 
@@ -69,6 +68,8 @@
         .json();
 
       $txCount = count;
+
+      console.log("COUNT", count)
 
       $transactions = {
         ...$transactions,
@@ -99,7 +100,7 @@
   };
 
   $: init(a);
-    onDestroy(() => clearTimeout(timeout));
+  onDestroy(() => clearTimeout(timeout));
 
   $: labelCalculated =
     label(asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
@@ -159,7 +160,7 @@
           </span>
         </button>
       </div>
-      {#if parseFloat(pending) && val(a, pending)}
+      {#if parseFloat(pending) > 0}
         <div class="m-6">
           <div class="text-sm light-color">Pending</div>
           <div class="flex mt-3">
