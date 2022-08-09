@@ -1,44 +1,10 @@
+import { q } from "./api.js";
 import { keypair, parse, sign } from "./wallet.js";
 import { parseISO, isWithinInterval } from "date-fns";
 import { address as Address } from "liquidjs-lib";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
-
-const getArtworks = `
-  query($assets: [String!]) {
-    artworks(where: { asset: { _in: $assets }}) {
-      id 
-      asset
-      asking_asset
-      has_royalty
-      royalty_recipients {
-        id
-        asking_asset
-        amount
-        address
-        name
-      }
-      auction_start
-      auction_end
-      list_price
-      artist {
-        id
-        address
-        multisig
-      } 
-      owner {
-        id
-        address
-        multisig
-      } 
-    } 
-  }`;
-
-const allMultisig = `query {
-  users {
-    multisig
-  } 
-}`;
+import { getArtworks, allMultisig } from "./queries.js";
 
 app.get("/pubkey", async (req, res) => {
   const { pubkey } = keypair();

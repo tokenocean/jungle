@@ -9,7 +9,7 @@ import {
   releaseToken,
 } from "./queries.js";
 
-setInterval(async () => {
+let checkAuctions = async () => {
   try {
     let { artworks } = await q(getFinishedAuctions, {
       now: formatISO(new Date()),
@@ -63,7 +63,7 @@ setInterval(async () => {
         console.log("couldn't release to bidder,", e.message);
 
         await q(cancelBids, {
-          id: artwork.id,
+          artwork_id: artwork.id,
           start: artwork.auction_start,
           end: artwork.auction_end,
         });
@@ -93,4 +93,8 @@ setInterval(async () => {
   } catch (e) {
     console.log(e);
   }
-}, 2000);
+
+  setTimeout(checkAuctions, 2000);
+};
+
+checkAuctions();
