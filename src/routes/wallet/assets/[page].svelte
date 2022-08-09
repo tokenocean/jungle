@@ -39,6 +39,8 @@
       </a>
     {/each}
   </div>
+
+  {#if pages > 1}
   <div class="full-width flex bg-white p-4 mx-auto">
     <div class="mx-auto">
       {#each pages as _, i}
@@ -53,6 +55,7 @@
       {/each}
     </div>
   </div>
+  {/if}
 </div>
 
 <style>

@@ -44,7 +44,7 @@
 </script>
 
 <div class="px-5 sm:px-0 mt-8">
-  {#if $transactions[page].length}
+  {#if $transactions[page]?.length}
     {#each $transactions[page] as { amount, hash, confirmed, created_at }}
       <a href={`/tx/${hash}`}>
         <div class="w-full mb-4">
@@ -67,6 +67,7 @@
   {/if}
 </div>
 
+{#if pages > 1}
 <div class="full-width flex bg-white p-4 mx-auto">
   <div class="mx-auto">
     {#each pages as _, i}
@@ -78,3 +79,4 @@
     {/each}
   </div>
 </div>
+{/if}

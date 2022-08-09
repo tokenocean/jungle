@@ -124,7 +124,7 @@ export const utxos = async (address) => {
     last = txns.shift();
   }
 
-  await redis.set(address, last);
+  if (last) await redis.set(address, last);
 
   let utxos = [];
   let set = await redis.sMembers(utxoSet);

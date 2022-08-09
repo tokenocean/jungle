@@ -68,7 +68,7 @@
       pending = val(a, $unconfirmed[a] || 0);
     }
 
-    $assetCount = await api().url(`/assets/assetCount`).get().json();
+    $assetCount = await api().url(`/assets/count`).get().json();
 
     pollBalances();
   };
@@ -92,7 +92,7 @@
       : pending;
 </script>
 
-{#if balance}
+{#if !isNaN(balance)}
   <div class="w-full">
     {#if $assetCount > 1}
       <div class="mb-5">
@@ -134,7 +134,7 @@
           </span>
         </button>
       </div>
-      {#if pending && val(a, pending)}
+      {#if parseFloat(pending) && val(a, pending)}
         <div class="m-6">
           <div class="text-sm light-color">Pending</div>
           <div class="flex mt-3">
@@ -159,7 +159,7 @@
     <div>
       <Fund bind:funding asset={a} />
       <Withdraw bind:withdrawing asset={a} />
-      <Transactions asset={a} {assetCount} {page} />
+      <Transactions asset={a} {page} />
     </div>
   </div>
 {/if}
