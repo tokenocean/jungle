@@ -9,7 +9,7 @@ const opts = {
   path: "/",
 };
 
-export async function GET({ request: { headers }, locals: { q } }) {
+export async function GET({ request: { headers, url }, locals: { q } }) {
   try {
     const cookies = cookie.parse(headers.get("cookie") || "");
     let { refresh_token, token: jwt } = cookies;
@@ -25,7 +25,7 @@ export async function GET({ request: { headers }, locals: { q } }) {
     let tokenExpiry = parseInt(jwt_expires_in / 1000);
     let refreshExpiry = parseInt(259200);
     let { currentuser } = await q(getUser);
-    body.currentuser = currentuser;
+    body.currentuser = currentuser[0];
 
     return {
       body,
@@ -45,6 +45,7 @@ export async function GET({ request: { headers }, locals: { q } }) {
       },
     };
   } catch (error) {
+    console.log(error)
     return {
       status: 500,
       error,

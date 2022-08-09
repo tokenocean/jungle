@@ -1,4 +1,3 @@
-import { session } from "$app/stores";
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { newapi as api, electrs, hasura, query } from "$lib/api";
@@ -118,6 +117,7 @@ export const getMnemonic = (mnemonic, pass) => {
   if (!mnemonic && get(user)) ({ mnemonic } = get(user));
   if (!pass) pass = get(password);
 
+  console.log("MP", mnemonic, pass)
   mnemonic = cryptojs.AES.decrypt(mnemonic, pass).toString(cryptojs.enc.Utf8);
   if (!mnemonic) throw new Error("Unable to decrypt mnmemonic");
   return mnemonic;

@@ -10,19 +10,6 @@
 
   let offset = 25;
   $: pages = new Array(Math.ceil($txCount / offset));
-
-  let timeout;
-  let getTransactions = async () => {
-    try {
-    } catch (e) {
-      console.log("problem fetching transactions", e);
-    }
-
-    timeout = setTimeout(getTransactions, 5000);
-  };
-
-  onMount(getTransactions);
-  onDestroy(() => clearTimeout(timeout));
 </script>
 
 <div class="px-5 sm:px-0 mt-8">

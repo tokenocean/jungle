@@ -15,8 +15,6 @@
       headers: { "content-type": "application/json" },
     }).then((r) => r.json());
 
-    props.jwt = session.jwt;
-
     let authRequired = [/a\/create/, /edit/, /wallet/];
     if (!session?.user && authRequired.find((p) => url.pathname.match(p))) {
       return {
@@ -80,7 +78,6 @@
   import { keypair, network } from "$lib/wallet";
 
   export let popup;
-  export let jwt;
 
   function initializeBTCUnits() {
     if ($user) {
@@ -102,7 +99,10 @@
     messagesInterval = 5000;
 
   let refresh = async () => {
+    clearTimeout(refreshTimer);
+
     try {
+      if (!$user) return;
       let { currentuser, jwt_token } = await get("/auth/refresh");
       $token = jwt_token;
       $user = currentuser;
@@ -116,7 +116,7 @@
 
   let authCheck = async () => {
     try {
-      if ($user) {
+      if ($user?.username) {
         checkAuthFromLocalStorage($user);
       }
     } catch (e) {
@@ -152,6 +152,9 @@
   };
 
   if (browser) {
+      $user = $session.user;
+      $token = $session.jwt;
+
     history.pushState = new Proxy(history.pushState, {
       apply(target, thisArg, argumentsList) {
         Reflect.apply(target, thisArg, argumentsList);
@@ -160,7 +163,6 @@
     });
 
     $p = popup;
-    $token = jwt;
 
     unsubscribeFromSession = session.subscribe((value) => {
       value && value.user && checkAuthFromLocalStorage(value.user);
@@ -183,9 +185,10 @@
     unsubscribeFromSession && unsubscribeFromSession();
   });
 
+  $: if ($user) refreshTimer = setTimeout(refresh, refreshInterval);
+
   onMount(() => {
     if (browser) {
-      refreshTimer = setTimeout(refresh, refreshInterval);
       fetchMessages();
       authCheck();
       initializeBTCUnits();

@@ -74,9 +74,8 @@
 
     loading = true;
     try {
-      ({ address, fee } = await api
+      ({ address, fee } = await api()
         .url("/liquid")
-        .auth(`Bearer ${$token}`)
         .post({
           amount: 10000,
           liquidAddress: $user.address,
@@ -94,9 +93,8 @@
     loading = true;
     explainer = true;
     try {
-      ({ address, fee } = await api
+      ({ address, fee } = await api()
         .url("/lightning")
-        .auth(`Bearer ${$token}`)
         .post({
           amount: 10000,
           liquidAddress: $user.address,

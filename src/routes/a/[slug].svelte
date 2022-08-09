@@ -51,6 +51,7 @@
 </script>
 
 <script>
+  import { session } from "$app/stores";
   import { user, token } from "$lib/store";
   import Fa from "svelte-fa";
   import {
@@ -70,7 +71,7 @@
     RoyaltyInfo,
   } from "$comp";
   import Sidebar from "./_sidebar.svelte";
-  import { tick, onDestroy } from "svelte";
+  import { tick, onDestroy, onMount } from "svelte";
   import { art, meta, prompt, password, psbt, commentsLimit } from "$lib/store";
   import countdown from "$lib/countdown";
   import {
@@ -108,14 +109,28 @@
 
   $: disabled =
     loading ||
-    (artwork.owner_id === $user?.id && underway(artwork)) ||
+    (artwork.owner_id === $session?.user?.id && underway(artwork)) ||
     artwork.transactions.some(
       (t) => ["purchase", "creation", "cancel"].includes(t.type) && !t.confirmed
     );
 
-  let start_counter, end_counter, now, timeout;
+  let start_counter,
+    end_counter,
+    now,
+    auctionTimeout,
+    refreshTimeout,
+    list_price,
+    val,
+    sats,
+    ticker,
+    amount;
 
+  let transaction = {};
+
+  let refreshInterval = 5000;
   let refreshArtwork = async () => {
+    clearTimeout(refreshTimeout);
+
     try {
       let { artworks } = await query(getArtworkBySlug, {
         slug: artwork.slug,
@@ -126,27 +141,27 @@
     } catch (e) {
       console.log(e);
     }
-  };
 
-  let poll = setInterval(refreshArtwork, 2500);
+    refreshTimeout = setTimeout(refreshArtwork, refreshInterval);
+  };
 
   onDestroy(() => {
     $art = undefined;
-    clearInterval(poll);
+    clearTimeout(auctionTimeout);
+    clearTimeout(refreshTimeout);
   });
 
-  $: update(artwork);
   let update = () => {
     if (!artwork) return;
     $art = artwork;
 
     let count = () => {
-      clearTimeout(timeout);
+      clearTimeout(auctionTimeout);
       now = new Date();
       if (!artwork) return;
       start_counter = countdown(parseISO(artwork.auction_start)) || "";
       end_counter = countdown(parseISO(artwork.auction_end)) || "";
-      timeout = setTimeout(count, 1000);
+      auctionTimeout = setTimeout(count, 1000);
     };
     count();
 
@@ -155,11 +170,9 @@
     list_price = val(artwork.list_price);
   };
 
-  let list_price;
-  let val, sats, ticker;
-  let amount;
+  refreshArtwork();
+  update();
 
-  let transaction = {};
   let makeOffer = async (e) => {
     try {
       if (e) e.preventDefault();
@@ -422,7 +435,7 @@
 
       {#if loading}
         <ProgressLinear />
-      {:else if $user && $user.id === artwork.owner_id && artwork.held}
+      {:else if $session?.user?.id === artwork.owner_id && artwork.held}
         <div class="w-full mb-2">
           <a
             sveltekit:prefetch
@@ -449,7 +462,7 @@
           >
         </div>
 
-        {#if $user.id === artwork.artist_id}
+        {#if $session?.user?.id === artwork.artist_id}
           <div class="w-full mb-2">
             <a
               href={`/a/${artwork.slug}/edit`}

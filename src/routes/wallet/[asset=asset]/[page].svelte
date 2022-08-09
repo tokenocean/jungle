@@ -13,6 +13,8 @@
     password,
     bitcoinUnitLocal,
     user,
+    transactions,
+    txCount,
   } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { getArtworksByOwner } from "$queries/artworks";
@@ -49,8 +51,10 @@
   };
 
   let timeout;
-  let poll = async () => {
+  let poll = async (a) => {
     try {
+      clearTimeout(timeout);
+
       let { username } = $user;
       if (!username) return;
 
@@ -59,10 +63,8 @@
       balance = val(a, $confirmed[a] || 0);
       pending = val(a, $unconfirmed[a] || 0);
 
-
-
       let { count } = await api()
-        .url(`/${username}/${asset}/transactions/count`)
+        .url(`/${username}/${a}/transactions/count`)
         .get()
         .json();
 
@@ -71,7 +73,7 @@
       $transactions = {
         ...$transactions,
         [page]: await api()
-          .url(`/${username}/${asset}/transactions/${page}`)
+          .url(`/${username}/${a}/transactions/${page}`)
           .get()
           .json(),
       };
@@ -83,19 +85,21 @@
   };
 
   let init = async () => {
-    browser && prefetch("/wallet/assets/1");
-    if ($confirmed[a]) {
-      balance = val(a, $confirmed[a] || 0);
-      pending = val(a, $unconfirmed[a] || 0);
+    if (browser) {
+      prefetch("/wallet/assets/1");
+      if ($confirmed[a]) {
+        balance = val(a, $confirmed[a] || 0);
+        pending = val(a, $unconfirmed[a] || 0);
+      }
+
+      $assetCount = await api().url(`/assets/count`).get().json();
+      clearTimeout(timeout);
+      poll();
     }
-
-    $assetCount = await api().url(`/assets/count`).get().json();
-
-    pollBalances();
   };
 
-  onMount(init);
-  onDestroy(() => clearTimeout(poll));
+  $: init(a);
+    onDestroy(() => clearTimeout(timeout));
 
   $: labelCalculated =
     label(asset) === "L-BTC" && $bitcoinUnitLocal === "sats"

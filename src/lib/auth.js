@@ -43,7 +43,8 @@ export const checkAuthFromLocalStorage = (user) => {
   const usernameFromStorage = window.sessionStorage.getItem("username");
 
   if (usernameFromStorage && user.username !== usernameFromStorage) {
-    goto("/logout");
+    console.log("check auth", usernameFromStorage, user.username);
+    // goto("/logout");
   }
 };
 
@@ -51,12 +52,12 @@ export const checkToken = (headers) => {
   const cookies = cookie.parse(headers.get("cookie") || "");
   if (!cookies.token || expired(cookies.token)) {
     return {
-      headers: { location: '/logout' },
+      headers: { location: "/logout" },
       status: 302,
-    } 
+    };
   } else {
     return {
-      authorization: `Bearer ${cookies.token}`
-    }
-  } 
-} 
+      authorization: `Bearer ${cookies.token}`,
+    };
+  }
+};

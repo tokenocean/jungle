@@ -385,6 +385,7 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
         let txid = reverse(hash).toString("hex");
         let out = Transaction.fromHex(await hex(txid)).outs[index];
 
+        try {
         out = {
           asset: parseAsset(out.asset),
           address: Address.fromOutputScript(out.script, network),
@@ -392,6 +393,9 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
         };
 
         if (our(out)) amount -= out.value;
+        } catch(e) {
+          continue;
+        } 
       }
 
       for (let j = 0; j < tx.outs.length; j++) {

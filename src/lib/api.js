@@ -33,8 +33,6 @@ export const hasura = wretch()
 
 export const query = async (query, variables, headers = {}) => {
   let jwt = getStore(token);
-  console.log("query", query)
-  console.log("JWT", jwt)
   if (jwt) headers = { ...headers, authorization: `Bearer ${jwt}` };
 
   let { data, errors } = await hasura
@@ -71,9 +69,7 @@ export const getQ = (defaultHeaders) => {
       let r = await fn(q, v, h);
       return r;
     } catch (e) {
-      if (h.authorization) delete h.authorization;
-      let r = await fn(q, v, h);
-      return r;
+      console.log(e);
     }
   };
 };
