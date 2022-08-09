@@ -99,7 +99,7 @@
   export let artwork, others, metadata, views;
 
   let release = async () => {
-    await requirePassword($session);
+    await requirePassword();
     $psbt = await releaseToSelf(artwork);
     $psbt = await sign();
     $psbt = await requestSignature($psbt);
@@ -173,7 +173,7 @@
       transaction.asset = artwork.asset;
       transaction.type = "bid";
 
-      await requirePassword($session);
+      await requirePassword();
 
       $psbt = await createOffer(artwork, transaction.amount);
       $psbt = await sign();

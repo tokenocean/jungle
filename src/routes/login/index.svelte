@@ -1,8 +1,8 @@
 <script>
   import Fa from "svelte-fa";
   import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-  import { page, session } from "$app/stores";
-  import { token } from "$lib/store";
+  import { page } from "$app/stores";
+  import { token, user } from "$lib/store";
   import { dev, err, goto } from "$lib/utils";
   import { post } from "$lib/api";
   import cryptojs from "crypto-js";
@@ -22,11 +22,11 @@
   let login = async () => {
     try {
       let res = await post("/auth/login", { email, password }, fetch).json();
-      console.log("SET TOKEN", res);
       $token = res.jwt_token;
+      $user = res.user;
       window.sessionStorage.setItem("password", password);
       window.sessionStorage.setItem("username", res.user.username);
-      window.location.href = '/';
+      goto('/');
     } catch (e) {
       console.log("login error", e);
       err(e);
