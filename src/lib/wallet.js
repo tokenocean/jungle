@@ -68,14 +68,18 @@ export const parseAsset = (v) => reverse(v.slice(1)).toString("hex");
 const nonce = Buffer.alloc(1);
 
 export const getBalance = async (asset) => {
-  console.log("AAAA", asset)
   let { confirmed: c, unconfirmed: u } = await api()
     .url(`/${asset}/balance`)
     .get()
     .json();
 
-  confirmed.set({ ...get(confirmed), ...c });
-  unconfirmed.set({ ...get(unconfirmed), ...u });
+  let nc = { ...get(confirmed) };
+  let nu = { ...get(unconfirmed) };
+  nc[asset] = c[asset];
+  nu[asset] = u[asset];
+
+  confirmed.set(nc);
+  unconfirmed.set(nu);
 };
 
 export const getHex = async (txid) => {

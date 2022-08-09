@@ -67,8 +67,9 @@ export const unreadMessages = writable([]);
 export const bitcoinUnitLocal = writable("");
 
 export const asset = persisted("asset", { name: "btc", asset: btc });
-export const count = persisted("count", 0);
+export const assetCount = persisted("assetCount", 0);
 export const assets = persisted("assets", []);
 export const confirmed = persisted("confirmed", {});
 export const unconfirmed = persisted("unconfirmed", {});
-export const transactions = persisted("transactions", []);
+export const transactions = persisted("transactions", {});
+export const txCount = persisted("txCount", 0);

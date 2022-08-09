@@ -56,6 +56,7 @@
 
   $: init(tx);
   let init = async (tx) => {
+    console.log("TX", tx)
     try {
       if (loading) return setTimeout(() => init(p, u), 50);
       loading = true;

@@ -79,13 +79,11 @@ export const utxos = async (address) => {
       if (!(await redis.sIsMember(utxoSet, `${txid}:${index}`))) {
         let k = txns.indexOf(txid);
         if (k > -1) {
-          console.log("DEFERRING", txid);
           defer = true;
           txns.splice(k, 1);
           txns.unshift(txid);
           break;
         } else {
-          console.log("SKIPPING", txid);
           skip[j] = true;
         }
       }
@@ -93,13 +91,10 @@ export const utxos = async (address) => {
 
     if (defer) continue;
 
-    // await redis.rPush(`${address}:txns`, tx.getId());
-
     for (let j = 0; j < ins.length; j++) {
       if (skip[j]) continue;
       let { hash, index } = ins[j];
       let txid = reverse(hash).toString("hex");
-      console.log("REMOVING", txid, index);
       await redis.sRem(utxoSet, `${txid}:${index}`);
     }
 
@@ -113,12 +108,10 @@ export const utxos = async (address) => {
 
       try {
         if (Address.fromOutputScript(script, network) === address) {
-          console.log("ADDING", txid, j);
           await redis.sAdd(utxoSet, `${txid}:${j}`);
           await redis.set(`${txid}:${j}`, `${asset},${value}`);
 
           if (!added[asset]) {
-            console.log("ADDED TO LIST", address, asset);
             added[asset] = true;
             redis.rPush(`${address}:${asset}`, txid);
           }
@@ -299,10 +292,19 @@ app.get("/address/:address/:asset/utxo", async (req, res) => {
 app.get("/tx/:txid/hex", async (req, res) => {
   try {
     let { txid } = req.params;
-    console.log("TXID", txid, await hex(txid));
     res.send(await hex(txid));
   } catch (e) {
     console.log("problem getting tx hex", e);
+    res.code(500).send(e.message);
+  }
+});
+
+app.get("/:username/:asset/transactions/count", auth, async (req, res) => {
+  try {
+    let { asset, username } = req.params;
+    res.send({ count: await redis.lLen(`${username}:${asset}`) });
+  } catch (e) {
+    console.log("problem getting tx count", e);
     res.code(500).send(e.message);
   }
 });
@@ -315,54 +317,62 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
     if (!users.length) throw new Error("user not found");
     let { id: user_id, address, multisig } = users[0];
 
-    let totalCount = await redis.lLen(username);
-    console.log("TOTAL", totalCount);
-
+    let totalCount = await redis.lLen(`${username}:${asset}`);
     let addressCount = await redis.lLen(`${address}:${asset}`);
     let multisigCount = await redis.lLen(`${multisig}:${asset}`);
-    console.log("addressCount", addressCount);
-    console.log("multisigCount", multisigCount);
 
-    if (totalCount < addressCount + multisigCount) {
-      let last = await blocktime(await redis.lIndex(username, 0));
-      console.log("LAST", last);
-
-      for (let i = 0; i < addressCount; i++) {
-        let txid = await redis.lIndex(`${address}:${asset}`, i);
-        if ((await blocktime(txid)) <= last) break;
-        console.log("PUSHING");
-        await redis.lPush(username, txid);
-      }
-
-      for (let i = 0; i < multisigCount; i++) {
-        let txid = await redis.lIndex(`${multisig}:${asset}`, i);
-        if ((await blocktime(txid)) <= last) break;
-        await redis.lPush(username, txid);
-      }
+    let last;
+    let i = totalCount;
+    while (i > 0 && !last) {
+      last = await blocktime(await redis.lIndex(`${username}:${asset}`, --i));
     }
 
-    totalCount = await redis.lLen(username);
-    console.log("TOTAL", totalCount);
+    let unseen = [];
+
+    let latest = [];
+    for (let i = 0; i < totalCount; i++) {
+      let txid = await redis.lIndex(`${username}:${asset}`, i);
+      let time = await blocktime(txid);
+      if (!time || time === last) latest.push(txid);
+    }
+
+    let findUnseen = async (a, c) => {
+      for (let i = c - 1; i >= 0; i--) {
+        let txid = await redis.lIndex(`${a}:${asset}`, i);
+        let time = await blocktime(txid);
+        if (last && time < last) break;
+        if (!latest.includes(txid)) {
+          unseen.push({ txid, time });
+          totalCount++;
+        }
+      }
+    };
+
+    await findUnseen(address, addressCount);
+    await findUnseen(multisig, multisigCount);
+
+    unseen = unseen.sort((a, b) => (b.time ? a.time - b.time : -1));
+    for (let i = 0; i < unseen.length; i++) {
+      await redis.rPush(`${username}:${asset}`, unseen[i].txid);
+    }
 
     let offset = 25;
-    let get = (a) =>
-      redis.lRange(
-        `${a}:${asset}`,
+    let txids = (
+      await redis.lRange(
+        `${username}:${asset}`,
         -(page * offset),
         0 - ((page - 1) * offset + 1)
-      );
-
-    let txids = [...(await get(address)), ...(await get(multisig))]
-      .sort((a, b) =>
-        compareDesc(parseISO(a.created_at), parseISO(b.created_at))
       )
-      .slice(0, offset);
+    ).reverse();
 
     let transactions = [];
     let { transactions: existing } = await q(getTransactionsByTxid, {
       txids,
       asset,
     });
+
+    let our = (out) =>
+      out.asset === asset && [address, multisig].includes(out.address);
 
     for (let i = 0; i < txids.length; i++) {
       let txid = txids[i];
@@ -381,7 +391,7 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
           value: parseVal(out.value),
         };
 
-        if (out.asset === asset && out.address === address) amount -= out.value;
+        if (our(out)) amount -= out.value;
       }
 
       for (let j = 0; j < tx.outs.length; j++) {
@@ -394,8 +404,7 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
             value: parseVal(out.value),
           };
 
-          if (out.asset === asset && out.address === address)
-            amount += out.value;
+          if (our(out)) amount += out.value;
         } catch (e) {
           continue;
         }
@@ -421,15 +430,9 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
       }
 
       if (!created_at || !confirmed) {
-        let status = await electrs.url(`/tx/${txid}/status`).get().json();
-
-        let { block_time } = status;
-
-        created_at = formatISO(
-          block_time ? new Date(1000 * block_time) : new Date()
-        );
-
-        confirmed = status.confirmed;
+        let time = await blocktime(txid);
+        created_at = formatISO(time ? new Date(1000 * time) : new Date());
+        confirmed = !!time;
       }
 
       let transaction = {
