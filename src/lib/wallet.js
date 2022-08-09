@@ -1,4 +1,3 @@
-import { session } from "$app/stores";
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { newapi as api, electrs, hasura, query } from "$lib/api";
@@ -68,14 +67,18 @@ export const parseAsset = (v) => reverse(v.slice(1)).toString("hex");
 const nonce = Buffer.alloc(1);
 
 export const getBalance = async (asset) => {
-  console.log("AAAA", asset)
   let { confirmed: c, unconfirmed: u } = await api()
     .url(`/${asset}/balance`)
     .get()
     .json();
 
-  confirmed.set({ ...get(confirmed), ...c });
-  unconfirmed.set({ ...get(unconfirmed), ...u });
+  let nc = { ...get(confirmed) };
+  let nu = { ...get(unconfirmed) };
+  nc[asset] = c[asset];
+  nu[asset] = u[asset];
+
+  confirmed.set(nc);
+  unconfirmed.set(nu);
 };
 
 export const getHex = async (txid) => {
@@ -114,6 +117,7 @@ export const getMnemonic = (mnemonic, pass) => {
   if (!mnemonic && get(user)) ({ mnemonic } = get(user));
   if (!pass) pass = get(password);
 
+  console.log("MP", mnemonic, pass)
   mnemonic = cryptojs.AES.decrypt(mnemonic, pass).toString(cryptojs.enc.Utf8);
   if (!mnemonic) throw new Error("Unable to decrypt mnmemonic");
   return mnemonic;

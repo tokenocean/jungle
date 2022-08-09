@@ -56,7 +56,7 @@ export async function handle({ event, resolve }) {
     }
   }
 
-  let q = getQ({ authorization: `Bearer ${jwt}` });
+  let q = jwt ? getQ({ authorization: `Bearer ${jwt}` }) : getQ();
   event.locals = { jwt, q };
 
   if (jwt) {

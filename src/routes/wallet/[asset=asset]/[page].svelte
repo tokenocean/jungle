@@ -7,11 +7,14 @@
   import { newapi as api, query } from "$lib/api";
   import { onDestroy, onMount, tick } from "svelte";
   import {
-    count,
+    assetCount,
     confirmed,
     unconfirmed,
     password,
     bitcoinUnitLocal,
+    user,
+    transactions,
+    txCount,
   } from "$lib/store";
   import { ProgressLinear } from "$comp";
   import { getArtworksByOwner } from "$queries/artworks";
@@ -31,10 +34,9 @@
   import Withdraw from "../_withdraw.svelte";
   import Transactions from "../_transactions.svelte";
 
-  export let asset;
+  export let asset, page;
 
   let a = asset.asset;
-  let page = 1;
 
   let balance, pending, funding, withdrawing;
 
@@ -48,34 +50,56 @@
     funding = false;
   };
 
-  let poll;
-  let pollBalances = async () => {
+  let timeout;
+  let poll = async (a) => {
     try {
+      clearTimeout(timeout);
+
+      let { username } = $user;
+      if (!username) return;
+
       await getBalance(a);
 
       balance = val(a, $confirmed[a] || 0);
       pending = val(a, $unconfirmed[a] || 0);
+
+      let { count } = await api()
+        .url(`/${username}/${a}/transactions/count`)
+        .get()
+        .json();
+
+      $txCount = count;
+
+      $transactions = {
+        ...$transactions,
+        [page]: await api()
+          .url(`/${username}/${a}/transactions/${page}`)
+          .get()
+          .json(),
+      };
     } catch (e) {
-      console.log("problem fetching balances");
+      console.log("problem fetching balances", e);
     }
 
-    poll = setTimeout(pollBalances, 5000);
+    timeout = setTimeout(poll, 5000);
   };
 
   let init = async () => {
-    browser && prefetch("/wallet/assets/1");
-    if ($confirmed[a]) {
-      balance = val(a, $confirmed[a] || 0);
-      pending = val(a, $unconfirmed[a] || 0);
+    if (browser) {
+      prefetch("/wallet/assets/1");
+      if ($confirmed[a]) {
+        balance = val(a, $confirmed[a] || 0);
+        pending = val(a, $unconfirmed[a] || 0);
+      }
+
+      $assetCount = await api().url(`/assets/count`).get().json();
+      clearTimeout(timeout);
+      poll();
     }
-
-    $count = await api().url(`/assets/count`).get().json();
-
-    pollBalances();
   };
 
-  onMount(init);
-  onDestroy(() => clearTimeout(poll));
+  $: init(a);
+    onDestroy(() => clearTimeout(timeout));
 
   $: labelCalculated =
     label(asset) === "L-BTC" && $bitcoinUnitLocal === "sats"
@@ -93,14 +117,14 @@
       : pending;
 </script>
 
-{#if balance}
+{#if !isNaN(balance)}
   <div class="w-full">
-    {#if $count > 1}
+    {#if $assetCount > 1}
       <div class="mb-5">
         <a class="secondary-color" href="/wallet/assets/1" sveltekit:prefetch>
           <div class="flex">
             <div class="px-5 md:px-0">
-              {$count} assets available in this wallet
+              {$assetCount} assets available in this wallet
             </div>
             <div class="my-auto ml-1">
               <Fa icon={faChevronRight} />
@@ -135,11 +159,11 @@
           </span>
         </button>
       </div>
-      {#if pending && val(a, pending)}
+      {#if parseFloat(pending) && val(a, pending)}
         <div class="m-6">
           <div class="text-sm light-color">Pending</div>
           <div class="flex mt-3">
-            <span class="light-color mr-3">
+            <span class="mr-3 text-orange-500">
               {pendingCalculated}
             </span>
             <span class="text-gray-400"> {labelCalculated}</span>

@@ -1,9 +1,9 @@
 <script>
   import { createPopperActions } from "svelte-popperjs";
-  import { session } from "$app/stores";
   import { UserPopup } from "$comp";
   import { network } from "$lib/wallet";
   import OutClick from "svelte-outclick";
+  import { user as currentuser } from "$lib/store";
 
   export let user = undefined;
   export let src = undefined;
@@ -27,7 +27,7 @@
   class={`${size} my-auto relative`}
   use:popperRef
   on:click={(e) => {
-    if (user && (!$session.user || (user && $session.user.username !== user.username))) {
+    if (user && (!$currentuser || (user && $currentuser.username !== user.username))) {
       e.preventDefault();
       e.stopPropagation();
       showPopup = !showPopup;

@@ -131,6 +131,7 @@ export const hex = async (txid) => {
         hex = await lq.getRawTransaction(txid);
         return true;
       } catch (e) {
+        console.log(e)
         return false;
       }
     });

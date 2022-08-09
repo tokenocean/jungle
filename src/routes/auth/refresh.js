@@ -1,6 +1,7 @@
 import cookie from "cookie";
 import { hbp } from "$lib/api";
 import { addSeconds } from "date-fns";
+import { getUser } from "$queries/users";
 
 const opts = {
   httpOnly: true,
@@ -8,8 +9,7 @@ const opts = {
   path: "/",
 };
 
-
-export async function GET({ request: { headers } }) {
+export async function GET({ request: { headers, url }, locals: { q } }) {
   try {
     const cookies = cookie.parse(headers.get("cookie") || "");
     let { refresh_token, token: jwt } = cookies;
@@ -24,6 +24,8 @@ export async function GET({ request: { headers } }) {
     ({ refresh_token } = body);
     let tokenExpiry = parseInt(jwt_expires_in / 1000);
     let refreshExpiry = parseInt(259200);
+    let { currentuser } = await q(getUser);
+    body.currentuser = currentuser[0];
 
     return {
       body,
@@ -43,6 +45,7 @@ export async function GET({ request: { headers } }) {
       },
     };
   } catch (error) {
+    console.log(error)
     return {
       status: 500,
       error,

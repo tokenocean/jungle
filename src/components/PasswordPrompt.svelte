@@ -1,9 +1,8 @@
 <svelte:options accessors={true} />
 
 <script>
-  import { session } from "$app/stores";
   import { tick } from "svelte";
-  import { prompt, password as pw, token } from "$lib/store";
+  import { prompt, password as pw, user, token } from "$lib/store";
   import { post } from "$lib/api";
   import { err, dev } from "$lib/utils";
   import Fa from "svelte-fa";
@@ -22,7 +21,7 @@
 
   export let submit = async (e) => {
     try {
-      let email = $session.user.username;
+      let email = $user.username;
       let res = await post("/auth/login", { email, password }, fetch).json();
 
       $pw = password;

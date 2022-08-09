@@ -1,6 +1,4 @@
 <script>
-  import { session } from "$app/stores";
-  import { token } from "$lib/store";
   import Fa from "svelte-fa";
   import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
   import {
@@ -15,6 +13,7 @@
   import { upload } from "$lib/upload";
   import { updateUser } from "$queries/users";
   import { query } from "$lib/api";
+  import { user } from "$lib/store";
 
   let form = {};
   let fileInput;
@@ -27,7 +26,7 @@
   let files = [];
 
   onMount(() => {
-    ({ ...form } = $session.user);
+    ({ ...form } = $user);
   });
 
   $: width = `width: ${percent}%`;
@@ -109,18 +108,18 @@
 
     await query(insertSamples, { samples }).catch(err);
 
-    $session.user.has_samples = true;
+    $user.has_samples = true;
 
     submitted = true;
   };
 </script>
 
 <div class="container mx-auto py-20">
-  {#if form && $session.user}
+  {#if form && $user}
     <div
       class="mb-4 w-full max-w-5xl md:shadow rounded-xl md:p-10 m-auto lg:flex-row bg-white"
     >
-      <a class="block mb-6 text-midblue" href={`/${$session.user.username}`}>
+      <a class="block mb-6 text-midblue" href={`/${$user.username}`}>
         <div class="flex">
           <Fa icon={faChevronLeft} class="my-auto mr-1" />
           <div>Back</div>

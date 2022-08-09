@@ -71,9 +71,7 @@ export const getQ = (defaultHeaders) => {
       let r = await fn(q, v, h);
       return r;
     } catch (e) {
-      if (h.authorization) delete h.authorization;
-      let r = await fn(q, v, h);
-      return r;
+      console.log(e);
     }
   };
 };

@@ -1,5 +1,7 @@
 import fs from "fs";
 import { app } from "./app.js";
+import { q } from "./api.js";
+import { getContract } from "./queries.js";
 
 app.post("/asset/register", async (req, res) => {
   let { asset } = req.body;

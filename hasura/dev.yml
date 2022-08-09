@@ -39,6 +39,11 @@ services:
       SMTP_SENDER: "${SMTP_SENDER}"
       AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
       NFT_STORAGE_TOKEN: "${NFT_STORAGE_TOKEN}"
+      RPCHOST: "${RPCHOST}"
+      RPCPORT: "${RPCPORT}"
+      RPCUSER: "${RPCUSER}"
+      RPCPASS: "${RPCPASS}"
+      RPCWALLET: "${RPCWALLET}"
     volumes:
       - ./app:/app
       - ./custom:/opt/src/hasura/app/custom

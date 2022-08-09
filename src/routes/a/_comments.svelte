@@ -7,12 +7,11 @@
     faChevronRight,
   } from "@fortawesome/free-solid-svg-icons";
   import { requirePassword } from "$lib/auth";
-  import { psbt, token, commentsLimit } from "$lib/store";
-  import { api, query } from "$lib/api";
+  import { psbt, token, commentsLimit, user } from "$lib/store";
+  import { newapi as api, query } from "$lib/api";
   import { createComment, deleteComment } from "$queries/artworks";
   import { btc, err, confirm, info } from "$lib/utils";
   import { broadcast, sign, pay, ACCEPTED } from "$lib/wallet";
-  import { session } from "$app/stores";
 
   export let artwork;
   export let refreshArtwork;
@@ -27,13 +26,12 @@
     await requirePassword();
     loading = true;
     try {
-      if (artwork.owner.id !== $session.user.id) {
+      if (artwork.owner.id !== $user.id) {
         await pay(undefined, artwork.owner.address, amount);
         await sign();
         await broadcast();
       }
-      let res = await api
-        .auth(`Bearer ${$token}`)
+      let res = await api()
         .url("/comment")
         .post({
           psbt: $psbt && $psbt.toBase64(),
@@ -97,7 +95,7 @@
             {formatDistanceStrict(new Date(comment.created_at), new Date())}
             ago
           </div>
-          {#if ($session.user && $session.user.id === comment.user.id) || ($session.user && $session.user.id === artwork.owner_id) || ($session.user && $session.user.is_admin)}
+          {#if ($user && $user.id === comment.user.id) || ($user && $user.id === artwork.owner_id) || ($user && $user.is_admin)}
             <button
               class="text-red-500 text-xs hover:text-red-700"
               on:click={() => handleDelete(comment.id)}>Delete</button
@@ -126,7 +124,7 @@
           class="w-full mt-8 border rounded"
           bind:value={comment}
         />
-        {#if ($session.user && $session.user.id !== artwork.owner_id) || !$session.user}
+        {#if ($user && $user.id !== artwork.owner_id) || !$user}
           <div class="relative pt-1">
             <label for="customRange1" class="form-label"
               >Owner Donation (min. 1000 sats)<br />

@@ -1,7 +1,7 @@
 import { getArtworkBySlug } from "$queries/artworks";
 import { getDefaultRoyaltyRecipients } from "$queries/royalty_recipients";
 
-export async function GET({ locals: { q }, params }) {
+export async function GET({ locals: { user, q }, params }) {
   let { slug } = params;
   let { artworks } = await q(getArtworkBySlug, { slug });
   let artwork = artworks[0];
@@ -14,6 +14,7 @@ export async function GET({ locals: { q }, params }) {
     body: {
       artwork,
       default_royalty_recipients,
+      user
     },
   };
 }

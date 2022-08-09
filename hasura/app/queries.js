@@ -596,4 +596,42 @@ export const updateMessages = `mutation($message: messages_set_input!, $from: uu
   update_messages(where: {from: {_eq: $from}, to: {_eq: $to}}, _set: $message) {
     affected_rows
   }
+<<<<<<< HEAD
 }`;
+
+export const getArtworks = `
+  query($assets: [String!]) {
+    artworks(where: { asset: { _in: $assets }}) {
+      id 
+      asset
+      asking_asset
+      has_royalty
+      royalty_recipients {
+        id
+        asking_asset
+        amount
+        address
+        name
+      }
+      auction_start
+      auction_end
+      list_price
+      artist {
+        id
+        address
+        multisig
+      } 
+      owner {
+        id
+        address
+        multisig
+      } 
+    } 
+  }`;
+
+export const allMultisig = `query {
+  users {
+    multisig
+  } 
+}`;
+

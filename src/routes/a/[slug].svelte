@@ -1,5 +1,5 @@
 <script context="module">
-  import { api, post } from "$lib/api";
+  import { newapi as api, post } from "$lib/api";
   import { browser } from "$app/env";
   import branding from "$lib/branding";
   import { host, satsFormatted, updateBitcoinUnit } from "$lib/utils";
@@ -52,7 +52,7 @@
 
 <script>
   import { session } from "$app/stores";
-  import { token } from "$lib/store";
+  import { user, token } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faChevronDown,
@@ -71,7 +71,7 @@
     RoyaltyInfo,
   } from "$comp";
   import Sidebar from "./_sidebar.svelte";
-  import { tick, onDestroy } from "svelte";
+  import { tick, onDestroy, onMount } from "svelte";
   import { art, meta, prompt, password, psbt, commentsLimit } from "$lib/store";
   import countdown from "$lib/countdown";
   import {
@@ -100,7 +100,7 @@
   export let artwork, others, metadata, views;
 
   let release = async () => {
-    await requirePassword($session);
+    await requirePassword();
     $psbt = await releaseToSelf(artwork);
     $psbt = await sign();
     $psbt = await requestSignature($psbt);
@@ -109,14 +109,29 @@
 
   $: disabled =
     loading ||
-    (artwork.owner_id === $session.user?.id && underway(artwork)) ||
+    (artwork.owner_id === $session?.user?.id && underway(artwork)) ||
     artwork.transactions.some(
       (t) => ["purchase", "creation", "cancel"].includes(t.type) && !t.confirmed
     );
 
-  let start_counter, end_counter, now, timeout;
+  let start_counter,
+    end_counter,
+    now,
+    auctionTimeout,
+    refreshTimeout,
+    list_price,
+    val,
+    sats,
+    ticker,
+    amount;
 
+  let transaction = {};
+
+  let refreshInterval = 5000;
   let refreshArtwork = async () => {
+    if (!artwork) return;
+    clearTimeout(refreshTimeout);
+
     try {
       let { artworks } = await query(getArtworkBySlug, {
         slug: artwork.slug,
@@ -127,27 +142,27 @@
     } catch (e) {
       console.log(e);
     }
-  };
 
-  let poll = setInterval(refreshArtwork, 2500);
+    refreshTimeout = setTimeout(refreshArtwork, refreshInterval);
+  };
 
   onDestroy(() => {
     $art = undefined;
-    clearInterval(poll);
+    clearTimeout(auctionTimeout);
+    clearTimeout(refreshTimeout);
   });
 
-  $: update(artwork);
   let update = () => {
     if (!artwork) return;
     $art = artwork;
 
     let count = () => {
-      clearTimeout(timeout);
+      clearTimeout(auctionTimeout);
       now = new Date();
       if (!artwork) return;
       start_counter = countdown(parseISO(artwork.auction_start)) || "";
       end_counter = countdown(parseISO(artwork.auction_end)) || "";
-      timeout = setTimeout(count, 1000);
+      auctionTimeout = setTimeout(count, 1000);
     };
     count();
 
@@ -156,11 +171,9 @@
     list_price = val(artwork.list_price);
   };
 
-  let list_price;
-  let val, sats, ticker;
-  let amount;
+  refreshArtwork();
+  update();
 
-  let transaction = {};
   let makeOffer = async (e) => {
     try {
       if (e) e.preventDefault();
@@ -174,7 +187,7 @@
       transaction.asset = artwork.asset;
       transaction.type = "bid";
 
-      await requirePassword($session);
+      await requirePassword();
 
       $psbt = await createOffer(artwork, transaction.amount);
       $psbt = await sign();
@@ -185,7 +198,7 @@
       await save();
       await refreshArtwork();
 
-      await api.url("/offer-notifications").auth(`Bearer ${$token}`).post({
+      await api().url("/offer-notifications").post({
         artworkId: artwork.id,
         transactionHash: transaction.hash,
       });
@@ -202,8 +215,7 @@
     transaction.artwork_id = artwork.id;
     transaction.asset = artwork.asking_asset;
 
-    let { data, errors } = await api
-      .auth(`Bearer ${$token}`)
+    let { data, errors } = await api()
       .url("/transaction")
       .post({ transaction })
       .json();
@@ -248,12 +260,12 @@
       await save();
       await refreshArtwork();
 
-      await api.url("/mail-purchase-successful").auth(`Bearer ${$token}`).post({
-        userId: $session.user.id,
+      await api().url("/mail-purchase-successful").post({
+        userId: $user.id,
         artworkId: artwork.id,
       });
 
-      await api.url("/mail-artwork-sold").auth(`Bearer ${$token}`).post({
+      await api().url("/mail-artwork-sold").post({
         userId: artwork.owner.id,
         artworkId: artwork.id,
       });
@@ -424,7 +436,7 @@
 
       {#if loading}
         <ProgressLinear />
-      {:else if $session.user && $session.user.id === artwork.owner_id && artwork.held}
+      {:else if $session?.user?.id === artwork.owner_id && artwork.held}
         <div class="w-full mb-2">
           <a
             sveltekit:prefetch
@@ -451,7 +463,7 @@
           >
         </div>
 
-        {#if $session.user.id === artwork.artist_id}
+        {#if $session?.user?.id === artwork.artist_id}
           <div class="w-full mb-2">
             <a
               href={`/a/${artwork.slug}/edit`}

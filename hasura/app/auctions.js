@@ -4,7 +4,7 @@ import { combine, release, sign, broadcast } from "./wallet.js";
 import { check } from "./signing.js";
 import { cancelBids, getFinishedAuctions, releaseToken } from "./queries.js";
 
-setInterval(async () => {
+let checkAuctions = async () => {
   try {
     let { auctions } = await q(getFinishedAuctions, {
       now: formatISO(new Date()),
@@ -15,8 +15,16 @@ setInterval(async () => {
       let { edition } = auction;
       let { bid } = edition;
 
-      console.log("finalizing auction ", auction.id);
-      console.log("reserve price", auction.reserve);
+      await q(closeAuction, {
+        id: artwork.id,
+        artwork: {
+          auction_start: null,
+          auction_end: null,
+        },
+      });
+
+      console.log("finalizing auction for", artwork.slug);
+      console.log("reserve price", artwork.reserve_price);
 
       try {
         if (
@@ -51,9 +59,9 @@ setInterval(async () => {
         console.log("couldn't release to bidder,", e.message);
 
         await q(cancelBids, {
-          id: edition.id,
-          start: auction.auction_start,
-          end: auction.auction_end,
+          artwork_id: artwork.id,
+          start: artwork.auction_start,
+          end: artwork.auction_end,
         });
 
         if (edition.has_royalty) continue;
@@ -81,4 +89,8 @@ setInterval(async () => {
   } catch (e) {
     console.log(e);
   }
-}, 2000);
+
+  setTimeout(checkAuctions, 2000);
+};
+
+checkAuctions();

@@ -73,25 +73,22 @@ export const hbp = wretch().url(HBP_URL);
 const { APP_URL } = process.env;
 export const lnft = wretch().url(APP_URL);
 
-export const lq = () =>
-  new Proxy(
-    {},
-    {
-      get:
-        (target, prop) =>
-        (...params) =>
-          ((method, ...params) =>
-            wretch()
-              .url(`http://${RPCHOST}:${RPCPORT}/wallet/${RPCWALLET}`)
-              .auth(
-                `Basic ${Buffer.from(`${RPCUSER}:${RPCPASS}`).toString(
-                  "base64"
-                )}`
-              )
-              .post({
-                method,
-                params,
-              })
-              .json(({ result }) => result))(prop.toLowerCase(), ...params),
-    }
-  );
+export const lq = new Proxy(
+  {},
+  {
+    get:
+      (target, prop) =>
+      (...params) =>
+        ((method, ...params) =>
+          wretch()
+            .url(`http://${RPCHOST}:${RPCPORT}/wallet/${RPCWALLET}`)
+            .auth(
+              `Basic ${Buffer.from(`${RPCUSER}:${RPCPASS}`).toString("base64")}`
+            )
+            .post({
+              method,
+              params,
+            })
+            .json(({ result }) => result))(prop.toLowerCase(), ...params),
+  }
+);
