@@ -49,6 +49,11 @@ services:
       SMTP_PORT: "${SMTP_PORT}"
       SMTP_SENDER: "${SMTP_SENDER}"
       SMTP_USER: "${SMTP_USER}"
+      RPCHOST: "${RPCHOST}"
+      RPCPORT: "${RPCPORT}"
+      RPCUSER: "${RPCUSER}"
+      RPCPASS: "${RPCPASS}"
+      RPCWALLET: "${RPCWALLET}"
     volumes:
       - ./custom:/opt/src/hasura/app/custom
       - ${STORAGE_DIR}:/export
