@@ -15,7 +15,7 @@ services:
     depends_on:
       - lapp
     container_name: ui
-    image: asoltys/raretoshi:prod
+    image: asoltys/raretoshi:staging
     restart: on-failure
     ports:
       - "3000:3000"
@@ -24,7 +24,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: asoltys/raretoshi-server:prod
+    image: asoltys/raretoshi-server:staging
     restart: on-failure
     environment:
       APP_URL: "${APP_URL}"

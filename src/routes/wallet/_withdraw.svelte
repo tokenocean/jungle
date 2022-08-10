@@ -38,11 +38,16 @@
     loading = true;
     try {
       if (asset !== btc && !artwork) artwork = { asset };
-      $psbt = await pay(artwork, to.trim(), sats(asset, 
-asset === btc && $bitcoinUnitLocal === "sats"
+      $psbt = await pay(
+        artwork,
+        to.trim(),
+        sats(
+          asset,
+          asset === btc && $bitcoinUnitLocal === "sats"
             ? amount / 100000000
             : amount
-));
+        )
+      );
       $psbt = await sign();
 
       if (artwork?.held === "multisig") {
