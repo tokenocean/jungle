@@ -12,11 +12,10 @@ services:
     environment:
       DOMAIN: "${DOMAIN}"
   ui:
-    image: junglelab/jungle:latest
     depends_on:
       - lapp
     container_name: ui
-    image: junglelab/jungle:latest
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
     restart: on-failure
     ports:
       - "3000:3000"
@@ -25,7 +24,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: asoltys/lnft-server
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: on-failure
     environment:
       APP_URL: "${APP_URL}"
@@ -84,7 +83,7 @@ services:
       - ./metadata:/hasura-metadata
       - ./seeds:/hasura-seeds
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
