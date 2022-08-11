@@ -77,7 +77,7 @@ export const broadcast = async (psbt) => {
   let tx = psbt.extractTransaction();
   let hex = tx.toHex();
 
-  return electrs.url("/tx").body(hex).post().text();
+  return lq.sendRawTransaction(hex);
 };
 
 export const parseVal = (v) => parseInt(v.slice(1).toString("hex"), 16);

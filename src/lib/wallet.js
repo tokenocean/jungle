@@ -689,7 +689,7 @@ export const broadcast = async (disableRetries = false) => {
 
   if (disableRetries) middlewares = [];
 
-  return electrs.url("/tx").middlewares(middlewares).body(hex).post().text();
+  return api().url("/broadcast").post({ hex }).json();
 };
 
 export const signAndBroadcast = async () => {

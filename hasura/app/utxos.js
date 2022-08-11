@@ -2,6 +2,7 @@ import redis from "./redis.js";
 import { electrs, q } from "./api.js";
 import {
   blocktime,
+  broadcast,
   btc,
   hex,
   network,
@@ -386,16 +387,16 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
         let out = Transaction.fromHex(await hex(txid)).outs[index];
 
         try {
-        out = {
-          asset: parseAsset(out.asset),
-          address: Address.fromOutputScript(out.script, network),
-          value: parseVal(out.value),
-        };
+          out = {
+            asset: parseAsset(out.asset),
+            address: Address.fromOutputScript(out.script, network),
+            value: parseVal(out.value),
+          };
 
-        if (our(out)) amount -= out.value;
-        } catch(e) {
+          if (our(out)) amount -= out.value;
+        } catch (e) {
           continue;
-        } 
+        }
       }
 
       for (let j = 0; j < tx.outs.length; j++) {
@@ -458,5 +459,16 @@ app.get("/:username/:asset/transactions/:page", async (req, res) => {
     res.send(transactions);
   } catch (e) {
     console.log("problem getting transactions", e);
+  }
+});
+
+app.post("/broadcast", async (req, res) => {
+  let { hex } = req.body;
+
+  try {
+    await broadcast(hex);
+  } catch (e) {
+    console.log("problem broadcasting transaction", e);
+    res.code(500).send(e.message);
   }
 });
