@@ -28,7 +28,6 @@
 >
   <div class="space-y-2">
     <button
-      class=""
       on:click={() => {
         showPopup = false;
         goto(`/${user.username}`);
@@ -67,5 +66,9 @@
 <style>
   button {
     @apply bg-white text-black block font-medium border border-black/25 rounded-full px-2 py-1 flex items-center w-32;
+  }
+
+  .z {
+    z-index: 100;
   }
 </style>

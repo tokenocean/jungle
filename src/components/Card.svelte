@@ -140,8 +140,7 @@
               on:click={(e) => {
                 if (
                   !$user ||
-                  (artwork &&
-                    $user.username !== artwork.artist.username)
+                  (artwork && $user.username !== artwork.artist.username)
                 ) {
                   e.preventDefault();
                   e.stopPropagation();
@@ -151,7 +150,9 @@
               <div class="flex">
                 <Avatar user={artwork.artist} size="xs" />
                 <div class="mx-1 w-3/4">
-                  <div class="truncate">@{artwork.artist.username}</div>
+                  <a class="truncate" href={`/${artwork.artist.username}`}
+                    >@{artwork.artist.username}</a
+                  >
                   <div class="text-xs text-gray-600">Artist</div>
                 </div>
               </div>
@@ -165,8 +166,7 @@
                 on:click={(e) => {
                   if (
                     !$user ||
-                    (artwork &&
-                      $user.username !== artwork.owner.username)
+                    (artwork && $user.username !== artwork.owner.username)
                   ) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -176,7 +176,9 @@
                 <div class="flex">
                   <Avatar user={artwork.owner} size="xs" />
                   <div class="ml-2 w-3/4">
-                    <div class="truncate">@{artwork.owner.username}</div>
+                    <a class="truncate" href={`/${artwork.owner.username}`}
+                      >@{artwork.owner.username}</a
+                    >
                     <div class="text-xs text-gray-600">Owner</div>
                   </div>
                 </div>

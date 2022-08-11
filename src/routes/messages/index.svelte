@@ -14,6 +14,7 @@
   let messageWindow;
   let ownPrivKey;
   let ownPubKey;
+
   onMount(async () => {
     await requirePassword();
     ownPrivKey = keypair().privkey.toString("hex");
@@ -80,7 +81,7 @@
       id: id,
       viewed: true,
       toUser: {
-        avatar_url: selectedUser.avatar,
+        avatar_url: selectedUser.avatar_url,
         id: selectedUser.id,
         username: selectedUser.username,
         pubkey: selectedUser.pubkey,
