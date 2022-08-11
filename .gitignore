@@ -31,3 +31,4 @@ cypress/integration/2-advanced-examples
 .svelte-kit
 .env.local
 .env.production
+.env
