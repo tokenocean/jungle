@@ -15,7 +15,7 @@ services:
     depends_on:
       - lapp
     container_name: ui
-    image: asoltys/raretoshi:staging
+    image: junglelab/jungle:latest
     restart: on-failure
     ports:
       - "3000:3000"
