@@ -109,10 +109,6 @@
 
   let address;
   $: if ($user) address = $user.address;
-
-  $: if ($user && $user.address) {
-    qr = qrcode.toDataURL($user.address);
-  }
 </script>
 
 {#if $user && funding}

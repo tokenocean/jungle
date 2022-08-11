@@ -41,14 +41,14 @@ import { compareAsc, parseISO } from "date-fns";
 import { SignaturePrompt, AcceptPrompt } from "$comp";
 import createHash from "create-hash";
 
+const { retry } = middlewares.default || middlewares;
+
 function sha256(buffer) {
   return createHash("sha256").update(buffer).digest();
 }
 
 export const CANCELLED = "cancelled";
 export const ACCEPTED = "accepted";
-
-const { retry } = middlewares.default || middlewares;
 
 export const DUST = 800;
 const satsPerByte = 0.15;
@@ -117,7 +117,6 @@ export const getMnemonic = (mnemonic, pass) => {
   if (!mnemonic && get(user)) ({ mnemonic } = get(user));
   if (!pass) pass = get(password);
 
-  console.log("MP", mnemonic, pass)
   mnemonic = cryptojs.AES.decrypt(mnemonic, pass).toString(cryptojs.enc.Utf8);
   if (!mnemonic) throw new Error("Unable to decrypt mnmemonic");
   return mnemonic;
@@ -393,7 +392,6 @@ const fund = async (
   let { address, redeem, output } = out;
 
   let utxos = await api().url(`/address/${address}/${asset}/utxo`).get().json();
-  console.log(utxos);
   let l = (await getLocked(asset))
     .filter((t) => !(p.artwork_id && t.artwork.id === p.artwork_id))
     .map((t) => {
@@ -555,6 +553,7 @@ export const releaseToSelf = async (artwork) => {
 
 export const pay = async (artwork, to, amount) => {
   fee.set(100);
+  console.log("AMOUNT", amount)
   if (!amount || amount <= 0) throw new Error("invalid amount");
   let asset = artwork ? artwork.asset : btc;
 

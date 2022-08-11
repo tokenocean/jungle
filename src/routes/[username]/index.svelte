@@ -1,5 +1,11 @@
 <script>
-  import { artworksLimit, prompt, messageUser, tipUser, user } from "$lib/store";
+  import {
+    artworksLimit,
+    prompt,
+    messageUser,
+    tipUser,
+    user,
+  } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faEnvelope,
@@ -147,10 +153,14 @@
             <Menu />
           {:else}
             <div
-              class="w-full cursor-pointer font-semibold text-xs text-center"
+              class="w-full cursor-pointer font-semibold text-xs"
               on:click={() => copy(subject.address)}
             >
-              <img src={qr} class="w-full" alt="QR Code" />
+              <img
+                src={qr}
+                class="w-64 border rounded-2xl mb-5"
+                alt="QR Code"
+              />
               {subject.address}
             </div>
 

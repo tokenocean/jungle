@@ -37,13 +37,13 @@
 
     loading = true;
     try {
-      if (a !== btc && !artwork) artwork = { asset };
+      if (asset !== btc && !artwork) artwork = { asset };
       $psbt = await pay(
         artwork,
         to.trim(),
         sats(
-          a,
-          a === btc && $bitcoinUnitLocal === "sats"
+          asset,
+          asset === btc && $bitcoinUnitLocal === "sats"
             ? amount / 100000000
             : amount
         )
@@ -112,8 +112,7 @@
 
 <style>
   textarea,
-  input,
-  select {
+  input {
     @apply rounded-lg p-2 text-black;
     margin-top: 10px;
   }

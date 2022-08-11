@@ -8,6 +8,7 @@
 
   export let asset, page;
 
+  let a = asset.asset;
   let offset = 25;
   $: pages = new Array(Math.ceil($txCount / offset));
 </script>
@@ -26,12 +27,10 @@
               class:text-secondary={amount > 0}
               class:text-orange-500={!confirmed}
             >
-              {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label({
-                asset,
-                name,
-              }) === "L-BTC" && $bitcoinUnitLocal === "sats"
-                ? satsFormatted(val(asset, Math.abs(amount)) * 100000000)
-                : val(asset, Math.abs(amount))}
+              {amount > 0 ? "+" : amount < 0 ? "-" : ""}{label(asset) ===
+                "L-BTC" && $bitcoinUnitLocal === "sats"
+                ? satsFormatted(val(a, Math.abs(amount)) * 100000000)
+                : val(a, Math.abs(amount))}
             </div>
           </div>
         </div>
@@ -40,7 +39,7 @@
   {/if}
 </div>
 
-{#if pages > 1}
+{#if pages.length > 1}
   <div class="full-width flex bg-white p-4 mx-auto">
     <div class="mx-auto">
       {#each pages as _, i}
