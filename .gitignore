@@ -32,3 +32,4 @@ cypress/integration/2-advanced-examples
 .env.local
 .env.production
 .env
+.env
