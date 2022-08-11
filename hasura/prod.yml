@@ -15,6 +15,7 @@ services:
     depends_on:
       - lapp
     container_name: ui
+    image: asoltys/raretoshi:staging
     restart: on-failure
     ports:
       - "3000:3000"
@@ -48,6 +49,11 @@ services:
       SMTP_PORT: "${SMTP_PORT}"
       SMTP_SENDER: "${SMTP_SENDER}"
       SMTP_USER: "${SMTP_USER}"
+      RPCHOST: "${RPCHOST}"
+      RPCPORT: "${RPCPORT}"
+      RPCUSER: "${RPCUSER}"
+      RPCPASS: "${RPCPASS}"
+      RPCWALLET: "${RPCWALLET}"
     volumes:
       - ./custom:/opt/src/hasura/app/custom
       - ${STORAGE_DIR}:/export
@@ -107,7 +113,6 @@ services:
       SMTP_SENDER: "${SMTP_SENDER}"
       AUTO_ACTIVATE_NEW_USERS: "false"
       VERIFY_EMAILS: "true"
-      SMTP_SECURE: "true"
     volumes:
       - ./custom:/app/custom
   ipfs:
@@ -125,3 +130,9 @@ services:
     image: redis
     volumes:
       - ./redis:/data
+  liquid:
+    image: ghcr.io/vulpemventures/elements
+    container_name: liquid
+    volumes:
+      - ./liquidmainnet:/home/elements/.elements
+    restart: unless-stopped

@@ -13,7 +13,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:staging
+    image: asoltys/lnft-server
     restart: on-failure
     command: ["pnpm", "dev"]
     environment:
