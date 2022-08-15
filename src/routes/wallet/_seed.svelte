@@ -4,12 +4,12 @@
   import { onMount, tick } from "svelte";
   import wordlist from "$lib/wordlist";
   import { ToggleSwitch } from "$comp";
-  import { password, user } from "$lib/store";
+  import { password, user, token } from "$lib/store";
   import { err, goto, info } from "$lib/utils";
   import { requirePassword } from "$lib/auth";
   import { createWallet } from "$lib/wallet";
   import { updateUser } from "$queries/users";
-  import { query } from "$lib/api";
+  import { get, query } from "$lib/api";
 
   export let mnemonic;
 
@@ -26,6 +26,10 @@
         user: params,
         id: $user.id,
       });
+
+      let { currentuser, jwt_token } = await get("/auth/refresh");
+      $token = jwt_token;
+      $user = currentuser;
 
       info("Wallet is ready!");
 
