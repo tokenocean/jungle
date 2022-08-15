@@ -150,7 +150,12 @@ const checkTransactions = async () => {
 
     for (let i = 0; i < transactions.length; i++) {
       let tx = transactions[i];
-      let time = await blocktime(tx.hash);
+
+      try {
+        let time = await blocktime(tx.hash);
+      } catch(e) {
+        continue;
+      } 
 
       if (time) {
         let {
