@@ -13,7 +13,7 @@ import { address as Address, Transaction } from "liquidjs-lib";
 import reverse from "buffer-reverse";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
-import { getUser } from "./utils.js";
+import { getUser, wait } from "./utils.js";
 import {
   createTransaction,
   getAssetArtworks,
@@ -44,104 +44,114 @@ let balances = async (address, asset) => {
   return { confirmed, unconfirmed };
 };
 
+let locked = {};
 export const utxos = async (address) => {
-  let utxoSet = `${address}:utxos`;
-  let last = await redis.get(address);
+  await wait(() => !locked[address]);
 
-  let curr = await electrs.url(`/address/${address}/txs`).get().json();
-  let txns = [
-    ...curr.filter((tx) => !tx.status.confirmed).reverse(),
-    ...curr.filter((tx) => tx.status.confirmed),
-  ].map((tx) => tx.txid);
+  try {
+    locked[address] = true;
+    let utxoSet = `${address}:utxos`;
+    let last = await redis.get(address);
 
-  while (curr.length >= 25 && !txns.includes(last)) {
-    let prev = txns.at(-1);
-    curr = await electrs
-      .url(`/address/${address}/txs/chain/${prev}`)
-      .get()
-      .json();
-    txns = [...txns, ...curr.map((tx) => tx.txid)];
-  }
+    let curr = await electrs.url(`/address/${address}/txs`).get().json();
+    let txns = [
+      ...curr.filter((tx) => !tx.status.confirmed).reverse(),
+      ...curr.filter((tx) => tx.status.confirmed),
+    ].map((tx) => tx.txid);
 
-  let index = txns.indexOf(last);
-  if (index > -1) txns = txns.slice(0, index);
-  txns.reverse();
-
-  while (txns.length) {
-    let tx = Transaction.fromHex(await hex(txns[0]));
-
-    let { ins, outs } = tx;
-    let defer;
-    let skip = {};
-
-    for (let j = 0; j < ins.length; j++) {
-      let { hash, index } = ins[j];
-      let txid = reverse(hash).toString("hex");
-      if (!(await redis.sIsMember(utxoSet, `${txid}:${index}`))) {
-        let k = txns.indexOf(txid);
-        if (k > -1) {
-          defer = true;
-          txns.splice(k, 1);
-          txns.unshift(txid);
-          break;
-        } else {
-          skip[j] = true;
-        }
-      }
+    while (curr.length >= 25 && !txns.includes(last)) {
+      let prev = txns.at(-1);
+      curr = await electrs
+        .url(`/address/${address}/txs/chain/${prev}`)
+        .get()
+        .json();
+      txns = [...txns, ...curr.map((tx) => tx.txid)];
     }
 
-    if (defer) continue;
+    let index = txns.indexOf(last);
+    if (index > -1) txns = txns.slice(0, index);
+    txns.reverse();
 
-    for (let j = 0; j < ins.length; j++) {
-      if (skip[j]) continue;
-      let { hash, index } = ins[j];
-      let txid = reverse(hash).toString("hex");
-      await redis.sRem(utxoSet, `${txid}:${index}`);
-    }
+    while (txns.length) {
+      let tx = Transaction.fromHex(await hex(txns[0]));
 
-    let added = {};
+      let { ins, outs } = tx;
+      let defer;
+      let skip = {};
 
-    for (let j = 0; j < outs.length; j++) {
-      let { script, value, asset } = outs[j];
-      let txid = tx.getId();
-      asset = parseAsset(asset);
-      value = parseVal(value);
-
-      try {
-        if (Address.fromOutputScript(script, network) === address) {
-          await redis.sAdd(utxoSet, `${txid}:${j}`);
-          await redis.set(`${txid}:${j}`, `${asset},${value}`);
-
-          if (!added[asset]) {
-            added[asset] = true;
-            redis.rPush(`${address}:${asset}`, txid);
+      for (let j = 0; j < ins.length; j++) {
+        let { hash, index } = ins[j];
+        let txid = reverse(hash).toString("hex");
+        if (!(await redis.sIsMember(utxoSet, `${txid}:${index}`))) {
+          let k = txns.indexOf(txid);
+          if (k > -1) {
+            defer = true;
+            txns.splice(k, 1);
+            txns.unshift(txid);
+            break;
+          } else {
+            skip[j] = true;
           }
         }
-      } catch (e) {
-        continue;
       }
+
+      if (defer) continue;
+
+      for (let j = 0; j < ins.length; j++) {
+        if (skip[j]) continue;
+        let { hash, index } = ins[j];
+        let txid = reverse(hash).toString("hex");
+        await redis.sRem(utxoSet, `${txid}:${index}`);
+      }
+
+      let added = {};
+
+      for (let j = 0; j < outs.length; j++) {
+        let { script, value, asset } = outs[j];
+        let txid = tx.getId();
+        asset = parseAsset(asset);
+        value = parseVal(value);
+
+        try {
+          if (Address.fromOutputScript(script, network) === address) {
+            await redis.sAdd(utxoSet, `${txid}:${j}`);
+            await redis.set(`${txid}:${j}`, `${asset},${value}`);
+
+            if (!added[asset]) {
+              added[asset] = true;
+              redis.rPush(`${address}:${asset}`, txid);
+            }
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+
+      last = txns.shift();
     }
 
-    last = txns.shift();
+    if (last) await redis.set(address, last);
+
+    let utxos = [];
+    let set = await redis.sMembers(utxoSet);
+
+    for (let i = 0; i < set.length; i++) {
+      let utxo = set[i];
+      let [txid, vout] = utxo.split(":");
+      let [asset, value] = (await redis.get(utxo)).split(",");
+
+      vout = parseInt(vout);
+      value = parseInt(value);
+
+      utxos.push({ txid, vout, asset, value });
+    }
+
+    delete locked[address];
+    return utxos;
+  } catch (e) {
+    console.log(e);
+    delete locked[address];
   }
-
-  if (last) await redis.set(address, last);
-
-  let utxos = [];
-  let set = await redis.sMembers(utxoSet);
-
-  for (let i = 0; i < set.length; i++) {
-    let utxo = set[i];
-    let [txid, vout] = utxo.split(":");
-    let [asset, value] = (await redis.get(utxo)).split(",");
-
-    vout = parseInt(vout);
-    value = parseInt(value);
-
-    utxos.push({ txid, vout, asset, value });
-  }
-
-  return utxos;
 };
 
 app.get("/assets/count", auth, async (req, res) => {
