@@ -1,20 +1,3 @@
-<script context="module">
-  export async function load({ fetch, params: { slug }, session }) {
-    if (!(session && session.user))
-      return {
-        status: 302,
-        redirect: "/login",
-      };
-
-    const { artwork } = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
-    const { users } = await fetch(`/users.json`).then((r) => r.json());
-
-    return {
-      props: { artwork, users }
-    };
-  }
-</script>
-
 <script>
   import { Avatar, ProgressLinear } from "$comp";
   import AutoComplete from "simple-svelte-autocomplete";
@@ -73,6 +56,7 @@
           recipient ? recipient.username : `${address.slice(0, 21)}...`
         }!`
       );
+
       goto(`/a/${artwork.slug}`);
     } catch (e) {
       err(e);

@@ -4,7 +4,14 @@ import reverse from "buffer-reverse";
 import fs from "fs";
 import { address as Address, Psbt, Transaction } from "liquidjs-lib";
 const sleep = (n) => new Promise((r) => setTimeout(r, n));
-import { btc, blocktime, hex, network, parseAsset, parseVal } from "./wallet.js";
+import {
+  btc,
+  blocktime,
+  hex,
+  network,
+  parseAsset,
+  parseVal,
+} from "./wallet.js";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
 import { getUser, wait } from "./utils.js";
@@ -150,12 +157,13 @@ const checkTransactions = async () => {
 
     for (let i = 0; i < transactions.length; i++) {
       let tx = transactions[i];
+      let time;
 
       try {
-        let time = await blocktime(tx.hash);
-      } catch(e) {
+        time = await blocktime(tx.hash);
+      } catch (e) {
         continue;
-      } 
+      }
 
       if (time) {
         let {
@@ -182,4 +190,3 @@ const checkTransactions = async () => {
 };
 
 setTimeout(checkTransactions, 8000);
-

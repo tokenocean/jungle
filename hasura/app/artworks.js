@@ -123,7 +123,11 @@ app.post("/held", async (req, res) => {
     let { asset, owner } = artwork;
     let { address, multisig } = owner;
 
-    let find = async (a) => (await utxos(a)).find((tx) => tx.asset === asset);
+    let find = async (a) => {
+      let txns = await utxos(a);
+      console.log(txns);
+      return txns.find((tx) => tx.asset === asset);
+    };
 
     let held = null;
     if (await find(address)) held = "single";
@@ -372,7 +376,12 @@ app.post("/comment", auth, async (req, res) => {
     let { amount, comment: commentBody, psbt, artwork_id } = req.body;
 
     let {
-      artworks_by_pk: { owner_id, artist_id, title, artist: { bitcoin_unit } },
+      artworks_by_pk: {
+        owner_id,
+        artist_id,
+        title,
+        artist: { bitcoin_unit },
+      },
     } = await q(getArtwork, { id: artwork_id });
 
     let user = await getUser(req);
@@ -407,7 +416,7 @@ app.post("/comment", auth, async (req, res) => {
         artworkName: title,
         commenterName: user.full_name,
         tipAmount: amount,
-        unit: bitcoin_unit === 'sats' ? 'L-sats' : 'L-BTC',
+        unit: bitcoin_unit === "sats" ? "L-sats" : "L-BTC",
       },
       message: {
         to: artist.display_name,
