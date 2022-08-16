@@ -16,7 +16,7 @@
   import Fa from "svelte-fa";
   import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
   import { page } from "$app/stores";
-  import { token, user } from "$lib/store";
+  import { password as pw, token, user, username } from "$lib/store";
   import { dev, err, goto } from "$lib/utils";
   import { post } from "$lib/api";
   import cryptojs from "crypto-js";
@@ -37,11 +37,12 @@
     try {
       let res = await post("/auth/login", { email, password }, fetch).json();
 
+      $pw = password;
+      $username = res.user.username;
+
       $session.user = res.user;
       $token = res.jwt_token;
       $user = res.user;
-      window.sessionStorage.setItem("password", password);
-      window.sessionStorage.setItem("username", res.user.username);
     } catch (e) {
       console.log("login error", e);
       err(e);

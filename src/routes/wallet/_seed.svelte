@@ -1,6 +1,6 @@
 <script>
   import { browser } from "$app/env";
-  import { page } from "$app/stores";
+  import { page, session } from "$app/stores";
   import { onMount, tick } from "svelte";
   import wordlist from "$lib/wordlist";
   import { ToggleSwitch } from "$comp";
@@ -34,6 +34,7 @@
       info("Wallet is ready!");
 
       $user.wallet_initialized = true;
+      $session.user = { ...$user };
 
       setTimeout(() => goto("/wallet"), 50);
     } catch (e) {

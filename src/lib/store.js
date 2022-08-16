@@ -4,16 +4,18 @@ import { browser } from "$app/env";
 const btc = import.meta.env.VITE_BTC;
 
 const persisted = (k, i) => {
-  let s = writable(
+  if (
     browser &&
-      sessionStorage.getItem(k) &&
-      sessionStorage.getItem(k) !== "undefined"
-      ? JSON.parse(sessionStorage.getItem(k))
-      : i
-  );
+    sessionStorage.getItem(k) &&
+    sessionStorage.getItem(k) !== "undefined"
+  ) {
+    try {
+      i = JSON.parse(sessionStorage.getItem(k));
+    } catch (e) {}
+  }
 
+  let s = writable(i);
   s.subscribe((v) => browser && sessionStorage.setItem(k, JSON.stringify(v)));
-
   return s;
 };
 
@@ -35,7 +37,7 @@ export const filterCriteria = writable({
   fromFollowed: false,
   hasOpenAuction: false,
   filterByCurrency: false,
-  selectedCurrency: null
+  selectedCurrency: null,
 });
 export const full = writable();
 export const loading = writable();
@@ -44,7 +46,6 @@ export const locked = writable();
 export const loggedIn = writable();
 export const meta = writable();
 export const offset = writable(0);
-export const password = writable();
 export const poll = writable([]);
 export const prompt = writable();
 export const psbt = writable();
@@ -69,6 +70,8 @@ export const asset = persisted("asset", { name: "btc", asset: btc });
 export const assetCount = persisted("assetCount", 0);
 export const assets = persisted("assets", []);
 export const confirmed = persisted("confirmed", {});
+export const password = persisted("password");
 export const unconfirmed = persisted("unconfirmed", {});
+export const username = persisted("username");
 export const transactions = persisted("transactions", {});
 export const txCount = persisted("txCount", 0);

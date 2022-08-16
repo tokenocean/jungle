@@ -40,9 +40,12 @@ export const activate = (ticket) => {
 };
 
 export const checkAuthFromLocalStorage = (user) => {
-  const usernameFromStorage = window.sessionStorage.getItem("username");
+  const usernameFromStorage =
+    sessionStorage.getItem("username") &&
+    sessionStorage.getItem("username") !== "undefined" &&
+    JSON.parse(sessionStorage.getItem("username"));
 
-  if (usernameFromStorage && user.username !== usernameFromStorage) {
+  if (user.username !== usernameFromStorage) {
     goto("/logout");
   }
 };
