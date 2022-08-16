@@ -553,7 +553,6 @@ export const releaseToSelf = async (artwork) => {
 
 export const pay = async (artwork, to, amount) => {
   fee.set(100);
-  console.log("AMOUNT", amount)
   if (!amount || amount <= 0) throw new Error("invalid amount");
   let asset = artwork ? artwork.asset : btc;
 
