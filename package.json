@@ -18,7 +18,7 @@
         "@noble/secp256k1": "1.6.0",
         "@popperjs/core": "~2.11.5",
         "@sveltejs/adapter-node": "next",
-        "@sveltejs/kit": "next",
+        "@sveltejs/kit": "1.0.0-next.405",
         "autoprefixer": "^10.4.7",
         "bip32": "^2.0.6",
         "bip39": "^3.0.4",
