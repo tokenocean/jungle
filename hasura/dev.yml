@@ -3,6 +3,7 @@ services:
   lapp:
     depends_on:
       - hbp
+      - redis
     container_name: lapp
     image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:staging
     restart: on-failure
