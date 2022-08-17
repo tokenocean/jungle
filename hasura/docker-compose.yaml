@@ -3,6 +3,8 @@ services:
   lapp:
     depends_on:
       - hbp
+      - redis
+      - liquid
     container_name: lapp
     image: asoltys/lnft-server
     restart: on-failure
