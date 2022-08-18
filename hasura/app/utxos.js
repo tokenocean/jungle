@@ -1,5 +1,5 @@
 import redis from "./redis.js";
-import { electrs, q } from "./api.js";
+import { electrs, q, lq } from "./api.js";
 import {
   blocktime,
   broadcast,
@@ -476,7 +476,7 @@ app.post("/broadcast", async (req, res) => {
   let { hex } = req.body;
 
   try {
-    await broadcast(hex);
+    res.send({ txid: await lq.sendRawTransaction(hex) });
   } catch (e) {
     console.log("problem broadcasting transaction", e);
     res.code(500).send(e.message);

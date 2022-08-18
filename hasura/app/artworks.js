@@ -125,7 +125,6 @@ app.post("/held", async (req, res) => {
 
     let find = async (a) => {
       let txns = await utxos(a);
-      console.log(txns);
       return txns.find((tx) => tx.asset === asset);
     };
 
