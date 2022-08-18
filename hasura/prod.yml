@@ -83,7 +83,7 @@ services:
       - ./metadata:/hasura-metadata
       - ./seeds:/hasura-seeds
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
@@ -136,4 +136,3 @@ services:
     volumes:
       - ./liquidmainnet:/home/elements/.elements
     restart: unless-stopped
-
