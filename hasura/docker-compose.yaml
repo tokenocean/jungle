@@ -15,7 +15,7 @@ services:
       - redis
       - liquid
     container_name: lapp
-    image:  asoltys/lnft-server
+    image: asoltys/lnft-server
     restart: on-failure
     command: ["pnpm", "dev"]
     environment:
@@ -64,7 +64,7 @@ services:
       - "5433:5432"
   hasura:
     container_name: hasura
-    image: hasura/graphql-engine:v2.7.0
+    image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
     ports:
       - "8080:8080"
     depends_on:
@@ -84,7 +84,6 @@ services:
     image: nhost/hasura-backend-plus:v2.4.0
     depends_on:
       - hasura
-    restart: always
     ports:
       - "3400:3000"
     environment:
@@ -116,7 +115,6 @@ services:
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
-    restart: unless-stopped
   liquid:
     image: ghcr.io/vulpemventures/elements:0.18.1.12
     container_name: liquid
