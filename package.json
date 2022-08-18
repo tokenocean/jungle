@@ -14,7 +14,7 @@
         "@asoltys/vite-plugin-stream-shim": "^1.0.5",
         "@fortawesome/free-brands-svg-icons": "^5.15.4",
         "@fortawesome/free-regular-svg-icons": "^5.15.4",
-        "@fortawesome/free-solid-svg-icons": "^5.15.4",
+        "@fortawesome/free-solid-svg-icons": "6",
         "@noble/secp256k1": "1.6.0",
         "@popperjs/core": "~2.11.5",
         "@sveltejs/adapter-node": "next",

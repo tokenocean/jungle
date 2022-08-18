@@ -11,6 +11,7 @@
     faEnvelope,
     faLink,
     faMapMarkerAlt,
+    faDroplet,
   } from "@fortawesome/free-solid-svg-icons";
   import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
   import { page } from "$app/stores";
@@ -66,7 +67,12 @@
     }
   };
 
-  let qr;
+  let qr, showQr;
+  let toggleQr = () => {
+    copy(subject.address);
+    showQr = !showQr;
+  };
+
   onMount(async () => {
     let address = subject.address;
     address = `bitcoin:${address}`;
@@ -79,7 +85,7 @@
 <div class="container mx-auto lg:px-16 mt-5 md:mt-20">
   {#if subject}
     <div class="flex justify-between flex-wrap">
-      <div class="w-full xl:w-1/3 xl:max-w-xs mb-20">
+      <div class="w-full xl:w-1/3 xl:max-w-xs">
         <div class="w-full flex flex-col">
           <div class="flex items-center">
             <Avatar size="large" user={subject} />
@@ -93,83 +99,19 @@
             <div>Following: {subject.num_follows}</div>
           </div>
         </div>
-        <div class="social-details">
-          {#if subject.instagram}
-            <a href={`https://instagram.com/${subject.instagram}`}>
-              <div class="flex">
-                <div class="my-auto">
-                  <Fa icon={faInstagram} />
-                </div>
-                <div><span>@{subject.instagram}</span></div>
-              </div>
-            </a>
-          {/if}
-          {#if subject.twitter}
-            <a href={`https://twitter.com/${subject.twitter}`}>
-              <div class="flex">
-                <div class="my-auto">
-                  <Fa icon={faTwitter} />
-                </div>
-                <div><span>@{subject.twitter}</span></div>
-              </div>
-            </a>
-          {/if}
-          {#if subject.email}
-            <a href={`mailto:${subject.email}`}>
-              <div class="flex">
-                <div class="my-auto">
-                  <Fa icon={faEnvelope} />
-                </div>
-                <div><span>{subject.email}</span></div>
-              </div>
-            </a>
-          {/if}
-          {#if subject.website}
-            <a href={`https://${subject.website}`}>
-              <div class="flex">
-                <div class="my-auto">
-                  <Fa icon={faLink} />
-                </div>
-                <div><span>{subject.website}</span></div>
-              </div>
-            </a>
-          {/if}
-          {#if subject.location}
-            <a href=".">
-              <div class="flex">
-                <div class="my-auto">
-                  <Fa icon={faMapMarkerAlt} />
-                </div>
-                <div><span>{subject.location}</span></div>
-              </div>
-            </a>
-          {/if}
-        </div>
-        {#if subject.bio}
-          <p>{subject.bio}</p>
-        {/if}
         {#if $user}
           {#if $user.id === subject.id}
             <Menu />
           {:else}
-            <div
-              class="w-full cursor-pointer font-semibold text-xs"
-              on:click={() => copy(subject.address)}
-            >
-              <img
-                src={qr}
-                class="w-64 border rounded-2xl mb-5"
-                alt="QR Code"
-              />
-              {subject.address}
-            </div>
-
-            <div class="flex space-x-5">
-              <button class="p-2 primary-btn follow mt-8" on:click={follow}>
+            <div class="grid grid-cols-3 gap-2 mb-10">
+              <button
+                class="p-2 primary-btn follow mt-8 w-full"
+                on:click={follow}
+              >
                 {subject.followed ? "Unfollow" : "Follow"}</button
               >
               <button
-                class="p-2 primary-btn mt-8"
+                class="p-2 primary-btn mt-8 w-full"
                 on:click={() => {
                   $messageUser = subject;
                   prompt.set(SendMessage);
@@ -178,7 +120,7 @@
                 Message</button
               >
               <button
-                class="p-2 primary-btn mt-8"
+                class="p-2 primary-btn mt-8 w-full"
                 on:click={() => {
                   $tipUser = {
                     username: subject.username,
@@ -190,7 +132,79 @@
                 Tip</button
               >
             </div>
+            {#if subject.bio}
+              <p class="my-4">{subject.bio}</p>
+            {/if}
+            <div class="social-details">
+              {#if subject.instagram}
+                <a href={`https://instagram.com/${subject.instagram}`}>
+                  <div class="flex">
+                    <div class="my-auto">
+                      <Fa icon={faInstagram} />
+                    </div>
+                    <div><span>@{subject.instagram}</span></div>
+                  </div>
+                </a>
+              {/if}
+              {#if subject.twitter}
+                <a href={`https://twitter.com/${subject.twitter}`}>
+                  <div class="flex">
+                    <div class="my-auto">
+                      <Fa icon={faTwitter} />
+                    </div>
+                    <div><span>@{subject.twitter}</span></div>
+                  </div>
+                </a>
+              {/if}
+              {#if subject.email}
+                <a href={`mailto:${subject.email}`}>
+                  <div class="flex">
+                    <div class="my-auto">
+                      <Fa icon={faEnvelope} />
+                    </div>
+                    <div><span>{subject.email}</span></div>
+                  </div>
+                </a>
+              {/if}
+              {#if subject.website}
+                <a href={`https://${subject.website}`}>
+                  <div class="flex">
+                    <div class="my-auto">
+                      <Fa icon={faLink} />
+                    </div>
+                    <div><span>{subject.website}</span></div>
+                  </div>
+                </a>
+              {/if}
+              {#if subject.location}
+                <div class="flex">
+                  <div class="my-auto">
+                    <Fa icon={faMapMarkerAlt} />
+                  </div>
+                  <div><span>{subject.location}</span></div>
+                </div>
+              {/if}
+              <div class="flex cursor-pointer">
+                <div class="my-auto">
+                  <Fa icon={faDroplet} />
+                </div>
+                <div on:click={toggleQr} class="truncate">
+                  <span>{subject.address}</span>
+                </div>
+              </div>
+            </div>
           {/if}
+        {/if}
+        {#if showQr}
+          <div
+            class="w-full cursor-pointer font-semibold text-xs text-center"
+            on:click={() => copy(subject.address)}
+          >
+            <img src={qr} class="w-64 mx-auto" alt="QR Code" />
+            <div>
+              {subject.address}
+            </div>
+          </div>
         {/if}
       </div>
 
@@ -314,10 +328,9 @@
   .social-details {
     display: flex;
     flex-direction: column;
-    margin: 25px 0;
   }
-  .social-details a {
-    margin-top: 15px;
+  .social-details div.flex {
+    @apply mb-2;
   }
 
   .social-details a:hover,
