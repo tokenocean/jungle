@@ -14,7 +14,7 @@ services:
       - hbp
       - redis
     container_name: lapp
-    image: asoltys/lnft-server
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:staging
     restart: on-failure
     command: ["pnpm", "dev"]
     environment:
@@ -85,7 +85,7 @@ services:
       - ./metadata:/hasura-metadata
     environment:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
@@ -113,7 +113,7 @@ services:
       STORAGE_ENABLE: "false"
       MAX_REQUESTS: 10000
       LOST_PASSWORD_ENABLE: "true"
-      EMAILS_ENABLE: "false"
+      EMAILS_ENABLE: "true"
       SMTP_HOST: "${SMTP_HOST}"
       SMTP_PORT: "${SMTP_PORT}"
       SMTP_USER: "${SMTP_USER}"
