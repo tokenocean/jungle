@@ -11,7 +11,7 @@
     faEnvelope,
     faLink,
     faMapMarkerAlt,
-    faDroplet,
+    faWallet,
   } from "@fortawesome/free-solid-svg-icons";
   import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
   import { page } from "$app/stores";
@@ -69,7 +69,6 @@
 
   let qr, showQr;
   let toggleQr = () => {
-    copy(subject.address);
     showQr = !showQr;
   };
 
@@ -132,69 +131,69 @@
                 Tip</button
               >
             </div>
-            {#if subject.bio}
-              <p class="my-4">{subject.bio}</p>
-            {/if}
-            <div class="social-details">
-              {#if subject.instagram}
-                <a href={`https://instagram.com/${subject.instagram}`}>
-                  <div class="flex">
-                    <div class="my-auto">
-                      <Fa icon={faInstagram} />
-                    </div>
-                    <div><span>@{subject.instagram}</span></div>
-                  </div>
-                </a>
-              {/if}
-              {#if subject.twitter}
-                <a href={`https://twitter.com/${subject.twitter}`}>
-                  <div class="flex">
-                    <div class="my-auto">
-                      <Fa icon={faTwitter} />
-                    </div>
-                    <div><span>@{subject.twitter}</span></div>
-                  </div>
-                </a>
-              {/if}
-              {#if subject.email}
-                <a href={`mailto:${subject.email}`}>
-                  <div class="flex">
-                    <div class="my-auto">
-                      <Fa icon={faEnvelope} />
-                    </div>
-                    <div><span>{subject.email}</span></div>
-                  </div>
-                </a>
-              {/if}
-              {#if subject.website}
-                <a href={`https://${subject.website}`}>
-                  <div class="flex">
-                    <div class="my-auto">
-                      <Fa icon={faLink} />
-                    </div>
-                    <div><span>{subject.website}</span></div>
-                  </div>
-                </a>
-              {/if}
-              {#if subject.location}
-                <div class="flex">
-                  <div class="my-auto">
-                    <Fa icon={faMapMarkerAlt} />
-                  </div>
-                  <div><span>{subject.location}</span></div>
-                </div>
-              {/if}
-              <div class="flex cursor-pointer">
-                <div class="my-auto">
-                  <Fa icon={faDroplet} />
-                </div>
-                <div on:click={toggleQr} class="truncate">
-                  <span>{subject.address}</span>
-                </div>
-              </div>
-            </div>
           {/if}
         {/if}
+        {#if subject.bio}
+          <p class="my-4">{subject.bio}</p>
+        {/if}
+        <div class="social-details">
+          {#if subject.instagram}
+            <a href={`https://instagram.com/${subject.instagram}`}>
+              <div class="flex">
+                <div class="my-auto">
+                  <Fa icon={faInstagram} />
+                </div>
+                <div><span>@{subject.instagram}</span></div>
+              </div>
+            </a>
+          {/if}
+          {#if subject.twitter}
+            <a href={`https://twitter.com/${subject.twitter}`}>
+              <div class="flex">
+                <div class="my-auto">
+                  <Fa icon={faTwitter} />
+                </div>
+                <div><span>@{subject.twitter}</span></div>
+              </div>
+            </a>
+          {/if}
+          {#if subject.email}
+            <a href={`mailto:${subject.email}`}>
+              <div class="flex">
+                <div class="my-auto">
+                  <Fa icon={faEnvelope} />
+                </div>
+                <div><span>{subject.email}</span></div>
+              </div>
+            </a>
+          {/if}
+          {#if subject.website}
+            <a href={`https://${subject.website}`}>
+              <div class="flex">
+                <div class="my-auto">
+                  <Fa icon={faLink} />
+                </div>
+                <div><span>{subject.website}</span></div>
+              </div>
+            </a>
+          {/if}
+          {#if subject.location}
+            <div class="flex">
+              <div class="my-auto">
+                <Fa icon={faMapMarkerAlt} />
+              </div>
+              <div><span>{subject.location}</span></div>
+            </div>
+          {/if}
+          <div class="flex cursor-pointer">
+            <div class="my-auto">
+              <Fa icon={faWallet} />
+            </div>
+            <div on:click={toggleQr} class="truncate">
+              <span>{subject.address}</span>
+            </div>
+          </div>
+        </div>
         {#if showQr}
           <div
             class="w-full cursor-pointer font-semibold text-xs text-center"
