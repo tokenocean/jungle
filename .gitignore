@@ -24,6 +24,7 @@ hasura/app/proofs.json
 hasura/app/.pnpm-store
 hasura/redis
 hasura/liquidmainnet
+hasura/caddy
 cypress/integration/1-getting-started
 cypress/integration/2-advanced-examples
 **/.pnpm-debug.log
