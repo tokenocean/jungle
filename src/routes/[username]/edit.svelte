@@ -156,14 +156,6 @@
             <label for="bio">Bio</label>
             <textarea placeholder="" bind:value={form.bio} />
           </div>
-          <div class="flex flex-col mb-4">
-            <label for="prompt_sign">Request transactions signing</label>
-            <input
-              type="checkbox"
-              id="prompt_sign"
-              bind:checked={form.prompt_sign}
-            />
-          </div>
           <div class="flex mt-8">
             <button on:click|preventDefault={submit} class="primary-btn "
               >Save details</button
