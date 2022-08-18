@@ -195,17 +195,17 @@
             </div>
           {/if}
         {/if}
-              {#if showQr}
-                <div
-                  class="w-full cursor-pointer font-semibold text-xs text-center"
-                  on:click={() => copy(subject.address)}
-                >
-                  <img src={qr} class="w-64 mx-auto" alt="QR Code" />
-                  <div>
-                    {subject.address}
-                  </div>
-                </div>
-              {/if}
+        {#if showQr}
+          <div
+            class="w-full cursor-pointer font-semibold text-xs text-center"
+            on:click={() => copy(subject.address)}
+          >
+            <img src={qr} class="w-64 mx-auto" alt="QR Code" />
+            <div>
+              {subject.address}
+            </div>
+          </div>
+        {/if}
       </div>
 
       <div class="w-full xl:w-2/3">
