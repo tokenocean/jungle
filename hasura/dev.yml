@@ -127,7 +127,7 @@ services:
         ipv4_address: 172.18.0.15
   ipfs:
     container_name: ipfs
-    image: ipfs/go-ipfs
+    image: ipfs/go-ipfs:v0.14.0
     ports:
       - 8081:8080
       - 4001:4001

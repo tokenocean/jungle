@@ -107,7 +107,7 @@ services:
       - ./custom:/app/custom
   ipfs:
     container_name: ipfs
-    image: ipfs/go-ipfs
+    image: ipfs/go-ipfs:v0.14.0
     ports:
       - 8081:8080
       - 4001:4001
@@ -116,7 +116,7 @@ services:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
   liquid:
-    image: ghcr.io/vulpemventures/elements:0.18.1.12
+    image: ghcr.io/vulpemventures/elements:0.21.0.2
     container_name: liquid
     ports:
       - ${LIQUID_NODE_PORT}:18884
