@@ -17,7 +17,7 @@
     "date-fns": "^2.28.0",
     "ecpair": "^2.0.1",
     "ejs": "^3.1.8",
-    "email-templates": "^v10.0.1",
+    "email-templates": "^8.1.0",
     "fastify": "^3.29.0",
     "fastify-caching": "^6.3.0",
     "fastify-http-proxy": "^4.4.0",
