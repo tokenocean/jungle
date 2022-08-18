@@ -43,7 +43,7 @@
   <div class="full-width flex bg-white p-4 mx-auto">
     <div class="mx-auto">
       {#each pages as _, i}
-        <a href={`/wallet/${asset}/${i + 1}`}>
+        <a href={`/wallet/${a}/${i + 1}`}>
           <button
             class="rounded-full w-12 h-12"
             class:font-bold={i + 1 === page}>{i + 1}</button
