@@ -131,7 +131,7 @@ services:
     volumes:
       - ./redis:/data
   liquid:
-    image: ghcr.io/vulpemventures/elements
+    image: ghcr.io/vulpemventures/elements:0.21.0.2
     container_name: liquid
     volumes:
       - ./liquidmainnet:/home/elements/.elements
