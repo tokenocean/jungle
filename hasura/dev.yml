@@ -12,6 +12,7 @@ services:
   lapp:
     depends_on:
       - hbp
+      - redis
     container_name: lapp
     image: asoltys/lnft-server
     restart: on-failure
@@ -108,7 +109,7 @@ services:
       JWT_ALGORITHM: "${JWT_ALGORITHM}"
       JWT_KEY: "${JWT_KEY}"
       AUTO_MIGRATE: "true"
-      AUTO_ACTIVATE_NEW_USERS: "false"
+      AUTO_ACTIVATE_NEW_USERS: "true"
       STORAGE_ENABLE: "false"
       MAX_REQUESTS: 10000
       LOST_PASSWORD_ENABLE: "true"

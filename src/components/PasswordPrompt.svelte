@@ -2,7 +2,7 @@
 
 <script>
   import { tick } from "svelte";
-  import { prompt, password as pw, user, token } from "$lib/store";
+  import { prompt, password as pw, user, username, token } from "$lib/store";
   import { post } from "$lib/api";
   import { err, dev } from "$lib/utils";
   import Fa from "svelte-fa";
@@ -24,10 +24,10 @@
       let email = $user.username;
       let res = await post("/auth/login", { email, password }, fetch).json();
 
+      $username = res.user.username;
       $pw = password;
+
       $token = res.jwt_token;
-      window.sessionStorage.setItem("password", password);
-      window.sessionStorage.setItem("username", res.user.username);
       $prompt = undefined;
     } catch (e) {
       err(e);

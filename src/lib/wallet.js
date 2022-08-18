@@ -553,7 +553,6 @@ export const releaseToSelf = async (artwork) => {
 
 export const pay = async (artwork, to, amount) => {
   fee.set(100);
-  console.log("AMOUNT", amount)
   if (!amount || amount <= 0) throw new Error("invalid amount");
   let asset = artwork ? artwork.asset : btc;
 
@@ -689,7 +688,7 @@ export const broadcast = async (disableRetries = false) => {
 
   if (disableRetries) middlewares = [];
 
-  return electrs.url("/tx").middlewares(middlewares).body(hex).post().text();
+  return api().url("/broadcast").post({ hex }).json();
 };
 
 export const signAndBroadcast = async () => {
@@ -849,8 +848,6 @@ export const getInputs = async () => {
     .url(`/address/${singlesig().address}/utxo`)
     .get()
     .json();
-
-  console.log("UTXOS", utxos);
 
   let txns = [];
   let a = utxos.filter((o) => o.asset === btc && o.value > DUST);

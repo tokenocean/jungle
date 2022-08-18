@@ -52,7 +52,7 @@
           case "L-BTC":
             where.asking_asset = { _eq: btc };
             break;
-          case "USDT":
+          case "L-USDT":
             where.asking_asset = { _eq: usd };
             break;
           case "L-CAD":

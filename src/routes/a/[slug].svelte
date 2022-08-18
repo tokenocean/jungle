@@ -16,7 +16,11 @@
         status: 404,
       };
 
-    await post("/artworks/held", { id: artwork.id }, fetch).res();
+    setTimeout(
+      () => post("/artworks/held", { id: artwork.id }, fetch).res().catch(console.log),
+      5000
+    );
+
     if (!browser) {
       try {
         await post("/artworks/viewed", { id: artwork.id }, fetch).res();

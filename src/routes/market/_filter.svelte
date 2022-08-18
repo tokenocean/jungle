@@ -5,7 +5,7 @@
   import { filterCriteria as fc } from "$lib/store";
   import { btc, usd, cad } from "$lib/utils";
 
-  const currencies = ["L-BTC", "USDT", "L-CAD"];
+  const currencies = ["L-BTC", "L-USDT", "L-CAD"];
 
   export let showFilters;
 </script>

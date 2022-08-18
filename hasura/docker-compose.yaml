@@ -12,6 +12,8 @@ services:
   lapp:
     depends_on:
       - hbp
+      - redis
+      - liquid
     container_name: lapp
     image:  asoltys/lnft-server
     restart: on-failure
@@ -39,6 +41,11 @@ services:
       SMTP_PORT: "${SMTP_PORT}"
       SMTP_SENDER: "${SMTP_SENDER}"
       SMTP_USER: "${SMTP_USER}"
+      RPCHOST: "${RPCHOST}"
+      RPCPORT: "${RPCPORT}"
+      RPCUSER: "${RPCUSER}"
+      RPCPASS: "${RPCPASS}"
+      RPCWALLET: "${RPCWALLET}"
     volumes:
       - ./app:/app
       - ./custom:/opt/src/hasura/app/custom

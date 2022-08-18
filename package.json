@@ -14,12 +14,12 @@
         "@asoltys/vite-plugin-stream-shim": "^1.0.5",
         "@fortawesome/free-brands-svg-icons": "^5.15.4",
         "@fortawesome/free-regular-svg-icons": "^5.15.4",
-        "@fortawesome/free-solid-svg-icons": "^5.15.4",
+        "@fortawesome/free-solid-svg-icons": "6",
         "@noble/secp256k1": "1.6.0",
         "@popperjs/core": "~2.11.5",
         "@sveltejs/adapter-node": "next",
-        "@sveltejs/kit": "next",
-        "autoprefixer": "^10.4.8",
+        "@sveltejs/kit": "1.0.0-next.405",
+        "autoprefixer": "^10.4.7",
         "bip32": "^2.0.6",
         "bip39": "^3.0.4",
         "browserify-cipher": "^1.0.1",
@@ -46,7 +46,7 @@
         "prettier": "^2.7.1",
         "prettier-plugin-svelte": "^2.7.0",
         "qrcode": "^1.5.1",
-        "rollup": "^2.77.2",
+        "rollup": "^2.77.1",
         "simple-svelte-autocomplete": "^2.4.0",
         "slip77": "^0.1.1",
         "svelte": "^3.49.0",
@@ -62,10 +62,5 @@
         "wretch": "^1.7.10",
         "wretch-middlewares": "^0.1.13"
     },
-    "type": "module",
-    "dependencies": {
-        "i": "^0.3.7",
-        "pnpm": "^7.9.0",
-        "yarn": "^1.22.19"
-    }
+    "type": "module"
 }

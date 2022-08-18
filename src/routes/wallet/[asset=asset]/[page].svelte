@@ -69,8 +69,6 @@
 
       $txCount = count;
 
-      console.log("COUNT", count)
-
       $transactions = {
         ...$transactions,
         [page]: await api()
