@@ -23,7 +23,7 @@
     artwork &&
     (thumb
       ? `/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`
-      : cid && `https://${cid}.ipfs.nftstorage.link/`);
+      : `/api/ipfs/${artwork.filename}`);
 
   $: cover = !showDetails;
   $: contain = showDetails;

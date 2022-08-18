@@ -4,7 +4,7 @@ specifiers:
   '@asoltys/vite-plugin-stream-shim': ^1.0.5
   '@fortawesome/free-brands-svg-icons': ^5.15.4
   '@fortawesome/free-regular-svg-icons': ^5.15.4
-  '@fortawesome/free-solid-svg-icons': ^5.15.4
+  '@fortawesome/free-solid-svg-icons': '6'
   '@noble/secp256k1': 1.6.0
   '@popperjs/core': ~2.11.5
   '@sveltejs/adapter-node': next
@@ -56,7 +56,7 @@ devDependencies:
   '@asoltys/vite-plugin-stream-shim': 1.0.5
   '@fortawesome/free-brands-svg-icons': 5.15.4
   '@fortawesome/free-regular-svg-icons': 5.15.4
-  '@fortawesome/free-solid-svg-icons': 5.15.4
+  '@fortawesome/free-solid-svg-icons': 6.1.2
   '@noble/secp256k1': 1.6.0
   '@popperjs/core': 2.11.5
   '@sveltejs/adapter-node': 1.0.0-next.86
@@ -166,6 +166,12 @@ packages:
     requiresBuild: true
     dev: true
 
+  /@fortawesome/fontawesome-common-types/6.1.2:
+    resolution: {integrity: sha512-wBaAPGz1Awxg05e0PBRkDRuTsy4B3dpBm+zreTTyd9TH4uUM27cAL4xWyWR0rLJCrRwzVsQ4hF3FvM6rqydKPA==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dev: true
+
   /@fortawesome/free-brands-svg-icons/5.15.4:
     resolution: {integrity: sha512-f1witbwycL9cTENJegcmcZRYyawAFbm8+c6IirLmwbbpqz46wyjbQYLuxOc7weXFXfB7QR8/Vd2u5R3q6JYD9g==}
     engines: {node: '>=6'}
@@ -182,12 +188,12 @@ packages:
       '@fortawesome/fontawesome-common-types': 0.2.36
     dev: true
 
-  /@fortawesome/free-solid-svg-icons/5.15.4:
-    resolution: {integrity: sha512-JLmQfz6tdtwxoihXLg6lT78BorrFyCf59SAwBM6qV/0zXyVeDygJVb3fk+j5Qat+Yvcxp1buLTY5iDh1ZSAQ8w==}
+  /@fortawesome/free-solid-svg-icons/6.1.2:
+    resolution: {integrity: sha512-lTgZz+cMpzjkHmCwOG3E1ilUZrnINYdqMmrkv30EC3XbRsGlbIOL8H9LaNp5SV4g0pNJDfQ4EdTWWaMvdwyLiQ==}
     engines: {node: '>=6'}
     requiresBuild: true
     dependencies:
-      '@fortawesome/fontawesome-common-types': 0.2.36
+      '@fortawesome/fontawesome-common-types': 6.1.2
     dev: true
 
   /@noble/secp256k1/1.6.0:
