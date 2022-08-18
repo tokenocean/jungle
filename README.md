@@ -61,41 +61,11 @@ The plan is to separate out any Raretoshi-specific features from the core platfo
     hasura metadata reload
     sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z
     docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z
+    docker exec -it liquid elements-cli createwallet coinos
+    docker exec -it liquid elements-cli rescanblockchain
     docker restart lapp
     cd ..
     pnpm dev   # site is available at http://localhost:3000/
-
-### Setup pre-commit git hooks
-
-We have a pre-commit git hook for running prettier on all files to keep the formatting consistent.
-
-`git config core.hooksPath "./git_hooks"` - This will set the git config path to use this directory for hooks.
-
-`chmod +x ./git_hooks/pre-commit` - This will give the hook the necessary permissions to run.
-
-## Setup local development with cloud tools - VS CodeSpaces https://vscode.dev
-
-     npm i -g pnpm
-     pnpm install
-     curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
-     cd hasura
-     cp .env.sample .env
-     docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
-     docker-compose up -d
-     hasura migrate apply
-     hasura metadata apply
-     hasura seeds apply
-     hasura metadata reload
-     sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z
-     docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z
-     docker restart lapp
-     cd ..
-     pnpm dev   # site is available at http://localhost:3000/
-     chmod +x mine.sh
+    chmod +x mine.sh
     ./mine.sh   # this script will run continually to mine regtest blocks, you may want to run it in a separate terminal window or tab
-
-## Fund a wallet with regtest coins
-
-Get a deposit address from the wallet page or users table in the db and send an amount with this command
-
-    docker exec -it liquid elements-cli -datadir=/home/elements/.elements sendtoaddress <address> <amount>
+    docker exec -it liquid elements-cli -datadir=/home/elements/.elements sendtoaddress <address> 1   # get <address> from http://localhost:3000/wallet
