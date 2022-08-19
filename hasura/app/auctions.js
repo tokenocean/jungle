@@ -62,16 +62,21 @@ let checkAuctions = async () => {
       } catch (e) {
         console.log("couldn't release to bidder,", e.message);
 
-        await q(cancelBids, {
-          artwork_id: artwork.id,
-          start: artwork.auction_start,
-          end: artwork.auction_end,
-        });
+        try {
+          await q(cancelBids, {
+            artwork_id: artwork.id,
+            start: artwork.auction_start,
+            end: artwork.auction_end,
+          });
+        } catch (e) {
+          console.log("problem cancelling bids", e);
+        }
 
         if (artwork.has_royalty) continue;
 
+        let psbt;
         try {
-          let psbt = await sign(artwork.auction_release_tx);
+          psbt = await sign(artwork.auction_release_tx);
           await broadcast(psbt);
 
           console.log("released to current owner");
@@ -86,7 +91,7 @@ let checkAuctions = async () => {
             type: "return",
           });
         } catch (e) {
-          console.log("problem releasing", e);
+          console.log("problem releasing", psbt.toBase64(), e);
         }
       }
     }

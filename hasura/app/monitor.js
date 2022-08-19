@@ -1,6 +1,5 @@
 import { api, ipfs, q, electrs, registry } from "./api.js";
-import { formatISO, compareAsc, parseISO, subMinutes } from "date-fns";
-import reverse from "buffer-reverse";
+import { formatISO } from "date-fns";
 import fs from "fs";
 import { address as Address, Psbt, Transaction } from "liquidjs-lib";
 const sleep = (n) => new Promise((r) => setTimeout(r, n));
@@ -14,7 +13,7 @@ import {
 } from "./wallet.js";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
-import { getUser, wait } from "./utils.js";
+import { getUser, wait, isSpent } from "./utils.js";
 import redis from "./redis.js";
 
 import {
@@ -28,8 +27,6 @@ import {
   getAvatars,
   getContract,
   getCurrentUser,
-  getLastTransaction,
-  getLastTransactionsForAddress,
   getTransactions,
   getUserByAddress,
   getUnconfirmed,
@@ -73,38 +70,6 @@ app.post("/updateAvatars", async (req, res) => {
     console.log(e);
   }
 });
-
-const isSpent = async ({ ins }, artwork_id) => {
-  try {
-    let { transactions } = await q(getLastTransaction, { artwork_id });
-
-    if (
-      !transactions.length ||
-      compareAsc(
-        parseISO(transactions[0].created_at),
-        subMinutes(new Date(), 2)
-      ) > 0
-    )
-      return false;
-
-    for (let i = 0; i < ins.length; i++) {
-      let { index, hash } = ins[i];
-      let txid = reverse(hash).toString("hex");
-
-      let { spent } = await electrs
-        .url(`/tx/${txid}/outspend/${index}`)
-        .get()
-        .json();
-
-      if (spent) return true;
-    }
-
-    return false;
-  } catch (e) {
-    console.log("problem checking spent status", e);
-    return false;
-  }
-};
 
 const checkBids = async () => {
   try {

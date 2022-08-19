@@ -26,7 +26,7 @@
     await requirePassword();
     $psbt = await sign();
     try {
-      $psbt = await requestSignature(p);
+      $psbt = await requestSignature($psbt);
     } catch (e) {
       console.log(`Couldn't get server signature: ${e.message}`);
     }

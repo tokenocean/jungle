@@ -14,6 +14,7 @@ import {
   createTransaction,
   deleteTransaction,
   getArtwork,
+  getListing,
   getUserByAddress,
   getTransactionArtwork,
   getTransactionUser,
@@ -26,7 +27,7 @@ import {
 } from "./queries.js";
 
 const { SERVER_URL } = process.env;
-import { getUser, getUserById, kebab, sleep, wait } from "./utils.js";
+import { getUser, getUserById, kebab, sleep, wait, isSpent } from "./utils.js";
 import crypto from "crypto";
 import { app } from "./app.js";
 import { utxos } from "./utxos.js";
@@ -119,9 +120,23 @@ app.post("/transfer", auth, async (req, res) => {
 
 app.post("/held", async (req, res) => {
   try {
-    let { artworks_by_pk: artwork } = await q(getArtwork, { id: req.body.id });
+    let { id } = req.body;
+    let { artworks_by_pk: artwork } = await q(getArtwork, { id });
     let { asset, owner } = artwork;
     let { address, multisig } = owner;
+
+
+    if (artwork.list_price_tx) {
+      let p = Psbt.fromBase64(artwork.list_price_tx)
+      try {
+        if (await isSpent(p.data.globalMap.unsignedTx.tx, id)) {
+          let { activelistings } = await q(getListing, { id });
+          await q(cancelListing, { id: activelistings[0].id, artwork_id: id });
+        }
+      } catch (e) {
+        console.log("problem cancelling listing", e)
+      }
+    }
 
     let find = async (a) => {
       let txns = await utxos(a);
@@ -409,22 +424,22 @@ app.post("/comment", auth, async (req, res) => {
     let r = await q(createComment, { comment });
 
     try {
-    let result = await mail.send({
-      template: "comment-received",
-      locals: {
-        artistName: artist.full_name,
-        artworkName: title,
-        commenterName: user.full_name,
-        tipAmount: amount,
-        unit: bitcoin_unit === "sats" ? "L-sats" : "L-BTC",
-      },
-      message: {
-        to: artist.display_name,
-      },
-    });
-    } catch(e) {
-      console.log("failed to send comment notification", e)
-    } 
+      let result = await mail.send({
+        template: "comment-received",
+        locals: {
+          artistName: artist.full_name,
+          artworkName: title,
+          commenterName: user.full_name,
+          tipAmount: amount,
+          unit: bitcoin_unit === "sats" ? "L-sats" : "L-BTC",
+        },
+        message: {
+          to: artist.display_name,
+        },
+      });
+    } catch (e) {
+      console.log("failed to send comment notification", e);
+    }
 
     res.send({ ok: true });
   } catch (e) {
