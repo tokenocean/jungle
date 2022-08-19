@@ -1,4 +1,5 @@
 import fs from "fs";
+import { fileTypeFromStream } from "file-type";
 import { create } from "ipfs-http-client";
 import sharp from "sharp";
 import ffmpeg from "fluent-ffmpeg";
@@ -19,18 +20,23 @@ app.post("/upload", async function (req, res) {
     const s2 = new Clone(data.file);
     const s3 = new Clone(data.file);
     const s4 = new Clone(data.file);
+    const s5 = new Clone(data.file);
 
     const { cid } = await ipfs.add(s1);
     const name = cid.toString();
 
-    const [format, ext] = data.mimetype.split("/");
+    let [format, ext] = (await fileTypeFromStream(s5)).mime.split("/");
+    if (format.startsWith("app")) {
+      format = "video";
+      ext = "mp4";
+    }
+
     const path = `/export/${name}`;
     const thumb = `${path}.${ext}`;
 
     await new Promise((resolve) =>
       s2.pipe(fs.createWriteStream(path).on("finish", resolve))
     );
-
 
     const form = new FormData();
     form.append("file", s4, {
