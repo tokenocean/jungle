@@ -16,10 +16,11 @@
         status: 404,
       };
 
-    setTimeout(
-      () => post("/artworks/held", { id: artwork.id }, fetch).res().catch(console.log),
-      5000
-    );
+    try {
+      await post("/artworks/held", { id: artwork.id }, fetch).res();
+    } catch (e) {
+      console.log(e);
+    }
 
     if (!browser) {
       try {
@@ -355,24 +356,13 @@
           </div>
         </a>
 
-        {#if artwork.artist_id !== artwork.owner_id && artwork.held}
+        {#if artwork.artist_id !== artwork.owner_id}
           <a href={`/${artwork.owner.username}`}>
             <div class="flex mb-6 secondary-color">
               <Avatar user={artwork.owner} />
               <div class="ml-2">
                 <div>@{artwork.owner.username}</div>
                 <div class="text-xs text-gray-600">Owner</div>
-              </div>
-            </div>
-          </a>
-        {/if}
-        {#if !artwork.held}
-          <a href="https://bitcoin.org/bitcoin.pdf">
-            <div class="flex mb-6 secondary-color">
-              <Avatar src="/satoshi.jpg" />
-              <div class="ml-2">
-                <div>@anon</div>
-                <div class="text-xs text-gray-600">Token Held Externally</div>
               </div>
             </div>
           </a>

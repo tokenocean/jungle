@@ -136,7 +136,7 @@
         {#if subject.bio}
           <p class="my-4">{subject.bio}</p>
         {/if}
-        <div class="social-details">
+        <div class="social-details mt-4">
           {#if subject.instagram}
             <a href={`https://instagram.com/${subject.instagram}`}>
               <div class="flex">

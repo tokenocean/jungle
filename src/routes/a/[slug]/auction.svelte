@@ -1,4 +1,5 @@
 <script>
+  import { session } from "$app/stores";
   import { browser } from "$app/env";
   import Fa from "svelte-fa";
   import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -456,7 +457,7 @@
               </div>
             </div>
           </div>
-          {#if $user.id === artwork.artist_id}
+          {#if $session.user.id === artwork.artist_id}
             <div class="flex w-full sm:w-3/4 mb-4">
               <div class="relative mt-1 rounded-md w-2/3 mr-6">
                 <div class="auction-toggle">

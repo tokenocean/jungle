@@ -408,6 +408,7 @@ app.post("/comment", auth, async (req, res) => {
 
     let r = await q(createComment, { comment });
 
+    try {
     let result = await mail.send({
       template: "comment-received",
       locals: {
@@ -421,6 +422,9 @@ app.post("/comment", auth, async (req, res) => {
         to: artist.display_name,
       },
     });
+    } catch(e) {
+      console.log("failed to send comment notification", e)
+    } 
 
     res.send({ ok: true });
   } catch (e) {

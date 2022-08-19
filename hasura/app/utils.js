@@ -10,8 +10,10 @@ export const kebab = (str) =>
 
 export const sleep = (n) => new Promise((r) => setTimeout(r, n));
 
-export const wait = async (f) => {
-  while (!(await f())) await sleep(1000);
+export const wait = async (f, s = 300) => {
+  let i = 0;
+  while (!(await f()) && i < s) await sleep(1000) && i++;
+  if (i >= s) throw new Error("timeout");
   return f();
 };
 

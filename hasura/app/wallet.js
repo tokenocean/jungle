@@ -134,7 +134,7 @@ export const hex = async (txid) => {
         console.log(e)
         return false;
       }
-    });
+    }, 10);
   }
 
   await redis.set(txid, hex);
