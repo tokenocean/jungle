@@ -159,7 +159,6 @@
             </a>
           </div>
 
-          <!--
           {#if artwork.owner.id !== artwork.artist.id}
             <div class="text-sm">
               <a
@@ -186,7 +185,6 @@
               </a>
             </div>
           {/if}
-          -->
         </div>
       </div>
     </div>
