@@ -51,7 +51,7 @@
       percent = 1;
       preview = e.target.result;
       await tick();
-      if (type.includes("video")) {
+      if (!type || type.includes("video")) {
         preview = URL.createObjectURL(file);
       } else {
         url = preview;

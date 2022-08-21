@@ -255,6 +255,12 @@ export const cancelListing = `mutation ($id: uuid!, $artwork_id: uuid!) {
   }
 }`;
 
+export const getListing = `query($id: uuid!) {
+  activelistings(where: { artwork_id: { _eq: $id }}) {
+    id
+  } 
+}`;
+
 export const getUnconfirmed = `query {
   transactions(
     where: {
@@ -431,6 +437,7 @@ export const getArtwork = `query($id: uuid!) {
       address
       multisig
     }
+    list_price_tx
     owner_id
     asset
     title
@@ -565,6 +572,7 @@ export const getFinishedAuctions = `query($now: timestamptz!) {
     reserve_price
     asking_asset
     has_royalty
+    auction_start
     auction_end
     transferred_at
     list_price_tx

@@ -82,7 +82,7 @@ export const getBalance = async (asset) => {
 };
 
 export const getHex = async (txid) => {
-  return electrs.url(`/tx/${txid}/hex`).get().text();
+  return api().url(`/tx/${txid}/hex`).get().text();
 };
 
 export const getTx = async (txid) => {
@@ -1122,7 +1122,6 @@ export const sendToMultisig = async (artwork) => {
 export const requestSignature = async (psbt) => {
   let { base64 } = await api()
     .url("/sign")
-    .headers({ authorization: `Bearer ${get(token)}` })
     .post({ psbt: psbt.toBase64() })
     .json();
   return Psbt.fromBase64(base64);
