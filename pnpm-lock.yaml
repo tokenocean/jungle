@@ -97,7 +97,7 @@ devDependencies:
   svelte-popperjs: 1.2.11_@popperjs+core@2.11.5
   svelte-preprocess: 4.10.7_v444kk5dhsdnvw4yvv6hlm5y6a
   svelte-select: 4.4.7
-  tailwindcss: 3.1.6
+  tailwindcss: 3.1.6_postcss@8.4.14
   uuid: 8.3.2
   vite: 3.0.3
   vite-plugin-wasm-pack: 0.1.12
@@ -1284,8 +1284,8 @@ packages:
     dev: true
     optional: true
 
-  /esbuild-linux-s390x/0.14.54:
-    resolution: {integrity: sha512-zaHpW9dziAsi7lRcyV4r8dhfG1qBidQWUXweUjnw+lliChJqQr+6XD71K41oEIC3Mx1KStovEmlzm+MkGZHnHA==}
+  /esbuild-linux-s390x/0.14.50:
+    resolution: {integrity: sha512-tVjqcu8o0P9H4StwbIhL1sQYm5mWATlodKB6dpEZFkcyTI8kfIGWiWcrGmkNGH2i1kBUOsdlBafPxR3nzp3TDA==}
     engines: {node: '>=12'}
     cpu: [s390x]
     os: [linux]
@@ -2994,10 +2994,12 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /tailwindcss/3.1.6:
+  /tailwindcss/3.1.6_postcss@8.4.14:
     resolution: {integrity: sha512-7skAOY56erZAFQssT1xkpk+kWt2NrO45kORlxFPXUt3CiGsVPhH1smuH5XoDH6sGPXLyBv+zgCKA2HWBsgCytg==}
     engines: {node: '>=12.13.0'}
     hasBin: true
+    peerDependencies:
+      postcss: ^8.0.9
     dependencies:
       arg: 5.0.2
       chokidar: 3.5.3
