@@ -20,7 +20,7 @@
     class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
   />
 </div>
-<label for={id} class="cursor-pointer">{label}</label>
+<label for={id} class="cursor-pointer h-6 pt-1">{label}</label>
 
 <style>
   .toggle-checkbox:checked {
