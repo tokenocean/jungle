@@ -10,9 +10,9 @@ export async function GET({ locals: { q }, params }) {
       transactions_by_pk: { hash, psbt },
     } = await q(getTransaction, { id });
 
-    if (!psbt) {
-      let tx = await getTx(hash);
+    let tx = await getTx(hash);
 
+    if (!psbt) {
       let p = new Psbt();
       for (let i = 0; i < tx.ins.length; i++) {
         p.addInput(tx.ins[i]);
@@ -25,9 +25,7 @@ export async function GET({ locals: { q }, params }) {
       psbt = p.toBase64();
     }
 
-    return {
-      body: { psbt },
-    };
+    return { body: { psbt, hex: tx.toHex() } };
   } catch (e) {
     console.log(e);
     return {
