@@ -22,7 +22,7 @@
   import { upload } from "$lib/upload";
   import { updateUser } from "$queries/users";
   import { query } from "$lib/api";
-  import { user } from "$lib/store";
+  import { user, username } from "$lib/store";
 
   export let form;
 
@@ -83,6 +83,7 @@
       $user = { ...$user, ...rest };
 
       await query(updateUser, { user: rest, id });
+      $username = rest.username;
       info("Profile updated");
       goto(`/${rest.username}`);
     } catch (e) {
