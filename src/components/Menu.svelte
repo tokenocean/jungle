@@ -1,7 +1,7 @@
 <script>
   import branding from "$lib/branding";
   import { Avatar, Search } from "$comp";
-  import { unreadMessages } from "$lib/store";
+  import { unreadMessages, user } from "$lib/store";
   import { session } from "$app/stores";
 
   export let open = false;
@@ -25,9 +25,9 @@
       <a href="/admin"><button on:click={toggle}>Admin</button></a>
     {/if}
     <div class="relative">
-      <a href={`/${$session.user?.username}`}>
+      <a href={`/${$user?.username}`}>
         <button on:click={toggle} class="flex">
-          <Avatar user={$session.user} />
+          <Avatar user={$user} />
         </button>
       </a>
       {#if $unreadMessages.length > 0}
