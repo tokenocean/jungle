@@ -1,0 +1,34 @@
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'java'
+}
+
+group 'by.aliaksandr.zasinets'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+lombok {
+    version = '1.18.4'
+    sha256 = ""
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    testImplementation 'org.testng:testng:6.14.3'
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
+    implementation 'io.github.bonigarcia:webdrivermanager:3.8.1'
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+}
+
+test {
+    useTestNG()
+}
