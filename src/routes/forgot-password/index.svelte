@@ -66,6 +66,9 @@
       <p class="my-4">
         We'll send a recovery link to the email associated with your account.
       </p>
+      <p class="my-4">
+          <strong>You will have to re-import your wallet from its seed after resetting your password.</strong>
+      </p>
       <div class="flex flex-col mb-4">
         <label class="mb-2 font-medium text-gray-600" for="email">Email</label>
         <input placeholder="Email" bind:value={email} bind:this={ref} />
