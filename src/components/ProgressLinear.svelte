@@ -22,7 +22,7 @@
   class:z-50={app}
   class:top-0={app}
   class:left-0={app}
-  class="w-full h-1 brand-color overflow-hidden"
+  class="w-full h-1 brand-color overflow-hidden my-4"
   class:hidden={app && !initialized}
   transition:slide={{ duration: 300 }}
 >

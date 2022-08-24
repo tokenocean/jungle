@@ -37,7 +37,7 @@ export const filterCriteria = writable({
   fromFollowed: false,
   hasOpenAuction: false,
   filterByCurrency: false,
-  selectedCurrency: null,
+  selectedCurrency: "L-BTC",
 });
 export const full = writable();
 export const loading = writable();

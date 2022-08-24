@@ -132,6 +132,7 @@ services:
     entrypoint:
       - /build/electrs
     command:
+      - --jsonrpc-import
       - -vvvv
       - --parent-network
       - regtest

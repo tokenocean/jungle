@@ -84,23 +84,25 @@
         on:change={(e) => ($fc.hasOpenAuction = e.target.checked)}
       />
     </div>
-    <div>
-      <ToggleSwitch
-        id="currency"
-        label="Currency is"
-        checked={$fc.filterByCurrency}
-        on:change={(e) => ($fc.filterByCurrency = e.target.checked)}
-      />
-      <select
-        bind:value={$fc.selectedCurrency}
-        class="rounded-full appearance-none bg-gray-100"
-      >
-        {#each currencies as currency}
-          <option value={currency}>
-            {currency}
-          </option>
-        {/each}
-      </select>
+  </div>
+  <div class="flex flex-nowrap">
+    <ToggleSwitch
+       id="currency"
+       label="Listing currency"
+       checked={$fc.filterByCurrency}
+       on:change={(e) => ($fc.filterByCurrency = e.target.checked)}
+       />
+       <div class="my-auto ml-2">
+    <select
+      bind:value={$fc.selectedCurrency}
+      class="rounded-full appearance-none bg-gray-100"
+    >
+      {#each currencies as currency}
+        <option value={currency}>
+          {currency}
+        </option>
+      {/each}
+    </select>
     </div>
   </div>
 </div>

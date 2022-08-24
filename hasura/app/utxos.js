@@ -157,6 +157,7 @@ export const utxos = async (address) => {
   } catch (e) {
     console.log(e);
     delete locked[address];
+    return [];
   }
 };
 

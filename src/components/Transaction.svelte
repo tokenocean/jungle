@@ -1,4 +1,5 @@
 <script>
+  import { browser } from "$app/env";
   import { tick } from "svelte";
   import Fa from "svelte-fa";
   import {
@@ -38,6 +39,7 @@
   export let summary = false;
   export let psbt;
   export let tx;
+  export let hex;
 
   let ins,
     outs,
@@ -46,18 +48,19 @@
     recipients,
     showDetails,
     users,
-    loading,
     pp,
     uu;
 
   let labels = {};
   let retries = 0;
+  let loading = true;
+
+  if (hex) tx = Transaction.fromHex(hex);
   if (!tx) ({ tx } = psbt.data.globalMap.unsignedTx);
 
-  $: init(tx);
+  $: browser && init(tx);
   let init = async (tx) => {
     try {
-      if (loading) return setTimeout(() => init(p, u), 50);
       loading = true;
       if (!tx) return (loading = false);
 
