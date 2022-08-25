@@ -41,15 +41,7 @@
   export let tx;
   export let hex;
 
-  let ins,
-    outs,
-    totals,
-    senders,
-    recipients,
-    showDetails,
-    users,
-    pp,
-    uu;
+  let ins, outs, totals, senders, recipients, showDetails, users, pp, uu;
 
   let labels = {};
   let retries = 0;
@@ -89,10 +81,10 @@
           .get()
           .json();
 
-        let signed = 
-            psbt?.data.inputs[i] &&
-            (!!psbt?.data.inputs[i].partialSig ||
-             !!psbt?.data.inputs[i].finalScriptSig);
+        let signed =
+          psbt?.data.inputs[i] &&
+          (!!psbt?.data.inputs[i].partialSig ||
+            !!psbt?.data.inputs[i].finalScriptSig);
 
         let pSig = psbt?.data.inputs[i] && !!psbt?.data.inputs[i].partialSig;
 
@@ -100,7 +92,7 @@
           address,
           asset,
           signed,
-          pSig, 
+          pSig,
           index,
           spent,
           txid,

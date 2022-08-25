@@ -13,8 +13,8 @@ export async function GET({ request: { headers }, params }) {
     return {
       body: { assets, count, page },
       cache: {
-        maxage: 3600
-      } 
+        maxage: 3600,
+      },
     };
   } catch (e) {
     console.log(e);

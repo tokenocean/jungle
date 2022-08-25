@@ -27,7 +27,10 @@
   class={`${size} my-auto relative`}
   use:popperRef
   on:click={(e) => {
-    if (user && (!$currentuser || (user && $currentuser.username !== user.username))) {
+    if (
+      user &&
+      (!$currentuser || (user && $currentuser.username !== user.username))
+    ) {
       e.preventDefault();
       e.stopPropagation();
       showPopup = !showPopup;
@@ -36,7 +39,7 @@
 >
   <div
     class={`relative ${size} group rounded-full overflow-hidden shadow-inner text-center`}
-           class:cursor-pointer={user}
+    class:cursor-pointer={user}
   >
     {#if user || src}
       <img

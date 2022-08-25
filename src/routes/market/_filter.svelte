@@ -87,22 +87,22 @@
   </div>
   <div class="flex flex-nowrap">
     <ToggleSwitch
-       id="currency"
-       label="Listing currency"
-       checked={$fc.filterByCurrency}
-       on:change={(e) => ($fc.filterByCurrency = e.target.checked)}
-       />
-       <div class="my-auto ml-2">
-    <select
-      bind:value={$fc.selectedCurrency}
-      class="rounded-full appearance-none bg-gray-100"
-    >
-      {#each currencies as currency}
-        <option value={currency}>
-          {currency}
-        </option>
-      {/each}
-    </select>
+      id="currency"
+      label="Listing currency"
+      checked={$fc.filterByCurrency}
+      on:change={(e) => ($fc.filterByCurrency = e.target.checked)}
+    />
+    <div class="my-auto ml-2">
+      <select
+        bind:value={$fc.selectedCurrency}
+        class="rounded-full appearance-none bg-gray-100"
+      >
+        {#each currencies as currency}
+          <option value={currency}>
+            {currency}
+          </option>
+        {/each}
+      </select>
     </div>
   </div>
 </div>

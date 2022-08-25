@@ -2,12 +2,24 @@ table:
   schema: public
   name: comments
 object_relationships:
-  - name: edition
+  - name: artwork
     using:
-      foreign_key_constraint_on: edition_id
+      foreign_key_constraint_on: artwork_id
   - name: user
     using:
       foreign_key_constraint_on: user_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      set:
+        user_id: x-hasura-User-Id
+      columns:
+        - artwork_id
+        - comment
+      backend_only: false
 select_permissions:
   - role: anonymous
     permission:
@@ -35,3 +47,13 @@ update_permissions:
         - comment
       filter: {}
       check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        _or:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - artwork:
+              owner_id:
+                _eq: X-Hasura-User-Id

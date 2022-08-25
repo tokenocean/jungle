@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   ui:
-    image: junglelab/jungle:latest
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
     depends_on:
       - lapp
     container_name: ui
@@ -14,7 +14,7 @@ services:
       - hbp
       - redis
     container_name: lapp
-    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:staging
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: on-failure
     command: ["pnpm", "dev"]
     environment:

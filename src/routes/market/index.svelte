@@ -9,7 +9,7 @@
     results,
     show,
     sortCriteria as sc,
-    user
+    user,
   } from "$lib/store";
   import { info, err, goto, btc, usd, cad } from "$lib/utils";
   import { Gallery, Results, Search } from "$comp";
@@ -48,7 +48,7 @@
         where.auction_end = { _gt: new Date(), _is_null: false };
       }
       if ($fc.filterByCurrency) {
-        switch($fc.selectedCurrency) {
+        switch ($fc.selectedCurrency) {
           case "L-BTC":
             where.asking_asset = { _eq: btc };
             break;
