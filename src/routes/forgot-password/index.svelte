@@ -82,8 +82,6 @@
     }
   }
 </style>
-<<<<<<< HEAD
-=======
 
 <div class="form-container bg-lightblue" key={$page.url.pathname}>
   <form class="mb-6" on:submit|preventDefault={forgot} autocomplete="off">

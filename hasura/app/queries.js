@@ -604,7 +604,6 @@ export const updateMessages = `mutation($message: messages_set_input!, $from: uu
   update_messages(where: {from: {_eq: $from}, to: {_eq: $to}}, _set: $message) {
     affected_rows
   }
-<<<<<<< HEAD
 }`;
 
 export const getArtworks = `
