@@ -1,10 +1,10 @@
 const BRANDING = {
-  projectName: "JungleLab",
+  projectName: "JUNGLELABᵀᴹ",
 
   superUserName: "junglelab",
 
   urls: {
-    base: "junglelab",
+    base: "JUNGLELABᵀᴹ",
     www: "www.junglelab.io",
     protocol: "https://junglelab.io",
     external: {
@@ -18,8 +18,8 @@ const BRANDING = {
   },
 
   meta: {
-    title: "JungleLab",
-    keywords: "Bitcoin Liquid LNFT Video,Music,Art",
+    title: "JUNGLELABᵀᴹ",
+    keywords: "Bitcoin Liquid Lightning LNFT Event Tickets,Video,Music,Art",
     description:
       "Upload, collect, and transact rare digital assets on the Liquid Network",
     image: "https://junglelab.io/splash.png",
@@ -32,7 +32,7 @@ const BRANDING = {
     },
 
     artwork: (art) => ({
-      title: `JungleLab - ${art.title}`,
+      title: `JUNGLELABᵀᴹ - ${art.title}`,
       image: `/api/ipfs/${art.filename}`,
       url: `https://junglelab.io/a/${art.slug}`,
     }),
