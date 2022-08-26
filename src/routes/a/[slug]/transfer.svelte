@@ -35,11 +35,19 @@
     loading = true;
 
     try {
-      let user = users.find(u => u.address === address || u.multisig === address);
-      let { address: addr } = user;
-      if (artwork.held === "multisig") {
-        addr = user.multisig;
-      } 
+      let user = users.find(
+        (u) => u.address === address || u.multisig === address
+      );
+
+      let addr = address;
+
+      if (user) {
+        ({ address: addr } = user);
+
+        if (artwork.held === "multisig") {
+          addr = user.multisig;
+        }
+      }
 
       $psbt = await pay(artwork, addr, 1);
       await sign();
@@ -66,55 +74,55 @@
   };
 </script>
 
-  <div class="container mx-auto sm:justify-between mt-10 md:mt-20">
-    <h2 class="mb-4">Transfer Artwork</h2>
+<div class="container mx-auto sm:justify-between mt-10 md:mt-20">
+  <h2 class="mb-4">Transfer Artwork</h2>
 
-    {#if loading}
-      <ProgressLinear />
-    {:else}
-      <div class="w-full max-w-lg text-center my-8 mx-auto">
-        <AutoComplete
-          hideArrow={true}
-          placeholder="Username"
-          items={users.filter((a) => a.id !== $user.id)}
-          className="w-full"
-          inputClassName="huh text-center"
-          labelFieldName="username"
-          bind:selectedItem={recipient}
-        >
-          <div class="flex" slot="item" let:item let:label>
-            <Avatar class="my-auto" user={item} />
-            <div class="ml-1 my-auto">{item.username}</div>
-          </div>
-        </AutoComplete>
-        <p class="font-bold mt-10 mb-7">OR</p>
+  {#if loading}
+    <ProgressLinear />
+  {:else}
+    <div class="w-full max-w-lg text-center my-8 mx-auto">
+      <AutoComplete
+        hideArrow={true}
+        placeholder="Username"
+        items={users.filter((a) => a.id !== $user.id)}
+        className="w-full"
+        inputClassName="usernameInput text-center"
+        labelFieldName="username"
+        bind:selectedItem={recipient}
+      >
+        <div class="flex" slot="item" let:item let:label>
+          <Avatar class="my-auto" user={item} disablePopup={true} />
+          <div class="ml-1 my-auto">{item.username}</div>
+        </div>
+      </AutoComplete>
+      <p class="font-bold mt-10 mb-7">OR</p>
 
-        <input
-          type="text"
-          class="w-full rounded-lg p-3 text-center"
-          placeholder="Address"
-          value={recipient ? "" : address}
-          on:keyup={(e) => {
-            recipient = undefined;
-            address = e.target.value;
-          }}
-        />
-        <a
-          href="/"
-          on:click|preventDefault={send}
-          class:disabled
-          class="block mt-8 text-center text-sm secondary-btn w-full">Send</a
-        >
-      </div>
-    {/if}
-  </div>
+      <input
+        type="text"
+        class="w-full rounded-lg p-3 text-center"
+        placeholder="Address"
+        value={recipient ? "" : address}
+        on:keyup={(e) => {
+          recipient = undefined;
+          address = e.target.value;
+        }}
+      />
+      <a
+        href="/"
+        on:click|preventDefault={send}
+        class:disabled
+        class="block mt-8 text-center text-sm secondary-btn w-full">Send</a
+      >
+    </div>
+  {/if}
+</div>
 
 <style>
   .disabled {
     @apply text-gray-400 border-gray-400;
   }
 
-  :global(.huh) {
+  :global(.usernameInput) {
     @apply rounded-lg px-8 py-4 text-black w-full !important;
   }
 </style>
