@@ -95,6 +95,7 @@
       pubkey,
       wallet_initialized,
       has_samples,
+      user: u,
       ...rest
     } = form;
 
