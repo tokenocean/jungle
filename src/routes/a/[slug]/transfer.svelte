@@ -38,9 +38,15 @@
       let user = users.find(
         (u) => u.address === address || u.multisig === address
       );
-      let { address: addr } = user;
-      if (artwork.held === "multisig") {
-        addr = user.multisig;
+
+      let addr = address;
+
+      if (user) {
+        ({ address: addr } = user);
+
+        if (artwork.held === "multisig") {
+          addr = user.multisig;
+        }
       }
 
       $psbt = await pay(artwork, addr, 1);
@@ -68,6 +74,7 @@
   };
 </script>
 
+{#if $user}
 <div class="container mx-auto sm:justify-between mt-10 md:mt-20">
   <h2 class="mb-4">Transfer Artwork</h2>
 
@@ -80,12 +87,12 @@
         placeholder="Username"
         items={users.filter((a) => a.id !== $user.id)}
         className="w-full"
-        inputClassName="huh text-center"
+        inputClassName="usernameInput text-center"
         labelFieldName="username"
         bind:selectedItem={recipient}
       >
         <div class="flex" slot="item" let:item let:label>
-          <Avatar class="my-auto" user={item} />
+          <Avatar class="my-auto" user={item} disablePopup={true} />
           <div class="ml-1 my-auto">{item.username}</div>
         </div>
       </AutoComplete>
@@ -116,7 +123,7 @@
     @apply text-gray-400 border-gray-400;
   }
 
-  :global(.huh) {
+  :global(.usernameInput) {
     @apply rounded-lg px-8 py-4 text-black w-full !important;
   }
 </style>

@@ -59,7 +59,7 @@ export const utxos = async (address) => {
       ...curr.filter((tx) => tx.status.confirmed),
     ].map((tx) => tx.txid);
 
-    while (curr.length >= 25 && !txns.includes(last[0])) {
+    while (curr.length >= 25 && txns.find((tx) => !last.includes(tx.txid))) {
       let prev = txns.at(-1);
       curr = await electrs
         .url(`/address/${address}/txs/chain/${prev}`)
@@ -68,14 +68,9 @@ export const utxos = async (address) => {
       txns = [...txns, ...curr.map((tx) => tx.txid)];
     }
 
-    txns.reverse();
+    txns = txns.filter((tx) => !last.includes(tx.txid));
 
     while (txns.length) {
-      if (last.includes(txns[0])) {
-        txns.shift();
-        continue;
-      }
-
       let tx = Transaction.fromHex(await hex(txns[0]));
 
       let { ins, outs } = tx;
