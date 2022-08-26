@@ -9,6 +9,7 @@
   export let src = undefined;
   export let overlay = undefined;
   export let size = "small";
+  export let disablePopup = false;
 
   const [popperRef, popperContent] = createPopperActions({
     placement: "right",
@@ -27,7 +28,7 @@
   class={`${size} my-auto relative`}
   use:popperRef
   on:click={(e) => {
-    if (user && (!$currentuser || (user && $currentuser.username !== user.username))) {
+    if (user && (!$currentuser || (user && $currentuser.username !== user.username)) && !disablePopup) {
       e.preventDefault();
       e.stopPropagation();
       showPopup = !showPopup;
