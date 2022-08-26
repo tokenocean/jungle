@@ -144,19 +144,19 @@
 
       <div class="m-6">
         <div class="text-sm light-color">Balance</div>
-        <button
-          class="flex mt-3"
-          on:click={() =>
-            updateBitcoinUnit($bitcoinUnitLocal === "sats" ? "btc" : "sats")}
-          disabled={label(asset) !== "L-BTC"}
-        >
-          <span class="text-4xl text-white mr-3">
-            {balanceCalculated}
-          </span>
-          <span class="text-gray-400 mt-auto">
-            {labelCalculated}
-          </span>
-        </button>
+          <div
+             class:cursor-pointer={label(asset) === 'L-BTC'}
+            class="flex mt-3"
+            on:click={() =>
+              updateBitcoinUnit($bitcoinUnitLocal === "sats" ? "btc" : "sats")}
+          >
+            <span class="text-4xl text-white mr-3">
+              {balanceCalculated}
+            </span>
+            <span class="text-gray-400 mt-auto">
+              {labelCalculated}
+            </span>
+          </div>
       </div>
       {#if parseFloat(pending) > 0}
         <div class="m-6">
