@@ -74,6 +74,7 @@
   };
 </script>
 
+{#if $user}
 <div class="container mx-auto sm:justify-between mt-10 md:mt-20">
   <h2 class="mb-4">Transfer Artwork</h2>
 
@@ -116,6 +117,7 @@
     </div>
   {/if}
 </div>
+{/if}
 
 <style>
   .disabled {
