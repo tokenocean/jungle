@@ -68,7 +68,7 @@ export const utxos = async (address) => {
       txns = [...txns, ...curr.map((tx) => tx.txid)];
     }
 
-    txns = txns.filter((tx) => !last.includes(tx.txid));
+    txns = txns.filter((txid) => !last.includes(txid));
 
     while (txns.length) {
       let tx = Transaction.fromHex(await hex(txns[0]));
