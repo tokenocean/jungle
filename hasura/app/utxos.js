@@ -59,7 +59,8 @@ export const utxos = async (address) => {
       ...curr.filter((tx) => tx.status.confirmed),
     ].map((tx) => tx.txid);
 
-    while (curr.length >= 25 && txns.find((tx) => !last.includes(tx.txid))) {
+    let i= 0;
+    while (curr.length >= 25 && curr.find((tx) => !last.includes(tx.txid))) {
       let prev = txns.at(-1);
       curr = await electrs
         .url(`/address/${address}/txs/chain/${prev}`)
