@@ -117,6 +117,7 @@
     </div>
   {/if}
 </div>
+{/if}
 
 <style>
   .disabled {
