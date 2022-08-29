@@ -62,7 +62,7 @@ app.post("/register", async (req, res) => {
   try {
     let { users } = await q(getUserByUsername, { username });
     if (users.length) {
-      throw new Error("Username taken");
+        throw new Error("Username taken");
     }
 
     let response = await hbp
@@ -115,10 +115,8 @@ app.get("/activate", async (req, res) => {
 app.post("/change-password", async (req, res) => {
   const { new_password, ticket } = req.body;
   let { auth_accounts } = await q(getUserByTicket, { ticket });
-  let {
-    user: { id },
-  } = auth_accounts[0];
-  await q(updateUser, { id, user: { wallet_initialized: false } });
+  let { user: { id }} = auth_accounts[0];
+  await q(updateUser, { id, user: { wallet_initialized: false }});
 
   res.send(
     await hbp

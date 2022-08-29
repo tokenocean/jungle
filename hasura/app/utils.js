@@ -1,10 +1,6 @@
 import { electrs, q } from "./api.js";
 import { compareAsc, parseISO, subMinutes } from "date-fns";
-import {
-  getCurrentUser,
-  getLastTransaction,
-  getUser as getUserQuery,
-} from "./queries.js";
+import { getCurrentUser, getLastTransaction, getUser as getUserQuery } from "./queries.js";
 import reverse from "buffer-reverse";
 
 export const kebab = (str) =>

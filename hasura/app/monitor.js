@@ -81,7 +81,7 @@ const checkBids = async () => {
       await sleep(1000);
       let p = Psbt.fromBase64(tx.psbt);
       try {
-        if (await isSpent(p.data.globalMap.unsignedTx.tx, tx.edition_id))
+        if (await isSpent(p.data.globalMap.unsignedTx.tx, tx.artwork_id))
           await q(cancelBid, { id: tx.id });
       } catch (e) {
         // keep going
@@ -132,7 +132,7 @@ const checkTransactions = async () => {
 
       if (time) {
         let {
-          update_transactions_by_pk: { edition_id, type, bid },
+          update_transactions_by_pk: { artwork_id, type, bid },
         } = await q(setConfirmed, {
           id: tx.id,
         });
@@ -144,7 +144,7 @@ const checkTransactions = async () => {
           });
 
         if (type === "accept")
-          await q(setOwner, { id: edition_id, owner_id: bid.user_id });
+          await q(setOwner, { id: artwork_id, owner_id: bid.user_id });
       }
     }
   } catch (e) {

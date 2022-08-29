@@ -125,15 +125,16 @@ app.post("/held", async (req, res) => {
     let { asset, owner } = artwork;
     let { address, multisig } = owner;
 
+
     if (artwork.list_price_tx) {
-      let p = Psbt.fromBase64(artwork.list_price_tx);
+      let p = Psbt.fromBase64(artwork.list_price_tx)
       try {
         if (await isSpent(p.data.globalMap.unsignedTx.tx, id)) {
           let { activelistings } = await q(getListing, { id });
           await q(cancelListing, { id: activelistings[0].id, artwork_id: id });
         }
       } catch (e) {
-        console.log("problem cancelling listing", e);
+        console.log("problem cancelling listing", e)
       }
     }
 

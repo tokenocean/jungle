@@ -120,7 +120,7 @@ export const blocktime = async (txid) => {
   if (!txid) return;
   let { blocktime } = await lq.getRawTransaction(txid, true);
   return blocktime;
-};
+} 
 
 export const hex = async (txid) => {
   let hex = await redis.get(txid);
@@ -131,7 +131,7 @@ export const hex = async (txid) => {
         hex = await lq.getRawTransaction(txid);
         return true;
       } catch (e) {
-        console.log(e);
+        console.log(e)
         return false;
       }
     }, 10);
@@ -140,3 +140,4 @@ export const hex = async (txid) => {
   await redis.set(txid, hex);
   return hex;
 };
+

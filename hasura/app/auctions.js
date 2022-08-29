@@ -2,18 +2,22 @@ import { api, q } from "./api.js";
 import { formatISO, compareAsc, parseISO } from "date-fns";
 import { combine, release, sign, broadcast } from "./wallet.js";
 import { check } from "./signing.js";
-import { cancelBids, getFinishedAuctions, releaseToken } from "./queries.js";
+import {
+  cancelBids,
+  closeAuction,
+  getFinishedAuctions,
+  releaseToken,
+} from "./queries.js";
 
 let checkAuctions = async () => {
   try {
-    let { auctions } = await q(getFinishedAuctions, {
+    let { artworks } = await q(getFinishedAuctions, {
       now: formatISO(new Date()),
     });
 
-    for (let i = 0; i < auctions.length; i++) {
-      let auction = auctions[i];
-      let { edition } = auction;
-      let { bid } = edition;
+    for (let i = 0; i < artworks.length; i++) {
+      let artwork = artworks[i];
+      let { bid } = artwork;
 
       await q(closeAuction, {
         id: artwork.id,
@@ -29,13 +33,13 @@ let checkAuctions = async () => {
       try {
         if (
           !(bid && bid.psbt) ||
-          compareAsc(parseISO(bid.created_at), parseISO(auction.auction_end)) >
+          compareAsc(parseISO(bid.created_at), parseISO(artwork.auction_end)) >
             0 ||
-          bid.amount < auction.reserve
+          bid.amount < artwork.reserve_price
         )
           throw new Error("no bid");
 
-        let combined = combine(auction.psbt, bid.psbt);
+        let combined = combine(artwork.auction_tx, bid.psbt);
 
         await check(combined);
 
@@ -44,12 +48,12 @@ let checkAuctions = async () => {
         await broadcast(psbt);
 
         await q(releaseToken, {
-          id: edition.id,
+          id: artwork.id,
           owner_id: bid.user.id,
           amount: bid.amount,
           hash: psbt.extractTransaction().getId(),
           psbt: psbt.toBase64(),
-          asset: edition.asking_asset,
+          asset: artwork.asking_asset,
           bid_id: bid.id,
           type: "release",
         });
@@ -68,7 +72,7 @@ let checkAuctions = async () => {
           console.log("problem cancelling bids", e);
         }
 
-        if (edition.has_royalty) continue;
+        if (artwork.has_royalty) continue;
 
         let psbt;
         try {
