@@ -2,19 +2,19 @@ table:
   schema: public
   name: transactions
 object_relationships:
-  - name: bid
+  - name: artwork
     using:
-      foreign_key_constraint_on: bid_id
-  - name: edition
-    using:
-      foreign_key_constraint_on: edition_id
-  - name: editionById
+      foreign_key_constraint_on: artwork_id
+  - name: artworkById
     using:
       foreign_key_constraint_on:
         column: bid_id
         table:
           schema: public
-          name: editions
+          name: artworks
+  - name: bid
+    using:
+      foreign_key_constraint_on: bid_id
   - name: user
     using:
       manual_configuration:
