@@ -28,6 +28,7 @@
 >
   <div class="space-y-2">
     <button
+      class="!bg-primary"
       on:click={() => {
         showPopup = false;
         goto(`/${user.username}`);
@@ -36,6 +37,7 @@
       <Fa icon={faUserCircle} class="mx-2" /> Profile
     </button>
     <button
+      class="!bg-primary"
       on:click={() => {
         showPopup = false;
         if (!$currentuser) {
@@ -49,6 +51,7 @@
       <Fa icon={faEnvelopeOpen} class="mx-2" /> Message</button
     >
     <button
+      class="!bg-primary"
       on:click={() => {
         showPopup = false;
         if (!$currentuser) {
