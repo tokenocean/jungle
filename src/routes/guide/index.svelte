@@ -691,7 +691,7 @@
   }
 
   .contact a {
-    color: #3ba5ac;
+    color: #FF8B00;
   }
 
   @media only screen and (max-width: 1023px) {

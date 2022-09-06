@@ -641,7 +641,7 @@
 
 <style>
   :global(.description a) {
-    color: #3ba5ac;
+    color: #FF8B00;
   }
 
   .disabled {
@@ -751,7 +751,7 @@
     }
 
     .show-more {
-      color: #3ba5ac;
+      color: #FF8B00;
       font-weight: bold;
       text-align: right;
       margin-top: 10px;
