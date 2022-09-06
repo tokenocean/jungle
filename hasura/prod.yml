@@ -15,7 +15,7 @@ services:
     depends_on:
       - lapp
     container_name: ui
-    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi:staging
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi:prod
     restart: on-failure
     ports:
       - "3000:3000"
@@ -24,7 +24,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:staging
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:prod
     restart: on-failure
     environment:
       APP_URL: "${APP_URL}"
