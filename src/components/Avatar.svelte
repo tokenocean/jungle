@@ -43,11 +43,11 @@
       <img
         key={user && user.username}
         src={user
-        ? `/api/ipfs/${user.avatar_url}`
-        : src.startsWith("data") || src[0] === "/"
+          ? `/api/public/${user.avatar_url}`
+          : src.startsWith("data") || src[0] === "/"
           ? src
-          : `/api/ipfs/${src}`}
-            alt={user ? user.username : "lovely avatar"}
+          : `/api/public/${src}`}
+        alt={user ? user.username : "lovely avatar"}
         class="absolute w-full h-full object-cover object-center visible overflow-hidden"
       />
     {/if}
