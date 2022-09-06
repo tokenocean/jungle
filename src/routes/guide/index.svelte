@@ -1,4 +1,5 @@
 <script context="module">
+	import { asset } from './../../lib/store.js';
   export const prerender = true;
 </script>
 
@@ -40,7 +41,7 @@
           <li>
             <p>
               <a href="#what-to-expect-after-listing"
-                >WHAT TO EXPECT AFTER LISTING ARTWORK</a
+                >WHAT TO EXPECT AFTER LISTING ASSET</a
               >
             </p>
           </li>
@@ -290,17 +291,17 @@
           />
         </div>
         <div class="item" id="upload-artwork-and-mint-nft">
-          <h3>4. UPLOAD ARTWORK & MINT NFT</h3>
+          <h3>4. UPLOAD ASSET & MINT NFT</h3>
           <p>
             All new accounts in JungleLab are “Fan” accounts. With this type of
-            account you can bid on artwork and trade NTFs in the secondary
+            account you can bid on asset and trade NTFs in the secondary
             market, but you can’t upload or mint NFTs. These options are
             reserved for users with an artist account. Artists will get their
             accounts tagged as “Artists” during the onboarding process.
           </p>
           <p>
-            To upload their artwork, artists can go to their profile page and
-            select “Submit a new artwork.” This option is also available in the
+            To upload their asset, artists can go to their profile page and
+            select “Submit a new asset.” This option is also available in the
             “Market” page (https://junglelab.io/market). Current supported file
             formats are jpg, png, gif and mp4 up to a size limit of 400MB.
           </p>
@@ -334,15 +335,15 @@
           <ul style="list-style: disc; padding-left: 30px">
             <li>Title</li>
             <li>
-              This is a physical artwork (this just adds an icon to indicate
+              This is a physical asset (this just adds an icon to indicate
               that the NFT is associated with a physical item like a physical
-              copy of the artwork)
+              copy of the asset)
             </li>
             <li>Number of editions (1:1, multiple editions)</li>
             <li>
               Description (here you can add a description of your artwork, about
               yourself, or indicate that there is additional content associated
-              with the NFT such as a physical copy of the underlying artwork,
+              with the NFT such as a physical copy of the underlying asset,
               access to an event, etc.)
             </li>
             <li>
