@@ -23,7 +23,7 @@
   </nav>
   <div>
     <a href="/" sveltekit:prefetch>
-      <img src="/logo-default.svg" alt="logo" class="w-36 lg:w-48" /></a
+      <img src="/logo-default.svg" alt="logo" class="w-32 lg:w-32" /></a
     >
   </div>
   <a class="mobileSearch" href="/market">
