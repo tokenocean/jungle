@@ -23,8 +23,8 @@
   </nav>
   <div>
     <a href="/" sveltekit:prefetch>
-      <img src="/logo-default.svg" alt="logo" class="w-16 lg:w-16" /></a
-    >
+      <img src="/logo-default.svg" alt="logo" class="w-10 lg:w-16" />
+    </a>
   </div>
   <a class="mobileSearch" href="/market">
     <Fa icon={faSearch} />

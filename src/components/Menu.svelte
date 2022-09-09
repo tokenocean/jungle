@@ -82,8 +82,7 @@
     .menu {
       flex-direction: column;
       align-items: flex-start;
-      margin-top: 50px;
-      border-top: 1px solid gray;
+      margin-top: 64px;
       width: 100%;
     }
 
