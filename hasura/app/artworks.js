@@ -9,6 +9,7 @@ import { auth } from "./auth.js";
 import {
   acceptBid,
   cancelBid,
+  cancelListing,
   createArtwork,
   createComment,
   createTransaction,
