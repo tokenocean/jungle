@@ -51,7 +51,7 @@ export const utxos = async (address) => {
   try {
     locked[address] = true;
     let utxoSet = `${address}:utxos`;
-    let last = await redis.lRange(`${address}`, -100, -1);
+    let last = await redis.lRange(`${address}`, -50, -1);
 
     let curr = await electrs.url(`/address/${address}/txs`).get().json();
     let txns = [
@@ -69,6 +69,8 @@ export const utxos = async (address) => {
       txns = [...txns, ...curr.map((tx) => tx.txid)];
     }
 
+    await redis.lPop(address, last.length);
+    await redis.rPush(address, txns.slice(0, 50));
     txns = txns.filter((tx) => !last.includes(tx.txid));
 
     while (txns.length) {
@@ -116,14 +118,9 @@ export const utxos = async (address) => {
             await redis.sAdd(utxoSet, `${txid}:${j}`);
             await redis.set(`${txid}:${j}`, `${asset},${value}`);
 
-            if (!added[address]) {
-              added[address] = true;
-              redis.rPush(`${address}`, txid);
-            }
-
             if (!added[asset]) {
-              added[asset] = true;
-              redis.rPush(`${address}:${asset}`, txid);
+               added[asset] = true;
+               redis.rPush(`${address}:${asset}`, txid);
             }
           }
         } catch (e) {

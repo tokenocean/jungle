@@ -1,7 +1,7 @@
 import { mnemonicToSeedSync } from "bip39";
 import { fromSeed } from "bip32";
 import redis from "./redis.js";
-import { wait } from "./utils.js";
+import { sleep, wait } from "./utils.js";
 
 import {
   address as Address,
@@ -120,24 +120,19 @@ export const blocktime = async (txid) => {
   if (!txid) return;
   let { blocktime } = await lq.getRawTransaction(txid, true);
   return blocktime;
-} 
+};
 
 export const hex = async (txid) => {
   let hex = await redis.get(txid);
   if (!hex) {
-    await wait(async () => {
-      try {
-        // hex = await electrs.url(`/tx/${txid}/hex`).get().text();
-        hex = await lq.getRawTransaction(txid);
-        return true;
-      } catch (e) {
-        console.log(e)
-        return false;
-      }
-    }, 10);
+    try {
+      hex = await lq.getRawTransaction(txid);
+    } catch (e) {
+      sleep(2000);
+      hex = await lq.getRawTransaction(txid);
+    }
   }
 
   await redis.set(txid, hex);
   return hex;
 };
-
