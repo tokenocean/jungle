@@ -19,13 +19,13 @@
   import { requirePassword } from "$lib/auth";
   import {
     DUST,
+    createIssuance,
     sign,
     parseAsset,
     parseVal,
     keypair,
     getInputs,
     network,
-    signOver,
   } from "$lib/wallet";
   import reverse from "buffer-reverse";
   import { ArtworkMedia } from "$comp";
@@ -99,7 +99,9 @@
     title: "",
     description: "",
     filename: "",
-    max_editions: 1,
+    asset: "",
+    edition: 1,
+    editions: 1,
     tags: [],
   };
 
@@ -139,7 +141,8 @@
 
   let submit = async (e) => {
     e.preventDefault();
-
+    await requirePassword();
+    transactions = [];
     if (!artwork.title) return err("Please enter a title");
 
     if (!artwork.filename)
@@ -149,10 +152,27 @@
     loading = true;
 
     try {
-      let { slug } = await api
-        .url("/create")
+      [inputs, total] = await getInputs();
+
+      for ($edition = 1; $edition <= artwork.editions; $edition++) {
+        await issue();
+        await sleep(10);
+        await info(
+          `Signed issuance transaction ${$edition} of ${artwork.editions}`
+        );
+        tries = 0;
+      }
+
+      if (total < required)
+        throw { message: "Insufficient funds", required, btc, total };
+
+      let { issuance, slug } = await api
+        .url("/issue")
         .auth(`Bearer ${$token}`)
-        .post({ artwork })
+        .post({
+          artwork,
+          transactions,
+        })
         .json();
 
       goto(`/a/${slug}`);

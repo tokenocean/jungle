@@ -59,7 +59,7 @@ export const utxos = async (address) => {
       ...curr.filter((tx) => tx.status.confirmed),
     ].map((tx) => tx.txid);
 
-    let i= 0;
+    let i = 0;
     while (curr.length >= 25 && curr.find((tx) => !last.includes(tx.txid))) {
       let prev = txns.at(-1);
       curr = await electrs
@@ -70,7 +70,8 @@ export const utxos = async (address) => {
     }
 
     await redis.lPop(address, last.length);
-    await redis.rPush(address, txns.slice(0, 50));
+    if (txns.length) await redis.rPush(address, txns.slice(0, 50));
+
     txns = txns.filter((tx) => !last.includes(tx.txid));
 
     while (txns.length) {
@@ -119,8 +120,8 @@ export const utxos = async (address) => {
             await redis.set(`${txid}:${j}`, `${asset},${value}`);
 
             if (!added[asset]) {
-               added[asset] = true;
-               redis.rPush(`${address}:${asset}`, txid);
+              added[asset] = true;
+              redis.rPush(`${address}:${asset}`, txid);
             }
           }
         } catch (e) {
