@@ -70,7 +70,9 @@ export const utxos = async (address) => {
     }
 
     await redis.lPop(address, last.length);
-    await redis.rPush(address, txns.slice(-50));
+
+    let latest = txns.slice(-50);
+    if (latest.length) await redis.rPush(address, latest);
     txns = txns.filter((tx) => !last.includes(tx.txid));
 
     while (txns.length) {
