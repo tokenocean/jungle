@@ -128,7 +128,7 @@ export const hex = async (txid) => {
     try {
       hex = await lq.getRawTransaction(txid);
     } catch (e) {
-      sleep(2000);
+      sleep(5000);
       hex = await lq.getRawTransaction(txid);
     }
   }

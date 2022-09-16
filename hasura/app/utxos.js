@@ -305,7 +305,7 @@ app.get("/tx/:txid/hex", async (req, res) => {
     let { txid } = req.params;
     res.send(await hex(txid));
   } catch (e) {
-    console.log("problem getting tx hex", e);
+    console.log("problem getting tx hex", txid);
     res.code(500).send(e.message);
   }
 });
