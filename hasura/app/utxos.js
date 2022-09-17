@@ -70,8 +70,7 @@ export const utxos = async (address) => {
     }
 
     await redis.lPop(address, last.length);
-    if (txns.length) await redis.rPush(address, txns.slice(0, 50));
-
+    await redis.rPush(address, txns.slice(-50));
     txns = txns.filter((tx) => !last.includes(tx.txid));
 
     while (txns.length) {
@@ -306,7 +305,7 @@ app.get("/tx/:txid/hex", async (req, res) => {
     let { txid } = req.params;
     res.send(await hex(txid));
   } catch (e) {
-    console.log("problem getting tx hex", e);
+    console.log("problem getting tx hex", txid);
     res.code(500).send(e.message);
   }
 });
