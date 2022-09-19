@@ -293,6 +293,15 @@
     }
   };
 
+  $: handleUnitChange($bitcoinUnitLocal)
+
+  let handleUnitChange = () => {
+    if (!amount) return
+    amount = ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+      ? sats(amount)
+      : val(amount)
+  }
+
   let showPopup = false;
   let showMore = false;
   let showActivity = false;
