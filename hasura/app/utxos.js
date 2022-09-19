@@ -59,7 +59,6 @@ export const utxos = async (address) => {
       ...curr.filter((tx) => tx.status.confirmed),
     ].map((tx) => tx.txid);
 
-    let i= 0;
     while (curr.length >= 25 && curr.find((tx) => !last.includes(tx.txid))) {
       let prev = txns.at(-1);
       curr = await electrs
@@ -69,11 +68,13 @@ export const utxos = async (address) => {
       txns = [...txns, ...curr.map((tx) => tx.txid)];
     }
 
-    await redis.lPop(address, last.length);
+    txns = txns.filter((txid) => !last.includes(txid));
 
-    let latest = txns.slice(-50);
+    await redis.del(address);
+    let latest = [...txns, ...last].slice(0, 50);
     if (latest.length) await redis.rPush(address, latest);
-    txns = txns.filter((tx) => !last.includes(tx.txid));
+
+    last = await redis.lRange(`${address}`, -50, -1);
 
     while (txns.length) {
       let tx = Transaction.fromHex(await hex(txns[0]));
