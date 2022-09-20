@@ -72,7 +72,9 @@ export const addressUser = async (address) => {
 export const addressLabel = async (address) => {
   const { users } = await query(getUserByAddress, { address });
   if (users.length) return users[0].username;
-  return address.length > 6 ? address.slice(0, 3) + ".." + address.slice(-3) : address;
+  return address.length > 6
+    ? address.slice(0, 3) + ".." + address.slice(-3)
+    : address;
 };
 
 export const assetLabel = async (asset) => {
@@ -369,6 +371,28 @@ export const updateBitcoinUnit = async (unit) => {
     } else {
       browser && window.localStorage.setItem("unit", unit);
       bitcoinUnitLocal.set(unit);
+    }
+  } catch (e) {
+    err(e);
+  }
+};
+
+export const updateFiats = async (fiat, action) => {
+  try {
+    let currentUser = get(user);
+
+    if (currentUser) {
+      const id = currentUser.id;
+      let updatedFiats = JSON.parse(currentUser.fiats);
+      if (action === "add") {
+        updatedFiats.push(fiat);
+      } else if (action === "remove") {
+        updatedFiats = updatedFiats.filter((value) => value !== fiat);
+      }
+      const setFiats = { fiats: JSON.stringify(updatedFiats) };
+      currentUser.fiats = JSON.stringify(updatedFiats);
+      user.set(currentUser);
+      await query(updateUser, { user: setFiats, id });
     }
   } catch (e) {
     err(e);
