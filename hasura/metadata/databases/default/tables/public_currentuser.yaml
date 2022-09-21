@@ -24,6 +24,8 @@ select_permissions:
         - created_at
         - display_name
         - email
+        - fiat
+        - fiats
         - full_name
         - has_samples
         - id
