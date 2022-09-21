@@ -5,7 +5,7 @@
   import { faLifeRing, faTimes } from "@fortawesome/free-solid-svg-icons";
 
   const fiatOptions = Object.keys($fiatRates);
-  $: selectedFiats = JSON.parse($user.fiats);
+  $: selectedFiats = ($user?.fiats && JSON.parse($user.fiats)) || [];
 </script>
 
 <div class="py-10">
