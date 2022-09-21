@@ -10,9 +10,5 @@ https://{$DOMAIN} {
     reverse_proxy lapp:8091
   }
 
-  tls {
-    issuer acme {
-      disable_http_challenge
-    }
-  }
+  tls adam@coinos.io
 }
