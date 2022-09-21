@@ -19,6 +19,8 @@
       headers: { "content-type": "application/json" },
     }).then((r) => r.json());
 
+    props.rates = rates;
+
     let authRequired = [/a\/create/, /edit/, /wallet/, /settings/];
     if (!session?.user && authRequired.find((p) => url.pathname.match(p))) {
       return {
