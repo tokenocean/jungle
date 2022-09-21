@@ -1,1 +1,0 @@
-drop view activebids cascade;
