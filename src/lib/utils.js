@@ -72,7 +72,9 @@ export const addressUser = async (address) => {
 export const addressLabel = async (address) => {
   const { users } = await query(getUserByAddress, { address });
   if (users.length) return users[0].username;
-  return address.length > 6 ? address.slice(0, 3) + ".." + address.slice(-3) : address;
+  return address.length > 6
+    ? address.slice(0, 3) + ".." + address.slice(-3)
+    : address;
 };
 
 export const assetLabel = async (asset) => {
@@ -369,6 +371,64 @@ export const updateBitcoinUnit = async (unit) => {
     } else {
       browser && window.localStorage.setItem("unit", unit);
       bitcoinUnitLocal.set(unit);
+    }
+  } catch (e) {
+    err(e);
+  }
+};
+
+export const updateFiats = async (fiat, action) => {
+  try {
+    let currentUser = get(user);
+
+    if (currentUser) {
+      const id = currentUser.id;
+      let fiats = JSON.parse(currentUser.fiats);
+      if (action === "add") {
+        fiats.push(fiat);
+      } else if (action === "remove") {
+        if (fiats.length <= 1)
+          return err("Must have at least one fiat currency selected");
+        const currentIndex = fiats.indexOf(currentUser.fiat);
+        if (currentUser.fiat === fiat) {
+          currentUser.fiat =
+            currentIndex === fiats.length - 1
+              ? fiats[0]
+              : fiats[currentIndex + 1];
+        }
+        fiats = fiats.filter((value) => value !== fiat);
+      }
+      const setFiats = { fiats: JSON.stringify(fiats), fiat: currentUser.fiat };
+      currentUser.fiats = JSON.stringify(fiats);
+      user.set(currentUser);
+      await query(updateUser, { user: setFiats, id });
+      if (action === "remove") {
+        info("Fiat currency removed");
+      } else if (action === "add") {
+        info("Fiat currency added");
+      }
+    }
+  } catch (e) {
+    err(e);
+  }
+};
+
+export const updateFiat = async () => {
+  try {
+    let currentUser = get(user);
+
+    if (currentUser) {
+      const id = currentUser.id;
+      const fiats = JSON.parse(currentUser.fiats);
+      const currentIndex = fiats.indexOf(currentUser.fiat);
+
+      currentUser.fiat =
+        currentIndex === fiats.length - 1 ? fiats[0] : fiats[currentIndex + 1];
+
+      const setFiat = { fiat: currentUser.fiat };
+      user.set(currentUser);
+
+      await query(updateUser, { user: setFiat, id });
     }
   } catch (e) {
     err(e);

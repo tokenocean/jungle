@@ -11,6 +11,10 @@
         },
       };
 
+    const rates = await fetch("/rates", {
+      headers: { "content-type": "application/json" },
+    }).then((r) => r.json());
+
     const props = await fetch("/announcements", {
       headers: { "content-type": "application/json" },
     }).then((r) => r.json());
@@ -70,6 +74,7 @@
     storeMessages,
     unreadMessages,
     username,
+    fiatRates,
   } from "$lib/store";
   import { onDestroy, onMount } from "svelte";
   import branding from "$lib/branding";
@@ -78,7 +83,9 @@
   import { err, decrypt, goto } from "$lib/utils";
   import { keypair, network } from "$lib/wallet";
 
-  export let popup;
+  export let popup, rates;
+
+  $fiatRates = rates;
 
   function initializeBTCUnits() {
     if ($user) {
@@ -150,6 +157,9 @@
 
     messagesTimer = setTimeout(fetchMessages, messagesInterval);
   };
+
+  $: updateUser($session);
+  let updateUser = (s) => ($user = s.user);
 
   if (browser) {
     $user = $session.user && { ...$session.user };

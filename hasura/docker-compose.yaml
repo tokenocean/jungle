@@ -94,8 +94,9 @@ services:
       SMTP_USER: "${SMTP_USER}"
       SMTP_PASS: "${SMTP_PASS}"
       SMTP_SENDER: "${SMTP_SENDER}"
+      VERIFY_EMAILS: "true"
     volumes:
-      - ./custom:/app/custom
+      - ./app:/app/custom
   ipfs:
     container_name: ipfs
     image: ipfs/go-ipfs:v0.14.0
