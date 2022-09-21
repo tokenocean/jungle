@@ -15,7 +15,7 @@
       headers: { "content-type": "application/json" },
     }).then((r) => r.json());
 
-    let authRequired = [/a\/create/, /edit/, /wallet/];
+    let authRequired = [/a\/create/, /edit/, /wallet/, /settings/];
     if (!session?.user && authRequired.find((p) => url.pathname.match(p))) {
       return {
         status: 302,
