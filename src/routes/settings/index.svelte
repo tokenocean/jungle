@@ -53,7 +53,6 @@
             on:change={(e) => {
               if (!$user.fiats.includes(e.target.value)) {
                 updateFiats(e.target.value, "add");
-                info("Fiat currency added");
               }
             }}
           >

@@ -1,9 +1,15 @@
 <script>
   import { Avatar, ArtworkMedia, Heart } from "$comp";
   import countdown from "$lib/countdown";
-  import { fade, units, satsFormatted, updateBitcoinUnit } from "$lib/utils";
+  import {
+    fade,
+    units,
+    satsFormatted,
+    updateBitcoinUnit,
+    updateFiat,
+  } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
-  import { loaded, bitcoinUnitLocal, user } from "$lib/store";
+  import { loaded, bitcoinUnitLocal, user, fiatRates } from "$lib/store";
 
   export let justScrolled = false;
   export let artwork;
@@ -49,6 +55,21 @@
     ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
       ? satsFormatted(artwork.list_price)
       : val(artwork.list_price);
+
+  $: fiatPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: $user ? $user.fiat : "USD",
+  }).format(
+    artwork.list_price * ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+  );
+
+  $: currentBidFiatPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: $user ? $user.fiat : "USD",
+  }).format(
+    (artwork.bid && artwork.bid.amount) *
+      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+  );
 
   $: currentBid =
     ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
@@ -108,6 +129,18 @@
               {tickerCalculated}
             </button>
             <div class="w-1/2 text-xs font-medium">List Price</div>
+            {#if artwork.list_price}
+              <div>
+                <button
+                  class="price"
+                  on:click={() => {
+                    if ($user && JSON.parse($user.fiats).length > 1) {
+                      updateFiat();
+                    }
+                  }}>{fiatPrice}</button
+                >
+              </div>
+            {/if}
           </div>
           {#if artwork.bid && artwork.bid.user}
             <div class="1/2 flex-1">
@@ -128,6 +161,16 @@
                 <a
                   href={`/${artwork.bid.user.username}`}
                   class="secondary-color">@{artwork.bid.user.username}</a
+                >
+              </div>
+              <div>
+                <button
+                  class="price"
+                  on:click={() => {
+                    if ($user && JSON.parse($user.fiats).length > 1) {
+                      updateFiat();
+                    }
+                  }}>{currentBidFiatPrice}</button
                 >
               </div>
             </div>
