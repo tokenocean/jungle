@@ -1,11 +1,11 @@
 <script>
   import { query } from "$lib/api";
   import { tick } from "svelte";
-  import { user, psbt, bitcoinUnitLocal } from "$lib/store";
+  import { user, psbt, bitcoinUnitLocal, fiatRates } from "$lib/store";
   import { broadcast, pay, keypair, requestSignature } from "$lib/wallet";
   import { btc, dev, err, info, sats, val, ticker } from "$lib/utils";
   import sign from "$lib/sign";
-  import { ProgressLinear } from "$comp";
+  import { ProgressLinear, Fiat } from "$comp";
   import { requirePassword } from "$lib/auth";
   import { getArtworkByAsset } from "$queries/artworks";
 
@@ -13,6 +13,24 @@
   export let withdrawing = false;
 
   let amount;
+
+  $: unitCalculated = $bitcoinUnitLocal === "sats" ? "L-sats" : "L-BTC";
+
+  $: fiatAmount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: $user ? $user.fiat : "USD",
+    signDisplay: "never",
+  }).format(
+    (amount
+      ? unitCalculated === "L-sats"
+        ? amount
+        : ticker(asset) === "L-BTC"
+        ? amount * 100000000
+        : 0
+      : 0) *
+      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+  );
+
   let to = dev
     ? "AzppkpkTHBGfGcvU89AKH9JNuoe24LZvjbNCDStpykLLUj2S3n3zPFPVhQCiC8akswapzRrEqHnJUmMQ"
     : "";
@@ -64,8 +82,6 @@
     }
     loading = false;
   };
-
-  $: unitCalculated = $bitcoinUnitLocal === "sats" ? "L-sats" : "L-BTC";
 </script>
 
 {#if $user && withdrawing}
@@ -92,6 +108,11 @@
             </div>
           {/if}
         </div>
+        {#if ticker(asset) !== "L-CAD" && ticker(asset) !== "L-USDt"}
+          <div class="flex justify-end">
+            <Fiat style="" amount={fiatAmount} />
+          </div>
+        {/if}
       </div>
       <div class="flex flex-col mb-4">
         <label for="address">Recipient Address</label>
