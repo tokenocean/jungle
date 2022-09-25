@@ -110,7 +110,7 @@
         </div>
         {#if ticker(asset) !== "L-CAD" && ticker(asset) !== "L-USDt"}
           <div class="flex justify-end">
-            <Fiat style="" amount={fiatAmount} />
+            <Fiat amount={fiatAmount} />
           </div>
         {/if}
       </div>

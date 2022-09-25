@@ -445,7 +445,7 @@
             </button>
             {#if ticker !== "L-CAD" && ticker !== "L-USDt"}
               <div class="text-sm">
-                <Fiat style="" amount={listFiatPrice} />
+                <Fiat amount={listFiatPrice} />
               </div>
             {/if}
           </div>
@@ -466,7 +466,7 @@
             </button>
             {#if ticker !== "L-CAD" && ticker !== "L-USDt"}
               <div class="text-sm">
-                <Fiat style="" amount={reserveFiatPrice} />
+                <Fiat amount={reserveFiatPrice} />
               </div>
             {/if}
           </div>
@@ -487,7 +487,7 @@
             </button>
             {#if ticker !== "L-CAD" && ticker !== "L-USDt"}
               <div class="text-sm">
-                <Fiat style="" amount={bidFiatAmount} />
+                <Fiat amount={bidFiatAmount} />
               </div>
             {/if}
           </div>
