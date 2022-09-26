@@ -1,6 +1,6 @@
 <script>
   import { ticker, val, satsFormatted } from "$lib/utils";
-  import { bitcoinUnitLocal } from "$lib/store";
+  import { bitcoinUnitLocal, user } from "$lib/store";
   export let transaction;
 
   $: amount =
@@ -59,7 +59,6 @@
     {:else if transaction.type === "purchase"}
       paid
       {amountPurchased}
-
       {asset}
       for
     {:else if transaction.type === "accept"}

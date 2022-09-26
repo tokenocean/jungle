@@ -57,7 +57,7 @@
 
 <script>
   import { session } from "$app/stores";
-  import { user, token } from "$lib/store";
+  import { user, token, fiatRates } from "$lib/store";
   import Fa from "svelte-fa";
   import {
     faChevronDown,
@@ -74,6 +74,7 @@
     Head,
     ProgressLinear,
     RoyaltyInfo,
+    Fiat,
   } from "$comp";
   import Sidebar from "./_sidebar.svelte";
   import { tick, onDestroy, onMount } from "svelte";
@@ -293,18 +294,61 @@
     }
   };
 
-  $: handleUnitChange($bitcoinUnitLocal)
+  $: handleUnitChange($bitcoinUnitLocal);
 
   let handleUnitChange = () => {
-    if (!amount) return
-    amount = ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
-      ? sats(amount)
-      : val(amount)
-  }
+    if (!amount) return;
+    amount =
+      ticker === "L-BTC" && $bitcoinUnitLocal === "sats"
+        ? sats(amount)
+        : val(amount);
+  };
 
   let showPopup = false;
   let showMore = false;
   let showActivity = false;
+
+  $: bidFiatAmount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: $user ? $user.fiat : "USD",
+    signDisplay: "never",
+  }).format(
+    (artwork.bid && artwork.bid.amount) *
+      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+  );
+
+  $: listFiatPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: $user ? $user.fiat : "USD",
+    signDisplay: "never",
+  }).format(
+    list_price *
+      100000000 *
+      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+  );
+
+  $: reserveFiatPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: $user ? $user.fiat : "USD",
+    signDisplay: "never",
+  }).format(
+    artwork.reserve_price * ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+  );
+
+  $: inputFiatAmount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: $user ? $user.fiat : "USD",
+    signDisplay: "never",
+  }).format(
+    (amount
+      ? tickerCalculated === "L-sats"
+        ? amount
+        : ticker === "L-BTC"
+        ? amount * 100000000
+        : 0
+      : 0) *
+      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+  );
 
   $: tickerCalculated =
     ticker === "L-BTC" && $bitcoinUnitLocal === "sats" ? "L-sats" : ticker;
@@ -399,6 +443,11 @@
               {listPrice}
               {tickerCalculated}
             </button>
+            {#if ticker !== "L-CAD" && ticker !== "L-USDt"}
+              <div class="text-sm">
+                <Fiat amount={listFiatPrice} />
+              </div>
+            {/if}
           </div>
         {/if}
         {#if artwork.reserve_price}
@@ -415,6 +464,11 @@
               {reservePrice}
               {tickerCalculated}
             </button>
+            {#if ticker !== "L-CAD" && ticker !== "L-USDt"}
+              <div class="text-sm">
+                <Fiat amount={reserveFiatPrice} />
+              </div>
+            {/if}
           </div>
         {/if}
         {#if artwork.bid && artwork.bid.amount}
@@ -431,6 +485,11 @@
               {bidAmount}
               {tickerCalculated}
             </button>
+            {#if ticker !== "L-CAD" && ticker !== "L-USDt"}
+              <div class="text-sm">
+                <Fiat amount={bidFiatAmount} />
+              </div>
+            {/if}
           </div>
         {/if}
       </div>
@@ -513,6 +572,11 @@
                       {tickerCalculated}
                     </div>
                   </div>
+                  {#if ticker !== "L-CAD" && ticker !== "L-USDt"}
+                    <div class="flex justify-end">
+                      <Fiat style="text-sm" amount={inputFiatAmount} />
+                    </div>
+                  {/if}
                 </div>
               </div>
               <button type="submit" class="secondary-btn">Submit</button>
