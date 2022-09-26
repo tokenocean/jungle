@@ -5,6 +5,8 @@ import { Psbt } from "liquidjs-lib";
 import { compareAsc, parseISO } from "date-fns";
 import { mail } from "./mail.js";
 import { auth } from "./auth.js";
+// import { newapi as api, post } from "$lib/api";
+
 
 import {
   acceptBid,
@@ -277,6 +279,7 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
   let tries = 0;
   let i = 0;
   let contract, psbt;
+  let user = await getUserById(user_id)
 
   let tags = artwork.tags.map(({ tag }) => ({
     tag,
@@ -343,7 +346,17 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
   }
 
   try {
-    // TODO send email
+    let result = await mail.send({
+      template: "artwork-minted",
+      locals: {
+        userName: user.full_name,
+        artworkTitle: artwork.title,
+        artworkUrl: artwork.slug,
+      },
+      message: {
+        to: user.display_name,
+      },
+    });
   } catch (e) {
     console.log(e);
   }
