@@ -2,6 +2,8 @@ import { api, q } from "./api.js";
 import { formatISO, compareAsc, parseISO } from "date-fns";
 import { combine, release, sign, broadcast } from "./wallet.js";
 import { check } from "./signing.js";
+import { mail } from "./mail.js";
+import { getUserById } from "./utils.js";
 import {
   cancelBids,
   closeAuction,
@@ -29,7 +31,6 @@ let checkAuctions = async () => {
 
       console.log("finalizing auction for", artwork.slug);
       console.log("reserve price", artwork.reserve_price);
-
       try {
         if (
           !(bid && bid.psbt) ||
@@ -39,6 +40,7 @@ let checkAuctions = async () => {
         )
           throw new Error("no bid");
 
+        let user = await getUserById(bid.user.id)
         let combined = combine(artwork.auction_tx, bid.psbt);
 
         await check(combined);
@@ -57,8 +59,25 @@ let checkAuctions = async () => {
           bid_id: bid.id,
           type: "release",
         });
-
+        
         console.log("released to high bidder");
+
+        try {
+          let result = await mail.send({
+            template: "purchase-successful",
+            locals: {
+              userName: bid.user.username,
+              artworkUrl: artwork.slug,
+              artworkTitle: artwork.title,
+              bidAmount: bid.amount
+            },
+            message: {
+              to: user.display_name
+            }
+          })
+        } catch (e) {
+          console.log(e);
+        }
       } catch (e) {
         console.log("couldn't release to bidder,", e.message);
 
