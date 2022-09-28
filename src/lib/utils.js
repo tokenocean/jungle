@@ -416,10 +416,10 @@ export const updateFiats = async (fiat, action) => {
 export const updateFiat = async () => {
   try {
     let currentUser = get(user);
-
-    if (currentUser) {
+    const fiats = JSON.parse(currentUser.fiats);
+    if (currentUser && fiats.length > 1) {
       const id = currentUser.id;
-      const fiats = JSON.parse(currentUser.fiats);
+
       const currentIndex = fiats.indexOf(currentUser.fiat);
 
       currentUser.fiat =
@@ -429,6 +429,8 @@ export const updateFiat = async () => {
       user.set(currentUser);
 
       await query(updateUser, { user: setFiat, id });
+    } else {
+      return;
     }
   } catch (e) {
     err(e);

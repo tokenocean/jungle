@@ -17,11 +17,12 @@
   export let refreshArtwork;
 
   let loading;
-
+  
   let comment;
   let commentsToggle = "hidden";
   let amount = 1000;
-
+  let commentLength = artwork.comments.length;
+  
   let submit = async () => {
     await requirePassword();
     loading = true;
@@ -107,7 +108,7 @@
     {#if loading}
       <ProgressLinear />
     {:else}
-      {#if $commentsLimit !== undefined && artwork.comments.length}
+      {#if $commentsLimit !== undefined && commentLength > 10}
         <button
           class="primary-btn w-full"
           on:click={() => {

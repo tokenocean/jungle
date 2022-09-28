@@ -39,3 +39,4 @@ export { default as Popup } from "./Popup.svelte";
 export { default as SendMessage } from "./SendMessage.svelte";
 export { default as SendTip } from "./SendTip.svelte";
 export { default as UserPopup } from "./UserPopup.svelte";
+export { default as Fiat } from "./Fiat.svelte";
