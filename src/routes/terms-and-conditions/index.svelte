@@ -10,7 +10,7 @@
     <div class="faq-content">
       <div class="faq">
         <p>
-          {branding.projectName} is a Urban bitcoin-focused digital assets website
+          {branding.projectName} is a bitcoin-focused digital assets website
           based on the LNFT platform which provides a new way for artists and their
           fans to interact in a more direct way. {branding.projectName} provides
           artists with an easy and intuitive way to mint and trade non-fungible tokens
