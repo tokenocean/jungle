@@ -121,7 +121,7 @@ services:
       SMTP_SENDER: "${SMTP_SENDER}"
       VERIFY_EMAILS: "true"
     volumes:
-      - ./custom:/app/custom
+      - ./app:/app/custom
     networks:
       default:
         ipv4_address: 172.18.0.15

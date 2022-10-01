@@ -174,7 +174,7 @@
           transactions,
         })
         .json();
-
+      
       goto(`/a/${slug}`);
     } catch (e) {
       console.log(e);
