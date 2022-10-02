@@ -65,10 +65,10 @@
     background: #3f6777;
   }
   .outer-btc {
-    background: #30bfad;
+    background: #CEDC21;
   }
   .border-btc {
-    border-color: #30bfad;
+    border-color: #CEDC21;
   }
 
   .dark-red {

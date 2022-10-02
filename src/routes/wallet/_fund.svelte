@@ -128,7 +128,7 @@
         Funding through a confidential liquid address, bitcoin address, or
         lightning invoice is achieved by automatically converting to L-BTC
         through
-        <a href="https://coinos.io" style="color: #43470b">coinos.io</a>. Funds
+        <a href="https://coinos.io" style="color: #deed0e">coinos.io</a>. Funds
         will be subject to counterparty risk during the conversion process.
       </p>
 
@@ -143,7 +143,7 @@
         See
         <a
           href="https://help.blockstream.com/hc/en-us/articles/900000630846-How-do-I-get-Liquid-Bitcoin-L-BTC-"
-          style="color: #43470b">this article</a
+          style="color: #CEDC21">this article</a
         >
         for other methods of acquiring L-BTC.
       </p>

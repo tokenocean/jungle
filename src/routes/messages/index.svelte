@@ -168,7 +168,7 @@
 
     <div class="border p-10 w-full rounded-lg space-y-4 dark-bg">
       {#if selectedUser === undefined}
-        <a href={`/${$user.username}`} class="text-[#30bfad]">
+        <a href={`/${$user.username}`} class="text-[#CEDC21]">
           <div class="flex">
             <Fa icon={faChevronLeft} class="my-auto mr-1" />
             <div>Back to profile</div>
@@ -176,7 +176,7 @@
         </a>
         {#each users as user}
           <div class="flex">
-            <div class="bg-[#30bfad] w-3 py-2 rounded-l-lg" />
+            <div class="bg-[#CEDC21] w-3 py-2 rounded-l-lg" />
             <button
               class="bg-[#31373e] flex justify-center items-center space-x-4 w-full p-2 px-10 rounded-r-lg"
               on:click={() => handleSelection(user)}
@@ -214,7 +214,7 @@
             </a>
           </div>
           <button
-            class="text-[#30bfad]"
+            class="text-[#deed0e]"
             on:click={() => {
               selectedUser = undefined;
               clearInterval(readMessagesInterval);
