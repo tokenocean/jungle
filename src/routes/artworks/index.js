@@ -6,7 +6,7 @@ export async function POST({ request, locals }) {
 
     let { q } = locals;
     let {
-      limit = 210,
+      limit = 21,
       offset = 0,
       where = {},
       order_by = { created_at: "desc" },

@@ -3,7 +3,7 @@ import { countArtworks, getLimited } from "$queries/artworks";
 export async function GET({ locals: { q } }) {
   try {
     let {
-      limit = 210,
+      limit = 21,
       offset = 0,
       where = {},
       order_by = { created_at: "desc" },
