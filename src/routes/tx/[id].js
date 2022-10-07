@@ -10,7 +10,13 @@ export async function GET({ locals: { q }, params }) {
       transactions_by_pk: { hash, psbt },
     } = await q(getTransaction, { id });
 
-    let tx = await getTx(hash);
+    let p, tx;
+    try {
+      tx = await getTx(hash);
+    } catch (e) {
+      p = Psbt.fromBase64(psbt);
+      ({tx } = p.data.globalMap.unsignedTx);
+    }
 
     if (!psbt) {
       let p = new Psbt();
