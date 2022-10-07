@@ -128,8 +128,8 @@ export const utxos = async (address) => {
             await redis.set(`${txid}:${j}`, `${asset},${value}`);
 
             if (!added[asset]) {
-               added[asset] = true;
-               redis.rPush(`${address}:${asset}`, txid);
+              added[asset] = true;
+              redis.rPush(`${address}:${asset}`, txid);
             }
           }
         } catch (e) {
@@ -310,8 +310,8 @@ app.get("/address/:address/:asset/utxo", async (req, res) => {
 });
 
 app.get("/tx/:txid/hex", async (req, res) => {
+  let { txid } = req.params;
   try {
-    let { txid } = req.params;
     res.send(await hex(txid));
   } catch (e) {
     console.log("problem getting tx hex", txid);
