@@ -310,8 +310,8 @@ app.get("/address/:address/:asset/utxo", async (req, res) => {
 });
 
 app.get("/tx/:txid/hex", async (req, res) => {
+  let { txid } = req.params;
   try {
-    let { txid } = req.params;
     res.send(await hex(txid));
   } catch (e) {
     console.log("problem getting tx hex", txid);
