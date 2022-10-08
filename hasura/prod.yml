@@ -114,7 +114,7 @@ services:
       AUTO_ACTIVATE_NEW_USERS: "false"
       VERIFY_EMAILS: "true"
     volumes:
-      - ./custom:/app/custom
+      - ./app:/app/custom
   ipfs:
     container_name: ipfs
     image: ipfs/go-ipfs:v0.14.0
