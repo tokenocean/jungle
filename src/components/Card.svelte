@@ -3,7 +3,7 @@
   import countdown from "$lib/countdown";
   import { fade, units, satsFormatted, updateBitcoinUnit } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
-  import { loaded, bitcoinUnitLocal, user, fiatRates } from "$lib/store";
+  import { loaded, bitcoinUnitLocal, user, fiat, fiatRates } from "$lib/store";
 
   export let justScrolled = false;
   export let artwork;
@@ -52,19 +52,19 @@
 
   $: fiatPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: $user ? $user.fiat : "USD",
+    currency: $user ? $user.fiat : $fiat,
     signDisplay: "never",
   }).format(
-    artwork.list_price * ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+    artwork.list_price * ($fiatRates[$user ? $user.fiat : $fiat] / 100000000)
   );
 
   $: currentBidFiatPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: $user ? $user.fiat : "USD",
+    currency: $user ? $user.fiat : $fiat,
     signDisplay: "never",
   }).format(
     (artwork.bid && artwork.bid.amount) *
-      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+      ($fiatRates[$user ? $user.fiat : $fiat] / 100000000)
   );
 
   $: currentBid =

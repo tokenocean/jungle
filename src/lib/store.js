@@ -26,6 +26,7 @@ export const commentsLimit = writable(10);
 export const edition = writable();
 export const error = writable();
 export const fee = writable(100);
+export const fiat = writable("USD");
 export const filterCriteria = writable({
   listPrice: false,
   openBid: false,
