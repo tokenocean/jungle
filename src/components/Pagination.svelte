@@ -1,14 +1,13 @@
 <script>
   import { offset } from "$lib/store";
-  import { onMount } from "svelte";
   import Fa from "svelte-fa";
   import {
     faChevronLeft,
     faChevronRight,
   } from "@fortawesome/free-solid-svg-icons";
-  export let loadMore, total;
+  export let loadMore, total, current;
   let pageSize = 21;
-  let current = 0;
+  
   let buttonLength = 5;
 
   $: pages = total > 0 ? [...Array(Math.ceil(total / pageSize)).keys()] : [];
