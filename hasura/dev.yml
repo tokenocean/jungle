@@ -12,7 +12,6 @@ services:
   lapp:
     depends_on:
       - hbp
-      - redis
     container_name: lapp
     image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: on-failure
@@ -54,20 +53,6 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.12
-  postgres:
-    container_name: postgres
-    image: postgres:12
-    restart: always
-    environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-    volumes:
-      - ${DATA_DIR}:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
-    networks:
-      default:
-        ipv4_address: 172.18.0.13
   hasura:
     logging:
       options:
@@ -77,8 +62,6 @@ services:
     image: hasura/graphql-engine:v2.7.0
     ports:
       - "8080:8080"
-    depends_on:
-      - postgres
     restart: always
     volumes:
       - ./migrations:/hasura-migrations
@@ -125,28 +108,7 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.15
-  ipfs:
-    container_name: ipfs
-    image: ipfs/go-ipfs:v0.14.0
-    ports:
-      - 8081:8080
-      - 4001:4001
-      - 5001:5001
-    volumes:
-      - ${IPFS_DATA}:/data/ipfs
-      - ${STORAGE_DIR}:/export
-    networks:
-      default:
-        ipv4_address: 172.18.0.16
-  redis:
-    container_name: redis
-    image: redis
-    volumes:
-      - ./redis:/data
-    networks:
-      default:
-        ipv4_address: 172.18.0.17
-networks:
-  default:
-    external:
-      name: net
+networks: 
+  default: 
+    name: net
+    external: true

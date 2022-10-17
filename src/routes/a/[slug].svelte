@@ -5,7 +5,7 @@
   import branding from "$lib/branding";
   import { host, satsFormatted, updateBitcoinUnit } from "$lib/utils";
   import Comments from "./_comments.svelte";
-  import { bitcoinUnitLocal } from "$lib/store";
+  import { bitcoinUnitLocal, fiat } from "$lib/store";
 
   export async function load({ fetch, params: { slug } }) {
     const props = await fetch(`/artworks/${slug}.json`).then((r) => r.json());
@@ -311,34 +311,34 @@
 
   $: bidFiatAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: $user ? $user.fiat : "USD",
+    currency: $user ? $user.fiat : $fiat,
     signDisplay: "never",
   }).format(
     (artwork.bid && artwork.bid.amount) *
-      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+      ($fiatRates[$user ? $user.fiat : $fiat] / 100000000)
   );
 
   $: listFiatPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: $user ? $user.fiat : "USD",
+    currency: $user ? $user.fiat : $fiat,
     signDisplay: "never",
   }).format(
     list_price *
       100000000 *
-      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+      ($fiatRates[$user ? $user.fiat : $fiat] / 100000000)
   );
 
   $: reserveFiatPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: $user ? $user.fiat : "USD",
+    currency: $user ? $user.fiat : $fiat,
     signDisplay: "never",
   }).format(
-    artwork.reserve_price * ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+    artwork.reserve_price * ($fiatRates[$user ? $user.fiat : $fiat] / 100000000)
   );
 
   $: inputFiatAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: $user ? $user.fiat : "USD",
+    currency: $user ? $user.fiat : $fiat,
     signDisplay: "never",
   }).format(
     (amount
@@ -348,7 +348,7 @@
         ? amount * 100000000
         : 0
       : 0) *
-      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+      ($fiatRates[$user ? $user.fiat : $fiat] / 100000000)
   );
 
   $: tickerCalculated =
@@ -439,7 +439,7 @@
                   $bitcoinUnitLocal === "sats" ? "btc" : "sats"
                 )}
               disabled={ticker !== "L-BTC"}
-              class="text-lg"
+              class="text-lg text-left"
             >
               {listPrice}
               {tickerCalculated}

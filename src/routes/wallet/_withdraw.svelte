@@ -1,7 +1,7 @@
 <script>
   import { query } from "$lib/api";
   import { tick } from "svelte";
-  import { user, psbt, bitcoinUnitLocal, fiatRates } from "$lib/store";
+  import { fiat, user, psbt, bitcoinUnitLocal, fiatRates } from "$lib/store";
   import { broadcast, pay, keypair, requestSignature } from "$lib/wallet";
   import { btc, dev, err, info, sats, val, ticker } from "$lib/utils";
   import sign from "$lib/sign";
@@ -18,7 +18,7 @@
 
   $: fiatAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: $user ? $user.fiat : "USD",
+    currency: $user ? $user.fiat : $fiat,
     signDisplay: "never",
   }).format(
     (amount
@@ -28,7 +28,7 @@
         ? amount * 100000000
         : 0
       : 0) *
-      ($fiatRates[$user ? $user.fiat : "USD"] / 100000000)
+      ($fiatRates[$user ? $user.fiat : $fiat] / 100000000)
   );
 
   let to = dev

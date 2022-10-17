@@ -5,6 +5,7 @@ import {
   acceptStatus,
   assets,
   error,
+  fiat,
   full,
   prompt,
   snack,
@@ -417,22 +418,26 @@ export const updateFiat = async () => {
   try {
     let currentUser = get(user);
     if (currentUser) {
-    const fiats = JSON.parse(currentUser.fiats);
-    if (currentUser && fiats.length > 1) {
-      const id = currentUser.id;
+      const fiats = JSON.parse(currentUser.fiats);
+      if (currentUser && fiats.length > 1) {
+        const id = currentUser.id;
 
-      const currentIndex = fiats.indexOf(currentUser.fiat);
+        const currentIndex = fiats.indexOf(currentUser.fiat);
 
-      currentUser.fiat =
-        currentIndex === fiats.length - 1 ? fiats[0] : fiats[currentIndex + 1];
+        currentUser.fiat =
+          currentIndex === fiats.length - 1
+            ? fiats[0]
+            : fiats[currentIndex + 1];
 
-      const setFiat = { fiat: currentUser.fiat };
-      user.set(currentUser);
+        const setFiat = { fiat: currentUser.fiat };
+        user.set(currentUser);
 
-      await query(updateUser, { user: setFiat, id });
-    }
+        await query(updateUser, { user: setFiat, id });
+      }
     } else {
-      return;
+      let fiats = ["USD", "EUR", "JPY", "GBP", "CAD", "AUD", "CNY"];
+      let i = fiats.indexOf(get(fiat));
+      fiat.set(++i >= fiats.length ? fiats[0] : fiats[i]);
     }
   } catch (e) {
     err(e);

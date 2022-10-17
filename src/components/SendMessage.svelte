@@ -55,6 +55,6 @@
     placeholder="Enter message..."
     id="message"
     name="message"
-    class="rounded-lg w-full bg-primary/25"
+    class="rounded-lg w-full"
   />
 </form>
