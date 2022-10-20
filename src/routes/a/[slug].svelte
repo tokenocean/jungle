@@ -16,12 +16,6 @@
         status: 404,
       };
 
-    try {
-      await post("/artworks/held", { id: artwork.id }, fetch).res();
-    } catch (e) {
-      console.log(e);
-    }
-
     if (!browser) {
       try {
         await post("/artworks/viewed", { id: artwork.id }, fetch).res();
@@ -56,7 +50,7 @@
 </script>
 
 <script>
-  import { session } from "$app/stores";
+  import { page, session } from "$app/stores";
   import { user, token, fiatRates } from "$lib/store";
   import Fa from "svelte-fa";
   import {
@@ -115,6 +109,7 @@
 
   $: disabled =
     loading ||
+    !artwork.held ||
     (artwork.owner_id === $session?.user?.id && underway(artwork)) ||
     artwork.transactions.some(
       (t) => ["purchase", "creation", "cancel"].includes(t.type) && !t.confirmed
@@ -139,6 +134,12 @@
     clearTimeout(refreshTimeout);
 
     try {
+      await post("/artworks/held", { id: artwork.id }, fetch).res();
+    } catch (e) {
+      console.log(e);
+    }
+
+    try {
       let { artworks } = await query(getArtworkBySlug, {
         slug: artwork.slug,
         limit: $commentsLimit,
@@ -150,35 +151,44 @@
     }
 
     refreshTimeout = setTimeout(refreshArtwork, refreshInterval);
+    console.log("refreshtimeout", refreshTimeout)
   };
 
-  onDestroy(() => {
-    $art = undefined;
+  let cleanup = () => {
     clearTimeout(auctionTimeout);
     clearTimeout(refreshTimeout);
-  });
+  };
+  onDestroy(cleanup);
+
+  $: init($page.url);
+  let init = () => {
+    $art = undefined;
+
+    cleanup();
+
+    refreshArtwork();
+    update();
+  };
+
+  let count = () => {
+    clearTimeout(auctionTimeout);
+    now = new Date();
+    if (!artwork) return;
+    start_counter = countdown(parseISO(artwork.auction_start)) || "";
+    end_counter = countdown(parseISO(artwork.auction_end)) || "";
+    auctionTimeout = setTimeout(count, 1000);
+  };
 
   let update = () => {
     if (!artwork) return;
     $art = artwork;
 
-    let count = () => {
-      clearTimeout(auctionTimeout);
-      now = new Date();
-      if (!artwork) return;
-      start_counter = countdown(parseISO(artwork.auction_start)) || "";
-      end_counter = countdown(parseISO(artwork.auction_end)) || "";
-      auctionTimeout = setTimeout(count, 1000);
-    };
     count();
 
     [sats, val, ticker] = units(artwork && artwork.asking_asset);
     list_price = artwork.list_price;
     list_price = val(artwork.list_price);
   };
-
-  refreshArtwork();
-  update();
 
   let makeOffer = async (e) => {
     try {
@@ -498,7 +508,7 @@
 
       {#if loading}
         <ProgressLinear />
-      {:else if $session?.user?.id === artwork.owner_id && artwork.held}
+      {:else if $session?.user?.id === artwork.owner_id}
         <div class="w-full mb-2">
           <a
             sveltekit:prefetch
@@ -682,12 +692,9 @@
         />
       </div>
 
-      <!-- Comments -->
-      {#if artwork.held}
-        <div class="mt-64">
-          <Comments bind:artwork bind:refreshArtwork />
-        </div>
-      {/if}
+      <div class="mt-64">
+        <Comments bind:artwork bind:refreshArtwork />
+      </div>
 
       {#if others.length}
         <div class="w-full mb-4">

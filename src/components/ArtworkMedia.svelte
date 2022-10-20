@@ -19,7 +19,6 @@
 
   let img, vid, aud;
   $: cid = artwork.filename && CID.parse(artwork.filename).toV1().toString();
-  console.log("file", artwork.filename, artwork.filetype);
   $: ext =
     !artwork.filetype || artwork.filetype.match(/video|gif|octet/)
       ? "webm"

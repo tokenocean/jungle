@@ -60,7 +60,6 @@ app.post("/upload", async function (req, res) {
     let filename = results[0].value.cid.toString();
     let ext = output.split(".")[1];
 
-    console.log("moving", output, filename, ext);
     await fs.move(output, `/export/${filename}.${ext}`, { overwrite: true });
 
     if (process.env.NODE_ENV === "production") {
