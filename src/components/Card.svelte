@@ -3,7 +3,7 @@
   import countdown from "$lib/countdown";
   import { fade, units, satsFormatted, updateBitcoinUnit } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
-  import { loaded, bitcoinUnitLocal, user, fiat, fiatRates } from "$lib/store";
+  import { bitcoinUnitLocal, user, fiat, fiatRates } from "$lib/store";
 
   export let justScrolled = false;
   export let artwork;
@@ -74,16 +74,12 @@
 </script>
 
 <div
-  class="{showDetails ? 'card' : ''} flex {!showDetails || $loaded[artwork.id]
-    ? 'bg-white'
-    : 'bg-gray-100'} flex-col justify-between h-full"
+  class="{showDetails ? 'card' : ''} flex bg-white flex-col justify-between h-full"
   in:fade
 >
   <div {style}>
     <a href={`/a/${artwork.slug}`} sveltekit:prefetch>
-      {#if $loaded[artwork.id] || !justScrolled}
-        <ArtworkMedia {noAudio} {artwork} {showDetails} {popup} bind:thumb />
-      {/if}
+      <ArtworkMedia {noAudio} {artwork} {showDetails} {popup} bind:thumb />
     </a>
   </div>
   {#if showDetails}

@@ -6,7 +6,6 @@
     faVolumeMute,
     faHeadphones,
   } from "@fortawesome/free-solid-svg-icons";
-  import { loaded } from "$lib/store";
   import { CID } from "multiformats/cid";
 
   export let artwork;
@@ -31,26 +30,6 @@
 
   $: cover = !showDetails;
   $: contain = showDetails;
-  $: setLoaded(img, vid, aud);
-  let setLoaded = (img, vid, aud) => {
-    img &&
-      (img.onload = () => {
-        $loaded[artwork.id] = true;
-        $loaded = $loaded;
-      });
-
-    vid &&
-      (vid.onloadeddata = () => {
-        $loaded[artwork.id] = true;
-        $loaded = $loaded;
-      });
-
-    aud &&
-      (aud.onerror = () => {
-        $loaded[artwork.id] = true;
-        $loaded = $loaded;
-      });
-  };
 
   function hasAudio(v) {
     if (!v) return false;
@@ -60,41 +39,6 @@
       Boolean(v.audioTracks && v.audioTracks.length)
     );
   }
-
-  let loadVideo = () => {
-    if (!vid) return;
-    if ("IntersectionObserver" in window) {
-      var lazyVideoObserver = new IntersectionObserver(function (
-        entries,
-        observer
-      ) {
-        entries.forEach(function (video) {
-          if (video.isIntersecting) {
-            for (var source in video.target.children) {
-              var videoSource = video.target.children[source];
-              if (
-                typeof videoSource.tagName === "string" &&
-                videoSource.tagName === "SOURCE"
-              ) {
-                videoSource.src = videoSource.dataset.src;
-              }
-            }
-
-            video.target.load();
-            video.target.classList.remove("lazy");
-            lazyVideoObserver.unobserve(video.target);
-          }
-        });
-      });
-
-      lazyVideoObserver.observe(vid);
-    }
-  };
-
-  onMount(loadVideo);
-  $: loadVideo(preview);
-  $: reloadVideo(artwork);
-  let reloadVideo = () => (vid && vid.currentTime) || loadVideo();
 
   let muted = true;
   let invisible = true;
@@ -108,20 +52,19 @@
   };
 </script>
 
-{#if !artwork.filetype || (artwork.filetype.includes("video") || (thumb && artwork.filetype.includes("gif")))}
+{#if !artwork.filetype || artwork.filetype.includes("video") || (thumb && artwork.filetype.includes("gif"))}
   <div
     class="w-full"
     class:inline-block={!popup}
     class:cover
     class:contain
-    class:hidden={!loaded}
     on:mouseover={over}
     on:focus={over}
     on:mouseout={out}
     on:blur={out}
   >
     <video
-      class={`lazy ${classes}`}
+      class={`${classes}`}
       autoplay
       muted
       playsinline
@@ -129,7 +72,7 @@
       bind:this={vid}
       controls={popup}
     >
-      <source data-src={preview || path} />
+      <source src={preview || path} />
       Your browser does not support HTML5 video.
     </video>
     {#if !popup}

@@ -151,7 +151,6 @@
     }
 
     refreshTimeout = setTimeout(refreshArtwork, refreshInterval);
-    console.log("refreshtimeout", refreshTimeout)
   };
 
   let cleanup = () => {
@@ -160,7 +159,7 @@
   };
   onDestroy(cleanup);
 
-  $: init($page.url);
+  $: browser && init($page.url);
   let init = () => {
     $art = undefined;
 
