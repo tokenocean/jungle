@@ -32,7 +32,6 @@ app.post("/upload", async function (req, res) {
     }
 
     const path = `/export/${name}`;
-    const thumb = `${path}.${ext}`;
 
     await new Promise((resolve) =>
       s2.pipe(fs.createWriteStream(path).on("finish", resolve))
@@ -65,16 +64,14 @@ app.post("/upload", async function (req, res) {
           .noAudio()
           .withVideoCodec("libvpx-vp9")
           .addOptions(["-b:v 0", "-crf 30", "-an", "-t 4"])
-          .output(thumb)
-          .outputFormat("webm")
+          .output(`${path}.webm`)
           .run();
       } else {
-        let t = sharp().rotate().resize(1000).webp();
-        s3.pipe(t).pipe(fs.createWriteStream(thumb));
+        let t = sharp().rotate().resize(800).webp();
+        s3.pipe(t).pipe(fs.createWriteStream(`${path}.webp`));
       }
     } catch (e) {
       console.log("processing failed", e);
-      s3.pipe(fs.createWriteStream(thumb));
     }
 
     res.send(name);

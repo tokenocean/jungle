@@ -43,7 +43,7 @@
       <img
         key={user && user.username}
         src={user
-          ? `/api/public/${user.avatar_url}`
+          ? `/api/public/${user.avatar_url}.webp`
           : src.startsWith("data") || src[0] === "/"
           ? src
           : `/api/public/${src}`}

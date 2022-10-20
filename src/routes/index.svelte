@@ -92,9 +92,7 @@
         muted
         playsinline
         loop
-        src={`/api/public/${artwork.filename}.${
-          artwork.filetype.split("/")[1]
-        }`}
+        src={`/api/public/${artwork.filename}.webm`}
         :key={featured[current].id}
       />
     {:else}
@@ -103,9 +101,7 @@
         out:fade
         class="lazy cover absolute secondary-header"
         alt={artwork.title}
-        src={`/api/public/${artwork.filename}.${
-          artwork.filetype.split("/")[1]
-        }`}
+        src={`/api/public/${artwork.filename}.webp`}
       />
     {/if}
   </div>

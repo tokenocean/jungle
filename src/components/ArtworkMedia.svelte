@@ -19,10 +19,11 @@
 
   let img, vid, aud;
   $: cid = artwork.filename && CID.parse(artwork.filename).toV1().toString();
+  $: ext = artwork.filetype.match(/video|gif|octet/) ? 'webm' : 'webp'
   $: path =
     artwork &&
     (thumb
-      ? `/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`
+     ? `/api/public/${artwork.filename}.${ext}`
       : `/api/ipfs/${artwork.filename}`);
 
   $: cover = !showDetails;
