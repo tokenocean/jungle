@@ -1,5 +1,4 @@
 <script context="module">
-	import { asset } from './../../lib/store.js';
   import { newapi as api, post } from "$lib/api";
   import { browser } from "$app/env";
   import branding from "$lib/branding";
@@ -625,8 +624,8 @@
         <div
           class="mob-desc description text-gray-600 whitespace-pre-wrap"
         >
-          <h4 class="mt-10 font-bold">About this asset</h4>
-          <div class="desc-text {showMore ? 'openDesc' : ''}">
+          <h4 class="mt-10 font-bold">About this artwork</h4>
+          <div>
             {@html linkify(artwork.description)}
           </div>
         </div>
@@ -662,7 +661,7 @@
 
       {#if artwork.description}
         <div class="desk-desc description text-gray-600">
-          <h4 class="mt-10 mb-5 font-bold">About this asset</h4>
+          <h4 class="mt-10 mb-5 font-bold">About this artwork</h4>
           <div class="whitespace-pre-wrap">
             {@html linkify(artwork.description)}
           </div>
@@ -712,7 +711,7 @@
 
 <style>
   :global(.description a) {
-    color: #FF8B00;
+    color: #3ba5ac;
   }
 
   .disabled {
