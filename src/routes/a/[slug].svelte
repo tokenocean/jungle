@@ -121,12 +121,10 @@
     auctionTimeout,
     refreshTimeout,
     list_price,
-    val,
-    sats,
-    ticker,
     amount;
 
   let transaction = {};
+  let [sats, val, ticker] = units(artwork.asking_asset);
 
   let refreshInterval = 5000;
   let refreshArtwork = async () => {
@@ -184,7 +182,6 @@
 
     count();
 
-    [sats, val, ticker] = units(artwork && artwork.asking_asset);
     list_price = artwork.list_price;
     list_price = val(artwork.list_price);
   };
@@ -626,7 +623,7 @@
 
       {#if artwork.description}
         <div
-          class="mob-desc description text-gray-600 whitespace-pre-wrap break-all"
+          class="mob-desc description text-gray-600 whitespace-pre-wrap"
         >
           <h4 class="mt-10 font-bold">About this artwork</h4>
           <div class="desc-text {showMore ? 'openDesc' : ''}">
