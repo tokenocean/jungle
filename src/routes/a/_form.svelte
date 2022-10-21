@@ -51,19 +51,8 @@
     label: tag,
   }));
 
-  // pattern that tags must match
-  const LEGAL_TAG = /^[A-Za-z0-9_-]*$/;
-
   let handle = ({ detail }) => {
-    // alert user about any illegal tags
-    for (let i = 0; i < detail.length; i++) {
-      if (!LEGAL_TAG.test(detail[i].value)) {
-        alert("Tag \"" + detail[i].value
-            + "\" is not allowed - you may only use letters, numbers, dashes and underscores.");
-      }
-    }
-    // only add tags that match the pattern
-    artwork.tags = detail.map(({ value: tag }) => ({ tag })).filter(d => LEGAL_TAG.test(d.tag));
+    artwork.tags = detail.map(({ value: tag }) => ({ tag }));
   };
 </script>
 
