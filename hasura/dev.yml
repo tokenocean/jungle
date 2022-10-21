@@ -31,6 +31,7 @@ services:
       HBP_URL: "${HBP_URL}"
       IPFS_URL: "${IPFS_URL}"
       IPFS_WEB_URL: "${IPFS_WEB_URL}"
+      NODE_ENV: "development"
       SIGNING_SERVER_MNEMONIC: "${SIGNING_SERVER_MNEMONIC}"
       SMTP_HOST: "${SMTP_HOST}"
       SMTP_PORT: "${SMTP_PORT}"
@@ -44,6 +45,8 @@ services:
       RPCUSER: "${RPCUSER}"
       RPCPASS: "${RPCPASS}"
       RPCWALLET: "${RPCWALLET}"
+    tmpfs:
+      - /tmp
     volumes:
       - ./app:/app
       - ./custom:/opt/src/hasura/app/custom
@@ -68,7 +71,7 @@ services:
       - ./metadata:/hasura-metadata
     environment:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
-      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
+      HASURA_GRAPHQL_DATABASE_URL: "${HASURA_GRAPHQL_DATABASE_URL}"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"

@@ -14,7 +14,7 @@
     user,
   } from "$lib/store";
   import { Dropzone, ProgressLinear } from "$comp";
-  import { upload, supportedTypes } from "$lib/upload";
+  import { upload } from "$lib/upload";
   import { btc, kebab, goto, err, info, sleep } from "$lib/utils";
   import { requirePassword } from "$lib/auth";
   import {
@@ -78,9 +78,6 @@
     if (!file) return;
     ({ type } = file);
     artwork.filetype = type;
-
-    if (supportedTypes.includes(type))
-      throw new Error("Supported file types are jpg, png, gif, mp4");
 
     if (file.size < 100000000) previewFile(file);
 
@@ -147,7 +144,6 @@
 
     if (!artwork.filename)
       return err("File not uploaded or hasn't finished processing");
-    if (!type) return err("Unrecognized file type");
 
     loading = true;
 
@@ -174,7 +170,7 @@
           transactions,
         })
         .json();
-      
+
       goto(`/a/${slug}`);
     } catch (e) {
       console.log(e);

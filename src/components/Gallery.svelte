@@ -6,12 +6,15 @@
   export let filtered;
   export let total;
   export let loadMore;
+
   let currentPage = 0;
 </script>
 
+
 <Pagination bind:current={currentPage} {loadMore} {total} />
 
-<div id="content">
+
+<div>
   <div class="sm:grid sm:grid-cols-2 sm:gap-10 lg:grid-cols-3">
     {#each filtered as artwork, i}
       <div class="market-gallery w-full mb-20">
@@ -21,7 +24,7 @@
   </div>
 </div>
 
-<Pagination bind:current={currentPage} {loadMore} {total} />
+<Pagination bind:current={currentPage} {loadMore} {total} scroll={true} />
 
 <style>
   .full-width {
