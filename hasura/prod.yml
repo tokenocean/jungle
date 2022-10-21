@@ -67,6 +67,8 @@ services:
     volumes:
       - ./custom:/opt/src/hasura/app/custom
       - ${STORAGE_DIR}:/export
+    tmpfs:
+      - /tmp
     ports:
       - "8091:8091"
     deploy:
