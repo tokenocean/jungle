@@ -5,27 +5,31 @@
     faChevronLeft,
     faChevronRight,
   } from "@fortawesome/free-solid-svg-icons";
-  export let loadMore, total, current;
+  export let loadMore, total, current, scroll;
   let pageSize = 21;
   
-  let buttonLength = 5;
+  let w;
+  $: buttons = w > 800 ? 5 : 1;
 
   $: pages = total > 0 ? [...Array(Math.ceil(total / pageSize)).keys()] : [];
 
   $: start =
-    current >= pages.length - buttonLength
-      ? pages.length - buttonLength
-      : Math.max(0, current - 2);
-  $: slice = pages.slice(start, start + buttonLength);
+    current >= pages.length - buttons
+      ? pages.length - buttons
+      : Math.max(0, current - Math.floor(buttons / 2));
+  $: slice = pages.slice(start, start + buttons);
 
   let load = (page) => {
+    if (scroll) scrollTo(0, 0);
     current = page;
     $offset = page * pageSize;
     loadMore();
   };
 </script>
 
-<div class="full-width flex bg-white p-4 mx-auto">
+<svelte:window bind:innerWidth={w} />
+
+<div class="flex bg-white p-4 mx-auto">
   <div class="mx-auto">
     <div class="container flex mb-2">
       <i
