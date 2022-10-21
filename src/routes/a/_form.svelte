@@ -1,5 +1,4 @@
 <script>
-	import { asset } from './../../lib/store.js';
   import { token } from "$lib/store";
   import { browser } from "$app/env";
   import { err } from "$lib/utils";
@@ -53,15 +52,7 @@
   }));
 
   let handle = ({ detail }) => {
-    // alert user about any illegal tags
-    for (let i = 0; i < detail.length; i++) {
-      if (!LEGAL_TAG.test(detail[i].value)) {
-        alert("Tag \"" + detail[i].value
-            + "\" is not allowed - you may only use letters, numbers, dashes and underscores.");
-      }
-    }
-    // only add tags that match the pattern
-    artwork.tags = detail.map(({ value: tag }) => ({ tag })).filter(d => LEGAL_TAG.test(d.tag));
+    artwork.tags = detail.map(({ value: tag }) => ({ tag }));
   };
 </script>
 
@@ -70,7 +61,7 @@
     <input
       class="border-0 border-b-2"
       style="border-radius: 0 !important"
-      placeholder="What's your asset title?"
+      placeholder="What's your artwork title?"
       on:input={({ target: { value } }) => debounce(value)}
       bind:this={input}
     />
@@ -83,7 +74,7 @@
         type="checkbox"
         bind:checked={artwork.is_physical}
       />
-      <span class="ml-3">This is a physical asset</span>
+      <span class="ml-3">This is a physical artwork</span>
     </label>
   </div>
   {#if !artwork.id}
@@ -108,7 +99,7 @@
   <div class="flex flex-col mb-6">
     <label for="tags"
       >Tags
-      <span class="text-gray-400">(e.g. Ticket, Abstract, event, etc)</span
+      <span class="text-gray-400">(e.g. Abstract, monochromatic, etc)</span
       ></label
     >
     <Select
@@ -130,8 +121,8 @@
   input[type="checkbox"]:checked {
     appearance: none;
     border: 5px solid #fff;
-    outline: 2px solid #CEDC21;
-    background-color: #CEDC21;
+    outline: 2px solid #6ed8e0;
+    background-color: #6ed8e0;
     padding: 2px;
     border-radius: 0;
   }
