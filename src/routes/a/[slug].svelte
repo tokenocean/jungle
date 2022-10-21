@@ -311,7 +311,6 @@
   };
 
   let showPopup = false;
-  let showMore = false;
   let showActivity = false;
 
   $: bidFiatAmount = new Intl.NumberFormat("en-US", {
@@ -626,12 +625,8 @@
           class="mob-desc description text-gray-600 whitespace-pre-wrap"
         >
           <h4 class="mt-10 font-bold">About this artwork</h4>
-          <div class="desc-text {showMore ? 'openDesc' : ''}">
+          <div>
             {@html linkify(artwork.description)}
-          </div>
-          <div class="show-more" on:click={() => (showMore = !showMore)}>
-            SHOW
-            {showMore ? "LESS -" : "MORE +"}
           </div>
         </div>
       {/if}
@@ -815,25 +810,6 @@
   }
 
   @media only screen and (max-width: 1023px) {
-    .desc-text {
-      height: 150px;
-      overflow: hidden;
-    }
-
-    .openDesc {
-      height: auto !important;
-      overflow: visible;
-    }
-
-    .show-more {
-      color: #3ba5ac;
-      font-weight: bold;
-      text-align: right;
-      margin-top: 10px;
-      cursor: pointer;
-      white-space: normal;
-    }
-
     .desktopImage,
     .desk-desc {
       display: none;
