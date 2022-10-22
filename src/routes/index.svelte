@@ -205,7 +205,7 @@
           <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://junglelab.net/art/">
               <span class="absolute inset-0" />
-              Art
+              Art Graffiti Photography
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">Artist Exclusives</p>
