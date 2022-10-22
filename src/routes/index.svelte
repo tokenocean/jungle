@@ -427,7 +427,7 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/grace-jamaican-jerk-festival//">
+            <a href="https://junglelab.net/grace-jamaican-jerk-festival/">
               <span class="absolute inset-0" />
               Grace® Jamaican Jerk Festival
             </a>
@@ -442,7 +442,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://images.unsplash.com/photo-1579664531470-ac357f8f8e2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDIwfHxNZXJjaGFuZGlzZXxlbnwwfHx8fDE2NTExNTgyOTI&ixlib=rb-1.2.1&q=80&w=2000"
+              src="https://junglelab.shop/_next/image?url=https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0458%2F4475%2F8678%2Fproducts%2Funisex-fleece-zip-up-hoodie-black-front-633d2560d4cb9.jpg%3Fv%3D1664951656&w=1200&q=85"
               alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
