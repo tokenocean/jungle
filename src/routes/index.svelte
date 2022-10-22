@@ -406,7 +406,7 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/nft-event-tickets/">
+            <a href="https://junglelab.io/Jerk%20Festival">
               <span class="absolute inset-0" />
               Digital Membership & Event Tickets
             </a>
