@@ -454,7 +454,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Exclusive Swag. Merchandise
+            Exclusive Swag.
           </p>
         </div>
       </div>
