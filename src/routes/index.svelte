@@ -389,7 +389,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
       <h2 class="text-2xl font-extrabold text-gray-900">
-        Digital Collections
+        Events & JungleLab Swag.
       </h2>
 
       <div
@@ -429,7 +429,7 @@
           <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://junglelab.net/grace-jamaican-jerk-festival//">
               <span class="absolute inset-0" />
-              Festival
+              Grace® Jamaican Jerk Festival
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
@@ -448,13 +448,13 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/merchandise/">
+            <a href="https://junglelab.shop">
               <span class="absolute inset-0" />
-              Merchandise
+              Swag.
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Exclusive Merchandise
+            Exclusive Swag. Merchandise
           </p>
         </div>
       </div>
