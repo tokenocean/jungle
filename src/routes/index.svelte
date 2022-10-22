@@ -1,4 +1,5 @@
 <script context="module">
+	import { assets } from './../lib/store.js';
   export async function load({ fetch }) {
     const props = await fetch(`/artworks/recent`).then((r) => r.json());
 
@@ -388,7 +389,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
       <h2 class="text-2xl font-extrabold text-gray-900">
-        Rare Dank Collections
+        Digital Collections
       </h2>
 
       <div
@@ -399,7 +400,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w2000/2022/10/Landing-Pages-1-2-1.jpg"
+              src="https://junglelab.net/content/images/2022/10/JF-logo-2-1-1-1.png"
               alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
@@ -407,11 +408,11 @@
           <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://junglelab.net/nft-event-tickets/">
               <span class="absolute inset-0" />
-              DIGITAL NFT Event Tickets
+              Digital Membership & Event Tickets
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Exclusive Digital NFT Event Tickets
+            Digital Assets
           </p>
         </div>
 
