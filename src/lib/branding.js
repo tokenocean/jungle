@@ -1,5 +1,5 @@
 const BRANDING = {
-  projectName: "JUNGLELABᵀᴹ",
+  projectName: "JUNGLELAB",
 
   superUserName: "junglelab",
 
