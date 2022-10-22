@@ -399,7 +399,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://images.unsplash.com/photo-1578575436955-ef29da568c6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fHRpY2tldHxlbnwwfHx8fDE2NDk4NzE3ODU&ixlib=rb-1.2.1&q=80&w=2000"
+              src="https://junglelab.net/content/images/size/w2000/2022/10/Landing-Pages-1-2-1.jpg"
               alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
@@ -407,11 +407,11 @@
           <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://junglelab.net/nft-event-tickets/">
               <span class="absolute inset-0" />
-              NFT Event Tickets
+              DIGITAL NFT Event Tickets
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Exclusive NFT Event Tickets
+            Exclusive Digital NFT Event Tickets
           </p>
         </div>
 
@@ -420,7 +420,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.MxbiqZwrs_YFQAXhSOjzVQHaE8%26pid%3DApi&f=1"
+              src="https://junglelab.net/content/images/size/w2000/2022/10/Landing-Pages-1-2-1.jpg"
               alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
@@ -432,7 +432,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Exclusive Festivals
+            Exclusive Events & Festivals
           </p>
         </div>
 
