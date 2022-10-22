@@ -224,7 +224,7 @@
       <p
         class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
       >
-        INVEST IN ARTISTS. INVEST IN MUSIC, INVEST IN NFT EVENT TICKETS.
+        INVEST IN ARTISTS. INVEST IN MUSIC, BUY DIGITAL ASSETS.
       </p>
     </div>
     <div class="mt-10">
