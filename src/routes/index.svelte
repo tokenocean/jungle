@@ -389,7 +389,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
       <h2 class="text-2xl font-extrabold text-gray-900">
-        Events & JungleLab Swag.
+        Events & Swag.
       </h2>
 
       <div
@@ -412,7 +412,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Digital Assets
+            Grace® Jamaican Jerk Festival Miami FL - 20th ANNNIVERSARY DROP!
           </p>
         </div>
 
