@@ -427,7 +427,7 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/nft-event-tickets/">
+            <a href="https://junglelab.net/grace-jamaican-jerk-festival//">
               <span class="absolute inset-0" />
               Festival
             </a>
