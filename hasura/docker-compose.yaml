@@ -108,6 +108,7 @@ services:
       VERIFY_EMAILS: "true"
     volumes:
       - ./app:/app/custom
+      - ${STORAGE_DIR}:/export
   ipfs:
     container_name: ipfs
     image: ipfs/go-ipfs:v0.14.0
