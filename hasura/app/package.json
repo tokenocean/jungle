@@ -22,9 +22,9 @@
     "fastify-caching": "^6.3.0",
     "fastify-http-proxy": "^4.4.0",
     "fastify-redis": "^4.4.0",
-    "file-type": "^17.1.6",
     "fluent-ffmpeg": "^2.1.2",
     "form-data": "^4.0.0",
+    "fs-extra": "^10.1.0",
     "got": "^12.1.0",
     "http-proxy": "^1.18.1",
     "ipfs-http-client": "57",
@@ -44,7 +44,7 @@
     "wretch": "^1.7.10"
   },
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "node index.js"
   },
   "type": "module"

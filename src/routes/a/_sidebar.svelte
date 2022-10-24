@@ -33,7 +33,7 @@
   <div class="mb-6">
     {#each artwork.tags.map((t) => t.tag) as tag (tag)}
       <a
-        href={`/tag/${tag}`}
+        href={`/tag/${encodeURIComponent(tag)}`}
         class="secondary-color text-sm font-bold uppercase mr-5">#{tag}</a>{' '}
     {/each}
   </div>

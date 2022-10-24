@@ -37,6 +37,8 @@ services:
       RPCUSER: "${RPCUSER}"
       RPCPASS: "${RPCPASS}"
       RPCWALLET: "${RPCWALLET}"
+    tmpfs:
+      - /tmp
     volumes:
       - ./app:/app
       - ./custom:/opt/src/hasura/app/custom

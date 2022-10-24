@@ -7,7 +7,6 @@ import { mail } from "./mail.js";
 import { auth } from "./auth.js";
 // import { newapi as api, post } from "$lib/api";
 
-
 import {
   acceptBid,
   cancelBid,
@@ -128,16 +127,15 @@ app.post("/held", async (req, res) => {
     let { asset, owner } = artwork;
     let { address, multisig } = owner;
 
-
     if (artwork.list_price_tx) {
-      let p = Psbt.fromBase64(artwork.list_price_tx)
+      let p = Psbt.fromBase64(artwork.list_price_tx);
       try {
         if (await isSpent(p.data.globalMap.unsignedTx.tx, id)) {
           let { activelistings } = await q(getListing, { id });
           await q(cancelListing, { id: activelistings[0].id, artwork_id: id });
         }
       } catch (e) {
-        console.log("problem cancelling listing", e)
+        console.log("problem cancelling listing", e);
       }
     }
 
@@ -279,7 +277,7 @@ const issue = async (issuance, ids, { artwork, transactions, user_id }) => {
   let tries = 0;
   let i = 0;
   let contract, psbt;
-  let user = await getUserById(user_id)
+  let user = await getUserById(user_id);
 
   let tags = artwork.tags.map(({ tag }) => ({
     tag,
@@ -378,9 +376,7 @@ app.post("/issue", auth, async (req, res) => {
 
     await wait(async () => {
       if (++tries > 40) throw new Error("Issuance timed out");
-      if (!(issuances[issuance].i > 0)) return false;
-      let utxos = await lnft.url(`/address/${address}/utxo`).get().json();
-      return utxos.find((tx) => tx.asset === issuances[issuance].asset);
+      return issuances[issuance].i > 0;
     });
 
     res.send({ id: ids[0], asset: issuances[issuance].asset, issuance, slug });

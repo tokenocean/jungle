@@ -244,7 +244,7 @@ export const validateEmail = (email) => {
 
 export const go = ({ id, type, s }) => {
   let url = { user: "u", artwork: "artwork", tag: "tag" }[type];
-  goto(`/${url}/${url === "artwork" ? id : s}`);
+  goto(`/${url}/${url === "artwork" ? id : encodeURIComponent(s)}`);
 };
 
 export const kebab = (str) =>

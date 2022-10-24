@@ -16,12 +16,6 @@
         status: 404,
       };
 
-    try {
-      await post("/artworks/held", { id: artwork.id }, fetch).res();
-    } catch (e) {
-      console.log(e);
-    }
-
     if (!browser) {
       try {
         await post("/artworks/viewed", { id: artwork.id }, fetch).res();
@@ -56,7 +50,7 @@
 </script>
 
 <script>
-  import { session } from "$app/stores";
+  import { page, session } from "$app/stores";
   import { user, token, fiatRates } from "$lib/store";
   import Fa from "svelte-fa";
   import {
@@ -115,6 +109,7 @@
 
   $: disabled =
     loading ||
+    !artwork.held ||
     (artwork.owner_id === $session?.user?.id && underway(artwork)) ||
     artwork.transactions.some(
       (t) => ["purchase", "creation", "cancel"].includes(t.type) && !t.confirmed
@@ -126,17 +121,21 @@
     auctionTimeout,
     refreshTimeout,
     list_price,
-    val,
-    sats,
-    ticker,
     amount;
 
   let transaction = {};
+  let [sats, val, ticker] = units(artwork.asking_asset);
 
   let refreshInterval = 5000;
   let refreshArtwork = async () => {
     if (!artwork) return;
     clearTimeout(refreshTimeout);
+
+    try {
+      await post("/artworks/held", { id: artwork.id }, fetch).res();
+    } catch (e) {
+      console.log(e);
+    }
 
     try {
       let { artworks } = await query(getArtworkBySlug, {
@@ -152,33 +151,40 @@
     refreshTimeout = setTimeout(refreshArtwork, refreshInterval);
   };
 
-  onDestroy(() => {
-    $art = undefined;
+  let cleanup = () => {
     clearTimeout(auctionTimeout);
     clearTimeout(refreshTimeout);
-  });
+  };
+  onDestroy(cleanup);
+
+  $: browser && init($page.url);
+  let init = () => {
+    $art = undefined;
+
+    cleanup();
+
+    refreshArtwork();
+    update();
+  };
+
+  let count = () => {
+    clearTimeout(auctionTimeout);
+    now = new Date();
+    if (!artwork) return;
+    start_counter = countdown(parseISO(artwork.auction_start)) || "";
+    end_counter = countdown(parseISO(artwork.auction_end)) || "";
+    auctionTimeout = setTimeout(count, 1000);
+  };
 
   let update = () => {
     if (!artwork) return;
     $art = artwork;
 
-    let count = () => {
-      clearTimeout(auctionTimeout);
-      now = new Date();
-      if (!artwork) return;
-      start_counter = countdown(parseISO(artwork.auction_start)) || "";
-      end_counter = countdown(parseISO(artwork.auction_end)) || "";
-      auctionTimeout = setTimeout(count, 1000);
-    };
     count();
 
-    [sats, val, ticker] = units(artwork && artwork.asking_asset);
     list_price = artwork.list_price;
     list_price = val(artwork.list_price);
   };
-
-  refreshArtwork();
-  update();
 
   let makeOffer = async (e) => {
     try {
@@ -305,7 +311,6 @@
   };
 
   let showPopup = false;
-  let showMore = false;
   let showActivity = false;
 
   $: bidFiatAmount = new Intl.NumberFormat("en-US", {
@@ -498,7 +503,7 @@
 
       {#if loading}
         <ProgressLinear />
-      {:else if $session?.user?.id === artwork.owner_id && artwork.held}
+      {:else if $session?.user?.id === artwork.owner_id}
         <div class="w-full mb-2">
           <a
             sveltekit:prefetch
@@ -624,15 +629,11 @@
 
       {#if artwork.description}
         <div
-          class="mob-desc description text-gray-600 whitespace-pre-wrap break-all"
+          class="mob-desc description text-gray-600 whitespace-pre-wrap"
         >
           <h4 class="mt-10 font-bold">About this artwork</h4>
-          <div class="desc-text {showMore ? 'openDesc' : ''}">
+          <div>
             {@html linkify(artwork.description)}
-          </div>
-          <div class="show-more" on:click={() => (showMore = !showMore)}>
-            SHOW
-            {showMore ? "LESS -" : "MORE +"}
           </div>
         </div>
       {/if}
@@ -689,12 +690,9 @@
         />
       </div>
 
-      <!-- Comments -->
-      {#if artwork.held}
-        <div class="mt-64">
-          <Comments bind:artwork bind:refreshArtwork />
-        </div>
-      {/if}
+      <div class="mt-64">
+        <Comments bind:artwork bind:refreshArtwork />
+      </div>
 
       {#if others.length}
         <div class="w-full mb-4">
@@ -819,25 +817,6 @@
   }
 
   @media only screen and (max-width: 1023px) {
-    .desc-text {
-      height: 150px;
-      overflow: hidden;
-    }
-
-    .openDesc {
-      height: auto !important;
-      overflow: visible;
-    }
-
-    .show-more {
-      color: #3ba5ac;
-      font-weight: bold;
-      text-align: right;
-      margin-top: 10px;
-      cursor: pointer;
-      white-space: normal;
-    }
-
     .desktopImage,
     .desk-desc {
       display: none;
