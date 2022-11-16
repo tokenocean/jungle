@@ -141,7 +141,7 @@ services:
       AUTO_ACTIVATE_NEW_USERS: "false"
       VERIFY_EMAILS: "true"
     volumes:
-      - ./custom:/app/custom
+      - ./app:/app/custom
     deploy:
       resources:
         limits:
