@@ -33,13 +33,21 @@
   onDestroy(() => clearInterval(interval));
 </script>
 
+
+<div class="flex header-container mx-auto justify-center align-baseline text-9xl font-semibold 
+            bg-gradient-to-r bg-clip-text  text-transparent 
+            from-indigo-500 via-purple-500 to-indigo-500
+            animate-text
+            ">
+            JUNGLELABᵀᴹ
+</div>
+
 <div class="flex header-container mx-auto justify-center marg-bottom">
   <div class="header text-center">
-    <h1 class="text-left md:text-center md:w-full">
-      {branding.projectName}
+    <h1 class="mx-auto md:text-center md:w-full">
       <br />music video art
     </h1>
-    <h5 class="md:max-w-lg mx-auto text-left md:text-center">
+    <h5 class="md:max-w-lg mx-auto md:text-center">
       Upload, collect, and transact rare dank digital assets on the Liquid
       Bitcoin Network
     </h5>
@@ -553,5 +561,58 @@
       width: 75%;
       width: fit-content;
     }
+    @keyframes text {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+.animate-text {
+  animation: text 20s ease infinite;
+}
+
+.bg-gradient-to-r {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.from-indigo-500 {
+  --tw-gradient-from: #43470b;
+  --tw-gradient-to: rgb(99 102 241 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-purple-500 {
+  --tw-gradient-to: rgb(168 85 247 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), #f2a900, var(--tw-gradient-to);
+}
+
+.to-indigo-500 {
+  --tw-gradient-to: #bf00ff;
+}
+
+.bg-clip-text {
+  -webkit-background-clip: text;
+          background-clip: text;
+}
+
+.text-9xl {
+  font-size: 5rem;
+  line-height: 2;
+}
+
+.font-semibold {
+  font-weight: 900;
+}
+
+.text-transparent {
+  color: transparent;
+}
+
   }
 </style>
