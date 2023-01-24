@@ -34,7 +34,7 @@
 </script>
 
 
-<div class="flex header-container mx-auto justify-center align-baseline text-9xl font-semibold 
+<div class="flex header-container mx-auto justify-center sm:text-9xl sm:font-semibold
             bg-gradient-to-r bg-clip-text  text-transparent 
             from-indigo-500 via-purple-500 to-indigo-500
             animate-text
@@ -42,14 +42,21 @@
             JUNGLELABᵀᴹ
 </div>
 
+<div class="flex header-container mx-auto justify-center marg-bottom sm:text-4 sm:font-semibold
+            bg-gradient-to-r bg-clip-text  text-transparent 
+            from-indigo-500 via-purple-500 to-indigo-500
+            animate-text
+            ">
+            music video art
+</div>
+
 <div class="flex header-container mx-auto justify-center marg-bottom">
   <div class="header text-center">
-    <h1 class="mx-auto md:text-center md:w-full">
-      <br />music video art
-    </h1>
+    <h2 class="mx-auto md:text-center md:w-full">
+      <br />Festival & Event Tickets
+    </h2>
     <h5 class="md:max-w-lg mx-auto md:text-center">
-      Upload, collect, and transact rare dank digital assets on the Liquid
-      Bitcoin Network
+      Browse, create, buy, sell, and auction NFTs & digital assets using the Bitcoin Liquid Network
     </h5>
     <a class="primary-btn" href={`/market`}>Start exploring</a>
   </div>
@@ -574,7 +581,7 @@
 }
 
 .animate-text {
-  animation: text 20s ease infinite;
+  animation: text 10s ease infinite;
 }
 
 .bg-gradient-to-r {
@@ -602,8 +609,13 @@
 }
 
 .text-9xl {
-  font-size: 5rem;
-  line-height: 2;
+  font-size: 6rem;
+  line-height: 3;
+}
+
+.text-4 {
+  font-size: 8rem;
+  line-height: 1;
 }
 
 .font-semibold {
