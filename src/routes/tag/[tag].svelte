@@ -21,9 +21,9 @@
 
     <div class="card border-l-8">
       <p>
-        Raretoshi artists, graphic designers, and memelords from around the
+        JungleLab artists, graphic designers, and memelords from around the
         world have joined forces to honor the historic Bitcoin Bond in El
-        Salvador. Like the NFTs on Raretoshi, the bond is issued on the Liquid
+        Salvador. Like the NFTs on JungleLab, the bond is issued on the Liquid
         Network, a layer-2 solution that allows the issuance of digital assets
         on top of Bitcoin.
       </p>
@@ -39,7 +39,7 @@
       <p>
         If you too are excited about the Bitcoin Bond, what it means for
         humanity's future, and would like to contribute to the Bitcoin Bond
-        gallery on Raretoshi, register to become an artist and upload a unique
+        gallery on JungleLab, register to become an artist and upload a unique
         1:1 piece of art (future meme lore) with the tag <b>#BitcoinBond</b>.
       </p>
       <p>

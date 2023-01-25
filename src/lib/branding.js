@@ -4,7 +4,7 @@ const BRANDING = {
   superUserName: "junglelab",
 
   urls: {
-    base: "JUNGLELABᵀᴹ",
+    base: "JUNGLELAB",
     www: "www.junglelab.io",
     protocol: "https://junglelab.io",
     external: {
@@ -32,7 +32,7 @@ const BRANDING = {
     },
 
     artwork: (art) => ({
-      title: `JUNGLELABᵀᴹ - ${art.title}`,
+      title: `JUNGLELAB - ${art.title}`,
       image: `/api/ipfs/${art.filename}`,
       url: `https://junglelab.io/a/${art.slug}`,
     }),

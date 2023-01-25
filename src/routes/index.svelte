@@ -33,15 +33,58 @@
   onDestroy(() => clearInterval(interval));
 </script>
 
+<!-- Container for demo purpose -->
+<div class="flex header-container mx-auto justify-center h5 font-semibold
+            bg-gradient-to-r bg-clip-text  text-transparent 
+            from-orange-500 via-orange-500 to-orange-500
+            animate-text
+            ">
+            JUNGLELABᵀᴹ
+</div>
+<!-- Container for demo purpose -->
+
+<!-- Container for demo purpose -->
+<div class="container my-24 px-6 mx-auto">
+
+  <!-- Section: Design Block -->
+  <section class="mb-32 text-white text-center lg:text-left background-radial-gradient">
+
+    <div class="relative overflow-hidden bg-no-repeat bg-cover" style="
+          background-position: 50%;
+          background-image: url('https://junglelab.shop/_next/image?url=https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0458%2F4475%2F8678%2Fproducts%2Funisex-fleece-zip-up-hoodie-black-front-633d2560d4cb9.jpg%3Fv%3D1664951656&w=1200&q=85');
+          height: 500px;
+        ">
+      <div class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed"
+        style="background-color: rgba(0, 0, 0, 0.75)">
+        <div class="flex justify-center items-center h-full">
+          <div class="text-center text-white px-6 py-6 md:py-0 md:px-12 max-w-[800px]">
+            <h2 class="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight leading-tight mb-12">
+              IPFS Network <br /><span>GraphQL Bitcoin</span>
+            </h2>
+            <p class="text-lg">
+              JungleLab LNFT Digital Assets is a revolutionary platform <br /><span>for creating, issuing, and trading non-fungible tokens (NFTs) on the </span> <br /><span>Bitcoin Liquid Network.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <!-- Section: Design Block -->
+  
+</div>
+<!-- Container for demo purpose -->
+
+
+<div class="h-24 bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"></div>
+
 <div class="flex header-container mx-auto justify-center marg-bottom">
   <div class="header text-center">
-    <h1 class="text-left md:text-center md:w-full">
-      {branding.projectName}
-      <br />music video art
-    </h1>
-    <h5 class="md:max-w-lg mx-auto text-left md:text-center">
-      Upload, collect, and transact rare dank digital assets on the Liquid
-      Bitcoin Network
+    <h2 class="mx-auto md:text-center md:w-full">
+      <br />Festival & Event Tickets
+    </h2>
+    <h5 class="md:max-w-lg mx-auto md:text-center">
+      Browse, create, buy, sell, and auction NFTs & digital assets using the Bitcoin Liquid Network
     </h5>
     <a class="primary-btn" href={`/market`}>Start exploring</a>
   </div>
@@ -218,13 +261,13 @@
 <div class="py-12 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="lg:text-center">
-      <h2 class="text-base text-black font-semibold tracking-wide uppercase">
-        Liquid Bitcoin Lightning Network
+      <h2 class="text-base text-black text-center font-semibold tracking-wide uppercase">
+      Engage with the community
       </h2>
       <p
-        class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
+        class="mt-2 text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
       >
-        INVEST IN ARTISTS. INVEST IN MUSIC, BUY DIGITAL ASSETS.
+      Reinvent your live experiences with NFT tickets
       </p>
     </div>
     <div class="mt-10">
@@ -258,9 +301,7 @@
             </p>
           </dt>
           <dd class="mt-2 ml-16 text-base text-gray-500">
-            Jungle Lab is a revolutionary urban lifestyle NFT platform for
-            artists, creatives and collectors to upload and transact rare
-            digital assets including music, videos and art.
+            With JungleLab, you can manage all of your digital products and assets in one place, including music, videos, and art. We streamline the talent eCommerce process, providing a comprehensive platform for all of your needs.
           </dd>
         </div>
 
@@ -291,9 +332,7 @@
             </p>
           </dt>
           <dd class="mt-2 ml-16 text-base text-gray-500">
-            Streamlining talent eCommerce portfolio and process - Manage all
-            your digital products/assets in one place i.e. albums, mixtapes,
-            singles, events, merchandise and exclusive artwork.
+            But we offer more than just a place to sell your work. We are committed to supporting millions of users and artists with an ecosystem that provides rights, ownership, and opportunities to create multiple independent revenue streams. We are proud to be supported by Blockstream, Jan3, Token Ocean and Raretoshi.
           </dd>
         </div>
 
@@ -324,10 +363,7 @@
             </p>
           </dt>
           <dd class="mt-2 ml-16 text-base text-gray-500">
-            We exist to support millions of users & artists + creatives with an
-            eco-system that provides rights, ownership, and the opportunity to
-            create multiple independent revenue streams, Supported by
-            Blockstream & Raretoshi.
+            In addition to the practical benefits, JungleLab is also a community. As an artist or Organiser on our platform, you can adopt special privileges for your fanbase, including early ticket releases and exclusive events with backstage passes attached to digital assets, build better customer experiences, offer rewards, pack benefits and even process payments.
           </dd>
         </div>
 
@@ -358,7 +394,7 @@
             </p>
           </dt>
           <dd class="mt-2 ml-16 text-base text-gray-500">
-            Help you adopt exclusive community - Adopt special privileges for
+            Join JungleLab today and take control of your digital assets and career. Invest in yourself and your digital assets with us. Help you adopt exclusive community - Adopt special privileges for
             your fanbase that follows you on our platform. i.e. early ticket
             release, exclusive events backstage passes attached to digital
             assets.
@@ -389,7 +425,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
       <h2 class="text-2xl font-extrabold text-gray-900">
-        Events & Swag.
+        Festival's & Event's.
       </h2>
 
       <div
@@ -400,7 +436,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/2022/10/JF-logo-2-1-1-1.png"
+              src="https://junglelab.net/content/images/size/w2000/2022/07/MTc5Mjk3Nzg1ODA4MTAzMDYz.webp"
               alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
@@ -408,7 +444,7 @@
           <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://junglelab.io/Jerk%20Festival">
               <span class="absolute inset-0" />
-              Digital Membership & Event Tickets
+              Digital Membership's
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
@@ -433,7 +469,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Exclusive Events & Festivals
+            Exclusive Events
           </p>
         </div>
 
@@ -442,7 +478,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.shop/_next/image?url=https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0458%2F4475%2F8678%2Fproducts%2Funisex-fleece-zip-up-hoodie-black-front-633d2560d4cb9.jpg%3Fv%3D1664951656&w=1200&q=85"
+              src="https://junglelab.net/content/images/size/w2000/2023/01/logo-fs-1.png"
               alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
@@ -553,5 +589,63 @@
       width: 75%;
       width: fit-content;
     }
+    @keyframes text {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+.animate-text {
+  animation: text 10s ease infinite;
+}
+
+.bg-gradient-to-r {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.from-orange-500 {
+  --tw-gradient-from: #43470b;
+  --tw-gradient-to: rgb(99 102 241 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-orange-500 {
+  --tw-gradient-to: rgb(168 85 247 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), #f2a900, var(--tw-gradient-to);
+}
+
+.to-orange-500 {
+  --tw-gradient-to: #f7931a;
+}
+
+.bg-clip-text {
+  -webkit-background-clip: text;
+          background-clip: text;
+}
+
+.text-9xl {
+  font-size: 6rem;
+  line-height: 3;
+}
+
+.text-4 {
+  font-size: 8rem;
+  line-height: 1;
+}
+
+.font-semibold {
+  font-weight: 900;
+}
+
+.text-transparent {
+  color: transparent;
+}
+
   }
 </style>
