@@ -51,8 +51,6 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=prod&repo=454790151))
 
-
-
 ## Setup local development environment
 
     pnpm install
