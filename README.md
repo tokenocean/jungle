@@ -41,6 +41,8 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
 - [Liquid asset registry](https://docs.blockstream.com/liquid/developer-guide/proof-of-issuance.html) for token metadata
 - [coinos](https://coinos.io/) BTC/LNBTC <-> L-BTC conversion
 
+
+
 ## Installation pre-requisites
 
 - pnpm: https://pnpm.io/
@@ -49,7 +51,8 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
 
 ##Setup CodeSpaces development environment
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=prod&repo=454790151))
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=prod&repo=454790151)
+
 
 ## Setup local development environment
 
