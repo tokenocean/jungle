@@ -47,6 +47,12 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
 - Docker: https://docs.docker.com/get-docker/
 - Hasura CLI: https://hasura.io/docs/1.0/graphql/core/hasura-cli/install-hasura-cli.html#install-hasura-cli
 
+##Setup CodeSpaces development environment
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=prod&repo=454790151))
+
+
+
 ## Setup local development environment
 
     pnpm install
