@@ -56,7 +56,6 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
     curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
     npm i -g pnpm
     pnpm install
-    pnpm install
     cd hasura
     cp .env.sample .env
     docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
