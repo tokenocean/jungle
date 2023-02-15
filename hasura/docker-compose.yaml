@@ -59,14 +59,15 @@ services:
     image: postgres:12
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - ${DATA_DIR}:/var/lib/postgresql/data
     ports:
       - "5433:5432"
   hasura:
     container_name: hasura
-    image: hasura/graphql-engine:v2.17.0.cli-migrations-v3
+    image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
     ports:
       - "8080:8080"
     depends_on:
@@ -108,7 +109,6 @@ services:
       VERIFY_EMAILS: "true"
     volumes:
       - ./app:/app/custom
-      - ${STORAGE_DIR}:/export
   ipfs:
     container_name: ipfs
     image: ipfs/go-ipfs:v0.14.0

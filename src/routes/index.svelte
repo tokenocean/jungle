@@ -33,58 +33,15 @@
   onDestroy(() => clearInterval(interval));
 </script>
 
-<!-- Container for demo purpose -->
-<div class="flex header-container mx-auto justify-center h5 font-semibold
-            bg-gradient-to-r bg-clip-text  text-transparent 
-            from-orange-500 via-orange-500 to-orange-500
-            animate-text
-            ">
-            JUNGLELABᵀᴹ
-</div>
-<!-- Container for demo purpose -->
-
-<!-- Container for demo purpose -->
-<div class="container my-24 px-6 mx-auto">
-
-  <!-- Section: Design Block -->
-  <section class="mb-32 text-white text-center lg:text-left background-radial-gradient">
-
-    <div class="relative overflow-hidden bg-no-repeat bg-cover" style="
-          background-position: 50%;
-          background-image: url('https://junglelab.shop/_next/image?url=https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0458%2F4475%2F8678%2Fproducts%2Funisex-fleece-zip-up-hoodie-black-front-633d2560d4cb9.jpg%3Fv%3D1664951656&w=1200&q=85');
-          height: 500px;
-        ">
-      <div class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed"
-        style="background-color: rgba(0, 0, 0, 0.75)">
-        <div class="flex justify-center items-center h-full">
-          <div class="text-center text-white px-6 py-6 md:py-0 md:px-12 max-w-[800px]">
-            <h2 class="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight leading-tight mb-12">
-              IPFS Network <br /><span>GraphQL Bitcoin</span>
-            </h2>
-            <p class="text-lg">
-              JungleLab LNFT Digital Assets is a revolutionary platform <br /><span>for creating, issuing, and trading non-fungible tokens (NFTs) on the </span> <br /><span>Bitcoin Liquid Network.</span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </section>
-  <!-- Section: Design Block -->
-  
-</div>
-<!-- Container for demo purpose -->
-
-
-<div class="h-24 bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"></div>
-
 <div class="flex header-container mx-auto justify-center marg-bottom">
   <div class="header text-center">
-    <h2 class="mx-auto md:text-center md:w-full">
-      <br />Festival & Event Tickets
-    </h2>
-    <h5 class="md:max-w-lg mx-auto md:text-center">
-      Browse, create, buy, sell, and auction NFTs & digital assets using the Bitcoin Liquid Network
+    <h1 class="text-left md:text-center md:w-full">
+      {branding.projectName}
+      <br />music video art
+    </h1>
+    <h5 class="md:max-w-lg mx-auto text-left md:text-center">
+      Upload, collect, and transact rare dank digital assets on the Liquid
+      Bitcoin Network
     </h5>
     <a class="primary-btn" href={`/market`}>Start exploring</a>
   </div>
