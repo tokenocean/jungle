@@ -73,6 +73,8 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
     docker restart lapp
     cd ..
     pnpm dev   # site is available at http://localhost:3000/
+    
+    ""liquid network regtest""
     chmod +x mine.sh
     ./mine.sh   # this script will run continually to mine regtest blocks, you may want to run it in a separate terminal window or tab
     docker exec -it liquid elements-cli -datadir=/home/elements/.elements sendtoaddress <address> 1   # get <address> from http://localhost:3000/wallet
