@@ -440,7 +440,7 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.shop">
+            <a href="https://junglelab.net/junglelab/">
               <span class="absolute inset-0" />
               JUNGLELABᵀᴹ User Guide.
             </a>
