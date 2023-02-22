@@ -37,6 +37,7 @@
             target="_blank"
             href={branding.urls.external.blog}
             class="flex items-center"
+            rel="noreferrer"
             ><div class="w-6 mr-1">
               <Fa icon={faRss} />
             </div>
@@ -48,6 +49,7 @@
             target="_blank"
             href={branding.urls.external.twitter}
             class="flex items-center"
+            rel="noreferrer"
             ><div class="w-6 mr-1">
               <Fa icon={faTwitter} />
             </div>
@@ -59,6 +61,7 @@
             target="_blank"
             href={branding.urls.external.discord}
             class="flex items-center"
+            rel="noreferrer"
             ><div class="w-6 mr-1">
               <Fa icon={faDiscord} size="sm" />
             </div>
@@ -70,6 +73,7 @@
             target="_blank"
             href={branding.urls.external.telegram}
             class="flex items-center"
+            rel="noreferrer"
             ><div class="w-6 mr-1">
               <Fa icon={faTelegramPlane} />
             </div>
@@ -81,6 +85,7 @@
             target="_blank"
             href={branding.urls.external.instagram}
             class="flex items-center"
+            rel="noreferrer"
             ><div class="w-6 mr-1">
               <Fa icon={faInstagramSquare} />
             </div>
@@ -92,6 +97,7 @@
             target="_blank"
             href={branding.urls.external.facebook}
             class="flex items-center"
+            rel="noreferrer"
             ><div class="w-6 mr-1">
               <Fa icon={faFacebook} />
             </div>
