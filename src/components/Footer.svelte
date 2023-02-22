@@ -2,7 +2,6 @@
   import branding from "$lib/branding";
   import Fa from "svelte-fa";
   import {
-    faFacebook,
     faInstagramSquare,
     faTelegramPlane,
     faDiscord,
@@ -90,18 +89,6 @@
               <Fa icon={faInstagramSquare} />
             </div>
             Instagram</a
-          >
-        </li>
-        <li class="mb-2">
-          <a
-            target="_blank"
-            href={branding.urls.external.facebook}
-            class="flex items-center"
-            rel="noreferrer"
-            ><div class="w-6 mr-1">
-              <Fa icon={faFacebook} />
-            </div>
-            Facebook</a
           >
         </li>
       </ul>
