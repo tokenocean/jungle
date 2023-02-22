@@ -37,11 +37,10 @@
   <div class="header text-center">
     <h1 class="text-left md:text-center md:w-full">
       {branding.projectName}
-      <br />music video art
+      <br />art music ticket video
     </h1>
     <h5 class="md:max-w-lg mx-auto text-left md:text-center">
-      Upload, collect, and transact rare dank digital assets on the Liquid
-      Bitcoin Network
+      Making it easy for digital creators to authenticate, showcase and sell the artwork they produce on the Liquid Blockchain.
     </h5>
     <a class="primary-btn" href={`/market`}>Start exploring</a>
   </div>
@@ -382,7 +381,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
       <h2 class="text-2xl font-extrabold text-gray-900">
-        Festival's & Event's.
+        Artist's & Organisers User Guide, Grace® Jamaican Jerk Festival, User Guide & Getting Started.
       </h2>
 
       <div
@@ -393,19 +392,19 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w2000/2022/07/MTc5Mjk3Nzg1ODA4MTAzMDYz.webp"
-              alt="Collection of digital assets."
+              src="https://junglelab.net/content/images/size/w2000/2023/02/logo-fs-2.png"
+              alt="Artist's & Organisers ."
               class="w-full h-full object-center object-cover"
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.io/Jerk%20Festival">
+            <a href="https://junglelab.net/junglelab-artists/">
               <span class="absolute inset-0" />
-              Digital Membership's
+              JUNGLELABᵀᴹ Artist's & Organisers
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Grace® Jamaican Jerk Festival Miami FL - 20th ANNNIVERSARY DROP!
+            Create, Upload, Collect, and Transact Digital Assets on the Liquid Bitcoin Network
           </p>
         </div>
 
@@ -414,8 +413,8 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w2000/2022/10/Landing-Pages-1-2-1.jpg"
-              alt="Collection of digital assets."
+              src="https://junglelab.net/content/images/size/w2000/2023/02/Landing-Pages-1-1-ptylhtjiok6yqsyiyvwpkn5pu7ef0tpn4zzi3os0s0.jpg"
+              alt="Festival Tickets & Asset's."
               class="w-full h-full object-center object-cover"
             />
           </div>
@@ -435,19 +434,19 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w2000/2023/01/logo-fs-1.png"
-              alt="Collection of digital assets."
+              src="https://junglelab.net/content/images/size/w2000/2023/02/Screenshot-2023-02-20-at-13.34.22-1.png"
+              alt="JUNGLELABᵀᴹ User Guide."
               class="w-full h-full object-center object-cover"
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://junglelab.shop">
               <span class="absolute inset-0" />
-              Swag.
+              JUNGLELABᵀᴹ User Guide.
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Exclusive Swag.
+            Getting Started.
           </p>
         </div>
       </div>

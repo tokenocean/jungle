@@ -45,7 +45,7 @@
 
         <p>
           JungleLab is a curated physical and digital assets marketplace focused
-          solely on Bitcoin Liquid Lightning Urban Culture . Your application
+          solely on Bitcoin Liquid Lightning Culture . Your application
           will be reviewed by our team and we'll reach out to let you know if
           you’ve been accepted.
         </p>
