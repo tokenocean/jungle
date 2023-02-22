@@ -392,6 +392,8 @@
         {#if artwork.is_physical}
           <div
             class="flex ml-auto py-1 px-4 bg-gray-100 rounded rounded-full my-auto"
+            role="button"
+            tabindex="0"
           >
             <div class="my-auto">
               <Fa icon={faImage} class="mr-1" />
@@ -400,6 +402,7 @@
               <span class="text-sm">Physical artwork</span>
             </div>
           </div>
+          
         {/if}
       </div>
 
