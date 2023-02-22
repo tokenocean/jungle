@@ -40,7 +40,7 @@
       <br />art music ticket video
     </h1>
     <h5 class="md:max-w-lg mx-auto text-left md:text-center">
-      Making it easy for digital creators to authenticate, showcase and sell the artwork they produce on the Liquid Blockchain.
+      Making it easy for digital creators to authenticate, showcase and sell the assets they produce on the Liquid Blockchain.
     </h5>
     <a class="primary-btn" href={`/market`}>Start exploring</a>
   </div>
