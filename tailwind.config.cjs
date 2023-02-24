@@ -9,7 +9,6 @@ module.exports = {
       xl: "1280px",
     },
      extend: {
-      extend: {
       'animation': {
             'text':'text 8s ease infinite',
         },
