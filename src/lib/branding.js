@@ -4,7 +4,7 @@ const BRANDING = {
   superUserName: "junglelab",
 
   urls: {
-    base: "JUNGLELAB",
+    base: "junglelab.io",
     www: "www.junglelab.io",
     protocol: "https://junglelab.io",
     external: {
