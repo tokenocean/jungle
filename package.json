@@ -62,5 +62,9 @@
         "wretch": "^1.7.10",
         "wretch-middlewares": "^0.1.13"
     },
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "@google/model-viewer": "^3.0.2",
+        "three": "^0.150.1"
+    }
 }
