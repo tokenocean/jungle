@@ -8,6 +8,7 @@ import { app } from "./app.js";
 import fastifyMultipart from "@fastify/multipart";
 import FormData from "form-data";
 import { pipeline } from "stream/promises";
+import { fileTypeFromStream } from "file-type";
 
 app.register(fastifyMultipart);
 
@@ -20,6 +21,9 @@ app.post("/upload", async function (req, res) {
     const s2 = new Clone(data.file);
     const s3 = new Clone(data.file);
     const s4 = new Clone(data.file);
+    const s5 = new Clone(data.file);
+
+    let { ext } = await fileTypeFromStream(s5);
 
     let output;
     let tmp = `/tmp/${v4()}`;
@@ -28,6 +32,7 @@ app.post("/upload", async function (req, res) {
       ipfs.add(s1),
       new Promise(async (resolve, reject) => {
         try {
+          if (ext === "gif") throw new Error("process gifs as videos");
           output = `${tmp}.webp`;
           await pipeline(
             s2,
@@ -58,7 +63,7 @@ app.post("/upload", async function (req, res) {
     ]);
 
     let filename = results[0].value.cid.toString();
-    let ext = output.split(".")[1];
+    ext = output.split(".")[1];
 
     await fs.move(output, `/export/${filename}.${ext}`, { overwrite: true });
 
