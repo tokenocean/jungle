@@ -140,6 +140,7 @@ services:
       SMTP_SENDER: "${SMTP_SENDER}"
       AUTO_ACTIVATE_NEW_USERS: "false"
       VERIFY_EMAILS: "true"
+    restart: always
     volumes:
       - ./app:/app/custom
     deploy:
@@ -154,6 +155,7 @@ services:
       - 8081:8080
       - 4001:4001
       - 5001:5001
+    restart: always
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
@@ -165,6 +167,7 @@ services:
   redis:
     container_name: redis
     image: redis
+    restart: always
     volumes:
       - ./redis:/data
     deploy:
@@ -173,11 +176,11 @@ services:
           cpus: '3.5'
           memory: 8G
   liquid:
-    image: ghcr.io/vulpemventures/elements:0.21.0.2
+    image: ghcr.io/vulpemventures/elements:22.0.2
     container_name: liquid
     volumes:
       - ./liquidmainnet:/home/elements/.elements
-    restart: unless-stopped
+    restart: always
     deploy:
       resources:
         limits:
