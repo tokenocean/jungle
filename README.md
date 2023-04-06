@@ -2,6 +2,7 @@
 ![junglelab ](https://junglelab.io/logo-default.svg)
 
 JungleLab LNFT Digital Assets is a web-based platform for issuing and transacting with non-fungible tokens on the [Bitcoin Liquid Network](https://blockstream.com/liquid/). JungleLab is sponsoring its development and hosting an exemplary curated instance of it for use by artists & organisers at [JungleLab](https://junglelab.io).
+Blockstream is sponsoring its development and hosting an exemplary curated instance of it for use by Bitcoin artists at Raretoshi.
 
 ## Features
 
