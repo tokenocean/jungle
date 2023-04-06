@@ -108,6 +108,7 @@ services:
       SMTP_PASS: "${SMTP_PASS}"
       SMTP_SENDER: "${SMTP_SENDER}"
       VERIFY_EMAILS: "true"
+    restart: always
     volumes:
       - ./app:/app/custom
   ipfs:
@@ -117,6 +118,7 @@ services:
       - 8081:8080
       - 4001:4001
       - 5001:5001
+    restart: always
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
@@ -176,6 +178,7 @@ services:
   redis:
     container_name: redis
     image: redis
+    restart: always
     volumes:
       - ./redis:/data
 networks: 
