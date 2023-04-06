@@ -11,6 +11,7 @@ services:
       - "9229:9229"
   lapp:
     depends_on:
+      - hasura
       - hbp
       - redis
       - liquid
@@ -77,7 +78,7 @@ services:
       - ./migrations:/hasura-migrations
       - ./metadata:/hasura-metadata
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
@@ -177,3 +178,7 @@ services:
     image: redis
     volumes:
       - ./redis:/data
+networks: 
+  default: 
+    name: net
+    external: true

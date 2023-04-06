@@ -576,8 +576,15 @@
                     />
                     <div
                       class="absolute inset-y-0 right-0 flex items-center mr-2"
-                    >
+                    > 
+                    <button 
+                      on:click|preventDefault={() =>
+                      updateBitcoinUnit(
+                        $bitcoinUnitLocal === "sats" ? "btc" : "sats"
+                      )}
+                      disabled={ticker !== "L-BTC"}>
                       {tickerCalculated}
+                    </button>
                     </div>
                   </div>
                   {#if ticker !== "L-CAD" && ticker !== "L-USDt"}

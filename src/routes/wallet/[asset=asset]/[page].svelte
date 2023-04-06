@@ -56,9 +56,8 @@
 
       let { username } = $user;
       if (!username) return;
-
+      
       await getBalance(a);
-
       balance = val(a, $confirmed[a] || 0);
       pending = val(a, $unconfirmed[a] || 0);
 
