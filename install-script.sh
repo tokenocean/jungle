@@ -15,8 +15,15 @@ cp .env.sample .env
 # Runs a Docker image with the specified parameters to install dependencies required for the app using pnpm.
 docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
 
+docker network create net
+
+chmod +x create-network.sh
+
+./create-network.sh
+
 # Starts the Docker Compose services defined in the "docker-compose.yaml" configuration file.
 docker-compose up -d
+
 
 # Applies any pending migrations to the database schema.
 hasura migrate apply
