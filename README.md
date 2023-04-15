@@ -54,6 +54,9 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=prod&repo=454790151)
     
+    run bash script for auto config: ./install-script.sh
+
+    
     curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
     npm i -g pnpm
     pnpm install
