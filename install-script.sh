@@ -24,9 +24,19 @@ chmod +x create-network.sh
 # Starts the Docker Compose services defined in the "docker-compose.yaml" configuration file.
 docker-compose up -d
 
+#!/bin/bash sleep 10
+sleep 10 &
+echo $!
+echo $?
+
 
 # Applies any pending migrations to the database schema.
 hasura migrate apply
+
+#!/bin/bash sleep 10
+sleep 10 &
+echo $!
+echo $?
 
 # Applies any pending metadata changes to the Hasura instance.
 hasura metadata apply
@@ -57,6 +67,7 @@ docker exec -it liquid elements-cli rescanblockchain
 
 # Restarts a service named "lapp".
 docker restart lapp
+
 
 # Changes the directory back to the previous folder.
 cd ..
