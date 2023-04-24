@@ -13,25 +13,30 @@ cd hasura
 cp .env.sample .env
 
 # Runs a Docker image with the specified parameters to install dependencies required for the app using pnpm.
-docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
+install_dependencies() {
+    docker run -it \
+        -v $PWD/app:/app \
+        --entrypoint pnpm \
+        asoltys/lnft-server \
+        install
+}
+install_dependencies
 
 docker network create net
-
 
 ./create-network.sh
 
 # Starts the Docker Compose services defined in the "docker-compose.yaml" configuration file.
-docker-compose up -d
+start_docker_compose() {
+    docker-compose -f docker-compose.yaml up -d
+}
+start_docker_compose
 
-#!/bin/bash sleep 10
-sleep 10 &
-echo $!
-echo $?
-
+# Waits for services to start up.
+sleep 10
 
 # Applies any pending migrations to the database schema.
 hasura migrate apply
-
 
 # Applies any pending metadata changes to the Hasura instance.
 hasura metadata apply
@@ -49,7 +54,8 @@ docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Pat
 docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"
 
 # Copies an image file "../static/user.png" to "/storage" folder as "QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp".
-sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
+IMAGE_PATH="../static/user.png"
+sudo cp $IMAGE_PATH storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
 
 # Adds the copied image file to IPFS and generates a content-addressed hash for the uploaded file.
 docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
@@ -63,11 +69,14 @@ docker exec -it liquid elements-cli rescanblockchain
 # Restarts a service named "lapp".
 docker restart lapp
 
-
 # Changes the directory back to the previous folder.
 cd ..
 
-# Stop the contanier junglelab/junglelab:latest for local work
+# Stop the container junglelab/junglelab:latest for local work
+docker stop junglelab/junglelab:latest
 
 # Uses pnpm to start the development server at http://localhost:3000.
-pnpm dev
+start_dev_server() {
+    pnpm dev
+}
+start_dev_server
