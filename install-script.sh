@@ -32,8 +32,16 @@ start_docker_compose() {
 }
 start_docker_compose
 
-# Waits for services to start up.
-sleep 10
+# Start the services.
+service1 &
+service2 &
+
+# Wait for the services to start up.
+wait
+
+# Continue with the rest of the script.
+echo "All services started successfully."
+
 
 # Applies any pending migrations to the database schema.
 hasura migrate apply
