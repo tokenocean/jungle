@@ -17,7 +17,6 @@ docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
 
 docker network create net
 
-chmod +x create-network.sh
 
 ./create-network.sh
 
@@ -33,10 +32,6 @@ echo $?
 # Applies any pending migrations to the database schema.
 hasura migrate apply
 
-#!/bin/bash sleep 10
-sleep 10 &
-echo $!
-echo $?
 
 # Applies any pending metadata changes to the Hasura instance.
 hasura metadata apply
@@ -71,6 +66,8 @@ docker restart lapp
 
 # Changes the directory back to the previous folder.
 cd ..
+
+# Stop the contanier junglelab/junglelab:latest for local work
 
 # Uses pnpm to start the development server at http://localhost:3000.
 pnpm dev
