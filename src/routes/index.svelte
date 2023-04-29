@@ -166,7 +166,7 @@
           <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://junglelab.io/galleries/event">
               <span class="absolute inset-0" />
-              Event Tickets Gallery
+              NFT Event Tickets Gallery
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">Organisers Exclusive</p>
@@ -188,7 +188,7 @@
               Galleries
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">VIP Exclusives</p>
+          <p class="text-base font-semibold text-gray-900">VIP Exclusive</p>
         </div>
 
         <div class="group relative">
@@ -202,12 +202,12 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/art/">
+            <a href="https://junglelab.net/about-us/">
               <span class="absolute inset-0" />
-              Art Graffiti Photography
+              Meet the Team
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">Artist Exclusives</p>
+          <p class="text-base font-semibold text-gray-900">JUNGLELABᵀᴹ Core Team</p>
         </div>
       </div>
     </div>
