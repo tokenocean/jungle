@@ -21,31 +21,19 @@
 
     <div class="card border-l-8">
       <p>
-        JungleLab artists, graphic designers, and memelords from around the
-        world have joined forces to honor the historic Bitcoin Bond in El
-        Salvador. Like the NFTs on JungleLab, the bond is issued on the Liquid
-        Network, a layer-2 solution that allows the issuance of digital assets
-        on top of Bitcoin.
+        Welcome to the Event Tickets Gallery on JungleLab! Here, you'll find a vibrant showcase of cutting-edge NFT event tickets created by visionary artists, graphic designers, and memelords from around the world.
       </p>
       <p>
-        El Salvador's adoption of Bitcoin and its layer-2 technologies signal
-        the much-anticipated transition away from centralized monetary systems
-        to more frictionless, censorship-resistant ones anchored to Bitcoin, the
-        hardest asset the world has ever known.
+        Our gallery features a diverse range of events, from music festivals to art exhibitions, each one designed to capture the unique spirit and energy of its creator. And because all of our event tickets are NFTs on the Liquid Network, you can be sure that each one is secure, transparent, and tamper-proof.
       </p>
     </div>
 
     <div class="card border-r-8">
       <p>
-        If you too are excited about nft event tickets, what it means for
-        humanity's future, and would like to contribute to the events
-        gallery on JungleLab, register to become an artist and upload a unique
-        1:1 piece of art (future meme lore) with the tag <b>#Event</b>.
+        But the Event Tickets Gallery is more than just a showcase of stunning artwork. It's also a dynamic platform for creators and enthusiasts alike to connect, collaborate, and explore the limitless potential of NFTs and decentralized finance, with the tag #Event. Join us in building a world that's more dynamic and exciting than ever before!
       </p>
       <p>
-        We will keep accepting artwork for the online gallery for as long as
-        possible, sharing it with El Salvador President Bukele, Samson Mow, Max
-        Keiser, and other architects of the bond.
+        So whether you're an artist looking to showcase your work, an event organizer looking for inspiration, or simply a crypto enthusiast eager to explore the cutting-edge world of NFTs, we invite you to join us on JungleLab and discover the future of event tickets!
       </p>
     </div>
   {/if}
