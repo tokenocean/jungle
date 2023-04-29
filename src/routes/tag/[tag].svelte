@@ -14,7 +14,7 @@
 </script>
 
 <div class="container mx-auto mt-10 md:mt-20">
-  {#if tag.toLowerCase() !== "bitcoinbond"}
+  {#if tag.toLowerCase() !== "event"}
     <h3 class="mb-10">{galleries[tag] ? galleries[tag] : `#${tag}`}</h3>
   {:else}
     <h3 class="mb-10">The The Event Tickets Gallery</h3>
@@ -37,10 +37,10 @@
 
     <div class="card border-r-8">
       <p>
-        If you too are excited about the Bitcoin Bond, what it means for
-        humanity's future, and would like to contribute to the Bitcoin Bond
+        If you too are excited about nft event tickets, what it means for
+        humanity's future, and would like to contribute to the events
         gallery on JungleLab, register to become an artist and upload a unique
-        1:1 piece of art (future meme lore) with the tag <b>#BitcoinBond</b>.
+        1:1 piece of art (future meme lore) with the tag <b>#Event</b>.
       </p>
       <p>
         We will keep accepting artwork for the online gallery for as long as
