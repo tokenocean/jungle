@@ -57,7 +57,7 @@
           {artwork.title}
 
           {#if new Date() < new Date("2023-04-15")}
-            <a href="/tag/bitcoinbond">
+            <a href="/tag/event">
               <button
                 class="button-transparent header-button border mt-10"
                 style="border-color: white; color: white"
