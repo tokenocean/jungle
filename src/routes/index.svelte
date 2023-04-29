@@ -233,7 +233,7 @@
         <div class="relative">
           <dt>
             <div
-              class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-gray-500 text-white"
+              class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white"
             >
               <!-- Heroicon name: outline/globe-alt -->
               <svg
@@ -264,7 +264,7 @@
         <div class="relative">
           <dt>
             <div
-              class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-gray-500 text-white"
+              class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white"
             >
               <!-- Heroicon name: outline/scale -->
               <svg
@@ -295,7 +295,7 @@
         <div class="relative">
           <dt>
             <div
-              class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-gray-500 text-white"
+              class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white"
             >
               <!-- Heroicon name: outline/lightning-bolt -->
               <svg
@@ -326,7 +326,7 @@
         <div class="relative">
           <dt>
             <div
-              class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-gray-500 text-white"
+              class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white"
             >
               <!-- Heroicon name: outline/annotation -->
               <svg
