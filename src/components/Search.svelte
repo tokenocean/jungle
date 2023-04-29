@@ -86,11 +86,15 @@
                 <div
                   class="secondary-color text-sm font-bold uppercase mr-5 cursor-pointer"
                   on:click={() => go(o)}
+                  on:keydown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      go(o);
+                    }
+                  }}
                 >
                   #{o.s}
                 </div>
-              {/each}
-            </div>
+                
 
             {#each r.artwork || [] as o}
               <div
