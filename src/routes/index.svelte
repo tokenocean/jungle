@@ -419,7 +419,7 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/grace-jamaican-jerk-festival/">
+            <a href="https://junglelab.io/Jerk%20Festival/">
               <span class="absolute inset-0" />
               Grace® Jamaican Jerk Festival
             </a>
