@@ -196,7 +196,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDExfHxhcnR8ZW58MHx8fHwxNjQwMDIwOTM4&ixlib=rb-1.2.1&q=80&w=2000"
+              src="https://images.unsplash.com/photo-1519309621146-2a47d1f7103a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDM4fHxNZWV0JTIwdGhlJTIwVGVhbXxlbnwwfHx8fDE2ODI3NDM2NjY&ixlib=rb-4.0.3&q=80&w=2000"
               alt="Collection of digital art assets."
               class="w-full h-full object-center object-cover"
             />
