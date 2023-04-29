@@ -17,7 +17,7 @@
   {#if tag.toLowerCase() !== "event"}
     <h3 class="mb-10">{galleries[tag] ? galleries[tag] : `#${tag}`}</h3>
   {:else}
-    <h3 class="mb-10">The The Event Tickets Gallery</h3>
+    <h3 class="mb-10">The Event Tickets Gallery</h3>
 
     <div class="card border-l-8">
       <p>
