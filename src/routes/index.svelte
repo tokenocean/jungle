@@ -177,18 +177,18 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://images.unsplash.com/photo-1554941829-202a0b2403b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDMzfHx2aWRlb3xlbnwwfHx8fDE2NDAwMjA4ODM&ixlib=rb-1.2.1&q=80&w=2000"
-              alt="Collection of video digital assets."
+              src="https://images.unsplash.com/photo-1515169273894-7e876dcf13da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDh8fGdhbGxlcnl8ZW58MHx8fHwxNjgyNzM5MTAw&ixlib=rb-4.0.3&q=80&w=2000"
+              alt="Collection of digital assets."
               class="w-full h-full object-center object-cover"
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/video/">
+            <a href="https://junglelab.io/galleries">
               <span class="absolute inset-0" />
-              Video
+              Galleries
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">Artist Exclusives</p>
+          <p class="text-base font-semibold text-gray-900">VIP Exclusives</p>
         </div>
 
         <div class="group relative">
