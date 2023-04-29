@@ -31,11 +31,11 @@
       <div
         class="btn cursor-pointer text-center rounded-sm text-sm p-2 my-auto ml-2"
         on:click|stopPropagation={onDelete}
+        on:keydown={onDelete}
       >
         <Fa icon={faTimes} />
       </div>
-    {/if}
-  </div>
+      {/if}
 </div>
 
 <style>
