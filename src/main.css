@@ -26,6 +26,7 @@
   src: url("/font/OpenSans-Bold.ttf") format("opentype");
 }
 
+/* Sets the default font family for the entire document. */
 body {
   font-family: OpenSans, system-ui, -apple-system,
     /* Firefox supports this but not yet `system-ui` */ "Segoe UI", Roboto,
@@ -36,12 +37,14 @@ body {
   color: #2d2e32;
 }
 
+/* Sets the font size for mobile devices. */
 @media (max-width: 768px) {
   body {
     font-size: 16px;
   }
 }
 
+/* Sets the font family and weight for all headers. */
 h1,
 h2,
 h3 {
@@ -95,10 +98,10 @@ Brand Colors
 
 /* Light blue — Primary accent color */
 .text-lightblue {
-  color: #2d2e32;
+  color: #CEDC21;
 }
 .bg-lightblue {
-  background: #43470b;
+  background: #CEDC21;
 }
 
 .border-lightblue {
@@ -109,7 +112,7 @@ Brand Colors
   color: #43470b;
 }
 
-/*Light blue gradient — Gradient accent color */
+/*orange gradient — Gradient accent color */
 .lightblue-grad {
   background: #ff9800;
   background: linear-gradient(90deg, #ccff00 0%, #ff9800 50%, #ff9800 100%);
@@ -238,4 +241,13 @@ button:hover {
 
 .footer ul li a {
   font-size: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #171717;
+    color: #fff;
+  }
+
+  /* Add any other styles you want for dark mode here */
 }

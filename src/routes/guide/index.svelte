@@ -355,7 +355,7 @@
             <li>
               Tags (you can use this field to add search words for your asset so
               other users can find it easily. This section will also be used to
-              include your asset in a specific gallery (e.g., #Bitcoin2021;
+              include your asset in a specific gallery (e.g., #Bitcoin2023;
               #Cypherpunks, etc.) Please only add the tag to a specific gallery
               if you are authorized to do so. We will remove any asset that is
               not supposed to be displayed in the gallery. Consult with your

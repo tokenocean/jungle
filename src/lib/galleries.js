@@ -1,3 +1,3 @@
 export default {
-  bitcoin2021: "Bitcoin 2021",
+  bitcoin2021: "Bitcoin 2023",
 };

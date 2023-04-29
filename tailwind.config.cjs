@@ -17,6 +17,10 @@ module.exports = {
       } 
     } 
   },
+  darkMode: 'class',
+
+  plugins: [],
+
   variants: {
     borderWidth: ["responsive", "hover", "focus"],
   },

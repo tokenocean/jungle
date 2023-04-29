@@ -142,19 +142,16 @@
       </div>
 
       <div class="m-6">
-        <div class="text-sm light-color">Balance</div>
-          <div
-             class:cursor-pointer={label(asset) === 'L-BTC'}
-            class="flex mt-3"
-            on:click={() =>
-              updateBitcoinUnit($bitcoinUnitLocal === "sats" ? "btc" : "sats")}
-          >
-            <span class="text-4xl text-white mr-3">
-              {balanceCalculated}
-            </span>
-            <span class="text-gray-400 mt-auto">
-              {labelCalculated}
-            </span>
+              <div class="text-sm light-color">Balance</div>
+              <div
+                class:cursor-pointer={label(asset) === 'L-BTC'}
+                class="flex mt-3"
+                on:click={() => updateBitcoinUnit($bitcoinUnitLocal === "sats" ? "btc" : "sats")}
+              >
+                <span class="text-4xl text-white mr-3">{balanceCalculated}</span>
+                <span class="text-gray-400 mt-auto">{labelCalculated}</span>
+              </div>
+            </div>
           </div>
       </div>
       {#if parseFloat(pending) > 0}
@@ -188,6 +185,7 @@
 {/if}
 
 <style>
+  /* Colors */
   .dark-red {
     background: #2b0208;
   }
@@ -197,26 +195,31 @@
   .dark-gray {
     background: #31373e;
   }
-  .border-blue {
-    border-color: #CEDC21;
-  }
 
-  .bg-btc {
-    background: rgba(52, 190, 171, 0.25);
-  }
+  /* Borders */
+  .border-blue,
   .border-btc {
     border-color: #CEDC21;
   }
 
+  /* Backgrounds */
+  .bg-btc {
+    background: rgba(52, 190, 171, 0.25);
+  }
+
+  /* Text */
   .light-color {
     color: #f4f4f4;
   }
 
+  /* Active State */
   .active {
     @apply border-t-2 border-b-2 border-r-2 text-white;
   }
 
+  /* Disabled State */
   button:disabled {
     @apply text-gray-400 border-gray-400;
   }
 </style>
+

@@ -56,13 +56,13 @@
         <p>
           {artwork.title}
 
-          {#if new Date() < new Date("2022-04-15")}
+          {#if new Date() < new Date("2023-04-15")}
             <a href="/tag/bitcoinbond">
               <button
                 class="button-transparent header-button border mt-10"
                 style="border-color: white; color: white"
               >
-                Visit The Bitcoin Bond Gallery</button
+                Visit The Event Gallery</button
               ></a
             >
           {:else}
@@ -143,10 +143,10 @@
   }
   ```
 -->
-<div class="bg-white-100">
+<div class="bg-grey-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
-      <h2 class="text-2xl font-extrabold text-gray-900">
+      <h2 class="text-2xl font-extrabold text-gray-300">
         Freedom is a Must. Take Yours.
       </h2>
 
@@ -163,13 +163,13 @@
               class="w-full h-full object-center object-cover"
             />
           </div>
-          <h3 class="mt-6 text-sm text-gray-500">
+          <h3 class="mt-6 text-sm text-gray-300">
             <a href="https://junglelab.net/music/">
               <span class="absolute inset-0" />
               Music
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">Artist Exclusives</p>
+          <p class="text-base font-semibold text-gray-300">Artist Exclusives</p>
         </div>
 
         <div class="group relative">
@@ -182,13 +182,13 @@
               class="w-full h-full object-center object-cover"
             />
           </div>
-          <h3 class="mt-6 text-sm text-gray-500">
+          <h3 class="mt-6 text-sm text-gray-300">
             <a href="https://junglelab.net/video/">
               <span class="absolute inset-0" />
               Video
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">Artist Exclusives</p>
+          <p class="text-base font-semibold text-gray-300">Artist Exclusives</p>
         </div>
 
         <div class="group relative">
@@ -201,27 +201,27 @@
               class="w-full h-full object-center object-cover"
             />
           </div>
-          <h3 class="mt-6 text-sm text-gray-500">
+          <h3 class="mt-6 text-sm text-gray-300">
             <a href="https://junglelab.net/art/">
               <span class="absolute inset-0" />
               Art Graffiti Photography
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">Artist Exclusives</p>
+          <p class="text-base font-semibold text-gray-300">Artist Exclusives</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 <!-- This is the information area -->
-<div class="py-12 bg-white">
+<div class="py-12 bg-grey">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="lg:text-center">
-      <h2 class="text-base text-black text-center font-semibold tracking-wide uppercase">
+      <h2 class="text-base text-white text-center font-semibold tracking-wide uppercase">
       Engage with the community
       </h2>
       <p
-        class="mt-2 text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
+        class="mt-2 text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-300 sm:text-4xl"
       >
       Reinvent your live experiences with NFT tickets
       </p>
@@ -252,7 +252,7 @@
                 />
               </svg>
             </div>
-            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">
+            <p class="ml-16 text-lg leading-6 font-medium text-gray-300">
               Global Market
             </p>
           </dt>
@@ -283,7 +283,7 @@
                 />
               </svg>
             </div>
-            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">
+            <p class="ml-16 text-lg leading-6 font-medium text-gray-300">
               Scale Faster
             </p>
           </dt>
@@ -314,7 +314,7 @@
                 />
               </svg>
             </div>
-            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">
+            <p class="ml-16 text-lg leading-6 font-medium text-gray-300">
               Liquid Network
             </p>
           </dt>
@@ -345,7 +345,7 @@
                 />
               </svg>
             </div>
-            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">
+            <p class="ml-16 text-lg leading-6 font-medium text-gray-300">
               Top Artists
             </p>
           </dt>
@@ -380,7 +380,7 @@
 <div class="bg-white-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
-      <h2 class="text-2xl font-extrabold text-gray-900">
+      <h2 class="text-2xl font-extrabold text-gray-300">
         Artist's & Organisers User Guide, Grace® Jamaican Jerk Festival, User Guide & Getting Started.
       </h2>
 
@@ -403,7 +403,7 @@
               JUNGLELABᵀᴹ Artist's & Organisers
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">
+          <p class="text-base font-semibold text-gray-300">
             Create, Upload, Collect, and Transact Digital Assets on the Liquid Bitcoin Network
           </p>
         </div>
@@ -424,7 +424,7 @@
               Grace® Jamaican Jerk Festival
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">
+          <p class="text-base font-semibold text-gray-300">
             Exclusive Events
           </p>
         </div>
@@ -445,7 +445,7 @@
               JUNGLELABᵀᴹ User Guide.
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">
+          <p class="text-base font-semibold text-gray-300">
             Getting Started.
           </p>
         </div>

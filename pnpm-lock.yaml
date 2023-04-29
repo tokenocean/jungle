@@ -1,5 +1,10 @@
 lockfileVersion: '6.0'
 
+dependencies:
+  svelte-theme-select:
+    specifier: ^0.0.4
+    version: 0.0.4
+
 devDependencies:
   '@asoltys/vite-plugin-stream-shim':
     specifier: ^1.0.5
@@ -3134,6 +3139,12 @@ packages:
     resolution: {integrity: sha512-0bnbMGbsE1LUnlioDcf27tl2O8kjuXlTXMXzIxC7LoIOWmqn0D+zd539HfLiQbdLuOHGTaynwN9V+4ehhEu1Jw==}
     dev: true
 
+  /svelte-headlessui@0.0.11:
+    resolution: {integrity: sha512-Tmef27bcFgQ72O4Rw1+dvIxWmL+Av+Ccx4VxqGB1WoLnkL69pUk93ljMrqEs+UghYi2iM0OgU4pl2PdR4DZ3pw==}
+    dependencies:
+      svelte-transition: 0.0.7
+    dev: false
+
   /svelte-hmr@0.15.0(svelte@3.52.0):
     resolution: {integrity: sha512-Aw21SsyoohyVn4yiKXWPNCSW2DQNH/76kvUnE9kpt4h9hcg9tfyQc6xshx9hzgMfGF0kVx0EGD8oBMWSnATeOg==}
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
@@ -3212,6 +3223,17 @@ packages:
   /svelte-select@4.4.7:
     resolution: {integrity: sha512-fIf9Z8rPI6F8naHZ9wjXT0Pv5gLyhdHAFkHFJnCfVVfELE8e82uOoF0xEVQP6Kir+b4Q5yOvNAzZ61WbSU6A0A==}
     dev: true
+
+  /svelte-theme-select@0.0.4:
+    resolution: {integrity: sha512-HskCQ9e0P3Cddb5eU6g9VIxHYtxDgWr2c5u23IPLM5mCmbNlwyX9VUl8wzpFCLXDApIg9xur0tQOIH8lsZLNeg==}
+    dependencies:
+      svelte-headlessui: 0.0.11
+      svelte-transition: 0.0.7
+    dev: false
+
+  /svelte-transition@0.0.7:
+    resolution: {integrity: sha512-YMbl+eIkzeYKBz6E/I8KI8RMezhqB38t2B/Mx8BotmtiN+5wnKath7CWDc+8U9zKGJ/iUYHmx4MwQjIzo05nVg==}
+    dev: false
 
   /svelte@3.52.0:
     resolution: {integrity: sha512-FxcnEUOAVfr10vDU5dVgJN19IvqeHQCS1zfe8vayTfis9A2t5Fhx+JDe5uv/C3j//bB1umpLJ6quhgs9xyUbCQ==}
