@@ -62,7 +62,7 @@
                 class="button-transparent header-button border mt-10"
                 style="border-color: white; color: white"
               >
-                Visit The Bitcoin Bond Gallery</button
+                Visit The Event Tickets</button
               ></a
             >
           {:else}
