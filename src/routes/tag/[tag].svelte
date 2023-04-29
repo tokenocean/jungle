@@ -30,7 +30,7 @@
 
     <div class="card border-r-8">
       <p>
-        But the Event Tickets Gallery is more than just a showcase of stunning artwork. It's also a dynamic platform for creators and enthusiasts alike to connect, collaborate, and explore the limitless potential of NFTs and decentralized finance, with the tag #Event. Join us in building a world that's more dynamic and exciting than ever before!
+        But the Event Tickets Gallery is more than just a showcase of stunning artwork. It's also a dynamic platform for creators and enthusiasts alike to connect, collaborate, and explore the limitless potential of NFTs and decentralized finance, Join us in building a world that's more dynamic and exciting than ever before! with the tag #Event.
       </p>
       <p>
         So whether you're an artist looking to showcase your work, an event organizer looking for inspiration, or simply a crypto enthusiast eager to explore the cutting-edge world of NFTs, we invite you to join us on JungleLab and discover the future of event tickets!
