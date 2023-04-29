@@ -425,7 +425,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Offical Partner of Grace® Jamaican Jerk Festival.
+            Offical Partner.
           </p>
         </div>
 
