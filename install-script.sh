@@ -60,7 +60,7 @@ docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Pat
 docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"
 
 # Copies an image file "../static/user.png" to "/storage" folder as "QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp".
-IMAGE_PATH="../static/user.webp"
+IMAGE_PATH="../static/user.png"
 sudo cp $IMAGE_PATH storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
 
 # Adds the copied image file to IPFS and generates a content-addressed hash for the uploaded file.
