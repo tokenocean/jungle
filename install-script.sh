@@ -24,8 +24,6 @@ install_dependencies
 
 docker network create net
 
-./create-network.sh
-
 # Starts the Docker Compose services defined in the "docker-compose.yaml" configuration file.
 start_docker_compose() {
     docker-compose -f docker-compose.yaml up -d && docker-compose -f docker-compose.yaml ps -q | xargs docker inspect --format '{{ .State.Status }}' | grep running | wc -l | while read COUNT ; do if [ $COUNT -eq 8 ] ; then break ; else echo "Waiting for all containers to start..." ; sleep 1 ; fi ; done
@@ -34,7 +32,7 @@ start_docker_compose
 
 # Wait for the services to start up.
 echo "Waiting for containers to start..."
-sleep 10
+sleep 30
 
 # Continue with the rest of the script.
 echo "All services started successfully."
