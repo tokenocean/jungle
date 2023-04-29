@@ -400,11 +400,11 @@
           <h3 class="mt-6 text-sm text-gray-500">
             <a href="https://blockstream.com/">
               <span class="absolute inset-0" />
-              Blockstream
+              Blockstream ©
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Rethinking Trust
+            Supported by Blockstream.
           </p>
         </div>
 
@@ -425,7 +425,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Exclusive Events
+            Offical Partner of Grace® Jamaican Jerk Festival.
           </p>
         </div>
 
