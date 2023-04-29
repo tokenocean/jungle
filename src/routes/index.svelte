@@ -158,18 +158,18 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDh8fG11c2ljfGVufDB8fHx8MTY0MDAxNTcxMA&ixlib=rb-1.2.1&q=80&w=2000"
-              alt="Collection of music digital assets."
+              src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDE0fHxldmVudCUyMHRpY2tldHxlbnwwfHx8fDE2ODI3MzgxODY&ixlib=rb-4.0.3&q=80&w=2000"
+              alt="The Event Tickets Gallery."
               class="w-full h-full object-center object-cover"
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/music/">
+            <a href="https://junglelab.io/galleries/event">
               <span class="absolute inset-0" />
-              Music
+              Event Tickets Gallery
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">Artist Exclusives</p>
+          <p class="text-base font-semibold text-gray-900">Organisers Exclusive</p>
         </div>
 
         <div class="group relative">
