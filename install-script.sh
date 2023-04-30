@@ -1,51 +1,88 @@
 #!/bin/bash
 
+set -e # Exit script if any command fails
+
 # Downloads and installs the latest version of Hasura GraphQL Engine command-line interface using cURL and Bash.
 curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
 
-# Install dependencies inside docker container
-docker run -it \
-        -v $PWD/app:/app \
-        --entrypoint pnpm \
-        asoltys/lnft-server \
-        install
+# Install pnpm and dependencies
+npm i -g pnpm
+pnpm install
 
-# Create a network if it does not exists, otherwise skip
-docker network ls | grep net > /dev/null || docker network create net
+# Set up Hasura project
+cd hasura
+cp .env.sample .env
+
+# Install dependencies using pnpm
+docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
+
+# Create a network if it does not exist, otherwise skip
+if ! docker network ls | grep net > /dev/null; then
+  echo "Creating docker network..."
+  docker network create net
+fi
 
 # Start docker-compose services
-docker-compose -f docker-compose.yaml up -d && \
-wait_until_all_containers_started=$(docker-compose -f docker-compose.yaml ps -q | xargs docker inspect --format '{{ .State.Status }}' | grep running | wc -l) && \
-while [ $wait_until_all_containers_started -ne 8 ]; do echo "Waiting for all containers to start..."; sleep 1 ; done
+echo "Starting docker-compose services..."
+docker-compose -f docker-compose.yaml up -d
+
+# Wait for all containers to start
+# Wait for all containers to start
+echo "Waiting for all containers to start..."
+docker-compose -f docker-compose.yaml up -d
+docker-compose -f docker-compose.yaml ps -q | xargs docker inspect --format '{{ .State.Status }}' | grep running &>/dev/null
 
 # Apply migrations, metadata, seeds and reload metadata after applying changes
-hasura migrate apply && \
-hasura metadata apply && \
-sleep 10 && \
-hasura seeds apply && \
-hasura metadata reload
+echo "Applying migrations and metadata..."
+if ! hasura migrate apply && \
+   hasura metadata apply && \
+   (sleep 10; hasura seeds apply) && \
+   hasura metadata reload; then
+  echo "Error: Failed to apply migrations, metadata, seeds, or reload metadata"
+  exit 1
+fi
 
-# Configure IPFS to use the public gateway with the specified settings.
-docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Paths": ["/ipfs", "/ipns"], "UseSubdomains": false } }'
+# Configure IPFS
+echo "Configuring IPFS..."
+if ! docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Paths": ["/ipfs", "/ipns"], "UseSubdomains": false } }' && \
+     docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"; then
+  echo "Error: Failed to configure IPFS gateway"
+  exit 1
+fi
 
-# Configures the IPFS gateway to listen on port 8080.
-docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"
-
-# Copies an image file "../static/user.png" to "/storage" folder as "QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp".
+# Copy and upload image file
+echo "Copying and uploading image file..."
 IMAGE_PATH="../static/user.png"
-sudo cp $IMAGE_PATH storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
+sudo cp $IMAGE_PATH storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp &&
+docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp ||
+  {
+    echo "Error: Failed to copy or upload image file to IPFS"
+    exit 1
+  }
 
-# Adds the copied image file to IPFS and generates a content-addressed hash for the uploaded file.
-docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
 
-# Creates a new cryptocurrency wallet with the name "coinos" using Liquid Elements command-line interface.
-docker exec -it liquid elements-cli createwallet coinos
+# Create new cryptocurrency wallet and rescan blockchain
+echo "Creating new cryptocurrency wallet and rescanning blockchain..."
+if ! docker exec -it liquid elements-cli createwallet coinos; then
+  echo "Error: Failed to create new wallet"
+  exit 1
+fi
 
-# Rescans the blockchain for any transactions related to the created wallet.
-docker exec -it liquid elements-cli rescanblockchain
+if ! docker exec -it liquid elements-cli rescanblockchain; then
+  echo "Error: Failed to rescan blockchain"
+  exit 1
+fi
 
-# Restart a single container named "lapp"
-docker restart lapp
+# Restart container
+echo "Restarting container..."
+if ! docker restart lapp; then
+  echo "Error: Failed to restart container"
+  exit 1
+fi
 
-# Uses pnpm to start the development server at http://localhost:3000.
-pnpm dev
+# Start development server
+echo "Starting development server..."
+if ! pnpm dev; then
+  echo "Error: Failed to start development server"
+  exit 1
+fi
