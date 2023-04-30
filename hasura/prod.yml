@@ -94,7 +94,7 @@ services:
           memory: 8G
   hasura:
     container_name: hasura
-    image: hasura/graphql-engine:v2.17.0.cli-migrations-v3
+    image: hasura/graphql-engine:v2.24.1
     ports:
       - "8080:8080"
     depends_on:
