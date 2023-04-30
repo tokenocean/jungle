@@ -1,4 +1,5 @@
 https://{$DOMAIN} {
+  cors("*")
   reverse_proxy /v1* hasura:8080
   reverse_proxy /v2* hasura:8080
   reverse_proxy /console* hasura:8080
