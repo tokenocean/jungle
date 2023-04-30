@@ -14,7 +14,7 @@
 </script>
 
 <div class="container mx-auto mt-10 md:mt-20">
-  {#if tag.toLowerCase() !== "event"}
+  {#if tag.toLowerCase() !== "ticket"}
     <h3 class="mb-10">{galleries[tag] ? galleries[tag] : `#${tag}`}</h3>
   {:else}
     <h3 class="mb-10">The Event Tickets Gallery</h3>
@@ -24,13 +24,13 @@
         Welcome to the Event Tickets Gallery on JungleLab! Here, you'll find a vibrant showcase of cutting-edge NFT event tickets created by visionary artists, graphic designers, and memelords from around the world.
       </p>
       <p>
-        Our gallery features a diverse range of events, from music festivals to art exhibitions, each one designed to capture the unique spirit and energy of its creator. And because all of our event tickets are NFTs on the Liquid Network, you can be sure that each one is secure, transparent, and tamper-proof.
+        Our gallery features a diverse range of events, from music festivals to art exhibitions, each one designed to capture the unique spirit and energy of its creator. And because all of our event tickets are NFTs on the Liquid Network, you can be sure that each one is secure, transparent, and tamper-proof. 
       </p>
     </div>
 
     <div class="card border-r-8">
       <p>
-        But the Event Tickets Gallery is more than just a showcase of stunning artwork. It's also a dynamic platform for creators and enthusiasts alike to connect, collaborate, and explore the limitless potential of NFTs and decentralized finance, Join us in building a world that's more dynamic and exciting than ever before! with the tag #Event.
+        But the Event Tickets Gallery is more than just a showcase of stunning artwork. It's also a dynamic platform for creators and enthusiasts alike to connect, collaborate, and explore the limitless potential of NFTs and decentralized finance, Join us in building a world that's more dynamic and exciting than ever before! with the tag #ticket.
       </p>
       <p>
         So whether you're an artist looking to showcase your work, an event organizer looking for inspiration, or simply a crypto enthusiast eager to explore the cutting-edge world of NFTs, we invite you to join us on JungleLab and discover the future of event tickets!
