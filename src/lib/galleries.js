@@ -1,7 +1,6 @@
 export default {
   junglelab: "JungleLab",
   ticket: "Buy Tickets",
-  event: "Events",
   junglelab: "JungleLab",
   membership: "Memberships",
   brand: "Brand",
