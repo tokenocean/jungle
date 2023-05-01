@@ -55,6 +55,7 @@
         "svelte-popperjs": "^1.2.11",
         "svelte-preprocess": "^4.10.7",
         "svelte-select": "^4.4.7",
+        "svelte-youtube-embed": "^0.1.11",
         "tailwindcss": "^3.1.6",
         "uuid": "^8.3.2",
         "vite": "^3.0.3",

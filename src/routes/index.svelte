@@ -19,6 +19,7 @@
   import branding from "$lib/branding";
   import { prefetch } from "$app/navigation";
   import { browser } from "$app/env";
+  import Youtube from "svelte-youtube-embed";
   onMount(() => browser && prefetch("/market"));
   export let featured;
   export let recent;
@@ -143,6 +144,12 @@
   }
   ```
 -->
+<div class="container mx-auto px-10">
+  <h3>Featured Videos</h3>
+<Youtube id="ipBSTuxMlLc" />
+</div>
+
+
 <div class="bg-white-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">

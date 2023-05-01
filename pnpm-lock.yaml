@@ -133,6 +133,9 @@ devDependencies:
   svelte-select:
     specifier: ^4.4.7
     version: 4.4.7
+  svelte-youtube-embed:
+    specifier: ^0.1.11
+    version: 0.1.11
   tailwindcss:
     specifier: ^3.1.6
     version: 3.1.6(postcss@8.4.18)
@@ -3211,6 +3214,10 @@ packages:
 
   /svelte-select@4.4.7:
     resolution: {integrity: sha512-fIf9Z8rPI6F8naHZ9wjXT0Pv5gLyhdHAFkHFJnCfVVfELE8e82uOoF0xEVQP6Kir+b4Q5yOvNAzZ61WbSU6A0A==}
+    dev: true
+
+  /svelte-youtube-embed@0.1.11:
+    resolution: {integrity: sha512-fw41QjivIK81mPYQ53LMZ/Xl3cyL00d+zj/OO0YPhGZsUbEM0HWEh4bGaFU47jOUa36DVqpAPogMbw+FBHBPuQ==}
     dev: true
 
   /svelte@3.52.0:
