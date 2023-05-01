@@ -163,17 +163,16 @@
             >
           </div>
         </form>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class="text-center mx-auto lg:ml-10 mb-10"
           on:click={() => fileInput.click()}
         >
-          <Avatar size="xl" src={preview || $user.avatar_url.webp} />
-          <button class="text-lightblue mt-5">
-            CHANGE AVATAR
-            <Fa icon={faImage} pull="right" class="mt-1 ml-2" />
-          </button>
-          
+          <Avatar size="xl" src={preview || $user.avatar_url} />
+          <button class="text-lightblue mt-5"
+            >CHANGE AVATAR
+            <Fa icon={faImage} pull="right" class="mt-1 ml-2" /></button
+          >
+
           <input
             class="hidden"
             bind:this={fileInput}
@@ -183,7 +182,7 @@
             accept="image/*"
             on:change={fileChosen}
           />
-          
+        </div>
       </div>
     </div>
   {/if}
@@ -233,7 +232,7 @@
   input[type="checkbox"]:checked {
     border: 5px solid #fff;
     outline: 2px solid #43470b;
-    background-color: #f2a900;
+    background-color: #43470b;
   }
 
   @media only screen and (max-width: 1024px) {

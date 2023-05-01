@@ -12,7 +12,7 @@
 <div class="flex mb-2">
   <div
     class="py-2 {recipient.type === royaltyRecipientIndividualType
-      ? '#CCFF00'
+      ? 'bg-primary'
       : 'bg-gray-500'} w-3 rounded-l-lg"
   />
   <div
@@ -31,11 +31,11 @@
       <div
         class="btn cursor-pointer text-center rounded-sm text-sm p-2 my-auto ml-2"
         on:click|stopPropagation={onDelete}
-        on:keydown={onDelete}
       >
         <Fa icon={faTimes} />
       </div>
-      {/if}
+    {/if}
+  </div>
 </div>
 
 <style>
