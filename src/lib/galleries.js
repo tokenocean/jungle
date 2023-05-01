@@ -1,5 +1,6 @@
 export default {
-  junglelab: "JungleLab",
+  membership: "Memberships",
+  artist: "Artists",
   ticket: "Ticket"
 };
 
