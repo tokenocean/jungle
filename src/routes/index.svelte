@@ -171,7 +171,7 @@
               NFT Event Tickets Gallery
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">Organisers Exclusive</p>
+          <p class="text-base font-semibold text-gray-900">Organisers Event Exclusive Tickets</p>
         </div>
 
         <div class="group relative">
