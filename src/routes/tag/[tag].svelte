@@ -21,7 +21,8 @@
 
     <div class="card border-l-8">
       <p>
-        Welcome to the Event Tickets Gallery on JungleLab! Here, you'll find a vibrant showcase of cutting-edge NFT event tickets created by visionary artists, graphic designers, and memelords from around the world.
+        Welcome to the NFT Event Tickets Gallery on JungleLab! Here, you'll find a vibrant showcase of cutting-edge NFT event tickets created by visionary artists, graphic designers, and memelords from around the world.
+        Create a ticket for your event and share it with the world. Sign in to buy or view your tickets and manage your events.
       </p>
       <p>
         Our gallery features a diverse range of events, from music festivals to art exhibitions, each one designed to capture the unique spirit and energy of its creator. And because all of our event tickets are NFTs on the Liquid Network, you can be sure that each one is secure, transparent, and tamper-proof. 
