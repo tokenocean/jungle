@@ -14,7 +14,7 @@
 </script>
 
 <div class="container mx-auto mt-10 md:mt-20">
-  {#if tag.toLowerCase() !== "ticket"}
+  {#if tag.toLowerCase() !== "event"}
     <h3 class="mb-10">{galleries[tag] ? galleries[tag] : `#${tag}`}</h3>
   {:else}
     <h3 class="mb-10">The Event Tickets Gallery</h3>
