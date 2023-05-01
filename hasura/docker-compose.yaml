@@ -86,6 +86,7 @@ services:
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
       HASURA_GRAPHQL_MIGRATIONS_DIR: /hasura/migrations
       HASURA_GRAPHQL_METADATA_DIR: /hasura/metadata
+      HASURA_GRAPHQL_ENABLED_APIS=metadata,graphql,config,metrics
   hbp:
     container_name: hbp
     image: nhost/hasura-backend-plus:v2.4.0
