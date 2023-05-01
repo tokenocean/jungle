@@ -216,15 +216,6 @@
   </div>
 </div>
 
-<div class="container mx-auto px-10">
-  <h3>Featured Videos</h3>
-<Youtube id="ipBSTuxMlLc" />
-</div>
-<div class="container mx-auto px-10">
-  <h3>Featured Videos</h3>
-<Youtube id="f6bCXQno72g" />
-</div>
-
 <!-- This is the information area -->
 <div class="py-12 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
