@@ -31,12 +31,18 @@ docker-compose -f docker-compose.yaml up -d
 echo "Waiting for all containers to start..."
 docker-compose -f docker-compose.yaml up -d
 docker-compose -f docker-compose.yaml ps -q | xargs docker inspect --format '{{ .State.Status }}' | grep running &>/dev/null
-
+echo "Waiting for containers to start..."
+while [ $? -ne 0 ]; do
+  echo "Waiting for containers to start..."
+  sleep 1
+  docker-compose -f docker-compose.yaml ps -q | xargs docker inspect --format '{{ .State.Status }}' | grep running &>/dev/null
+done
+sleep 30
 # Apply migrations, metadata, seeds and reload metadata after applying changes
 echo "Applying migrations and metadata..."
 if ! hasura migrate apply && \
    hasura metadata apply && \
-   (sleep 10; hasura seeds apply) && \
+   sleep 10; hasura seeds apply && \
    hasura metadata reload; then
   echo "Error: Failed to apply migrations, metadata, seeds, or reload metadata"
   exit 1
