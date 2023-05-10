@@ -19,7 +19,7 @@
         <Avatar user={transaction.user} />
       </div>
       <div class="flex flex-col">
-        <p class="mt-2 break-all">
+        <p class="mt-2">
           <TransactionText {transaction} />
         </p>
         <p class="text-sm">
