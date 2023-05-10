@@ -15,13 +15,25 @@ module.exports = {
         primary: "#FF8B00",
         secondary: "#CEDC21",
       } 
-    } 
-  },
-  darkMode: 'class',
-
+    },
+    // Add light and dark mode variants for background-color, text-color, etc.
+    // (Note: This requires TailwindCSS v2.2 or later)
+    backgroundColor: theme => ({
+      ...theme('colors'),
+      'primary-dark': '#151719',
+      'secondary-dark': '#4B5563'
+    }),
+    textColor: theme => ({
+      ...theme('colors'),
+      'primary-dark': '#151719',
+      'secondary-dark': '#D1D5DB'
+    })
+  }, 
+  // Set darkMode to 'media' to enable automatic switching based on the user's system preferences
+  darkMode: 'media', 
   plugins: [],
 
   variants: {
     borderWidth: ["responsive", "hover", "focus"],
-  },
+  }
 };
