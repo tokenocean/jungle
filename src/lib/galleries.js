@@ -1,6 +1,6 @@
 export default {
   membership: "Membership",
   artist: "Artist",
-  ticket: "Ticket"
+  art: "Art"
 };
 

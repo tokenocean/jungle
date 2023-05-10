@@ -10,14 +10,17 @@
 
 <div class="flex justify-between items-center menu relative">
   <Search suggest={false} />
-  <a sveltekit:prefetch href="/galleries"
-    ><button on:click={toggle}>Galleries</button></a
-  >
   <a sveltekit:prefetch href="/market"
     ><button on:click={toggle}>Market</button></a
   >
   <a sveltekit:prefetch href="/activity"
     ><button on:click={toggle}>Activity</button></a
+  >
+  <a sveltekit:prefetch href="/galleries/event"
+    ><button on:click={toggle}>Events</button></a
+  >
+  <a sveltekit:prefetch href="/galleries"
+    ><button on:click={toggle}>Galleries</button></a
   >
   <a href={branding.urls.external.blog}
     ><button on:click={toggle}>Blog</button></a
