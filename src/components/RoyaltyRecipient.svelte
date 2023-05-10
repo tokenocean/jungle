@@ -23,7 +23,7 @@
       <div class="ml-auto my-auto">
         {recipient.amount}%
       </div>
-      <div class="w-full break-all text-wrap text-xs text-secondary">
+      <div class="w-full text-wrap text-xs text-secondary">
         {recipient.address}
       </div>
     </div>

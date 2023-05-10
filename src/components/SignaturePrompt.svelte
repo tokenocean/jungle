@@ -63,7 +63,7 @@
 
   <Transaction summary={true} psbt={$psbt} />
   {#if base64}
-    <div class="break-all font-mono text-xs mb-2">{p.toBase64()}</div>
+    <div class="font-mono text-xs mb-2">{p.toBase64()}</div>
   {/if}
 {:catch error}
   <p style="color: red">{error.message}</p>

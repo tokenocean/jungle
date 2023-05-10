@@ -312,7 +312,7 @@
     {/if}
 
     {#if showDetails}
-      <div class="text-sm break-all text-wrap">
+      <div class="text-sm text-wrap">
         <div class="text-gray-400 text-xs">Transaction ID</div>
         <div class="mb-4 p-4">
           {#if ins.find((i) => !i.signed || i.pSig)}

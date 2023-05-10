@@ -23,7 +23,7 @@
       </div>
       <div class="p-4">
         <div class="flex justify-between mb-4">
-          <h3 class="text-xl break-all font-bold">{artwork.title}</h3>
+          <h3 class="text-xl font-bold">{artwork.title}</h3>
           <p class="text-right pl-5" />
         </div>
         <div class="flex">

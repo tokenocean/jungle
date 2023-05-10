@@ -271,7 +271,7 @@
       {:else}
         <div class="flex">
           <div
-            class="break-all text-sm"
+            class="text-sm"
             class:truncate={!showInvoice && tab === "lightning"}
             class:invisible={loading}
             class:mx-auto={tab !== "lightning"}
