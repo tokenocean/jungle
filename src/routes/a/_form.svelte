@@ -99,7 +99,7 @@
   <div class="flex flex-col mb-6">
     <label for="tags"
       >Tags
-      <span class="text-gray-400">(e.g. Ticket, abstract, event, etc)</span
+      <span class="text-gray-400">(e.g. Event, Membership, Ticket, Artist etc) for galleries listing & search</span
       ></label
     >
     <Select
