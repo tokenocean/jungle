@@ -19,7 +19,6 @@
   import branding from "$lib/branding";
   import { prefetch } from "$app/navigation";
   import { browser } from "$app/env";
-  import Youtube from "svelte-youtube-embed";
   onMount(() => browser && prefetch("/market"));
   export let featured;
   export let recent;
