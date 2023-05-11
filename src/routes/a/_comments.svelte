@@ -87,7 +87,7 @@
         <Avatar user={comment.user} size="large" />
         <div class="ml-10">
           <div class="font-bold">
-            <a href="https://www.raretoshi.com/{comment.user.username}"
+            <a href="https://junglelab.io/{comment.user.username}"
               >@{comment.user.username}</a
             >
           </div>
