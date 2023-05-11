@@ -37,11 +37,13 @@
     metadata[type] = `${host}/api/public/${artwork.filename}.webp`;
     if (artwork.filetype.includes("video")) {
       type = "video";
-      metadata[type] = `${host}/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`;
+      const fileTypeParts = artwork.filetype.split("/");
+      const fileExtension = fileTypeParts.length > 1 ? fileTypeParts[1] : "";
+      metadata[type] = `${host}/api/public/${artwork.filename}.${fileExtension}`;
     } else {
       metadata[type] = `${host}/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`;
     }
-
+    
     props.metadata = metadata;
 
     return {

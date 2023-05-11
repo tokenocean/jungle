@@ -182,7 +182,7 @@
               on:click={() => handleSelection(user)}
             >
               <img
-                src={`/api/public/${user.avatar_url}`}
+                src={`/api/public/${user.avatar_url}.webp`}
                 alt="avatar"
                 class="w-10 h-10 rounded-full"
               />
@@ -204,7 +204,7 @@
             <a href={`/${selectedUser.username}`}>
               <div class="flex items-center">
                 <img
-                  src={`/api/public/${selectedUser.avatar_url}`}
+                  src={`/api/public/${selectedUser.avatar_url}.webp`}
                   alt="avatar"
                   class="w-12 h-12 rounded-full"
                 />
