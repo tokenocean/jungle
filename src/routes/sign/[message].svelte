@@ -1,4 +1,5 @@
 <script>
+  import { user } from "$lib/store";
   import { page } from "$app/stores";
   import { copy, focus } from "$lib/utils";
   import { signMessage, verifySignature } from "$lib/wallet";
@@ -19,10 +20,17 @@
     <div>{message}</div>
   </div>
   <div>
+    <div><b>Address</b></div>
+    <div>{$user.address}</div>
+  </div>
+  <button class="primary-btn" on:click={() => copy($user.address)}
+    >Copy Address</button
+  >
+  <div>
     <div><b>Signature</b></div>
     <div>{signature}</div>
   </div>
-    <button type="submit" class="primary-btn" on:click={() => copy(signature)}
-      >Copy Signature</button
-    >
+  <button class="primary-btn" on:click={() => copy(signature)}
+    >Copy Signature</button
+  >
 </div>
