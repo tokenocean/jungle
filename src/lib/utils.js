@@ -155,6 +155,8 @@ export const copy = (v) => {
   info("Copied!");
 };
 
+export let focus = (el) => browser && screen.width > 1280 && setTimeout(() => el.focus(), 1);
+
 export const pick = (obj, ...keys) =>
   Object.fromEntries(Object.entries(obj).filter(([key]) => keys.includes(key)));
 

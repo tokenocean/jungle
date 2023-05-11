@@ -529,6 +529,13 @@
             class:disabled>Transfer</a
           >
         </div>
+        <div class="w-full mb-2">
+          <a
+            href={`/a/${artwork.slug}/sign`}
+            class="block text-center text-sm secondary-btn w-full"
+            class:disabled>Sign Message</a
+          >
+        </div>
 
         {#if $session?.user?.id === artwork.artist_id}
           <div class="w-full mb-2">
