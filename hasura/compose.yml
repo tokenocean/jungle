@@ -2,7 +2,7 @@ version: "3.6"
 services:
   rar:
     container_name: rar
-    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi:prod
+    image: raretoshi
     ports:
       - "3004:3000"
   lapp:
