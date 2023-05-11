@@ -1,9 +1,9 @@
 <script context="module">
-  export const load = ({ session, props }) => {
+  export const load = ({ session, props, url }) => {
     if (session.user) {
       return {
         status: 302,
-        redirect: "/",
+        redirect: url.searchParams.get("redirect") || "/",
       };
     }
 
