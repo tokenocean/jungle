@@ -35,11 +35,12 @@
 
     let type = "image";
     metadata[type] = `${host}/api/public/${artwork.filename}.webp`;
-    if (artwork.filetype.includes("video")) type = "video";
-
-    metadata[type] = `${host}/api/public/${artwork.filename}.${
-      artwork.filetype.split("/")[1]
-    }`;
+    if (artwork.filetype.includes("video")) {
+      type = "video";
+      metadata[type] = `${host}/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`;
+    } else {
+      metadata[type] = `${host}/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`;
+    }
 
     props.metadata = metadata;
 
