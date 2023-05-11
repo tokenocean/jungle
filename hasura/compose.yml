@@ -1,33 +1,50 @@
 version: "3.6"
 services:
+  rar:
+    container_name: rar
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi:prod
+    ports:
+      - "3004:3000"
   lapp:
     depends_on:
+      - hasura
       - hbp
+      - redis
+      # - liquid
     container_name: lapp
-    image: asoltys/lnft-server
+    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:prod
     restart: on-failure
+    command: ["pnpm", "dev"]
     environment:
       APP_URL: "${APP_URL}"
-      SERVER_URL: "${SERVER_URL}"
-      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
       CLOUDFLARE_TOKEN: "${CLOUDFLARE_TOKEN}"
       CLOUDFLARE_ZONE: "${CLOUDFLARE_ZONE}"
-      DOMAIN: "${DOMAIN}"
-      COINOS_URL: "${COINOS_URL}"
       COINOS_TOKEN: "${COINOS_TOKEN}"
-      HASURA_URL: "${HASURA_URL}"
+      COINOS_URL: "${COINOS_URL}"
+      DOMAIN: "${DOMAIN}"
       HASURA_JWT: "${HASURA_GRAPHQL_JWT_SECRET}"
-      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      HASURA_URL: "${HASURA_URL}"
       HBP_URL: "${HBP_URL}"
       IPFS_URL: "${IPFS_URL}"
       IPFS_WEB_URL: "${IPFS_WEB_URL}"
+      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      NFT_STORAGE_TOKEN: "${NFT_STORAGE_TOKEN}"
+      SERVER_URL: "${SERVER_URL}"
       SIGNING_SERVER_MNEMONIC: "${SIGNING_SERVER_MNEMONIC}"
       SMTP_HOST: "${SMTP_HOST}"
-      SMTP_PORT: "${SMTP_PORT}"
-      SMTP_USER: "${SMTP_USER}"
       SMTP_PASS: "${SMTP_PASS}"
+      SMTP_PORT: "${SMTP_PORT}"
       SMTP_SENDER: "${SMTP_SENDER}"
-      AUTH_EVENT_VALUE: '${AUTH_EVENT_VALUE}'
+      SMTP_USER: "${SMTP_USER}"
+      RPCHOST: "${RPCHOST}"
+      RPCPORT: "${RPCPORT}"
+      RPCUSER: "${RPCUSER}"
+      RPCPASS: "${RPCPASS}"
+      RPCWALLET: "${RPCWALLET}"
+    tmpfs:
+      - /tmp
     volumes:
       - ./app:/app
       - ./custom:/opt/src/hasura/app/custom
@@ -39,14 +56,15 @@ services:
     image: postgres:12
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - ${DATA_DIR}:/var/lib/postgresql/data
     ports:
       - "5433:5432"
   hasura:
     container_name: hasura
-    image: fedormelexin/graphql-engine-arm64
+    image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
     ports:
       - "8080:8080"
     depends_on:
@@ -56,16 +74,14 @@ services:
       - ./migrations:/hasura-migrations
       - ./metadata:/hasura-metadata
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
-      SERVER_URL: '${SERVER_URL}'
-      AUTH_EVENT_VALUE: '${AUTH_EVENT_VALUE}'
   hbp:
     container_name: hbp
-    image: nhost/hasura-backend-plus:v2.2.3
+    image: nhost/hasura-backend-plus:v2.4.0
     depends_on:
       - hasura
     ports:
@@ -87,12 +103,12 @@ services:
       SMTP_USER: "${SMTP_USER}"
       SMTP_PASS: "${SMTP_PASS}"
       SMTP_SENDER: "${SMTP_SENDER}"
-      APP_URL: "${APP_URL}"
+      VERIFY_EMAILS: "true"
     volumes:
-      - ./custom:/app/custom
+      - ./app:/app/custom
   ipfs:
     container_name: ipfs
-    image: linuxserver/ipfs
+    image: ipfs/go-ipfs:v0.14.0
     ports:
       - 8081:8080
       - 4001:4001
@@ -101,55 +117,17 @@ services:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
   liquid:
-    image: ghcr.io/vulpemventures/elements:0.18.1.12
+    image: ghcr.io/vulpemventures/elements:0.21.0.2
     container_name: liquid
-    ports:
-      - ${LIQUID_NODE_PORT}:18884
-      - ${LIQUID_PEER_PORT}:18886
-      - ${LIQUID_BLOCK_PORT}:18602
-      - ${LIQUID_TX_PORT}:18603
     volumes:
-      - ./liquidregtest/liquid-config/:/home/elements/.elements
+      - ./liquidmainnet:/home/elements/.elements
     restart: unless-stopped
-  electrs-liquid:
-    image: vulpemventures/electrs-liquid:latest
-    container_name: electrs-liquid
-    entrypoint:
-      - /build/electrs
-    command:
-      - -vvvv
-      - --parent-network
-      - regtest
-      - --network
-      - liquidregtest
-      - --daemon-dir
-      - /config
-      - --daemon-rpc-addr
-      - liquid:18884
-      - --cookie
-      - admin1:123
-      - --http-addr
-      - 0.0.0.0:3002
-      - --electrum-rpc-addr
-      - 0.0.0.0:60401
-      - --cors
-      - "*"
-    depends_on:
-      - liquid
-    ports:
-      - ${LIQUID_ELECTRS_RPC_PORT}:60401
-      - ${LIQUID_ELECTRS_PORT}:3002
+  redis:
+    container_name: redis
+    image: redis
     volumes:
-      - ./liquidregtest/liquid-config/:/config
-    restart: unless-stopped
-  esplora-liquid:
-    platform: linux/arm/v7
-    image: vulpemventures/esplora:latest
-    container_name: esplora-liquid
-    environment:
-      API_URL: http://${DOMAIN}:${LIQUID_ELECTRS_PORT}
-      NATIVE_ASSET_ID: 5ac9f65c0efcc4775e0baec4ec03abdde22473cd3cf33c0419ca290e0751b225
-      IS_ELEMENTS: 1
-    ports:
-      - ${LIQUID_ESPLORA_PORT}:5000
-    restart: unless-stopped
+      - ./redis:/data
+networks: 
+  default: 
+    name: net
+    external: true
