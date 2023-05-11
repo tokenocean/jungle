@@ -10,6 +10,7 @@
   let signature;
   onMount(async () => {
     signature = (await signMessage(message)).toString("base64");
+      console.log(verifySignature(message, signature));
   });
 </script>
 
@@ -21,14 +22,14 @@
   </div>
   <div>
     <div><b>Address</b></div>
-    <div>{$user.address}</div>
+    <div class="break-all">{$user.address}</div>
   </div>
   <button class="primary-btn" on:click={() => copy($user.address)}
     >Copy Address</button
   >
   <div>
     <div><b>Signature</b></div>
-    <div>{signature}</div>
+    <div class="break-all">{signature}</div>
   </div>
   <button class="primary-btn" on:click={() => copy(signature)}
     >Copy Signature</button
