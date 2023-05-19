@@ -21,7 +21,7 @@
 
     props.rates = rates;
 
-    let authRequired = [/a\/create/, /edit/, /wallet/, /settings/, /sign/];
+    let authRequired = [/^\/a\/create/, /^\/a\/edit/, /^\/wallet/, /^\/settings/, /^\/sign/];
     if (!session?.user && authRequired.find((p) => url.pathname.match(p))) {
       return {
         status: 302,
