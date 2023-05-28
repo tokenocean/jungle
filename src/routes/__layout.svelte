@@ -1,16 +1,8 @@
 <script context="module">
-  import { prerendering } from "$app/env";
   import { get } from "$lib/api";
   import "../main.css";
 
   export async function load({ fetch, url, session }) {
-    if (prerendering)
-      return {
-        props: {
-          popup: null,
-        },
-      };
-
     const rates = await fetch("/rates", {
       headers: { "content-type": "application/json" },
     }).then((r) => r.json());

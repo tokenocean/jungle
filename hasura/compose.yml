@@ -2,9 +2,10 @@ version: "3.6"
 services:
   rar:
     container_name: rar
-    image: raretoshi
+    image: asoltys/raretoshi
     ports:
       - "3004:3000"
+    restart: always
   lapp:
     depends_on:
       - hasura
@@ -13,7 +14,7 @@ services:
       # - liquid
     container_name: lapp
     image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:prod
-    restart: on-failure
+    restart: always
     command: ["pnpm", "dev"]
     environment:
       APP_URL: "${APP_URL}"
@@ -106,6 +107,7 @@ services:
       VERIFY_EMAILS: "true"
     volumes:
       - ./app:/app/custom
+    restart: always
   ipfs:
     container_name: ipfs
     image: ipfs/go-ipfs:v0.14.0
@@ -116,17 +118,19 @@ services:
     volumes:
       - ${IPFS_DATA}:/data/ipfs
       - ${STORAGE_DIR}:/export
+    restart: always
   liquid:
     image: ghcr.io/vulpemventures/elements:0.21.0.2
     container_name: liquid
     volumes:
       - ./liquidmainnet:/home/elements/.elements
-    restart: unless-stopped
+    restart: always
   redis:
     container_name: redis
     image: redis
     volumes:
       - ./redis:/data
+    restart: always
 networks: 
   default: 
     name: net
