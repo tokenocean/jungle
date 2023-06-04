@@ -54,7 +54,7 @@ app.post("/upload", async function (req, res) {
             .size("400x?")
             .noAudio()
             .withVideoCodec("libvpx-vp9")
-            .addOptions(["-b:v 0", "-crf 30", "-an", "-t 4"])
+            .addOptions(["-b:v 0", "-crf 15", "-an", "-t 4"])
             .on("error", reject)
             .on("end", () => resolve(output))
             .save(output);
