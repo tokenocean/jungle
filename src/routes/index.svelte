@@ -56,7 +56,7 @@
         <p>
           {artwork.title}
 
-          {#if new Date() < new Date("2024-04-15")}
+          {#if new Date() < new Date("2023-04-15")}
             <a href="/tag/event">
               <button
                 class="button-transparent header-button border mt-10"
