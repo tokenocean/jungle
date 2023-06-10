@@ -1,8 +1,3 @@
-<script context="module">
-	import { asset } from './../../lib/store.js';
-  export const prerender = true;
-</script>
-
 <script>
   import branding from "$lib/branding";
 </script>
