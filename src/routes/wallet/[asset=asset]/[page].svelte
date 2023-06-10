@@ -27,7 +27,6 @@
     satsFormatted,
     updateBitcoinUnit,
   } from "$lib/utils";
-  import { requireLogin } from "$lib/auth";
   import { getBalance } from "$lib/wallet";
 
   import Fund from "../_fund.svelte";

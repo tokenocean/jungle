@@ -21,11 +21,11 @@
 
     props.rates = rates;
 
-    let authRequired = [/a\/create/, /edit/, /wallet/, /settings/];
+    let authRequired = [/a\/create/, /edit/, /wallet/, /settings/, /sign/];
     if (!session?.user && authRequired.find((p) => url.pathname.match(p))) {
       return {
         status: 302,
-        redirect: "/login",
+        redirect: `/login?redirect=${url.pathname}`,
       };
     }
 

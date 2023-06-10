@@ -14,7 +14,7 @@ services:
       - hasura
       - hbp
       - redis
-      - liquid
+      # - liquid
     container_name: lapp
     image: asoltys/lnft-server
     restart: on-failure
