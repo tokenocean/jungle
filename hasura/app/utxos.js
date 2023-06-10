@@ -308,7 +308,7 @@ app.get("/tx/:txid/hex", async (req, res) => {
   try {
     res.send(await hex(txid));
   } catch (e) {
-    console.log("problem getting tx hex", txid);
+    console.log("problem getting tx hex", txid, req.headers["cf-connecting-ip"]);
     res.code(500).send(e.message);
   }
 });
