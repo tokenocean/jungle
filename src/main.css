@@ -239,3 +239,34 @@ button:hover {
 .footer ul li a {
   font-size: 16px;
 }
+
+.dark:text-white
+
+// main.css
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #111111;
+    --text-color: #ffffff;
+  }
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+// main-dark.css
+:root {
+  --bg-color: #111111;
+  --text-color: #ffffff;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

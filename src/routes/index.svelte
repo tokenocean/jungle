@@ -35,7 +35,7 @@
 
 <div class="flex header-container mx-auto justify-center marg-bottom">
   <div class="header text-center">
-    <h1 class="text-left md:text-center md:w-full">
+    <h1 class="dark:text-white text-left md:text-center md:w-full">
       {branding.projectName}
       <br />art music ticket video
     </h1>

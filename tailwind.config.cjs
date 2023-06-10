@@ -1,23 +1,28 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   mode: 'jit',
   content: [
     './src/**/*.{js,svelte}',
   ],
   theme: {
-    screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-    },
     extend: {
       colors: {
-        primary: "#FF8B00",
-        secondary: "#CEDC21",
-      } 
-    } 
+        primary: '#FF8B00',
+        secondary: '#CEDC21',
+        gray: colors.trueGray,
+      },
+      boxShadow: {
+        '3xl': '0 35px 60px -15px rgb (255, 139, 0)',
+      }
+    },
   },
   variants: {
-    borderWidth: ["responsive", "hover", "focus"],
+    extend: {},
   },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+  ],
+  darkMode: 'class', // Enable auto dark mode
 };
