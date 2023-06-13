@@ -33,31 +33,46 @@ app.post("/upload", async function (req, res) {
       new Promise(async (resolve, reject) => {
         try {
           if (ext === "gif") throw new Error("process gifs as videos");
-          output = `${tmp}.webp`;
-          await pipeline(
-            s2,
-            sharp().rotate().resize(800).webp({quality: 90}),
-            fs.createWriteStream(output)
-          );
-          resolve(output);
-        } catch (e) {
-          try {
-            await pipeline(s3, fs.createWriteStream(tmp));
-          } catch (e) {
-            console.log("disk write failed", e);
+          if (ext === "mp3" || ext === "aiff" || ext === "wav" || ext === "m4a") {
+            output = `${tmp}.webm`;
+            ffmpeg()
+              .input(s2)
+              .audioCodec("libopus")
+              .format("webm")
+              .output(output)
+              .on("error", reject)
+              .on("end", () => resolve(output))
+              .run();
+          } else if (ext === "mp4") {
+            output = `${tmp}.webp`;
+            await pipeline(
+              s2,
+              sharp().rotate().resize(800).webp({ quality: 90 }),
+              fs.createWriteStream(output)
+            );
+            resolve(output);
+          } else {
+            try {
+              await pipeline(s3, fs.createWriteStream(tmp));
+            } catch (e) {
+              console.log("disk write failed", e);
+            }
+
+            output = `${tmp}.webm`;
+
+            ffmpeg()
+              .input(tmp)
+              .size("400x?")
+              .noAudio()
+              .withVideoCodec("libvpx-vp9")
+              .addOptions(["-b:v", "0", "-crf", "15", "-an", "-t", "4"])
+              .on("error", reject)
+              .on("end", () => resolve(output))
+              .save(output);
           }
-
-          output = `${tmp}.webm`;
-
-          ffmpeg()
-            .input(tmp)
-            .size("400x?")
-            .noAudio()
-            .withVideoCodec("libvpx-vp9")
-            .addOptions(["-b:v 0", "-crf 15", "-an", "-t 4"])
-            .on("error", reject)
-            .on("end", () => resolve(output))
-            .save(output);
+        } catch (e) {
+          console.log("Conversion error:", e);
+          reject(e);
         }
       }),
     ]);
