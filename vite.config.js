@@ -28,5 +28,6 @@ const config = {
       "@fortawesome/free-solid-svg-icons",
     ],
   },
-  
+};
+
 export default config;
