@@ -36,31 +36,30 @@
   }}
 >
   <div
-    class={`relative ${size} group rounded-full overflow-hidden shadow-inner text-center`}
-    class:cursor-pointer={user}
-  >
-    {#if user || src}
-      <img
-        key={user && user.username}
-        src={user
-          ? `/api/public/${user.avatar_url}.webp`
-          : src.startsWith("data") || src[0] === "/"
-          ? src
-          : `/api/public/${src}`}
-        alt={user ? user.username : "lovely avatar"}
-        class="absolute w-full h-full object-cover object-center visible overflow-hidden"
-      />
-    {/if}
-  </div>
-  {#if overlay}
-    <img
-      alt="Multisig"
-      src={overlay}
-      class="w-6 h-6 absolute"
-      style="bottom: -8px; right: -20px"
-    />
-  {/if}
-</div>
+     class={`relative ${size} group rounded-full overflow-hidden shadow-inner text-center`}
+     class:cursor-pointer={user}
+   >
+     {#if user || src}
+       <img
+         key={user && user.username}
+         src={user
+           ? `/api/public/${user.avatar_url}.webp`
+           : src.startsWith("data") || src[0] === "/"
+           ? src
+           : `/api/public/${src}`}
+         alt={user ? user.username : "lovely avatar"}
+         class="absolute w-full h-full object-cover object-center visible overflow-hidden"
+       />
+     {/if}
+   </div>
+   {#if overlay}
+     <img
+       alt="Multisig"
+       src={overlay}
+       class="w-6 h-6 absolute"
+       style="bottom: -8px; right: -20px"
+     />
+   {/if}
 
 <style>
   .z {
