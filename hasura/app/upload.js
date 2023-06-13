@@ -111,5 +111,5 @@ app.post("/upload", async function (req, res) {
 });
 
 if (!data || !fs.existsSync(data.file.path)) {
-  return res.status(400).send("File does not exist");
+  res.status(400).send("File does not exist");
 }
