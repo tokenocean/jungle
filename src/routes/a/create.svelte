@@ -62,6 +62,7 @@
   };
 
   let percent;
+  let width;
   let progress = async (event) => {
     percent = Math.round((event.loaded / event.total) * 100);
 
@@ -77,29 +78,45 @@
   const uploadFile = async ({ detail: file }) => {
     if (!file) return;
     ({ type } = file);
+    let ext = file.name.split(".").pop().toLowerCase();
+    let artwork = {
+      title: "",
+      description: "",
+      filename: "",
+      asset: "",
+      edition: 1,
+      editions: 1,
+      tags: [],
+    };
     artwork.filetype = type;
 
     if (file.size < 100000000) previewFile(file);
 
-    try {
-      artwork.filename = await upload(file, progress);
-    } catch (e) {
-      err(e);
-      percent = 0;
-      return;
+    if (
+      ext === "mp3" ||
+      ext === "aiff" ||
+      ext === "wav" ||
+      ext === "m4a" ||
+      ext === "mp4"
+    ) {
+      // Existing code for handling MP4 files
+      if (type.includes("video")) {
+        video = URL.createObjectURL(file);
+      } else {
+        video = "";
+      }
+    } else {
+      // Existing code for handling other file types
+      try {
+        artwork.filename = await upload(file, progress);
+      } catch (e) {
+        err(e);
+        percent = 0;
+        return;
+      }
     }
 
     await tick();
-  };
-
-  let artwork = {
-    title: "",
-    description: "",
-    filename: "",
-    asset: "",
-    edition: 1,
-    editions: 1,
-    tags: [],
   };
 
   let hash, tx, inputs, total, transactions;
@@ -207,12 +224,18 @@
       {#if percent}
         <div class="ml-2 flex-1 flex">
           <div class="upload-button mx-auto">
-            <ArtworkMedia
-              {artwork}
-              {preview}
-              showDetails={false}
-              thumb={false}
-            />
+            {#if type.includes("video")}
+              <video class="w-full" controls>
+                <source src={video} type={type} />
+              </video>
+            {:else}
+              <ArtworkMedia
+                {artwork}
+                {preview}
+                showDetails={false}
+                thumb={false}
+              />
+            {/if}
             <div class="w-full bg-grey-light p-8">
               <div
                 class="font-light p-4 mx-auto max-w-xs text-center"
@@ -224,7 +247,9 @@
                   {percent}%
                 {:else if artwork.filename}
                   Upload complete!
-                {:else}Processing...{/if}
+                {:else}
+                  Processing...
+                {/if}
               </div>
             </div>
           </div>
