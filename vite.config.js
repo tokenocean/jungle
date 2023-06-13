@@ -26,7 +26,13 @@ const config = {
       "@fortawesome/free-brands-svg-icons",
       "@fortawesome/free-regular-svg-icons",
       "@fortawesome/free-solid-svg-icons",
+      "bitcoinjs-message", // fixed
     ],
+  },
+  build: {
+    rollupOptions: {
+      external: ['bitcoinjs-message'],
+    },
   },
 };
 

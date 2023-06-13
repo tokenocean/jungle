@@ -60,6 +60,7 @@
        style="bottom: -8px; right: -20px"
      />
    {/if}
+</div>
 
 <style>
   .z {

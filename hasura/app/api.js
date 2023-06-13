@@ -2,7 +2,7 @@ import wretch from "wretch";
 import fetch from "node-fetch";
 const w = wretch().polyfills({ fetch });
 const {
-  LIQUID_ELECTRS_URL,
+  LIQUID_ELECTRS_URL = "https://blockstream.info/liquid/api",
   HASURA_SECRET,
   HASURA_URL,
   CLOUDFLARE_TOKEN,
@@ -19,6 +19,7 @@ const {
 } = process.env;
 
 const DELAY = LIQUID_ELECTRS_URL.includes("blockstream") ? 40 : 0;
+
 
 const queue = [];
 let processed = 0;
