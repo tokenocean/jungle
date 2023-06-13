@@ -34,7 +34,7 @@
     metadata.description = artwork.description.replace(/(?:\r\n|\r|\n)/g, " ");
 
     let type = "image";
-    metadata[type] = `${host}/api/public/${artwork.filename}.png`;
+    metadata[type] = `${host}/api/public/${artwork.filename}.webp`;
     if (artwork.filetype.includes("video")) type = "video";
 
     metadata[type] = `${host}/api/public/${artwork.filename}.${

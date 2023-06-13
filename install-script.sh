@@ -27,23 +27,14 @@ echo "Starting docker-compose services..."
 docker-compose -f docker-compose.yaml up -d
 
 # Wait for all containers to start
-# Wait for all containers to start
 echo "Waiting for all containers to start..."
-docker-compose -f docker-compose.yaml up -d
-docker-compose -f docker-compose.yaml ps -q | xargs docker inspect --format '{{ .State.Status }}' | grep running &>/dev/null
-echo "Waiting for containers to start..."
-while [ $? -ne 0 ]; do
-  echo "Waiting for containers to start..."
+while ! docker-compose -f docker-compose.yaml ps --services --filter "status=running" | grep -q .; do
   sleep 1
-  docker-compose -f docker-compose.yaml ps -q | xargs docker inspect --format '{{ .State.Status }}' | grep running &>/dev/null
 done
-sleep 30
-# Apply migrations, metadata, seeds and reload metadata after applying changes
+
+# Apply migrations, metadata, seeds, and reload metadata after applying changes
 echo "Applying migrations and metadata..."
-if ! hasura migrate apply && \
-   hasura metadata apply && \
-   sleep 10; hasura seeds apply && \
-   hasura metadata reload; then
+if ! hasura migrate apply && hasura metadata apply && sleep 10 && hasura seeds apply && hasura metadata reload; then
   echo "Error: Failed to apply migrations, metadata, seeds, or reload metadata"
   exit 1
 fi
@@ -59,15 +50,13 @@ fi
 # Copy and upload image file
 echo "Copying and uploading image file..."
 IMAGE_PATH="../static/user.png"
-sudo cp $IMAGE_PATH storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp &&
-docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp ||
-  {
-    echo "Error: Failed to copy or upload image file to IPFS"
-    exit 1
-  }
+if ! sudo cp $IMAGE_PATH storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp && \
+     docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp; then
+  echo "Error: Failed to copy or upload image file to IPFS"
+  exit 1
+fi
 
-
-# Create new cryptocurrency wallet and rescan blockchain
+# Create new wallet and rescan blockchain
 echo "Creating new cryptocurrency wallet and rescanning blockchain..."
 if ! docker exec -it liquid elements-cli createwallet coinos; then
   echo "Error: Failed to create new wallet"
@@ -90,5 +79,4 @@ fi
 echo "Starting development server..."
 if ! pnpm dev; then
   echo "Error: Failed to start development server"
-  exit 1
-fi
+ 

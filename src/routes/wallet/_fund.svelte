@@ -23,7 +23,7 @@
     showInvoice = !showInvoice;
   };
 
-  let confidential = false;
+  let confidential = true;
   let toggleConfidential = () => {
     confidential = !confidential;
     if (confidential) liquid();

@@ -5,7 +5,7 @@ https://{$DOMAIN} {
   reverse_proxy ui:3000
 
   @cached {
-    path *.jpg *.jpeg *.png *.gif *.ico /api/tx/* /api/public/*
+    path *.aiff *.mp4 *.mp3 *.jpg *.jpeg *.png *.gif *.ico /api/tx/* /api/public/*
   }
 
   header @cached Cache-Control "public, max-age=604800, must-revalidate"
