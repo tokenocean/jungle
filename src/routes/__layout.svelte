@@ -1,8 +1,16 @@
 <script context="module">
+  import { prerendering } from "$app/env";
   import { get } from "$lib/api";
   import "../main.css";
 
   export async function load({ fetch, url, session }) {
+    if (prerendering)
+      return {
+        props: {
+          popup: null,
+        },
+      };
+
     const rates = await fetch("/rates", {
       headers: { "content-type": "application/json" },
     }).then((r) => r.json());
@@ -13,7 +21,7 @@
 
     props.rates = rates;
 
-    let authRequired = [/^\/a\/create/, /^\/a\/edit/, /^\/wallet/, /^\/settings/, /^\/sign/];
+    let authRequired = [/a\/create/, /edit/, /wallet/, /settings/, /sign/];
     if (!session?.user && authRequired.find((p) => url.pathname.match(p))) {
       return {
         status: 302,
@@ -204,7 +212,7 @@
 <Snack />
 
 <Sidebar bind:open />
-<div class="sticky">
+<div class={y > 50 ? "sticky" : ""}>
   <Navbar bind:sidebar={open} />
 </div>
 <Dialog />
