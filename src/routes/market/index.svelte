@@ -9,7 +9,7 @@
     results,
     show,
     sortCriteria as sc,
-    user,
+    user
   } from "$lib/store";
   import { info, err, goto, btc, usd, cad } from "$lib/utils";
   import { Gallery, Results, Search } from "$comp";
@@ -18,15 +18,19 @@
   import { requirePassword } from "$lib/auth";
   import { compareAsc, parseISO } from "date-fns";
   import { browser } from "$app/env";
+
   export let total;
   export let initialArtworks = [];
+
   let showFilters;
   let filtered = [...initialArtworks];
+
   $: filtersUpdated($fc, $sc);
   let filtersUpdated = () => {
     $offset = 0;
     loadMore();
   };
+
   let loadMore = async () => {
     if (!browser) return;
     try {
@@ -48,7 +52,7 @@
         where.auction_end = { _gt: new Date(), _is_null: false };
       }
       if ($fc.filterByCurrency) {
-        switch ($fc.selectedCurrency) {
+        switch($fc.selectedCurrency) {
           case "L-BTC":
             where.asking_asset = { _eq: btc };
             break;
@@ -68,6 +72,7 @@
           owner: { id: { _in: follows } },
         };
       }
+
       let order_by = {
         newest: { created_at: "desc" },
         oldest: { created_at: "asc" },
@@ -76,11 +81,13 @@
         ending_soon: { auction_end: "asc" },
         most_viewed: { views: "desc" },
       }[$sc];
+
       const r = await fetch("/artworks", {
         method: "POST",
         body: JSON.stringify({ offset: $offset, order_by, where }),
         headers: { "content-type": "application/json" },
       }).then((r) => r.json());
+
       filtered = [...r.artworks];
       total = r.total;
     } catch (e) {
@@ -138,6 +145,7 @@
       border-bottom: 1px solid #CEDC21;
     }
   }
+
   @media only screen and (max-width: 767px) {
     .primary-btn {
       width: 300px;
