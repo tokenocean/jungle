@@ -1,10 +1,4 @@
 <script context="module">
-	import { asset } from './../../lib/store.js';
-  export const prerender = true;
-</script>
-
-<script context="module">
-	import { assets } from './../lib/store.js';
   export async function load({ fetch }) {
     const props = await fetch(`/artworks/recent`).then((r) => r.json());
 
@@ -24,17 +18,22 @@
   import branding from "$lib/branding";
   import { prefetch } from "$app/navigation";
   import { browser } from "$app/env";
+
   onMount(() => browser && prefetch("/market"));
+
   export let featured;
   export let recent;
   export let latest;
+
   let current = 0;
   $: artwork = featured && featured[current] && featured[current].artwork;
+
   let interval = setInterval(() => {
     if (!featured) return;
     current++;
     if (current >= featured.length) current = 0;
   }, 6000);
+
   onDestroy(() => clearInterval(interval));
 </script>
 
