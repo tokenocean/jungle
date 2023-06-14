@@ -79,4 +79,4 @@ fi
 echo "Starting development server..."
 if ! pnpm dev; then
   echo "Error: Failed to start development server"
- 
+fi
