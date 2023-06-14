@@ -1,4 +1,4 @@
-FROM gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:base
+FROM gcr.io/coinos-326717/github.com/tokenocean/jungle-server:base
 
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV

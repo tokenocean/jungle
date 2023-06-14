@@ -1,45 +1,43 @@
 version: "3.6"
 services:
-  ui:
+  jung:
+    container_name: 
     image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
-    depends_on:
-      - lapp
-    container_name: ui
-    restart: on-failure
     ports:
-      - "3000:3000"
-      - "9229:9229"
+      - "3004:3000"
+    restart: always
   lapp:
     depends_on:
+      - hasura
       - hbp
+      - redis
     container_name: lapp
     image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
-    restart: on-failure
+    restart: always
     command: ["pnpm", "dev"]
     environment:
       APP_URL: "${APP_URL}"
-      SERVER_URL: "${SERVER_URL}"
-      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
       CLOUDFLARE_TOKEN: "${CLOUDFLARE_TOKEN}"
       CLOUDFLARE_ZONE: "${CLOUDFLARE_ZONE}"
-      DOMAIN: "${DOMAIN}"
-      COINOS_URL: "${COINOS_URL}"
       COINOS_TOKEN: "${COINOS_TOKEN}"
-      HASURA_URL: "${HASURA_URL}"
+      COINOS_URL: "${COINOS_URL}"
+      DOMAIN: "${DOMAIN}"
       HASURA_JWT: "${HASURA_GRAPHQL_JWT_SECRET}"
-      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      HASURA_URL: "${HASURA_URL}"
       HBP_URL: "${HBP_URL}"
       IPFS_URL: "${IPFS_URL}"
       IPFS_WEB_URL: "${IPFS_WEB_URL}"
-      NODE_ENV: "development"
+      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      NFT_STORAGE_TOKEN: "${NFT_STORAGE_TOKEN}"
+      SERVER_URL: "${SERVER_URL}"
       SIGNING_SERVER_MNEMONIC: "${SIGNING_SERVER_MNEMONIC}"
       SMTP_HOST: "${SMTP_HOST}"
-      SMTP_PORT: "${SMTP_PORT}"
-      SMTP_USER: "${SMTP_USER}"
       SMTP_PASS: "${SMTP_PASS}"
+      SMTP_PORT: "${SMTP_PORT}"
       SMTP_SENDER: "${SMTP_SENDER}"
-      AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
-      NFT_STORAGE_TOKEN: "${NFT_STORAGE_TOKEN}"
+      SMTP_USER: "${SMTP_USER}"
       RPCHOST: "${RPCHOST}"
       RPCPORT: "${RPCPORT}"
       RPCUSER: "${RPCUSER}"
@@ -53,34 +51,34 @@ services:
       - ${STORAGE_DIR}:/export
     ports:
       - "8091:8091"
-    networks:
-      default:
-        ipv4_address: 172.18.0.12
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - ${DATA_DIR}:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
   hasura:
-    logging:
-      options:
-        max-size: "50k"
-        max-file: "3"
     container_name: hasura
-    image: hasura/graphql-engine:v2.7.0
+    image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
     restart: always
     volumes:
       - ./migrations:/hasura-migrations
       - ./metadata:/hasura-metadata
     environment:
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
-      HASURA_GRAPHQL_DATABASE_URL: "${HASURA_GRAPHQL_DATABASE_URL}"
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_USER}"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
       HASURA_GRAPHQL_JWT_SECRET: "${HASURA_GRAPHQL_JWT_SECRET}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
-      SERVER_URL: "${SERVER_URL}"
-      AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
-    networks:
-      default:
-        ipv4_address: 172.18.0.14
   hbp:
     container_name: hbp
     image: nhost/hasura-backend-plus:v2.4.0
@@ -108,9 +106,30 @@ services:
       VERIFY_EMAILS: "true"
     volumes:
       - ./app:/app/custom
-    networks:
-      default:
-        ipv4_address: 172.18.0.15
+    restart: always
+  ipfs:
+    container_name: ipfs
+    image: ipfs/go-ipfs:v0.14.0
+    ports:
+      - 8081:8080
+      - 4001:4001
+      - 5001:5001
+    volumes:
+      - ${IPFS_DATA}:/data/ipfs
+      - ${STORAGE_DIR}:/export
+    restart: always
+  liquid:
+    image: ghcr.io/vulpemventures/elements:0.21.0.2
+    container_name: liquid
+    volumes:
+      - ./liquidmainnet:/home/elements/.elements
+    restart: always
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+      - ./redis:/data
+    restart: always
 networks: 
   default: 
     name: net
