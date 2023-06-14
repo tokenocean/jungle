@@ -1,4 +1,8 @@
 <script context="module">
+	import { asset } from './../../lib/store.js';
+  export const prerender = true;
+</script>
+<script context="module">
 	import { assets } from './../lib/store.js';
   export async function load({ fetch }) {
     const props = await fetch(`/artworks/recent`).then((r) => r.json());
