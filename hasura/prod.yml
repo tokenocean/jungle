@@ -34,7 +34,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: asoltys/lnft-server
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: on-failure
     environment:
       APP_URL: "${APP_URL}"
