@@ -1,4 +1,3 @@
-import { signAsync, verify } from "bitcoinjs-message";
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { newapi as api, electrs, hasura, query } from "$lib/api";

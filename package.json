@@ -64,6 +64,6 @@
     },
     "type": "module",
     "dependencies": {
-        "bitcoinjs-message": "^2.2.0"
+        
     }
 }
