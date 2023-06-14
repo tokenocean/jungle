@@ -20,7 +20,7 @@ services:
     depends_on:
       - lapp
     container_name: ui
-    image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
+    image: junglelab/jungle:latest
     restart: on-failure
     ports:
       - "3000:3000"
