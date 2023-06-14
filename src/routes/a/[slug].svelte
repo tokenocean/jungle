@@ -34,16 +34,13 @@
     metadata.description = artwork.description.replace(/(?:\r\n|\r|\n)/g, " ");
 
     let type = "image";
-    metadata[type] = `${host}/api/public/${artwork.filename}.webp`;
-    if (artwork.filetype.includes("video")) {
-      type = "video";
-      const fileTypeParts = artwork.filetype.split("/");
-      const fileExtension = fileTypeParts.length > 1 ? fileTypeParts[1] : "";
-      metadata[type] = `${host}/api/public/${artwork.filename}.${fileExtension}`;
-    } else {
-      metadata[type] = `${host}/api/public/${artwork.filename}.${artwork.filetype.split("/")[1]}`;
-    }
-    
+    metadata[type] = `${host}/api/public/${artwork.filename}.png`;
+    if (artwork.filetype.includes("video")) type = "video";
+
+    metadata[type] = `${host}/api/public/${artwork.filename}.${
+      artwork.filetype.split("/")[1]
+    }`;
+
     props.metadata = metadata;
 
     return {
@@ -395,8 +392,6 @@
         {#if artwork.is_physical}
           <div
             class="flex ml-auto py-1 px-4 bg-gray-100 rounded rounded-full my-auto"
-            role="button"
-            tabindex="0"
           >
             <div class="my-auto">
               <Fa icon={faImage} class="mr-1" />
@@ -405,7 +400,6 @@
               <span class="text-sm">Physical artwork</span>
             </div>
           </div>
-          
         {/if}
       </div>
 
@@ -533,6 +527,13 @@
             href={`/a/${artwork.slug}/transfer`}
             class="block text-center text-sm secondary-btn w-full"
             class:disabled>Transfer</a
+          >
+        </div>
+        <div class="w-full mb-2">
+          <a
+            href={`/a/${artwork.slug}/sign`}
+            class="block text-center text-sm secondary-btn w-full"
+            class:disabled>Sign Message</a
           >
         </div>
 

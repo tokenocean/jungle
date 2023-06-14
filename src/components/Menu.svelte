@@ -25,7 +25,7 @@
   <a href={branding.urls.external.blog}
     ><button on:click={toggle}>Blog</button></a
   >
-  <a href="/help"><button on:click={toggle}>Help</button></a>
+  <a href="/help"><button on:click={toggle}>Help</button></a>&nbsp;
   {#if $session.user}
     {#if $session.user.is_admin}
       <a href="/admin"><button on:click={toggle}>Admin</button></a>

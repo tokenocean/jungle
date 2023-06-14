@@ -199,7 +199,7 @@
                 <div class="flex">
                   <Avatar user={artwork.owner} size="xs" />
                   <div class="ml-2 w-3/4">
-                    <a class="truncate" href={`/${artwork.owner.username}`}
+                    <a class="break-all" href={`/${artwork.owner.username}`}
                       >@{artwork.owner.username}</a
                     >
                     <div class="text-xs text-gray-600">Owner</div>

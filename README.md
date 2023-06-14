@@ -57,29 +57,71 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
     run bash script for auto config: ./install-script.sh
 
     
-    curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
-    npm i -g pnpm
-    pnpm install
-    cd hasura
-    cp .env.sample .env
-    docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
-    docker-compose up -d
-    hasura migrate apply
-    hasura metadata apply
-    hasura seeds apply
-    hasura metadata reload
-    docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Paths": ["/ipfs", "/ipns"], "UseSubdomains": false } }'
-    docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"
-    sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
-    docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
-    docker exec -it liquid elements-cli createwallet coinos
-    docker exec -it liquid elements-cli rescanblockchain
-    docker restart lapp
-    cd ..
-    pnpm dev   # site is available at http://localhost:3000/
+    #!/bin/bash
+
+# Install Hasura CLI
+curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+
+# Install pnpm globally
+npm i -g pnpm
+
+# Install project dependencies
+pnpm install
+
+# Navigate to the "hasura" directory
+cd hasura
+
+# Copy the .env.sample file to .env
+cp .env.sample .env
+
+# Install project dependencies within a Docker container
+docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
+
+# Create a Docker network
+docker network create net
+
+# Start Docker containers
+docker-compose up -d
+
+# Apply Hasura migrations
+hasura migrate apply
+
+# Apply Hasura metadata
+hasura metadata apply
+
+# Apply Hasura seeds
+hasura seeds apply
+
+# Reload Hasura metadata
+hasura metadata reload
+
+# Configure IPFS gateway
+docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Paths": ["/ipfs", "/ipns"], "UseSubdomains": false } }'
+docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"
+
+# Copy the user.png file to the storage directory
+sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
+
+# Add the file to IPFS
+docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
+
+# Create a Liquid wallet
+docker exec -it liquid elements-cli createwallet coinos
+
+# Rescan the blockchain
+docker exec -it liquid elements-cli rescanblockchain
+
+# Restart the "lapp" service
+docker restart lapp
+
+# Navigate back to the previous directory
+cd ..
+
+pnpm dev   # site is available at http://localhost:3000/
     
-    chmod +x mine.sh
-    ./mine.sh   # this script will run continually to mine regtest blocks, you may want to run it in a separate terminal window or tab
+chmod +x mine.sh
+./mine.sh   # this script will run continually to mine regtest blocks, you may want to run it in a separate terminal window or tab
+    
     # liquid network regtest
     
     docker exec -it liquid elements-cli -datadir=/home/elements/.elements sendtoaddress <address> 1   # get <address> from http://localhost:3000/wallet
