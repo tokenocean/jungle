@@ -4,11 +4,22 @@ import { parseISO, isWithinInterval } from "date-fns";
 import { address as Address } from "liquidjs-lib";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
-import { getArtworks, allMultisig } from "./queries.js";
+import { getUserByAddress, getArtworks, allMultisig } from "./queries.js";
 
 app.get("/pubkey", async (req, res) => {
   const { pubkey } = keypair();
   res.send({ pubkey: pubkey.toString("hex") });
+});
+
+app.get("/address/:address", async (req, res) => {
+  const { address } = req.params;
+  let { users } = await q(getUserByAddress, { address });
+  if (users.length) {
+    let { address, multisig } = users[0];
+    res.send({ address, multisig });
+  } else {
+    res.status(500).send("address not found");
+  }
 });
 
 app.post("/sign", auth, async (req, res) => {
