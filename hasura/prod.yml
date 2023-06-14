@@ -20,7 +20,7 @@ services:
     depends_on:
       - lapp
     container_name: ui
-    image: junglelab/jungle:latest
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
     restart: on-failure
     ports:
       - "3000:3000"
@@ -34,7 +34,7 @@ services:
     depends_on:
       - hbp
     container_name: lapp
-    image: junglelab/lnft-server
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: on-failure
     environment:
       APP_URL: "${APP_URL}"

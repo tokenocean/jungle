@@ -16,7 +16,7 @@ services:
       - redis
       # - liquid
     container_name: lapp
-    image: junglelab/lnft-server
+    image: asoltys/lnft-server
     restart: on-failure
     command: ["pnpm", "dev"]
     environment:
