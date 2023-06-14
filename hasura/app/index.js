@@ -15,7 +15,7 @@ import "./messages.js";
 import "./monitor.js";
 import "./registry.js";
 import "./signing.js";
- import "./upload.js";
+import "./upload.js";
 import "./mail.js";
 import "./tips.js";
 import "./utxos.js";
