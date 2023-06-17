@@ -36,7 +36,7 @@ app.post("/upload", async function (req, res) {
           output = `${tmp}.webp`;
           await pipeline(
             s2,
-            sharp().rotate().resize(800).webp(),
+            sharp().rotate().resize(800).webp({ quality: 90 }),
             fs.createWriteStream(output)
           );
           resolve(output);
