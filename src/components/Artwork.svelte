@@ -10,7 +10,7 @@
   </video>
 {:else}
   <img
-    src={`/api/storage/o/public/${artwork.filename}`}
+    src={`/api/storage/o/public/${artwork.filename}.${ext}`}
     alt={artwork.filename}
     class="w-auto h-auto"
   />
