@@ -191,7 +191,7 @@
                         <Avatar user={users[username]} />
                       {:else}
                         <Avatar
-                          src="QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp"
+                          src="QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z"
                         />
                       {/if}
                     </div>
@@ -245,7 +245,7 @@
                         <Avatar user={users[username]} />
                       {:else}
                         <Avatar
-                          src="QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp"
+                          src="QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z"
                         />
                       {/if}
                     </div>
