@@ -2,7 +2,8 @@ import cookie from "cookie";
 
 const opts = {
   httpOnly: true,
-  sameSite: "lax",
+  sameSite: "none",
+  secure: true,
   path: "/",
 };
 
