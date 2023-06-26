@@ -39,7 +39,8 @@ export async function handle({ event, resolve }) {
           cookie.serialize("token", jwt_token, {
             httpOnly: true,
             maxAge: tokenExpiry,
-            sameSite: "lax",
+            sameSite: "none",
+            secure: true,
             path: "/",
             expires: addSeconds(new Date(), tokenExpiry),
           }),
