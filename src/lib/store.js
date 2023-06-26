@@ -6,6 +6,7 @@ const btc = import.meta.env.VITE_BTC;
 const persisted = (k, i) => {
   if (
     browser &&
+    window.location === window.parent.location &&
     sessionStorage.getItem(k) &&
     sessionStorage.getItem(k) !== "undefined"
   ) {
@@ -15,7 +16,9 @@ const persisted = (k, i) => {
   }
 
   let s = writable(i);
-  s.subscribe((v) => browser && sessionStorage.setItem(k, JSON.stringify(v)));
+  s.subscribe((v) => browser && 
+      window.location === window.parent.location &&
+    sessionStorage.setItem(k, JSON.stringify(v)));
   return s;
 };
 
