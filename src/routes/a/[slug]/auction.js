@@ -14,7 +14,7 @@ export async function GET({ locals: { user, q }, params }) {
     body: {
       artwork,
       default_royalty_recipients,
-      user,
+      user
     },
   };
 }
