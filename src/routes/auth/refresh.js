@@ -5,7 +5,8 @@ import { getUser } from "$queries/users";
 
 const opts = {
   httpOnly: true,
-  sameSite: "lax",
+  sameSite: "none",
+  secure: true,
   path: "/",
 };
 
@@ -45,7 +46,7 @@ export async function GET({ request: { headers, url }, locals: { q } }) {
       },
     };
   } catch (error) {
-    console.log(error);
+    console.log(error)
     return {
       status: 500,
       error,
