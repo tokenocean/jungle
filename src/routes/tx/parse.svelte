@@ -1,5 +1,4 @@
 <script>
-  import { session } from "$app/stores";
   import { Transaction } from "$comp";
   import { psbt } from "$lib/store";
   import { err, info } from "$lib/utils";
@@ -17,10 +16,10 @@
   let parse = () => {
     try {
       $psbt = Psbt.fromBase64(base64);
-    } catch (e) {
+    } catch(e) {
       err(e);
       $psbt = undefined;
-    }
+    } 
   };
 
   let signTx = async () => {
@@ -44,6 +43,7 @@
 </script>
 
 <div class="container mx-auto px-10 mt-16 max-w-4xl">
+
   {#if $psbt}
     <div class="flex">
       <button on:click={clear} class="secondary-btn mr-2">Clear</button>
@@ -58,4 +58,5 @@
       <button on:click={parse} class="secondary-btn mr-2">Parse</button>
     </div>
   {/if}
+
 </div>
