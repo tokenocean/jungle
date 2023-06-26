@@ -33,10 +33,6 @@
   <meta property="og:url" content={host + $page.url.pathname} />
   <meta name="twitter:site" content={metadata.twitter.site} />
   <meta name="twitter:creator" content={metadata.twitter.creator} />
-  <meta name="viewport" content="initial-scale=1, viewport-fit=cover, width=device-width">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
 
   {#if !dev}
     <!-- Global site tag (gtag.js) - Google Analytics -->
