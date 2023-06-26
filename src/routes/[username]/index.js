@@ -15,6 +15,7 @@ export async function GET({
       body: {
         subject: users[0],
       },
+      headers,
     };
   } catch (e) {
     console.log(e);
