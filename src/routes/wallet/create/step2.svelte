@@ -13,6 +13,7 @@
     mnemonic = getMnemonic();
   });
   let offset = 0;
+
 </script>
 
 <div class="container">
