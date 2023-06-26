@@ -34,7 +34,11 @@
 
     await confirm();
 
-    await api().url("/cancel").post({ id }).json().catch(err);
+    await api()
+      .url("/cancel")
+      .post({ id })
+      .json()
+      .catch(err);
 
     transaction.cancelled = true;
     update();
