@@ -1,5 +1,4 @@
 <script>
-	import { asset } from './../../lib/store.js';
   import {
     artworksLimit,
     prompt,
@@ -245,7 +244,7 @@
           <div class="w-full justify-center">
             <div class="w-full max-w-sm mx-auto mb-12">
               {#if $user?.is_artist && $user?.id === subject.id}
-                <a href="/a/create" class="primary-btn">Submit a new asset</a>
+                <a href="/a/create" class="primary-btn">Submit a new artwork</a>
               {/if}
             </div>
             <div class="w-full flex flex-wrap">
@@ -314,14 +313,14 @@
 
   .hover {
     @apply border-b-2;
-    border-bottom: 3px solid #43470b;
+    border-bottom: 3px solid #6ed8e0;
   }
 
   .tabs div {
     @apply mb-auto h-10 mx-2 md:mx-4;
     &:hover {
       @apply border-b-2;
-      border-bottom: 3px solid #43470b;
+      border-bottom: 3px solid #6ed8e0;
     }
   }
 
@@ -340,6 +339,6 @@
 
   .social-details span {
     margin-left: 8px;
-    color: #43470b;
+    color: #0f828a;
   }
 </style>
