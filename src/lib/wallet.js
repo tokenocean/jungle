@@ -1,3 +1,4 @@
+import { signAsync, verify } from "bitcoinjs-message";
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { newapi as api, electrs, hasura, query } from "$lib/api";
@@ -704,7 +705,7 @@ export const signMessage = (m) =>
     segwitType: "p2sh(p2wpkh)",
   });
 
-export const verifySignature = (m, s) => verify(m, singlesig().address, s);
+export const verifySignature = (m, s) => console.log(singlesig().address) || verify(m, singlesig().address, s);
 
 export const executeSwap = async (artwork) => {
   let {
