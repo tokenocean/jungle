@@ -7,7 +7,7 @@ export async function GET({ locals, params }) {
   return {
     body: {
       artworks,
-      count: artworks.length,
+      count: artworks.length
     },
   };
 }
