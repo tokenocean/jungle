@@ -12,7 +12,9 @@
 </script>
 
 <div class="mt-10 mb-5">
-  <a class="primary-btn w-52" href={`/${$user.username}/edit`}>Edit Profile</a>
+  <a class="primary-btn w-52" href={`/${$user.username}/edit`}
+    >Edit Profile</a
+  >
 </div>
 
 <div class="menu uppercase">
