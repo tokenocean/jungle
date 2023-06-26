@@ -1,17 +1,16 @@
 <script context="module">
   export async function load({ fetch, params: { username } }) {
-    const r = await fetch(`/artworks/username/${username}.json`).then((r) =>
-      r.json()
-    );
+    const r = await fetch(`/artworks/username/${username}.json`).then((r) => r.json());
 
     return {
       props: {
         count: r.count,
         artworks: r.artworks,
-        username,
+        username
       },
     };
   }
+
 </script>
 
 <script>
