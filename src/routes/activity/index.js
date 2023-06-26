@@ -5,7 +5,13 @@ export async function GET({ request: { headers }, locals }) {
 
   try {
     let { recentactivity: transactions } = await q(getRecentActivity(80));
-    return { body: { transactions } };
+
+    return {
+      body: {
+        transactions,
+      },
+      headers,
+    };
   } catch (e) {
     console.log(e);
     return {
