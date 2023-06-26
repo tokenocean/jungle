@@ -1,4 +1,5 @@
 <script>
+  import { requirePassword } from "$lib/auth";
   import { user } from "$lib/store";
   import { page } from "$app/stores";
   import { copy, focus } from "$lib/utils";
@@ -9,7 +10,15 @@
 
   let signature;
   onMount(async () => {
+    await requirePassword();
     signature = (await signMessage(message)).toString("base64");
+
+    window.opener.postMessage(
+      JSON.stringify({ address: $user.address, signature }),
+      "https://athanasi.coinos.io"
+    );
+
+    window.close();
   });
 </script>
 
@@ -21,14 +30,14 @@
   </div>
   <div>
     <div><b>Address</b></div>
-    <div>{$user.address}</div>
+    <div class="break-all">{$user.address}</div>
   </div>
   <button class="primary-btn" on:click={() => copy($user.address)}
     >Copy Address</button
   >
   <div>
     <div><b>Signature</b></div>
-    <div>{signature}</div>
+    <div class="break-all">{signature}</div>
   </div>
   <button class="primary-btn" on:click={() => copy(signature)}
     >Copy Signature</button
