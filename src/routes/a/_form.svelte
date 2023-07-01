@@ -74,7 +74,7 @@
         type="checkbox"
         bind:checked={artwork.is_physical}
       />
-      <span class="ml-3">This is a physical artwork</span>
+      <span class="ml-3">This is a physical asset</span>
     </label>
   </div>
   {#if !artwork.id}
@@ -121,8 +121,8 @@
   input[type="checkbox"]:checked {
     appearance: none;
     border: 5px solid #fff;
-    outline: 2px solid #6ed8e0;
-    background-color: #6ed8e0;
+    outline: 2px solid #f2a900;
+    background-color: #43470b;
     padding: 2px;
     border-radius: 0;
   }

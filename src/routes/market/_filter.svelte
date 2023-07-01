@@ -47,7 +47,7 @@
     <div>
       <ToggleSwitch
         id="is-physical"
-        label="Physical artwork"
+        label="Physical asset"
         checked={$fc.isPhysical}
         on:change={(e) => ($fc.isPhysical = e.target.checked)}
       />
