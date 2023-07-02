@@ -131,7 +131,8 @@
   img,
   video {
     max-height: 70vh;
-    @apply mx-auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   video {
