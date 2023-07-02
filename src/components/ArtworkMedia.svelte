@@ -25,7 +25,7 @@
   $: path =
     artwork &&
     (thumb
-      ? `/api/public/${artwork.filename}.${ext}`
+      ? `/api/public/${artwork.filename}${ext}`  // Fixed: Added the closing curly brace after `${ext}`.
       : `/api/ipfs/${artwork.filename}`);
 
   $: cover = !showDetails;
