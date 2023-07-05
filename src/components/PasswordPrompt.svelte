@@ -2,7 +2,7 @@
 
 <script>
   import { tick } from "svelte";
-  import { prompt, password as pw, user, username, token } from "$lib/store";
+  import { user, username } from "$lib/store";
   import { post } from "$lib/api";
   import { err, dev } from "$lib/utils";
   import Fa from "svelte-fa";
@@ -16,16 +16,17 @@
   let input;
   let show;
 
-  let focus = (p) => p && tick().then(() => input.focus());
-  $: focus($prompt);
+  let focus = (p) => {
+    p && tick().then(() => input.focus());
+  };
 
   export let submit = async (e) => {
     try {
       let email = $user.username;
-      let res = await post("/auth/login", { email, password }, fetch).json();
+      let res = await post("/auth/login", { email, password }).json();
 
       $username = res.user.username;
-      $pw = password;
+      $password = password;
 
       $token = res.jwt_token;
       $prompt = undefined;
@@ -67,17 +68,16 @@
       <button
         class="flex h-full top-0 absolute px-3 right-0 w-auto"
         type="button"
-        on:click|preventDefault|stopPropagation={() => (show = !show)}
+        on:click|stopPropagation={() => (show = !show)}
       >
         <Fa icon={show ? faEyeSlash : faEye} class="my-auto mr-1" />
       </button>
     </div>
     <div class="text-right text-sm">
-      <a href="/forgot-password" class="block w-full text-midblue"
-        >Forgot password?</a
-      >
+      <a href="/forgot-password" class="text-midblue">Forgot password?</a>
     </div>
   </div>
+  <button type="submit">Submit</button>
 </form>
 
 <style>
