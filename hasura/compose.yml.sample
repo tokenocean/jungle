@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   jung:
-    container_name: 
+    container_name: ui
     image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
     ports:
       - "3004:3000"

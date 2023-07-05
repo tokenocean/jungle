@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   jung:
-    container_name: 
+    container_name: ui
     image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
     ports:
       - "3004:3000"
@@ -119,10 +119,10 @@ services:
       - ${STORAGE_DIR}:/export
     restart: always
   liquid:
-    image: ghcr.io/vulpemventures/elements:0.21.0.2
+    image: ghcr.io/vulpemventures/elements:22.1.1
     container_name: liquid
     volumes:
-      - ./liquidmainnet:/home/elements/.elements
+      - ./liquidregtest/liquid-config/:/home/elements/.elements
     restart: always
   redis:
     container_name: redis
