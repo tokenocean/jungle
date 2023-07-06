@@ -23,12 +23,12 @@ export const requireLogin = async (page) => {
 export const requirePassword = async () => {
   await requireLogin();
 
-  if (get(pw) && get(pw) !== "undefined") return;
+  if (get(pw)) return;
   let unsub;
-  let newPw = await new Promise(
+  await new Promise(
     (resolve) =>
       (unsub = pw.subscribe((password) =>
-        (password && password !== "undefined") ? resolve(password) : prompt.set(PasswordPrompt)
+        password ? resolve() : prompt.set(PasswordPrompt)
       ))
   );
   unsub();
@@ -41,11 +41,12 @@ export const activate = (ticket) => {
 
 export const checkAuthFromLocalStorage = (user) => {
   const usernameFromStorage =
+    window.location === window.parent.location &&
     sessionStorage.getItem("username") &&
     sessionStorage.getItem("username") !== "undefined" &&
     JSON.parse(sessionStorage.getItem("username"));
 
-  if (usernameFromStorage && user.username !== usernameFromStorage) {
+  if (user.username !== usernameFromStorage) {
     goto("/logout");
   }
 };
