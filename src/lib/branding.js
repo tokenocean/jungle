@@ -22,7 +22,7 @@ const BRANDING = {
     keywords: "Liquid Bitcoin Lightning LNFT Events, Tickets, Video, Music, Art",
     description:
       "Upload, collect, and transact rare digital assets on the Liquid Network",
-    image: "https://junglelab.io/logo.png",
+    image: "https://junglelab.io/splash.png",
     url: "https://junglelab.io/",
 
     twitter: {
