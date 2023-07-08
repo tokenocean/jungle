@@ -59,89 +59,72 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
     
     #!/bin/bash
 
-To install and run the necessary commands, follow the steps below:
+Certainly! Here's the complete list in plain text format without code formatting:
 
-Install Hasura CLI:
-shell
-Copy code
-curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
-Install pnpm globally:
-shell
-Copy code
-npm i -g pnpm
-Install project dependencies:
-shell
-Copy code
-pnpm install
-Navigate to the "hasura" directory:
-shell
-Copy code
-cd hasura
-Copy the .env.sample file to .env:
-shell
-Copy code
-cp .env.sample .env
-Install project dependencies within a Docker container:
-shell
-Copy code
-docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
-Create a Docker network:
-shell
-Copy code
-docker network create net
-Start Docker containers:
-shell
-Copy code
-docker-compose up -d
-Apply Hasura migrations:
-shell
-Copy code
-hasura migrate apply
-Apply Hasura metadata:
-shell
-Copy code
-hasura metadata apply
-Apply Hasura seeds:
-shell
-Copy code
-hasura seeds apply
-Reload Hasura metadata:
-shell
-Copy code
-hasura metadata reload
-Configure IPFS gateway:
-shell
-Copy code
-docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Paths": ["/ipfs", "/ipns"], "UseSubdomains": false } }'
-docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"
-Copy the user.png file to the storage directory:
-shell
-Copy code
-sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
-Add the file to IPFS:
-shell
-Copy code
-docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
-Create a Liquid wallet:
-shell
-Copy code
-docker exec -it liquid elements-cli createwallet coinos
-Rescan the blockchain:
-shell
-Copy code
-docker exec -it liquid elements-cli rescanblockchain
-Restart the "lapp" service:
-shell
-Copy code
-docker restart lapp
-Navigate back to the previous directory:
-shell
-Copy code
-cd ..
-Start the development server:
-shell
-Copy code
-pnpm dev
+To install Hasura CLI and run the necessary commands, follow the steps below:
+
+1. Install Hasura CLI
+   - Use the command: `curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash`
+
+2. Install pnpm globally
+   - Use the command: `npm i -g pnpm`
+
+3. Install project dependencies
+   - Use the command: `pnpm install`
+
+4. Navigate to the "hasura" directory
+   - Use the command: `cd hasura`
+
+5. Copy the .env.sample file to .env
+   - Use the command: `cp .env.sample .env`
+
+6. Install project dependencies within a Docker container
+   - Use the command: `docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install`
+
+7. Create a Docker network
+   - Use the command: `docker network create net`
+
+8. Start Docker containers
+   - Use the command: `docker-compose up -d`
+
+9. Apply Hasura migrations
+   - Use the command: `hasura migrate apply`
+
+10. Apply Hasura metadata
+    - Use the command: `hasura metadata apply`
+
+11. Apply Hasura seeds
+    - Use the command: `hasura seeds apply`
+
+12. Reload Hasura metadata
+    - Use the command: `hasura metadata reload`
+
+13. Configure IPFS gateway
+    - Use the commands:
+      - `docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Paths": ["/ipfs", "/ipns"], "UseSubdomains": false } }'`
+      - `docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"`
+
+14. Copy the user.png file to the storage directory
+    - Use the command: `sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp`
+
+15. Add the file to IPFS
+    - Use the command: `docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp`
+
+16. Create a Liquid wallet
+    - Use the command: `docker exec -it liquid elements-cli createwallet coinos`
+
+17. Rescan the blockchain
+    - Use the command: `docker exec -it liquid elements-cli rescanblockchain`
+
+18. Restart the "lapp" service
+    - Use the command: `docker restart lapp`
+
+19. Navigate back to the previous directory
+    - Use the command: `cd ..`
+
+20. Start the development server
+    - Use the command: `pnpm dev`
+
 After following these steps, your site should be available at http://localhost:3000/.
     
     # liquid network regtest
