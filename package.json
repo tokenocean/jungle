@@ -19,7 +19,6 @@
         "@popperjs/core": "~2.11.5",
         "@sveltejs/adapter-node": "next",
         "@sveltejs/kit": "1.0.0-next.405",
-        "@tailwindcss/aspect-ratio": "^0.4.2",
         "autoprefixer": "^10.4.7",
         "bip32": "^2.0.6",
         "bip39": "^3.0.4",
