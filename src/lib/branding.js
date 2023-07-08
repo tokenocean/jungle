@@ -34,7 +34,7 @@ const BRANDING = {
     artwork: (art) => ({
       title: `JUNGLELAB - ${art.title}`,
       image: `/api/ipfs/${art.filename}`,
-      url: `https://junglelab.io/a/${art.slug}`,
+      url: `https://junglelab.io/a/${art.slug}.webp`,
     }),
   },
 
