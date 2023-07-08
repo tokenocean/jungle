@@ -167,7 +167,7 @@
           class="text-center mx-auto lg:ml-10 mb-10"
           on:click={() => fileInput.click()}
         >
-          <Avatar size="xl" src={preview || $user.avatar_url} />
+          <Avatar size="xl" src={preview || `${$user.avatar_url}.webp`} />
           <button class="text-lightblue mt-5"
             >CHANGE AVATAR
             <Fa icon={faImage} pull="right" class="mt-1 ml-2" /></button
