@@ -391,7 +391,7 @@
         </div>
         {#if artwork.is_physical}
           <div
-            class="flex ml-auto py-1 px-4 bg-gray-100 rounded rounded-full my-auto"
+            class="flex ml-auto py-1 px-4 bg-gray-100 rounded-full my-auto"
           >
             <div class="my-auto">
               <Fa icon={faImage} class="mr-1" />
@@ -729,15 +729,19 @@
   }
 
   .disabled {
-    pointer-events: none;
-    @apply text-gray-400 border-gray-400;
+      pointer-events: none;
+      color: gray-400;
+      border-color: gray-400;
   }
 
   button {
-    @apply mb-2 w-full text-sm;
-    &:hover {
-      @apply border-green-700;
-    }
+    margin-bottom: 2rem;
+    width: 100%;
+    font-size: 0.875rem;
+  }
+  
+  button:hover {
+    border-color: #34D399;
   }
 
   .popup {
