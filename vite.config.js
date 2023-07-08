@@ -1,17 +1,20 @@
-// vite.config.js
 import { sveltekit } from "@sveltejs/kit/vite";
 import shim from "@asoltys/vite-plugin-stream-shim";
 import path from "path";
+import aspectRatio from "@tailwindcss/aspect-ratio";
 
 /** @type {import('vite').UserConfig} */
 const config = {
-  plugins: [sveltekit(), shim()],
+  plugins: [sveltekit(), shim(), aspectRatio()],
   resolve: {
     alias: {
       $comp: path.resolve("src/components/index.js"),
       $components: path.resolve("src/components"),
       $queries: path.resolve("src/queries"),
     },
+  },
+  corePlugins: {
+    aspectRatio: false,
   },
   server: {
     proxy: {
