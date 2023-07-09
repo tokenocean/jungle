@@ -59,7 +59,6 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
     
     #!/bin/bash
 
-Certainly! Here's the complete list in plain text format without code formatting:
 
 To install Hasura CLI and run the necessary commands, follow the steps below:
 
