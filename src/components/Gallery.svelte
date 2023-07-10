@@ -29,6 +29,6 @@
 <style>
   .full-width {
     width: 100%;
-    left: calc(100vw - 100%);
+    left: 0;
   }
 </style>

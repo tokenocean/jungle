@@ -694,10 +694,11 @@
     color: #FF8B00;
   }
 
-  @media only screen and (max-width: 1023px) {
+  @media screen and (max-width: 1023px) {
     .layout-container {
       flex-wrap: wrap;
     }
+
     .contact {
       width: 100%;
       margin: 30px 0;
