@@ -24,10 +24,10 @@
   </div>
 </div>
 
-<Pagination bind:current={currentPage} {loadMore} {total} scroll={true} />
+<Pagination bind:current={currentPage} {loadMore} {total} scroll />
 
 <style>
-  .full-width {
+  :global(.full-width) {
     width: 100%;
     left: 0;
   }
