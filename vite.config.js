@@ -4,7 +4,8 @@ import path from "path";
 
 /** @type {import('vite').UserConfig} */
 const config = {
-  plugins: [sveltekit(), shim()],
+  plugins: [sveltekit(), shim()], // Added closing parentheses to the imports
+
   resolve: {
     alias: {
       $comp: path.resolve("src/components/index.js"),
@@ -12,6 +13,7 @@ const config = {
       $queries: path.resolve("src/queries"),
     },
   },
+
   server: {
     proxy: {
       "/api": {
@@ -20,6 +22,7 @@ const config = {
       },
     },
   },
+
   ssr: {
     noExternal: [
       "@fortawesome/free-brands-svg-icons",

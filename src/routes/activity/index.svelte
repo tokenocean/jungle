@@ -1,14 +1,27 @@
 <script context="module">
   export async function load({ fetch }) {
-    const props = await fetch(`/activity.json`).then((r) =>
-      r.json()
-    );
+    try {
+      const response = await fetch(`/activity.json`);
 
-    return {
-      props,
-    };
+      if (!response.ok) {
+        throw new Error('Network response was not OK');
+      }
+
+      const props = await response.json();
+
+      return {
+        props,
+      };
+    } catch (error) {
+      console.error(error);
+      // Handle the error gracefully, e.g., show an error message or fallback content.
+      return {
+        props: {
+          error: error.message,
+        },
+      };
+    }
   }
-
 </script>
 
 <script>
@@ -19,11 +32,15 @@
 
 <div class="container mx-auto my-10 md:my-20">
   <h2>Activity</h2>
-  <div class="flex flex-wrap justify-between mt-10 lg:mt-20">
-    <div class="w-full lg:max-w-lg mx-auto">
-      {#each transactions as transaction}
-        <Activity {transaction} showImage={true} />
-      {/each}
+  {#if transactions}
+    <div class="flex flex-wrap justify-between mt-10 lg:mt-20">
+      <div class="w-full lg:max-w-lg mx-auto">
+        {#each transactions as transaction}
+          <Activity {transaction} showImage={true} />
+        {/each}
+      </div>
     </div>
-  </div>
+  {:else}
+    <p>No transactions available.</p>
+  {/if}
 </div>

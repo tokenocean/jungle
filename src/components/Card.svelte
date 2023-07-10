@@ -5,7 +5,7 @@
   import { onDestroy, onMount } from "svelte";
   import { bitcoinUnitLocal, user, fiat, fiatRates } from "$lib/store";
 
-  export let justScrolled = false;
+  export const justScrolled = false;
   export let artwork;
   export let columns = 3;
   export let showDetails = true;
