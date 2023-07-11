@@ -1,1 +1,1 @@
-export let match = (param) => true;
+export let match = (param) => true
