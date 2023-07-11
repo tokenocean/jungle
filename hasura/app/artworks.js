@@ -124,8 +124,6 @@ app.post("/held", async (req, res) => {
   try {
     let { id } = req.body;
     let { artworks_by_pk: artwork } = await q(getArtwork, { id });
-
-    if (!artwork) throw new Error(`unable to locate artwork with id ${id}`)
     let { asset, owner } = artwork;
     let { address, multisig } = owner;
 
