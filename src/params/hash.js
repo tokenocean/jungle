@@ -1,1 +1,1 @@
-export let match = (p) => /\w{64}/.test(p);
+export let match = (p) => /\w{64}/.test(p)
