@@ -1,3 +1,4 @@
+import redis from "./redis.js";
 import { electrs, q } from "./api.js";
 import { compareAsc, parseISO, subMinutes } from "date-fns";
 import { getCurrentUser, getLastTransaction, getUser as getUserQuery } from "./queries.js";
@@ -19,14 +20,30 @@ export const wait = async (f, s = 300) => {
   return f();
 };
 
+export const getUtxosFromRedis = async (address) => {
+  const utxoSet = `${address}:utxos`;
+  const set = await redis.sMembers(utxoSet);
+
+  const utxos = [];
+  for (let i = 0; i < set.length; i++) {
+    const utxo = set[i];
+    const [txid, vout] = utxo.split(":");
+    const [asset, value] = (await redis.get(utxo)).split(",");
+
+    utxos.push({ txid, vout: parseInt(vout), asset, value: parseInt(value) });
+  }
+
+  return utxos;
+};
+
 export const getUser = async ({ headers }) => {
   if (!headers.authorization) throw new Error("missing auth token");
-  let { currentuser } = await q(getCurrentUser, null, headers);
+  const { currentuser } = await q(getCurrentUser, null, headers);
   return currentuser[0];
 };
 
 export const getUserById = async (id) => {
-  let { users_by_pk: user } = id
+  const { users_by_pk: user } = id
     ? await q(getUserQuery, { id })
     : { users_by_pk: null };
 
@@ -35,7 +52,7 @@ export const getUserById = async (id) => {
 
 export const isSpent = async ({ ins }, artwork_id) => {
   try {
-    let { transactions } = await q(getLastTransaction, { artwork_id });
+    const { transactions } = await q(getLastTransaction, { artwork_id });
 
     if (
       !transactions.length ||
@@ -43,19 +60,22 @@ export const isSpent = async ({ ins }, artwork_id) => {
         parseISO(transactions[0].created_at),
         subMinutes(new Date(), 2)
       ) > 0
-    )
+    ) {
       return false;
+    }
 
     for (let i = 0; i < ins.length; i++) {
-      let { index, hash } = ins[i];
-      let txid = reverse(hash).toString("hex");
+      const { index, hash } = ins[i];
+      const txid = reverse(hash).toString("hex");
 
-      let { spent } = await electrs
+      const { spent } = await electrs
         .url(`/tx/${txid}/outspend/${index}`)
         .get()
         .json();
 
-      if (spent) return true;
+      if (spent) {
+        return true;
+      }
     }
 
     return false;
