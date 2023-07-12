@@ -13,7 +13,7 @@ import { address as Address, Transaction } from "liquidjs-lib";
 import reverse from "buffer-reverse";
 import { app } from "./app.js";
 import { auth } from "./auth.js";
-import { getUser, wait } from "./utils.js";
+import { getUser, wait, getUtxosFromRedis } from "./utils.js";
 import {
   createTransaction,
   getAssetArtworks,
@@ -23,25 +23,34 @@ import {
 import { compareDesc, parseISO, formatISO } from "date-fns";
 
 let balances = async (address, asset) => {
-  let mempool = (
-    await electrs.url(`/address/${address}/txs/mempool`).get().json()
-  ).map((tx) => tx.txid);
+  try {
+    let mempool = (
+      await electrs.url(`/address/${address}/txs/mempool`).get().json()
+    ).map((tx) => tx.txid);
 
-  let confirmed = [],
-    unconfirmed = [];
+    let confirmed = [];
+    let unconfirmed = [];
 
-  let balances = {};
-  (await utxos(address))
-    .filter((tx) => !asset || tx.asset === asset)
-    .map((tx) =>
-      mempool.includes(tx.txid) ? unconfirmed.push(tx) : confirmed.push(tx)
-    );
+    let utxos = await getUtxosFromRedis(address);
+    utxos.forEach((tx) => {
+      if (!asset || tx.asset === asset) {
+        if (mempool.includes(tx.txid)) {
+          unconfirmed.push(tx);
+        } else {
+          confirmed.push(tx);
+        }
+      }
+    });
 
-  let sum = (a, b) => ({ ...a, [b.asset]: (a[b.asset] || 0) + b.value });
-  confirmed = confirmed.reduce(sum, {});
-  unconfirmed = unconfirmed.reduce(sum, {});
+    let sum = (a, b) => ({ ...a, [b.asset]: (a[b.asset] || 0) + b.value });
+    confirmed = confirmed.reduce(sum, {});
+    unconfirmed = unconfirmed.reduce(sum, {});
 
-  return { confirmed, unconfirmed };
+    return { confirmed, unconfirmed };
+  } catch (e) {
+    console.log(e);
+    return { confirmed: {}, unconfirmed: {} };
+  }
 };
 
 let locked = {};
