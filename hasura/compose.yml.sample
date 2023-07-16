@@ -11,6 +11,7 @@ services:
       - hasura
       - hbp
       - redis
+      # - liquid
     container_name: lapp
     image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: always
@@ -119,14 +120,14 @@ services:
       - ${STORAGE_DIR}:/export
     restart: always
   liquid:
-    image: ghcr.io/vulpemventures/elements:0.21.0.2
+    image: ghcr.io/vulpemventures/elements:22.1.1
     container_name: liquid
     volumes:
-      - ./liquidmainnet:/home/elements/.elements
+      - ./liquidregtest/liquid-config/:/home/elements/.elements
     restart: always
   redis:
     container_name: redis
-    image: redis
+    image: redis:latest
     volumes:
       - ./redis:/data
     restart: always
