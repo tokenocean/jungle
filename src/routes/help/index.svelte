@@ -71,7 +71,7 @@
         </h3>
 
         <p>
-          Currently, it is 50 sats (0.0000005 BTC) or less than three cents per
+          Currently, it is 81 sats (0.00000081 BTC) or less than three pence per
           asset issuance, and 100 sats (0.000001 BTC) for listing and auctions.
           The lowest bid price allowed is 1,000 sats (0.00001 BTC).
         </p>
