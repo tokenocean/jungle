@@ -1,28 +1,53 @@
 version: "3.6"
-
 services:
-  rar:
-    container_name: rar
-    image: asoltys/raretoshi
+  jung:
+    container_name: ui
     platforms:
-      - linux/arm/v7
+      - linux/amd64
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle:prod
     ports:
       - "3004:3000"
     restart: always
-
   lapp:
     depends_on:
       - hasura
       - hbp
       - redis
+      # - liquid
     container_name: lapp
-    image: gcr.io/coinos-326717/github.com/tokenocean/raretoshi-server:prod
     platforms:
-      - linux/arm/v7
+      - linux/amd64
+    image: gcr.io/coinos-326717/github.com/tokenocean/jungle-server:prod
     restart: always
     command: ["pnpm", "dev"]
     environment:
-      # Environment variables...
+      APP_URL: "${APP_URL}"
+      AUTH_EVENT_VALUE: "${AUTH_EVENT_VALUE}"
+      CLOUDFLARE_TOKEN: "${CLOUDFLARE_TOKEN}"
+      CLOUDFLARE_ZONE: "${CLOUDFLARE_ZONE}"
+      COINOS_TOKEN: "${COINOS_TOKEN}"
+      COINOS_URL: "${COINOS_URL}"
+      DOMAIN: "${DOMAIN}"
+      HASURA_JWT: "${HASURA_GRAPHQL_JWT_SECRET}"
+      HASURA_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      HASURA_URL: "${HASURA_URL}"
+      HBP_URL: "${HBP_URL}"
+      IPFS_URL: "${IPFS_URL}"
+      IPFS_WEB_URL: "${IPFS_WEB_URL}"
+      LIQUID_ELECTRS_URL: "${LIQUID_ELECTRS_URL}"
+      NFT_STORAGE_TOKEN: "${NFT_STORAGE_TOKEN}"
+      SERVER_URL: "${SERVER_URL}"
+      SIGNING_SERVER_MNEMONIC: "${SIGNING_SERVER_MNEMONIC}"
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PASS: "${SMTP_PASS}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_SENDER: "${SMTP_SENDER}"
+      SMTP_USER: "${SMTP_USER}"
+      RPCHOST: "${RPCHOST}"
+      RPCPORT: "${RPCPORT}"
+      RPCUSER: "${RPCUSER}"
+      RPCPASS: "${RPCPASS}"
+      RPCWALLET: "${RPCWALLET}"
     tmpfs:
       - /tmp
     volumes:
@@ -47,7 +72,7 @@ services:
 
   hasura:
     container_name: hasura
-    image: hasura/graphql-engine:v2.0.9.cli-migrations-v3
+    image: hasura/graphql-engine:v2.29.0.cli-migrations-v3.ubuntu.arm64
     platforms:
       - linux/arm/v7
     ports:
@@ -92,7 +117,7 @@ services:
 
   liquid:
     container_name: liquid
-    image: ghcr.io/vulpemventures/elements:0.21.0.2
+    image: ghcr.io/vulpemventures/elements:22.1.1
     platforms:
       - linux/arm/v7
     volumes:
@@ -101,7 +126,7 @@ services:
 
   redis:
     container_name: redis
-    image: redis
+    image: redis:latest
     platforms:
       - linux/arm/v7
     volumes:
