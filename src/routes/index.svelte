@@ -186,18 +186,18 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://images.squarespace-cdn.com/content/v1/60f7c7b467181769ecb387cb/1665641700056-3TI4L7M3HHKQFZF1HL21/unsplash-image-ZhQCZjr9fHo.jpg?format=2500w"
-              alt="Concert Production & Special Events."
+              src="https://arzeia.com/wp-content/uploads/2023/06/IMG_5775.jpg"
+              alt="ARZEIA Private Wild Beach Party."
               class="w-full h-full object-center object-cover"
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://www.oea.agency">
+            <a href="https://junglelab.io/n-o-m-a-d">
               <span class="absolute inset-0" />
-              Meet OEA Agency
+              N-O-M-A-D Production
             </a>
           </h3>
-          <p class="text-base font-semibold text-gray-900">JUNGLELABᵀᴹ Core Team</p>
+          <p class="text-base font-semibold text-gray-900">ARZEIA Private Wild Beach Party</p>
         </div>
       </div>
     </div>
@@ -352,27 +352,12 @@
   </div>
 </div>
 
-<!--
-  This example2 requires Tailwind CSS v2.0+ 
-  
-  This example2 requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
 -->
 <div class="bg-white-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
       <h2 class="text-2xl font-extrabold text-gray-900">
-        Partners & Sponsors.
+        Partners & Community.
       </h2>
 
       <div
@@ -395,7 +380,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Supported by Blockstream.
+            Supported by Blockstream. Liquid Network Community | Liquid on BOL2
           </p>
         </div>
 
@@ -425,19 +410,19 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w2000/2023/02/Screenshot-2023-02-20-at-13.34.22-1.png"
-              alt="JUNGLELABᵀᴹ User Guide."
+              src="https://images.squarespace-cdn.com/content/v1/60f7c7b467181769ecb387cb/1665641700056-3TI4L7M3HHKQFZF1HL21/unsplash-image-ZhQCZjr9fHo.jpg?format=2500w"
+              alt="Concert Production & Special Events."
               class="w-full h-full object-center object-cover"
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/junglelab/">
+            <a href="https://www.oea.agency/">
               <span class="absolute inset-0" />
-              JUNGLELABᵀᴹ User Guide.
+              OEA Agency
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Getting Started.
+            Offical Partner.
           </p>
         </div>
       </div>
