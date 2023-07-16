@@ -401,7 +401,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Offical Partner.
+            Official Partner.
           </p>
         </div>
 
@@ -422,7 +422,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Offical Partner.
+            Official Partner.
           </p>
         </div>
       </div>
