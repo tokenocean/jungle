@@ -131,22 +131,7 @@
   <a class="secondary-btn" href={"/market"}>View gallery</a>
 </div>
 
-<!--
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
--->
+
 
 <div class="bg-white-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -201,15 +186,15 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://images.unsplash.com/photo-1519309621146-2a47d1f7103a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDM4fHxNZWV0JTIwdGhlJTIwVGVhbXxlbnwwfHx8fDE2ODI3NDM2NjY&ixlib=rb-4.0.3&q=80&w=2000"
-              alt="Collection of digital art assets."
+              src="https://images.squarespace-cdn.com/content/v1/60f7c7b467181769ecb387cb/1665641700056-3TI4L7M3HHKQFZF1HL21/unsplash-image-ZhQCZjr9fHo.jpg?format=2500w"
+              alt="Concert Production & Special Events."
               class="w-full h-full object-center object-cover"
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.net/about-us/">
+            <a href="https://www.oea.agency">
               <span class="absolute inset-0" />
-              Meet the Team
+              Meet OEA Agency
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">JUNGLELABᵀᴹ Core Team</p>
