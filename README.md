@@ -58,27 +58,28 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
     run bash script for auto config: 
     ./install-script.sh
 
-curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
-npm i -g pnpm
-pnpm install
-cd hasura
-cp .env.sample .env
-docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
-docker network create net
-docker-compose up -d
-hasura migrate apply
-hasura metadata apply
-hasura seeds apply
-hasura metadata reload
-docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Paths": ["/ipfs", "/ipns"], "UseSubdomains": false } }'
-docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"
-sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
-docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
-docker exec -it liquid elements-cli createwallet coinos
-docker exec -it liquid elements-cli rescanblockchain
-docker restart lapp
-cd ..
-pnpm dev
+    curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+    npm i -g pnpm
+    pnpm install
+    cd hasura
+    cp .env.sample .env
+    docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
+    docker network create net
+    docker-compose up -d
+    hasura migrate apply
+    hasura metadata apply
+    hasura seeds apply
+    hasura metadata reload
+    docker exec -it ipfs ipfs config --json Gateway.PublicGateways '{ "ipfs": { "Paths": ["/ipfs", "/ipns"], "UseSubdomains": false } }'
+    docker exec -it ipfs ipfs config Addresses.Gateway "/ip4/0.0.0.0/tcp/8080"
+    sudo cp ../static/user.png storage/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
+    docker exec -it ipfs ipfs add /export/QmcbyjMMT5fFtoiWRJiwV8xoiRWJpSRwC6qCFMqp7EXD4Z.webp
+    docker exec -it liquid elements-cli createwallet coinos
+    docker exec -it liquid elements-cli rescanblockchain
+    docker restart lapp
+    cd ..
+    pnpm dev
+
 
 After following these steps, your site should now be available at http://localhost:3000/.
     
