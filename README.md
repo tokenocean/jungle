@@ -96,6 +96,7 @@ After following these steps, your site should now be available at http://localho
 ## Setup local development environment
 
     pnpm install
+    curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
     cd hasura
     cp .env.sample .env
     docker run -it -v $PWD/app:/app --entrypoint pnpm asoltys/lnft-server install
