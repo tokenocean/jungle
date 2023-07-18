@@ -1,5 +1,5 @@
 import fs from "fs";
-import { app } from "./app.js";
+import { app, registry } from "./app.js"; // Assuming that 'registry' is exported from "./app.js"
 import { q } from "./api.js";
 import { getContract } from "./queries.js";
 
@@ -18,7 +18,7 @@ app.post("/asset/register", async (req, res) => {
     let { transactions } = await q(getContract, { asset });
     let { contract } = transactions[0];
 
-    r = await registry
+    let r = await registry
       .post({
         asset_id: asset,
         contract: JSON.parse(contract),
@@ -27,7 +27,7 @@ app.post("/asset/register", async (req, res) => {
 
     res.send(r);
   } catch (e) {
-    res.code(500).send(`Asset registration failed ${e.message}`);
+    res.status(500).send(`Asset registration failed ${e.message}`);
   }
 });
 
@@ -49,6 +49,5 @@ app.get("/proof/liquid-asset-proof-:asset", (req, res) => {
     res.send(
       `Authorize linking the domain name ${host} to the Liquid asset ${asset}`
     );
-  else res.code(500).send("Unrecognized asset");
+  else res.status(500).send("Unrecognized asset");
 });
-
