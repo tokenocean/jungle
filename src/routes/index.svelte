@@ -357,7 +357,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
       <h2 class="text-2xl font-extrabold text-gray-900">
-        Partners & Community.
+        The community for Bitcoin builders. | Liquid on BOL2 + Our Official Partners.
       </h2>
 
       <div
@@ -380,7 +380,7 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Supported by Blockstream. Liquid Network Community | Liquid on BOL2
+            
           </p>
         </div>
 
@@ -395,13 +395,13 @@
             />
           </div>
           <h3 class="mt-6 text-sm text-gray-500">
-            <a href="https://junglelab.io/Jerk%20Festival/">
+            <a href="https://jerkfestival.com/">
               <span class="absolute inset-0" />
               Grace® Jamaican Jerk Festival
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Official Partner.
+            
           </p>
         </div>
 
@@ -422,7 +422,70 @@
             </a>
           </h3>
           <p class="text-base font-semibold text-gray-900">
-            Official Partner.
+            
+          </p>
+        </div>
+
+        <div class="group relative">
+          <div
+            class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
+          >
+            <img
+              src="https://scontent-man2-1.xx.fbcdn.net/v/t39.30808-6/312349682_139043465542830_700694932282852907_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=F1hCq9NJSdwAX8Wx5Qe&_nc_ht=scontent-man2-1.xx&oh=00_AfCKIkzCSVJx_syuLobNUUO70n0wf71fXAH9KWTq7pg6gw&oe=64BBA322"
+              alt="Coinos is an open source bitcoin wallet, payment system & exchange. Developed by Adam Soltys."
+              class="w-full h-full object-center object-cover"
+            />
+          </div>
+          <h3 class="mt-6 text-sm text-gray-500">
+            <a href="https://coinos.io/">
+              <span class="absolute inset-0" />
+              Coinos
+            </a>
+          </h3>
+          <p class="text-base font-semibold text-gray-900">
+            Official Partners
+          </p>
+        </div>
+
+        <div class="group relative">
+          <div
+            class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
+          >
+            <img
+              src="https://mcpherson-marketing.co.uk/wp-content/uploads/2022/09/home-page-slide-3.webp"
+              alt="Driving growth for premium luxury & lifestyle brands."
+              class="w-full h-full object-center object-cover"
+            />
+          </div>
+          <h3 class="mt-6 text-sm text-gray-500">
+            <a href="https://mcpherson-marketing.co.uk/">
+              <span class="absolute inset-0" />
+              Mcpherson-Marketing
+            </a>
+          </h3>
+          <p class="text-base font-semibold text-gray-900">
+            Official Partners
+          </p>
+        </div>
+
+        <div class="group relative">
+          <div
+            class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
+          >
+            <img
+              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs.yimg.com%2Fny%2Fapi%2Fres%2F1.2%2Fus8e5j24Znn2MVtQcdylnw--%2FYXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTcyMA--%2Fhttps%3A%2F%2Fmedia.zenfs.com%2Fen%2Fcoindesk_75%2Fcce02168bd3c731ff717330dae1c9df8&f=1&nofb=1&ipt=8ed90346b1facc0215ac3af412ea4cbe274162ba73c01fbcdbae5ba34fc0c535&ipo=images"
+              alt="Ex-Blockstream Exec Samson Mow Raises $21M for Bitcoin Startup JAN3."
+              class="w-full h-full object-center object-cover"
+            />
+          </div>
+          <h3 class="mt-6 text-sm text-gray-500">
+            <a href="https://jan3.com/">
+              <span class="absolute inset-0" />
+              JAN3
+            </a>
+          </h3>
+          <p class="text-base font-semibold text-gray-900">
+            Official Partners
           </p>
         </div>
       </div>
