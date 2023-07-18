@@ -39,7 +39,7 @@ JungleLab LNFT Digital Assets is a web-based platform for issuing and transactin
 ### 3rd-party APIs
 
 - [Esplora](https://github.com/Blockstream/esplora/blob/master/API.md) for Liquid blockchain data
-- [Liquid asset registry](https://docs.blockstream.com/liquid/developer-guide/proof-of-issuance.html) for token metadata
+- [Liquid asset registry]([https://docs.blockstream.com/liquid/developer-guide/proof-of-issuance.html](https://docs.liquid.net/docs/blockstream-liquid-asset-registry)) for token metadata
 - [coinos](https://coinos.io/) BTC/LNBTC <-> L-BTC conversion
 
 
