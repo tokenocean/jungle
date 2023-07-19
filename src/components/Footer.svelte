@@ -104,7 +104,7 @@
         <li class="mb-2">
           <a href="/terms-and-conditions">Terms of Service</a>
         </li>
-        <li class="mb-2"><a href="/guide">User Guide</a></li>
+        <li class="mb-2"><a href="https://peperium.site/junglesearch">Toshi Search</a></li>
       </ul>
     </div>
   </div>
