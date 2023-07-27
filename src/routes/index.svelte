@@ -388,7 +388,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://junglelab.net/content/images/size/w2000/2023/02/Landing-Pages-1-1-ptylhtjiok6yqsyiyvwpkn5pu7ef0tpn4zzi3os0s0.jpg"
+              src="https://weekendbroward.com/wp-content/uploads/2014/11/jamaican-jerk-festival-650x494.jpg"
               alt="Festival Tickets & Asset's."
               class="w-full h-full object-center object-cover"
             />
@@ -430,7 +430,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://scontent-man2-1.xx.fbcdn.net/v/t39.30808-6/312349682_139043465542830_700694932282852907_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=F1hCq9NJSdwAX8Wx5Qe&_nc_ht=scontent-man2-1.xx&oh=00_AfCKIkzCSVJx_syuLobNUUO70n0wf71fXAH9KWTq7pg6gw&oe=64BBA322"
+              src="https://pbs.twimg.com/profile_images/1576777621836541952/IL1RBW7E_400x400.jpg"
               alt="Coinos is an open source bitcoin wallet, payment system & exchange. Developed by Adam Soltys."
               class="w-full h-full object-center object-cover"
             />
@@ -472,7 +472,7 @@
             class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1"
           >
             <img
-              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs.yimg.com%2Fny%2Fapi%2Fres%2F1.2%2Fus8e5j24Znn2MVtQcdylnw--%2FYXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTcyMA--%2Fhttps%3A%2F%2Fmedia.zenfs.com%2Fen%2Fcoindesk_75%2Fcce02168bd3c731ff717330dae1c9df8&f=1&nofb=1&ipt=8ed90346b1facc0215ac3af412ea4cbe274162ba73c01fbcdbae5ba34fc0c535&ipo=images"
+              src="https://media.zenfs.com/en/coindesk_75/cce02168bd3c731ff717330dae1c9df8"
               alt="Ex-Blockstream Exec Samson Mow Raises $21M for Bitcoin Startup JAN3."
               class="w-full h-full object-center object-cover"
             />
